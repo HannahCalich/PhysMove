@@ -1,0 +1,26 @@
+Package: PhysMove
+Type: Package
+Title: PhysMove: Quantify Animal Movement Patterns Using Statistical Physics Methods
+Version: 0.0.0.9000
+Date: 2021-04-09
+Authors@R: 
+    c(person("Hannah", "Calich", email = "hannah.calich@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7541-9584")),
+      person("Ana", "Sequeira", email = "Ana.Sequeira@uwa.edu.au", role = "aut", comment = c(ORCID = "0000-0001-6906-799X")), 
+      person("Jorge", "Rodriguez", email = "jorgeprodriguezg@gmail.com", role = "ctb"),
+      person("Víctor", "Eguíluz", email = "victor@ifisc.uib-csic.esu", role = "ctb", comment = c(ORCID = "0000-0003-1133-1289")))
+Description: The "package name" package aims to quantify movement patterns of satellite tagged animals using methods derrived from statistical physics. 
+  This package contains R functions to: calculate displacements, plot probability density functions (pdfs) of displacemets, 
+  fit distributions of displacemnts to known distribtuons, calculate the root-mean-square (rms) of displacements, etc etc etc... 
+  80 characters per line, subsequent lines indented 4 spaces, 1 paragraph.
+  More about what it does (maybe more than one line)
+  Use four spaces when indenting paragraphs within the Description.
+Depends: R (>= 4.0) 
+Imports: 
+  ggplot2 (>= 3.0.0),
+  rootSolve (>= 1.8.2.1)  
+License: GPL-3 
+URL: https://github.com/HannahCalich/PhysMove
+BugReports: https://github.com/HannahCalich/PhysMove/issues
+LazyData: true
+Encoding: UTF-8
+RoxygenNote: 7.1.1
