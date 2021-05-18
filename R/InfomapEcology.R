@@ -22,12 +22,14 @@ infomap_object <- run_infomap_monolayer(network_object, infomap_executable='Info
                                         flow_model = 'directed',
                                         silent=T,trials=100, two_level=F, seed=123)
 
-
+check_infomap()
 
 
 linklist<-read.delim("H:/My Documents/1_MyDocuments/PhD_2021/PhD/Methods Paper/R/Infomap_test/Bull_Probabilities20200210.txt")
 names(linklist)<-c("source", "target", "weight")
+linklist<-as.data.frame(linklist)
+linklist$source<-as.numeric(linklist$source)
+linklist$target<-as.numeric(linklist$target)
 
-test<-create_monolayer_object(linklist, directed = TRUE, bipartite=FALSE)
-
-
+test<-create_monolayer_object(linklist, directed = T, bipartite = F)#, node_metadata = nodes)
+infomap_object <- run_infomap_monolayer(test, infomap_executable='Infomap',flow_model = 'directed', silent = T, two_level = F, ...="-k")
