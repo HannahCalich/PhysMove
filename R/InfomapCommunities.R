@@ -17,7 +17,7 @@
 #' LinkList(species_df, grid=4, hours=24, range_hr=6)
 #' @export
 
-LinkList <- function(species_df, grid=4, hours=24, range_hr=6){
+LinkList <- function(species_df, grid=4, hours=24, range_hr=6, infomap=TRUE, interm=FALSE){
 
     species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
     longmin <- -180
@@ -82,20 +82,57 @@ LinkList <- function(species_df, grid=4, hours=24, range_hr=6){
       order.df$OriginOrder[which(c==order.df[,1])]<-as.numeric(paste(visited.order[c]))
       order.df$DestinationOrder[which(c==order.df[,3])]<-as.numeric(paste(visited.order[c]))
     }
-    assign("LinkListCellNumbers", order.df, envir = .GlobalEnv)
 
     # Format results for infomap
-    ordered.weights<-order.df[,c(2,4,5)] # remove cell numbers (infomap requires order of cell visits only)
-    colnames(ordered.weights)<-c("from", "to", "weight") # rename columns following infomap requirements
-    ordered.weights$from<-sub("^","Node",ordered.weights$from)
-    ordered.weights$to<-sub("^","Node",ordered.weights$to)
+    LinkList<-order.df[,c(2,4,5)] # remove cell numbers (infomap requires order of cell visits only)
+    colnames(LinkList)<-c("from", "to", "weight") # rename columns following infomap requirements
+    LinkList$from<-sub("^","Node",LinkList$from)
+    LinkList$to<-sub("^","Node",LinkList$to)
     names(order.df)<-c("Cell", "Node", "Cell", "Node")
     nodenames<-rbind(order.df[,c(1:2)],order.df[,c(3:4)])
     nodenames<-unique(nodenames[order(nodenames$Node),])
     names(nodenames)<-c("cell", "node_name")
     nodenames<-nodenames[,2:1]
     nodenames$node_name<-sub("^","Node",nodenames$node_name)
-    assign("nodenames", nodenames, envir = .GlobalEnv)
-    assign("LinkList", ordered.weights, envir = .GlobalEnv)
-    assign("grid",grid, envir = .GlobalEnv)
+
+    if (infomap==TRUE){
+      out <- tryCatch(
+        error=function(cond) {
+          message(paste("Trouble locating infomapecology package, try loading manually via library(infomapecology) and re-running function"))
+          message("Here's the original error message:")
+          message(cond)
+          return(NA)
+        }
+      )
+      if(infomapecology::check_infomap() = !TRUE){
+        message("Cannot find infomap.exe, please set working directory to folder containing infomap.exe file. See https://ecological-complexity-lab.github.io/infomap_ecology_package/installation for more information")
+      } else {
+        monolayer_object<-infomapecology::create_monolayer_object(LinkList, directed = T, bipartite = F,node_metadata = nodenames)
+        infomap_object<-infomapecology::run_infomap_monolayer(monolayer_object, infomap_executable='infomap', flow_model='directed', silent=T, two_level=F, ...="-k")
+        infomap_modules<-as.data.frame(infomap_object$modules)
+          for(i in 1:nrow(infomap_modules)){
+            coordlat <- floor(infomap_modules$cell[i]/(grid*(longmax-longmin))) #Take origin cell number and divide by number of cells in longitude of grid.
+            #Floor used because here we're identifying the latitude row this origin cell came from
+            coordlong <- infomap_modules$cell[i] - (grid*(longmax-longmin)) * coordlat
+            infomap_modules$long[i] <- longmin + (coordlong / grid)
+            infomap_modules$lat[i] <- latmin + (coordlat / grid)
+          }
+        assign("Infomap_Results",infomap_modules, envir = .GlobalEnv)
+        }
+      return(out)
+    }
+    }
+
+
+
+
+
+
+    if (interm==TRUE){
+    assign("TransitionProbabilityMatrix", order.df, envir = .GlobalEnv)
+    # assign("nodenames", nodenames, envir = .GlobalEnv)
+    # assign("LinkList", LinkList, envir = .GlobalEnv)
+    # assign("grid",grid, envir = .GlobalEnv)
+    }
 }
+
