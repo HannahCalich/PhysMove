@@ -17,122 +17,104 @@
 #' LinkList(species_df, grid=4, hours=24, range_hr=6)
 #' @export
 
-LinkList <- function(species_df, grid=4, hours=24, range_hr=6, infomap=TRUE, interm=FALSE){
+LinkList <- function(species_df, grid=4, hours=24, range_hr=6, infomap=TRUE, tpm=FALSE){
 
-    species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
-    longmin <- -180
-    latmin <- -90
-    longmax <- 180
-    latmax <- 90
-    coordlong <- floor(grid * (as.numeric(species_df[,2]) - longmin)) # convert longitude from (-180 to +180) to (0-360)
-    coordlat <- floor(grid * (as.numeric(species_df[,3]) - latmin)) # convert latitude from (-90 to +90) to (0-180)
-    species_df$cellnum <- coordlong + grid * (longmax - longmin) * coordlat # assign cell number to each lat/long
-    MyTime <- hours*60*60 # 1 day time periods (in seconds)# There are 3600 seconds in 1 hour
-    range_hr <- range_hr*60*60
-    totalcells <- (grid * (longmax - longmin)) * (grid * (latmax - latmin))   # Vector to store origin and destination cells, plus counts# 1,036,800 cells of 0.25 deg in world
+  if (infomap==TRUE){
+    if(infomapecology::check_infomap()!=TRUE){
+      message("Cannot find infomap.exe, please set working directory to folder containing infomap.exe file. See https://ecological-complexity-lab.github.io/infomap_ecology_package/installation for more information")
+      opt <- options(show.error.messages = FALSE)
+      on.exit(options(opt))
+      stop()
+    }
+  }
 
-  # DestinationCells is list of all cells that were visited within time window, i.e., each list number is an origin cell and
-  # All of the numbers in the list are the destination cells visited within the time window.
-    DestinationCells <- list()
-    DestinationCells[[totalcells + 1 ]] <- 0 ### Dummy value at the last element + 1 possible to make sure the list has at least one element for each possible origin
+  outerror <- tryCatch({
+  species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
+  longmin <- -180
+  latmin <- -90
+  longmax <- 180
+  latmax <- 90
+  coordlong <- floor(grid * (as.numeric(species_df[,2]) - longmin)) # convert longitude from (-180 to +180) to (0-360)
+  coordlat <- floor(grid * (as.numeric(species_df[,3]) - latmin)) # convert latitude from (-90 to +90) to (0-180)
+  species_df$cellnum <- coordlong + grid * (longmax - longmin) * coordlat # assign cell number to each lat/long
+  MyTime <- hours*60*60 # 1 day time periods (in seconds)# There are 3600 seconds in 1 hour
+  range_hr <- range_hr*60*60
+  totalcells <- (grid * (longmax - longmin)) * (grid * (latmax - latmin))   # Vector to store origin and destination cells, plus counts# 1,036,800 cells of 0.25 deg in world
 
-  # Create list of origin cells and all cells visited from origin cell (destination cells) within time period (set earlier).If >1 cell is visited within time period, the cell that was visited closest to the time period is closen as the destination cell.
-    for (i in 1:length(species_index)){
-      for(j in 1:length((species_index[[i]]))){
-        Jumpj<-which(species_df[species_index[[i]],4] >= species_df[species_index[[i]][j],4] + MyTime - range_hr & species_df[species_index[[i]],4] <= species_df[species_index[[i]][j],4] + MyTime + range_hr)
-          if(length(Jumpj) == 1){
-          DestinationCells[[as.numeric(species_df[species_index[[i]][j],5])]] <- append(DestinationCells[[as.numeric(species_df[species_index[[i]][j],5])]], as.numeric(species_df[species_index[[i]][Jumpj],5]))
-          } else if(length(Jumpj) > 1){
-            checkJump <- c()
-              for (r in 1:length(Jumpj)){
-              checkJump[r] <- abs(as.numeric(species_df[species_index[[i]][Jumpj[r]],4]) - as.numeric(species_df[species_index[[i]][j],4]) - MyTime)
-            }
-              if(length(which(checkJump == 1)) == 1){
-              mymin <- which(checkJump == 1)
-            } else {mymin <- which(checkJump == min(checkJump))
-            }
-            DestinationCells[[as.numeric(species_df[species_index[[i]][j],5])]] <- append(DestinationCells[[as.numeric(species_df[species_index[[i]][j],5])]], as.numeric(species_df[species_index[[i]][Jumpj[mymin]],5]))
+  DestinationCells <- list()
+  DestinationCells[[totalcells + 1 ]] <- 0 ### Dummy value at the last element + 1 possible to make sure the list has at least one element for each possible origin
+
+  for (i in 1:length(species_index)){
+    for(j in 1:length((species_index[[i]]))){
+      Jumpj<-which(species_df[species_index[[i]],4] >= species_df[species_index[[i]][j],4] + MyTime - range_hr & species_df[species_index[[i]],4] <= species_df[species_index[[i]][j],4] + MyTime + range_hr)
+        if(length(Jumpj) == 1){
+        DestinationCells[[as.numeric(species_df[species_index[[i]][j],5])]] <- append(DestinationCells[[as.numeric(species_df[species_index[[i]][j],5])]], as.numeric(species_df[species_index[[i]][Jumpj],5]))
+        } else if(length(Jumpj) > 1){
+          checkJump <- c()
+            for (r in 1:length(Jumpj)){
+            checkJump[r] <- abs(as.numeric(species_df[species_index[[i]][Jumpj[r]],4]) - as.numeric(species_df[species_index[[i]][j],4]) - MyTime)
           }
-      }
-    }
-    names(DestinationCells) <- seq_along(DestinationCells) # to keep origin cells as names
-    DestinationCells <- Filter(Negate(is.null), DestinationCells) # remove cells that were not visited within time window
-    DestinationCells <- (DestinationCells[-length(DestinationCells)]) # Remove dummy value from tail
-
-  # Calculate the probability that each origin cell was visited by each destination cell. Creates transition probability matrix of movements.
-    Probability<-c()
-    Probability.Total<-c()
-    for(i in 1:length(DestinationCells)){ # total number of origin cells
-      MyP <- as.numeric(table(DestinationCells[[i]]))/length(DestinationCells[[i]]) # Calculate the probability of each destination cell being visited
-      Probability<-data.frame("OriginCell"=c(as.numeric(paste(names(DestinationCells[i])))),
-                              "DestinationCell"=c(as.numeric(names(table(DestinationCells[[i]])))), "Probability"=c(MyP))
-      Probability.Total<-rbind(Probability.Total, Probability)
-    }
-
-  # Format transition probability matrix for infomap by re-numbering visited cells by order of visit
-    empty.vector<-c(rep(0,times=totalcells)) # make vector for each cell in world (n=1036800 cells for 0.25 deg resolution)
-    Visited.Cells<-as.vector(t(cbind(Probability.Total$OriginCell,Probability.Total$DestinationCell))) # convert transition probability matrix to consecutive vector of origin then destination cells, maintaining movement order
-    visited.order<-replace(empty.vector, unique(Visited.Cells), seq(1,length(unique(Visited.Cells)),1)) # re-numbers vector of visited cells (all cells in world)
-
-  # Create new dataframe with all destination cells re-numbered in order of visit
-    order.df<-data.frame("OriginCell"=as.numeric(c(Probability.Total$OriginCell)), "OriginOrder"=as.numeric(c("0")),
-                         "DestinationCell"=as.numeric(c(Probability.Total$DestinationCell)), "DestinationOrder"=as.numeric(c("0")),
-                         "Probability"=as.numeric(c(Probability.Total$Probability)))
-    for (c in 1:length(visited.order)){ # for all cells in the world, go through all the visited cells, and renumber the order that they were visited starting at 1
-      order.df$OriginOrder[which(c==order.df[,1])]<-as.numeric(paste(visited.order[c]))
-      order.df$DestinationOrder[which(c==order.df[,3])]<-as.numeric(paste(visited.order[c]))
-    }
-
-    # Format results for infomap
-    LinkList<-order.df[,c(2,4,5)] # remove cell numbers (infomap requires order of cell visits only)
-    colnames(LinkList)<-c("from", "to", "weight") # rename columns following infomap requirements
-    LinkList$from<-sub("^","Node",LinkList$from)
-    LinkList$to<-sub("^","Node",LinkList$to)
-    names(order.df)<-c("Cell", "Node", "Cell", "Node")
-    nodenames<-rbind(order.df[,c(1:2)],order.df[,c(3:4)])
-    nodenames<-unique(nodenames[order(nodenames$Node),])
-    names(nodenames)<-c("cell", "node_name")
-    nodenames<-nodenames[,2:1]
-    nodenames$node_name<-sub("^","Node",nodenames$node_name)
-
-    if (infomap==TRUE){
-      out <- tryCatch(
-        error=function(cond) {
-          message(paste("Trouble locating infomapecology package, try loading manually via library(infomapecology) and re-running function"))
-          message("Here's the original error message:")
-          message(cond)
-          return(NA)
-        }
-      )
-      if(infomapecology::check_infomap() = !TRUE){
-        message("Cannot find infomap.exe, please set working directory to folder containing infomap.exe file. See https://ecological-complexity-lab.github.io/infomap_ecology_package/installation for more information")
-      } else {
-        monolayer_object<-infomapecology::create_monolayer_object(LinkList, directed = T, bipartite = F,node_metadata = nodenames)
-        infomap_object<-infomapecology::run_infomap_monolayer(monolayer_object, infomap_executable='infomap', flow_model='directed', silent=T, two_level=F, ...="-k")
-        infomap_modules<-as.data.frame(infomap_object$modules)
-          for(i in 1:nrow(infomap_modules)){
-            coordlat <- floor(infomap_modules$cell[i]/(grid*(longmax-longmin))) #Take origin cell number and divide by number of cells in longitude of grid.
-            #Floor used because here we're identifying the latitude row this origin cell came from
-            coordlong <- infomap_modules$cell[i] - (grid*(longmax-longmin)) * coordlat
-            infomap_modules$long[i] <- longmin + (coordlong / grid)
-            infomap_modules$lat[i] <- latmin + (coordlat / grid)
+            if(length(which(checkJump == 1)) == 1){
+            mymin <- which(checkJump == 1)
+          } else {mymin <- which(checkJump == min(checkJump))
           }
-        assign("Infomap_Results",infomap_modules, envir = .GlobalEnv)
+          DestinationCells[[as.numeric(species_df[species_index[[i]][j],5])]] <- append(DestinationCells[[as.numeric(species_df[species_index[[i]][j],5])]], as.numeric(species_df[species_index[[i]][Jumpj[mymin]],5]))
         }
-      return(out)
     }
+  }
+  names(DestinationCells) <- seq_along(DestinationCells) # to keep origin cells as names
+  DestinationCells <- Filter(Negate(is.null), DestinationCells) # remove cells that were not visited within time window
+  DestinationCells <- (DestinationCells[-length(DestinationCells)]) # Remove dummy value from tail
+  Probability<-c()
+  Probability.Total<-c()
+  for(i in 1:length(DestinationCells)){ # total number of origin cells
+    MyP <- as.numeric(table(DestinationCells[[i]]))/length(DestinationCells[[i]]) # Calculate the probability of each destination cell being visited
+    Probability<-data.frame("OriginCell"=c(as.numeric(paste(names(DestinationCells[i])))),
+                            "DestinationCell"=c(as.numeric(names(table(DestinationCells[[i]])))), "Probability"=c(MyP))
+    Probability.Total<-rbind(Probability.Total, Probability)
+  }
+  empty.vector<-c(rep(0,times=totalcells)) # make vector for each cell in world (n=1036800 cells for 0.25 deg resolution)
+  Visited.Cells<-as.vector(t(cbind(Probability.Total$OriginCell,Probability.Total$DestinationCell))) # convert transition probability matrix to consecutive vector of origin then destination cells, maintaining movement order
+  visited.order<-replace(empty.vector, unique(Visited.Cells), seq(1,length(unique(Visited.Cells)),1)) # re-numbers vector of visited cells (all cells in world)
+  order.df<-data.frame("OriginCell"=as.numeric(c(Probability.Total$OriginCell)), "OriginOrder"=as.numeric(c("0")),
+                       "DestinationCell"=as.numeric(c(Probability.Total$DestinationCell)), "DestinationOrder"=as.numeric(c("0")),
+                       "Probability"=as.numeric(c(Probability.Total$Probability)))
+  for (c in 1:length(visited.order)){ # for all cells in the world, go through all the visited cells, and renumber the order that they were visited starting at 1
+    order.df$OriginOrder[which(c==order.df[,1])]<-as.numeric(paste(visited.order[c]))
+    order.df$DestinationOrder[which(c==order.df[,3])]<-as.numeric(paste(visited.order[c]))
+  }
+  LinkList<-order.df[,c(2,4,5)] # remove cell numbers (infomap requires order of cell visits only)
+  colnames(LinkList)<-c("from", "to", "weight") # rename columns following infomap requirements
+  LinkList$from<-sub("^","Node",LinkList$from)
+  LinkList$to<-sub("^","Node",LinkList$to)
+  names(order.df)<-c("Cell", "Node", "Cell", "Node")
+  nodenames<-rbind(order.df[,c(1:2)],order.df[,c(3:4)])
+  nodenames<-unique(nodenames[order(nodenames$Node),])
+  names(nodenames)<-c("cell", "node_name")
+  nodenames<-nodenames[,2:1]
+  nodenames$node_name<-sub("^","Node",nodenames$node_name)
+
+  if (tpm==TRUE){
+  assign("TransitionProbabilityMatrix", order.df, envir = .GlobalEnv)
+  }
+
+  if (infomap==TRUE){
+    monolayer_object<-infomapecology::create_monolayer_object(LinkList, directed = T, bipartite = F,node_metadata = nodenames)
+    infomap_object<-infomapecology::run_infomap_monolayer(monolayer_object, infomap_executable='infomap', flow_model='directed', silent=T, verbose=F, two_level=F, ...="-k")
+    infomap_modules<-as.data.frame(infomap_object$modules)
+    for(i in 1:nrow(infomap_modules)){
+      coordlat <- floor(infomap_modules$cell[i]/(grid*(longmax-longmin)))
+      coordlong <- infomap_modules$cell[i] - (grid*(longmax-longmin)) * coordlat
+      infomap_modules$long[i] <- longmin + (coordlong / grid)
+      infomap_modules$lat[i] <- latmin + (coordlat / grid)
     }
-
-
-
-
-
-
-    if (interm==TRUE){
-    assign("TransitionProbabilityMatrix", order.df, envir = .GlobalEnv)
-    # assign("nodenames", nodenames, envir = .GlobalEnv)
-    # assign("LinkList", LinkList, envir = .GlobalEnv)
-    # assign("grid",grid, envir = .GlobalEnv)
-    }
+    assign("Infomap_Results",infomap_modules, envir = .GlobalEnv)
+  }
+  },
+  error=function(cond){
+    message(paste("Trouble locating infomapecology package. To resolve: load the package directly via library(infomapecology)"))
+    # return(NA)
+  }
+  )
+  return(invisible(outerror))
 }
-
