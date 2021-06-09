@@ -82,6 +82,9 @@ RMS <- function (species_df, timeunit="hours", bw=1.1, plot=TRUE, pchtype=c(15,1
 
   if (lm==TRUE){
     model<-lm(formula = TimeWindows_log ~ dRMS, data = MyRMS)
+    # fit.rms<-lm(log(sqrt(MyRMS$sumDist2/MyRMS$Timefreq))~log(MyRMS$mybins))
+    abline(fit.rms)
+    # Indiv.RMS[s,2]<-fit.rms$coefficients[2]
     model
     assign("RMS_LinearModel",model, envir = .GlobalEnv)
   }
