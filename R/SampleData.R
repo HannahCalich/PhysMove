@@ -8,7 +8,7 @@
 #Calculate random displacement lengths following a powerlaw
 set.seed(1)
 samplesize <- 1000
-distmin <- 2.5e-1 #in km 
+distmin <- 2.5e-1 #in km
 alpha <- 3
 r <- runif(samplesize,0,1) #uniform random number between 0-1
 pl_x <- distmin*(1-r)^(-1/(alpha-1)) #Displacement values in km where x >= xmin
@@ -29,10 +29,23 @@ for (i in 1:(samplesize-1)){
   PLsample$lat[i+1] <- lat2/rad # convert to degrees and save
   PLsample$day[i+1] <- PLsample$day[i]+(24*60*60) # previous day plus number of hours it would take the animal to travel that distance
 }
-head(PLsample)
-
 plot(PLsample$lon,PLsample$lat,type="l", lty=1)
-# PLsample[1000,4]-PLsample[1,4]
+
+rm(samplesize)
+rm(distmin)
+rm(alpha)
+rm(r)
+rm(pl_x)
+rm(angle)
+rm(i)
+rm(Radius)
+rm(rad)
+rm(a)
+rm(d)
+rm(lat1)
+rm(lat2)
+rm(long1)
+rm(long2)
 
 ##TEST PHYSMOVE
 CalculateDisplacements(PLsample, max_hr = 24)

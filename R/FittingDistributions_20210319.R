@@ -39,8 +39,7 @@ FitDist <- function (Displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, F
       disp <- unlist(Displacements[d])
       x[[d]] <- disp/mean(disp)
     }
-  }
-  else {
+  } else {
   x <- unlist(Displacements)
   }
 
