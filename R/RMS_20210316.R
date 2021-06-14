@@ -63,29 +63,25 @@ RMS <- function (species_df, timeunit="hours", bw=1.1, plot=TRUE, pchtype=c(15,1
 
   if (plot==TRUE){    # Plot RMS of displacements, and mean displacements on log-log scale
 
-    yminval = min(c(min(MyRMS$MeanDisp_per_count),min(MyRMS$Sqrt_dRMS_per_count)))
-    ymaxval = max(c(max(MyRMS$MeanDisp_per_count),max(MyRMS$Sqrt_dRMS_per_count)))
-
-    plot(MyRMS[,1], MyRMS$MeanDisp_per_count, log="xy", xaxt="n", yaxt="n", ylim=c(yminval,ymaxval),
-         xlim=c(min(MyRMS$TimeWindows_log),max(MyRMS$TimeWindows_log)),col=colours[1],pch=pchtype[1],
-         xlab=paste("T(", timeunit, ")", sep = ""),ylab="")
+    yminval = log(min(c(min(MyRMS$MeanDisp_per_count),min(MyRMS$Sqrt_dRMS_per_count))))
+    ymaxval = log(max(c(max(MyRMS$MeanDisp_per_count),max(MyRMS$Sqrt_dRMS_per_count))))
+    plot(log(MyRMS[,1]),log(MyRMS$MeanDisp_per_count),  xaxt="n", yaxt="n", ylim=c(yminval,ymaxval),
+         xlim=c(log(min(MyRMS$TimeWindows_log)),log(max(MyRMS$TimeWindows_log))),col=colours[1],pch=pchtype[1],
+         xlab=paste("T(", timeunit, ")", sep = ""),ylab="")#,log="xy")
     myTicks = axTicks(1)
     axis(1, at = myTicks, labels = formatC(myTicks, digits = 0, format = 'e'))
     myTicks2 = axTicks(2)
     axis(2, at = myTicks2, labels = formatC(myTicks2, digits = 0, format = 'e'))
     title(ylab=expression('<'*d^q*'>'^(1/q)*(km)), line=2)
-    points(MyRMS[,1], MyRMS$Sqrt_dRMS_per_count, col=colours[2],pch=pchtype[2])
+    points(log(MyRMS[,1]), log(MyRMS$Sqrt_dRMS_per_count), col=colours[2],pch=pchtype[2])
     if (legend[1]==TRUE){
       legend(legend[2], bty="n", c("Mean Disp.", "RMS Disp."), col=colours, pch=pchtype)
     }
   }
 
   if (lm==TRUE){
-    model<-lm(formula = TimeWindows_log ~ dRMS, data = MyRMS)
-    # fit.rms<-lm(log(sqrt(MyRMS$sumDist2/MyRMS$Timefreq))~log(MyRMS$mybins))
-    abline(fit.rms)
-    # Indiv.RMS[s,2]<-fit.rms$coefficients[2]
-    model
+    model<-lm(log(MyRMS$Sqrt_dRMS_per_count) ~ log(MyRMS$TimeWindows_log), data = MyRMS)
+    abline(model)
     assign("RMS_LinearModel",model, envir = .GlobalEnv)
   }
 

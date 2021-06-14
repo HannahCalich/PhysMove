@@ -22,8 +22,7 @@ CompDist <- function (Displacements){
       disp <- unlist(Displacements[d])
       x[[d]] <- disp/mean(disp)
     }
-  }
-  else {
+  } else {
   x <- unlist(Displacements)
   }
 
@@ -85,6 +84,5 @@ CompDist <- function (Displacements){
   sum.rel.lik <- sum(rel_like)
   AICw <- rel_like/sum.rel.lik
   DistResults$AICw<-AICw
-
   assign("DistResults_AIC", DistResults, envir = .GlobalEnv)
 }
