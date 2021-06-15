@@ -56,8 +56,8 @@ CompDist(DistResults_AIC)
 
 ########################################################################
 ########################################################################
-CalculateDisplacements(sharksBull, max=24)
-FitDist(Displacements)
+CalculateDisplacements(PLsample, max_hr=24)
+FitDist(Displacements, dist="exp")
 
 x <- list()
 for (d in 1:length(TimeWindows)){
@@ -119,14 +119,35 @@ N <- length(x)
   disp_exp$setXmin(exp_xmin)
   disp_pars_exp<-estimate_pars(disp_exp)
   disp_exp$setPars(disp_pars_exp)
-  m<-disp_exp
-  m
-  print(paste("KS stat for xmin:",exp_xmin$gof))
+  e<-disp_exp
+  e
+  # print(paste("KS stat for xmin:",exp_xmin$gof))
+  #
+  # rm(disp_exp)
+  # rm(disp_pars_exp)
+  # rm(d)
+  # rm(disp)
+  disp_ln<-conlnorm$new(unlist(x)) #Exp
+  ln_xmin<-estimate_xmin(disp_ln)
+  disp_ln$setXmin(ln_xmin)
+  disp_pars_ln<-estimate_pars(disp_ln)
+  disp_ln$setPars(disp_pars_ln)
+  ln<-disp_ln
+  ln
 
-  rm(disp_exp)
-  rm(disp_pars_exp)
-  rm(d)
-  rm(disp)
+  disp_pl<-conpl$new(unlist(x)) #Exp
+  pl_xmin<-estimate_xmin(disp_pl)
+  disp_pl$setXmin(pl_xmin)
+  disp_pars_pl<-estimate_pars(disp_pl)
+  disp_pl$setPars(disp_pars_pl)
+  pl<-disp_pl
+  pl
+
+  FitDist(Displacements)
+  e
+  ln
+  pl
+
 
 ### To estimate xmin you need to make fitted and data cdfs and get the KS statistic.
 ### Once you've run poweRlaw pkg and saved dist_exp as m, run below to check the ccdfs match
@@ -174,3 +195,6 @@ N <- length(x)
     result = stats4::mle(minuslogl = negloglike, start=theta_0, method = "L-BFGS-B", lower = 0)
     result@coef[1]
 
+#################### Testing FitDist
+    CalculateDisplacements(sharksBull,max_hr=24)
+    FitDist(Displacements, dist=("exp"))
