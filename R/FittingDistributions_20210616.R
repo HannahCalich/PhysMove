@@ -42,10 +42,9 @@ FitDist <- function (Displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, F
       x[[d]] <- disp/mean(disp)
     }
   } else {
-  x <- unlist(Displacements)
+    x <- unlist(Displacements)
   }
 
-  # x <- round(unlist(x), digits=8) #Can round to 8 digits if having issue getting exactly the correct answers v poweRlaw
   x <- unlist(x)
   xmins <- sort(unique(x)) #possible xmin values
   dat <- numeric(length(xmins)) #blank vectors for D values
@@ -143,74 +142,73 @@ FitDist <- function (Displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, F
 
   if ("lnorm" %in% dist){
     create_nll <- function(x){
-        xi <- x[x>xmin]
-        n <- length(xi)
-        function(mu, sigma) {
-          ll <- sum(dnorm(log(xi), mean=mu, sd=sigma, log=TRUE)) - n*pnorm(log(xmin), mean=mu, sd=sigma, log.p=TRUE, lower.tail=FALSE) ##original was log=TRUE
-          nll <- -ll
-          if (!is.finite(nll)){
-            nll <- 1e+12
-          }
-          nll
+      xi <- x[x>xmin]
+      n <- length(xi)
+      function(mu, sigma) {
+        nll <- -(sum(dlnorm(xi, mean=mu, sd=sigma, log=TRUE)) - n*plnorm(xmin, mean=mu, sd=sigma, log.p=TRUE, lower.tail=FALSE))
+        if (!is.finite(nll)){
+          nll <- 1e+12
         }
+        nll
+      }
     }
-    # norm.cdf <- function(x){
-    #     phi = 1/2*(1+VGAM::erf(((x-pars.mat[i,1])/(pars.mat[i,2]))/sqrt(2)))
-    #     phi
-    # }
     if (Full==FALSE){
       if (missing(set_xmin)){
+        # Initializing values with min of data
+        init <- matrix(ncol=2, nrow=2)
+        xmin <- min(x)
+        xi <- x[x>xmin] # truncate dataset at xmin
+        n <- length(xi) #size of truncated data set
+        pars = c(mean(log(xi)), sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
+        my_nll <- create_nll(xi) # Calculate negative log likelihood
+        mle = stats4::mle(minuslogl = my_nll, start=list(mu=pars[1],sigma=pars[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
+        init = c(as.numeric(mle@coef[1]), as.numeric(mle@coef[2])) # Records parameters of fit
         pars.mat <- matrix(ncol=2, nrow=(length(xmins)-1))
-        # core_xmins = length(xmins)-floor(length(xmins)*0.01) #not processing on last 1% of xmins because sd of the xi values get too small which results in sd = NA which throws errors
-        for (i in 1:(length(xmins)-2)){ #-2 needed here because if xi <- x[x>xmin] results in an xi of 1 val you can't calc sd(log(xi)), and the NA throws errors. Also, a fit to the last two values would be meaningless.
-        # for (i in 1:core_xmins){
-          i=994
+        for (i in 1:(length(xmins)-length(pars))){ #-2 needed here because if xi <- x[x>xmin] results in an xi of 1 val you can't calc sd(log(xi)), and the NA throws errors. Also, a fit to the last two values would be meaningless. #poweRlaw code does this through "max_data_pt_needed"
           xmin <- xmins[i]
           xi <- x[x>xmin] # truncate dataset at xmin
           n <- length(xi) #size of truncated data set
           my_nll <- create_nll(xi) # Calculate negative log likelihood
-          pars = c(mean(log(xi)), sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
-          mle = stats4::mle(minuslogl = my_nll, start=list(mu=pars[1],sigma=pars[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
+          mle = stats4::mle(minuslogl = my_nll, start=list(mu=init[1],sigma=init[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
           pars.mat[i,] = c(as.numeric(mle@coef[1]), as.numeric(mle@coef[2])) # Records parameters of fit
           n <- length(x[x>=xmin]) #create cdf including xmin
-          xi= x[(N-n+1):N] #identify truncated values to use with cdf
-          ## same x values going into cdf
-          ## Force paramaters to match exactly
-          pars.mat[i,1]=m$pars[1]
-          pars.mat[i,2]=m$pars[2]
-
-          fx = (plnorm(xi, pars.mat[i,1], pars.mat[i,2], lower.tail = TRUE)/plnorm(xmin, pars.mat[i,1], pars.mat[i,2], lower.tail = FALSE))-(1/plnorm(xmin, pars.mat[i,1], pars.mat[i,2], lower.tail = FALSE)+1
-          # fx = (norm.cdf(log(xi))-norm.cdf(log(xmin)))/(1-norm.cdf(log(xmin))) #lognormal CDF of fitted data
+          xi = x[(N-n+1):N] #identify truncated values to use with cdf
+          fx = (plnorm(xi, pars.mat[i,1], pars.mat[i,2], lower.tail = TRUE)/plnorm(xmin, pars.mat[i,1], pars.mat[i,2], lower.tail = FALSE))-(1/plnorm(xmin, pars.mat[i,1], pars.mat[i,2], lower.tail = FALSE))+1
           fx[xi<xmin] = 0
-
           sx <- ((0:(n - 1))/n)[1:length(fx)] #CDF for empirical data
           dat[i] <- max(abs(sx-fx)) # max difference between fitted and empirical cdfs
         }
         D <- min(dat[dat>0], na.rm=TRUE) # find smallest D value
-        LN_xmin <- xmins[which(dat==D)] # find corresponding xmin value such that LN_xmin is the D value that minimizes the distance between sx and fx
+        row <- which(dat==D)
+        LN_xmin <- xmins[row] # find corresponding xmin value such that LN_xmin is the D value that minimizes the distance between sx and fx
+        LN_mu <-  pars.mat[row,1] # determine parameters that correspond with LN_xmin
+        LN_sigma <- pars.mat[row,2]
         n <- length(x[x>LN_xmin]) # truncate dataset at xmin
-        LN_mu <-  pars.mat[which(dat==D),1] # determine parameters that correspond with LN_xmin
-        LN_sigma <- pars.mat[which(dat==D),2]
       }
       if (!missing(set_xmin)){
-        xmin <- set_xmin # If xmin is supplied, assign it as the LN_xmin
-        xi <- x[x>=xmin] # truncate dataset at xmin
-        n <- length(xi) # size of truncated data set
-        my_nll <- create_nll(xi)
-        mle = stats4::mle(minuslogl = my_nll, start=list(mu=mean(log(xi)),sigma=sd(log(xi))), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))#, upper = c(Inf, Inf)) #poweRlaw uses lower = c(-Inf, .Machine$double.eps), but we're using 0 for now
+        xmin <- set_xmin
+        xi <- x[x>xmin] # truncate dataset at xmin
+        n <- length(xi) #size of truncated data set
+        pars = c(mean(log(xi)), sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
+        my_nll <- create_nll(xi) # Calculate negative log likelihood
+        mle = stats4::mle(minuslogl = my_nll, start=list(mu=pars[1],sigma=pars[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
         LN_xmin <- xmin
         LN_mu <- as.numeric(mle@coef[1])
         LN_sigma <-as.numeric(mle@coef[2])
+        n <- length(x[x>LN_xmin]) # truncate dataset at xmin
       }
     }
     if (Full==TRUE){
-      n <- length(x)
-      xmin <- min(x) # size of truncated data set
-      my_nll <- create_nll(x)
-      mle <- stats4::mle(minuslogl = my_nll, start=list(mu=mean(log(x)),sigma=sd(log(x))), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))#, upper = c(Inf, Inf)) #poweRlaw uses lower = c(-Inf, .Machine$double.eps), but we're using 0 for now
+      xmin <- min(x)
+      xi <- x[x>xmin] # truncate dataset at xmin
+      n <- length(xi) #size of truncated data set
+      pars = c(mean(log(xi)), sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
+      my_nll <- create_nll(xi) # Calculate negative log likelihood
+      mle = stats4::mle(minuslogl = my_nll, start=list(mu=pars[1],sigma=pars[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
       LN_xmin <- xmin
       LN_mu <- as.numeric(mle@coef[1])
       LN_sigma <-as.numeric(mle@coef[2])
+      n <- length(x[x>LN_xmin]) # truncate dataset at xmin
     }
     DistResults[which(DistResults$Distribution =="lnorm"),which(names(DistResults)=="xmin")]<-LN_xmin
     DistResults[which(DistResults$Distribution =="lnorm"),which(names(DistResults)=="Parameter1")]<-LN_mu
