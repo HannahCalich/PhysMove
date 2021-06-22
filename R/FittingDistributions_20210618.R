@@ -33,7 +33,9 @@ FitDist <- function (Displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, F
     stop("Please Calculate Displacements using the CalcDisp function prior to executing FitDist")
   }
 
-  #if people dont type in "pl","exp","lnorm" send warning
+  if (("pl" %in% dist|"exp" %in% dist|"lnorm" %in% dist)!=TRUE){
+    stop("Distributions can only be fit to 'pl','exp', or 'lnorm' distributions")
+  }
 
   if (Normalize){
     x <- list()
@@ -69,7 +71,7 @@ FitDist <- function (Displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, F
         dat[i] <- max(abs(fx-sx))
       }
       D <- min(dat[dat>0], na.rm=TRUE) #find smallest D value
-      PL_xmin <- xmins[which(dat==D)] #find corresponding xmin value such that PLxmin is the D value that minimizes the distance between sx and fx
+      PL_xmin <- xmins[which.max(dat==D)] #find corresponding xmin value such that PLxmin is the D value that minimizes the distance between sx and fx
     }
     if (!is.null(set_xmin)){
       PL_xmin <- set_xmin # If xmin is supplied, assign it as the PL_xmin
@@ -83,6 +85,7 @@ FitDist <- function (Displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, F
   }
 
   if ("exp" %in% dist){
+    dat <- numeric(length(xmins)) #blank vectors for D values
     create_nll <- function(x){
       xi <- x[x>xmin]
       n <- length(xi)
@@ -95,7 +98,7 @@ FitDist <- function (Displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, F
       }
     }
     if (Full==FALSE){
-      if (missing(set_xmin)){
+      if (is.null(set_xmin)){
         init <-c()
         xmin <- min(x)
         xi <- x[x>xmin] # truncate dataset at xmin
@@ -105,7 +108,7 @@ FitDist <- function (Displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, F
         mle = stats4::mle(minuslogl = my_nll, start=list(lambda=pars), method = "L-BFGS-B", lower = 0)
         init = c(as.numeric(mle@coef[1])) # Records parameters of fit
         pars.list = c()
-        for (i in 1:(length(xmins)-length(pars))){
+        for (i in 1:(length(xmins)-length(pars)-1)){
           xmin <- xmins[i]
           xi <- x[x>xmin]
           n <- length(xi)
@@ -120,12 +123,12 @@ FitDist <- function (Displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, F
           dat[i] <- max(abs(sx-fx), na.rm=TRUE) # max difference between fitted and empirical cdfs (KS test)
         }
         D <- min(dat[dat>0],na.rm=TRUE)
-        row <- which(dat==D)
+        row <- which.max(dat==D)
         Exp_xmin <- xmins[row]
         Exp_lambda <- pars.list[row]
         n <- length(x[x>Exp_xmin]) #length of truncated dataset
       }
-      if (!missing(set_xmin)){
+      if (!is.null(set_xmin)){
         xmin <- set_xmin
         xi <- x[x>xmin] # truncate dataset at xmin
         n <- length(xi) #size of truncated data set
@@ -150,6 +153,7 @@ FitDist <- function (Displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, F
   }
 
   if ("lnorm" %in% dist){
+    dat <- numeric(length(xmins)) #blank vectors for D values{
     create_nll <- function(x){
       xi <- x[x>xmin]
       n <- length(xi)
@@ -162,7 +166,7 @@ FitDist <- function (Displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, F
       }
     }
     if (Full==FALSE){
-      if (missing(set_xmin)){
+      if (is.null(set_xmin)){
         init <- matrix(ncol=2, nrow=1)# Initializing values with min of data
         xmin <- min(x)
         xi <- x[x>xmin] # truncate dataset at xmin
@@ -172,7 +176,7 @@ FitDist <- function (Displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, F
         mle = stats4::mle(minuslogl = my_nll, start=list(mu=pars[1],sigma=pars[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
         init = c(as.numeric(mle@coef[1]), as.numeric(mle@coef[2])) # Records parameters of fit
         pars.mat <- matrix(ncol=2, nrow=(length(xmins)-1))
-        for (i in 1:(length(xmins)-length(pars))){ #-2 needed here because if xi <- x[x>xmin] results in an xi of 1 val you can't calc sd(log(xi)), and the NA throws errors. Also, a fit to the last two values would be meaningless. #poweRlaw code does this through "max_data_pt_needed"
+        for (i in 1:(length(xmins)-length(pars)-1)){ #-2 needed here because if xi <- x[x>xmin] results in an xi of 1 val you can't calc sd(log(xi)), and the NA throws errors. Also, a fit to the last two values would be meaningless. #poweRlaw code does this through "max_data_pt_needed"
           xmin <- xmins[i]
           xi <- x[x>xmin] # truncate dataset at xmin
           n <- length(xi) #size of truncated data set
@@ -187,13 +191,13 @@ FitDist <- function (Displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, F
           dat[i] <- max(abs(sx-fx)) # max difference between fitted and empirical cdfs
         }
         D <- min(dat[dat>0], na.rm=TRUE) # find smallest D value
-        row <- which(dat==D)
+        row <- which.max(dat==D) #which.max is needed for cases where identical D values are calculated. In this case pick the highest row as it containes the most data.
         LN_xmin <- xmins[row] # find corresponding xmin value such that LN_xmin is the D value that minimizes the distance between sx and fx
         LN_mu <-  pars.mat[row,1] # determine parameters that correspond with LN_xmin
         LN_sigma <- pars.mat[row,2]
         n <- length(x[x>LN_xmin]) # truncate dataset at xmin
       }
-      if (!missing(set_xmin)){
+      if (!is.null(set_xmin)){
         xmin <- set_xmin
         xi <- x[x>xmin] # truncate dataset at xmin
         n <- length(xi) #size of truncated data set

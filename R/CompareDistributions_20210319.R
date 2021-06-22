@@ -16,6 +16,12 @@ CompDist <- function (Displacements){
     stop("Please fit distributions using the FitDist function prior to executing PlotDist")
   }
 
+  if (length(dist)>1){
+    if ((sum(DistResults[1:length(dist),5])/length(dist)==DistResults[1,5])==FALSE){
+     stop("Distributions can only compared over equal data ranges")
+    }
+  }
+
   if (Normalize){
     x <- list()
     for (d in 1:length(TimeWindows)){
