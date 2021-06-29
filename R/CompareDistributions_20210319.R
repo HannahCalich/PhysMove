@@ -6,7 +6,7 @@
 #' @examples CompDist(Displacements)
 #' @export
 
-CompDist <- function (Displacements){
+CompDist <- function (Displacements){#}, AICc=FALSE){
 
   if (exists("Displacements")==FALSE){
     stop("Please calculate displacements using the CalcDisp function and fit distriubtions using the FitDisp function prior to executing PlotDist")
@@ -16,11 +16,11 @@ CompDist <- function (Displacements){
     stop("Please fit distributions using the FitDist function prior to executing PlotDist")
   }
 
-  if (length(dist)>1){
-    if ((sum(DistResults[1:length(dist),5])/length(dist)==DistResults[1,5])==FALSE){
-     stop("Distributions can only compared over equal data ranges")
-    }
-  }
+  # if (length(dist)>1 & AICc==FALSE){
+  #   if ((sum(DistResults[1:length(dist),5])/length(dist)==DistResults[1,5])==FALSE){
+  #    stop("AIC values can only be calculated over equal data ranges")
+  #   }
+  # }
 
   if (Normalize){
     x <- list()
@@ -32,13 +32,11 @@ CompDist <- function (Displacements){
   x <- unlist(Displacements)
   }
 
-  x <- round(unlist(x), digits=8) # To limit discrepancies with floating numbers
-  # xmins <- sort(unique(x)) #possible xmin values
-  # dat <- numeric(length(xmins)) #blank vectors for D values
+  xmins <- sort(unique(x)) #possible xmin values
   x <- sort(x)
-  # N <- length(x)
-  DistResults<-cbind(DistResults,"AIC"=c(NA), "AICw"=c(NA))
+  DistResults<-cbind(DistResults,"AIC"=c(NA), "AICc"=c(NA), "AICw"=c(NA))
   AIC_Scores<-c()
+  AICc_Scores<-c()
 
   if ("pl" %in% dist){
     MyPowerLaw <- function(parameters, Displacements){
@@ -47,12 +45,22 @@ CompDist <- function (Displacements){
     }
     PL_xmin <- DistResults[which(DistResults$Distribution=="pl"),"xmin"]
     PL_alpha <- DistResults[which(DistResults$Distribution=="pl"),"Parameter1"]
+    PL_nTail <- DistResults[which(DistResults$Distribution=="pl"),"N_Tail"]
     PL_pdf <- MyPowerLaw(c(PL_alpha, PL_xmin), x)
     PL_pdf[x<PL_xmin] = 0
     logLik<-sum(log(PL_pdf[PL_pdf>0]))
-    PL_AIC <- -2*logLik + 2*1
-    AIC_Scores<-c(AIC_Scores,PL_AIC)
-    DistResults[which(DistResults$Distribution =="pl"),"AIC"]<-PL_AIC
+    K <- 1
+
+    if (PL_nTail/K <= 40){ #use AIC
+      PL_AIC <- -2*logLik + 2*K
+      AIC_Scores<-c(AIC_Scores,PL_AIC)
+      DistResults[which(DistResults$Distribution =="pl"),"AIC"]<-PL_AIC
+    } else { #use AICc
+      # PL_nTail <- DistResults[which(DistResults$Distribution=="pl"),"N_Tail"]
+      PL_AICc <- -2*logLik + 2*K + ((2*K*(K+1))/(PL_nTail-K-1))
+      AICc_Scores<-c(AICc_Scores,PL_AICc)
+      DistResults[which(DistResults$Distribution =="pl"),"AICc"]<-PL_AICc
+    }
   }
 
   if ("exp" %in% dist){
@@ -62,12 +70,21 @@ CompDist <- function (Displacements){
     }
     Exp_xmin <- DistResults[which(DistResults$Distribution=="exp"),"xmin"]
     Exp_lambda <- DistResults[which(DistResults$Distribution=="exp"),"Parameter1"]
+    Exp_nTail <- DistResults[which(DistResults$Distribution=="exp"),"N_Tail"]
     Exp_pdf <- MyExponentialTrunc(c(Exp_lambda, Exp_xmin), x)
     Exp_pdf[x<Exp_xmin] = 0
     logLik<-sum(log(Exp_pdf[Exp_pdf>0]))
-    Exp_AIC <- -2*logLik + 2*1
-    AIC_Scores<-c(AIC_Scores,Exp_AIC)
-    DistResults[which(DistResults$Distribution =="exp"),"AIC"]<-Exp_AIC
+    K <- 1
+    if (Exp_nTail/K <= 40){ #use AIC
+      Exp_AIC <- -2*logLik + 2*K
+      AIC_Scores<-c(AIC_Scores,Exp_AIC)
+      DistResults[which(DistResults$Distribution =="exp"),"AIC"]<-Exp_AIC
+    } else { #use AICc
+      # Exp_nTail <- DistResults[which(DistResults$Distribution=="exp"),"N_Tail"]
+      Exp_AICc <- -2*logLik + 2*K + ((2*K*(K+1))/(Exp_nTail-K-1))
+      AICc_Scores<-c(AICc_Scores,Exp_AICc)
+      DistResults[which(DistResults$Distribution =="exp"),"AICc"]<-Exp_AICc
+    }
   }
 
   if ("lnorm" %in% dist){
@@ -78,17 +95,30 @@ CompDist <- function (Displacements){
     LN_xmin <- DistResults[which(DistResults$Distribution=="lnorm"),"xmin"]
     LN_mu <- DistResults[which(DistResults$Distribution=="lnorm"),"Parameter1"]
     LN_sigma <- DistResults[which(DistResults$Distribution=="lnorm"),"Parameter2"]
+    LN_nTail <- DistResults[which(DistResults$Distribution=="lnorm"),"N_Tail"]
     LN_pdf <- MyLogNormalTrunc(c(LN_mu, LN_sigma, LN_xmin), x)
     LN_pdf[x<LN_xmin] = 0
     logLik<-sum(log(LN_pdf[LN_pdf>0]))
-    LN_AIC <- -2*logLik + 2*1
-    AIC_Scores<-c(AIC_Scores,LN_AIC)
-    DistResults[which(DistResults$Distribution =="lnorm"),"AIC"]<-LN_AIC
+    K <- 2
+    if (LN_nTail/K <= 40){
+      LN_AIC <- -2*logLik + 2*K
+      AIC_Scores<-c(AIC_Scores,LN_AIC)
+      DistResults[which(DistResults$Distribution =="lnorm"),"AIC"]<-LN_AIC
+    } else {
+      # LN_nTail <- DistResults[which(DistResults$Distribution=="lnorm"),"N_Tail"]
+      LN_AICc <- -2*logLik + 2*K + ((2*K*(K+1))/(LN_nTail-K-1))
+      AICc_Scores<-c(AICc_Scores,LN_AICc)
+      DistResults[which(DistResults$Distribution =="lnorm"),"AICc"]<-LN_AICc
     }
+  }
 
+  if (AICc==FALSE){
   rel_like <- exp(-1/2*((DistResults$AIC)-min(DistResults$AIC)))
+  } else {
+  rel_like <- exp(-1/2*((DistResults$AICc)-min(DistResults$AICc)))
+  }
   sum.rel.lik <- sum(rel_like)
   AICw <- rel_like/sum.rel.lik
   DistResults$AICw<-AICw
-  assign("DistResults_AIC", DistResults, envir = .GlobalEnv)
+  assign("DistResults", DistResults, envir = .GlobalEnv)
 }

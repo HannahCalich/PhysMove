@@ -10,7 +10,7 @@
 #' @param Normalize Normalizes the displacement distances by dividing each displacement by the average displacement for that time period. Required if working with displacements calculated over multiple time windows.
 #' @param Plot Plot the Complementary Cumulative Distribution Function for the displacements and add fit lines for each calculated distribution, if desired. Default is c(TRUE, TRUE).
 #'
-#' @return Dataframe with summary statistics for each distribution fit.
+#' @return Dataframe with summary statistics for each distribution fit. N_Tail is the number of data points greater than or equal to current value of xmin
 #' @examples CalculateDisplacements(species_df, dist=c("pl","exp"))
 #' @examples CalculateDisplacements(species_df, dist=c("pl","exp","lnorm"), set_xmin=NULL, Full=FALSE, AIC=TRUE, Normalize=TRUE)
 #' @export
@@ -126,12 +126,12 @@ FitDist <- function (Displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, F
         row <- which.max(dat==D)
         Exp_xmin <- xmins[row]
         Exp_lambda <- pars.list[row]
-        n <- length(x[x>Exp_xmin]) #length of truncated dataset
+        n <- length(x[x>=Exp_xmin]) #length of truncated dataset
       }
       if (!is.null(set_xmin)){
         xmin <- set_xmin
         xi <- x[x>xmin] # truncate dataset at xmin
-        n <- length(xi) #size of truncated data set
+        n <- length(x[x>=xmin]) #size of truncated data set
         my_nll <- create_nll(xi)
         mle = stats4::mle(minuslogl = my_nll, start=list(lambda=mean(xi)), method = "L-BFGS-B", lower = 0)
         Exp_lambda = as.numeric(mle@coef[1])
@@ -195,7 +195,7 @@ FitDist <- function (Displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, F
         LN_xmin <- xmins[row] # find corresponding xmin value such that LN_xmin is the D value that minimizes the distance between sx and fx
         LN_mu <-  pars.mat[row,1] # determine parameters that correspond with LN_xmin
         LN_sigma <- pars.mat[row,2]
-        n <- length(x[x>LN_xmin]) # truncate dataset at xmin
+        n <- length(x[x>=LN_xmin]) # truncate dataset at xmin
       }
       if (!is.null(set_xmin)){
         xmin <- set_xmin
@@ -207,7 +207,7 @@ FitDist <- function (Displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, F
         LN_xmin <- xmin
         LN_mu <- as.numeric(mle@coef[1])
         LN_sigma <-as.numeric(mle@coef[2])
-        n <- length(x[x>LN_xmin]) # truncate dataset at xmin
+        n <- length(x[x>=LN_xmin]) # truncate dataset at xmin
       }
     }
     if (Full==TRUE){
@@ -220,7 +220,7 @@ FitDist <- function (Displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, F
       LN_xmin <- xmin
       LN_mu <- as.numeric(mle@coef[1])
       LN_sigma <-as.numeric(mle@coef[2])
-      n <- length(x[x>LN_xmin]) # truncate dataset at xmin
+      n <- length(x[x>=LN_xmin]) # truncate dataset at xmin
     }
     DistResults[which(DistResults$Distribution =="lnorm"),which(names(DistResults)=="xmin")]<-LN_xmin
     DistResults[which(DistResults$Distribution =="lnorm"),which(names(DistResults)=="Parameter1")]<-LN_mu

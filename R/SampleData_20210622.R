@@ -34,6 +34,7 @@ for (i in 1:(samplesize-1)){
 }
 plot(PLsample$lon,PLsample$lat,type="l", lty=1)
 head(PLsample)
+rm(list=ls()[! ls() %in% c("PLsample")])
 }
 ############################################################################################################################################################
 ############################################################################################################################################################
@@ -41,12 +42,12 @@ head(PLsample)
 #Calculate random displacement lengths following an exp dist
 {
 set.seed(1)
-samplesize <- 1000
+samplesize <- 2500
 lambda <- 0.125
 distmin <- 2.5e-1 #in km
 r <- runif(samplesize,0,1) #uniform random number between 0-1
-exp_x <--(1/lambda)*log(1-r)
-# exp_x <- distmin-(1/lambda)*log(1-r) ##Mean of exponential dist should equal 1/lambda when xmin isn't a factor. e.g., 1/mean(-(1/lambda)*log(1-r)) = lambda
+# exp_x <--(1/lambda)*log(1-r)
+exp_x <- distmin-(1/lambda)*log(1-r) ##Mean of exponential dist should equal 1/lambda when xmin isn't a factor. e.g., 1/mean(-(1/lambda)*log(1-r)) = lambda
 summary(exp_x)
 # Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
 # 0.2605  2.6386  5.5317  8.3453 11.2428 76.8543
@@ -68,7 +69,7 @@ for (i in 1:(samplesize-1)){
   Expsample$day[i+1] <- Expsample$day[i]+(24*60*60) # previous day plus number of hours it would take the animal to travel that distance
 }
 plot(Expsample$lon,Expsample$lat,type="l", lty=1)
-
+rm(list=ls()[! ls() %in% c("Expsample")])
 }
 ############################################################################################################################################################
 ############################################################################################################################################################
@@ -134,8 +135,8 @@ mu <- 0.3
 sigma <- 2
 lnorm_x <- EnvStats::rlnormTrunc(samplesize, mu, sigma, min = distmin, max = distmax)
 summary(lnorm_x)
-# Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
-# 0.2501   0.8125   2.1564   8.4682   7.2470 171.9009
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+# 0.2518  0.8009  1.9135  5.6227  5.9535 49.9321
 angle <- runif(samplesize,0,360) #random angles between 0-360
 LNsample<-data.frame("ref"=c(1),"lon"=c(rep(0,samplesize)),"lat"=c(rep(0,samplesize)),"day"=as.POSIXct("2015-01-01 09:30:31")) # 1 track
 i<-1
@@ -154,27 +155,23 @@ for (i in 1:(samplesize-1)){
 }
 plot(LNsample$lon,LNsample$lat,type="l", lty=1)
 } ## rlnormTrunc and rlnorm methods
-
+tail(LNsample)
 ############################################################################################################################################################
 ############################################################################################################################################################
 
 ##TEST PHYSMOVE
 CalculateDisplacements(Expsample, max_hr = 24)
-summary(unlist(Displacements)) ## 2 m/s is 173 km/d
-min(unlist(Displacements))
-FitDist(Displacements, dist="exp", Normalize = FALSE)#, set_xmin = 0.3858889)
-CompDist(Displacements)
+# summary(unlist(Displacements)) ## 2 m/s is 173 km/d
+# min(unlist(Displacements))
+FitDist(Displacements, Normalize = FALSE, dist=c("exp", "lnorm"), Full = TRUE)
+CompDist(Displacements)#, force_AICc = TRUE)
+#, set_xmin = 0.3858889) #pl
+#, set_xmin = 10.1093271) #exp
+#, set_xmin = 7.4997411) #lnorm
+
+
+CompDist(Displacements)#, AICc=FALSE)
 # 0.3858889 #PL xmin
-
-
-
-# CompDist(Displacements)
-# PlotDist(Displacements)
-# CompDist(DistResults_AIC)
-
-# library(poweRlaw)
-# blackouts = read.table("blackouts.txt")$V1
-# x<-blackouts
 
 ##COMPARE TO POWERLAW PKG
 library(poweRlaw)
@@ -197,13 +194,16 @@ disp_exp<-conexp$new(unlist(Displacements))
 # disp_exp<-conexp$new(unlist(x)) #create continuous  power law object
 exp_xmin<-estimate_xmin(disp_exp)
 disp_exp$setXmin(exp_xmin)
+disp_exp$setXmin(min(unlist(Displacements)))
+disp_exp$setPars(estimate_pars(disp_exp))
 e<-disp_exp
+e$internal$n
 
-disp_ln<-conlnorm$new(unlist(x)) #create continuous  power law object
+disp_ln<-conlnorm$new(unlist(Displacements)) #create continuous  power law object
 ln_xmin<-estimate_xmin(disp_ln)
 disp_ln$setXmin(ln_xmin)
 ln<-disp_ln
-
+ln$internal$n
 pl
 e
 ln
