@@ -13,7 +13,7 @@
 #' @examples CalculateDisplacements(species_df, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
 #' @export
 
-CalculateDisplacements<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6){
+CalcDisp<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6){
 
   min_hr<-min_hr*(60*60) #convert hours (input) to seconds
   max_hr<-max_hr*(60*60) #convert hours (input) to seconds

@@ -11,7 +11,7 @@
 #' @examples PlotDist(Displacements)
 #' @export
 
-PlotDist <- function (Displacements, lines=TRUE, colours=c("#D55E00", "#DDCC77", "#0072B2"), legend=c(TRUE, "bottomleft")){
+PlotDist <- function (Displacements, lines=TRUE, colours=c("#D55E00", "#DDCC77", "#0072B2"), distPlot=FALSE, legend=c(TRUE, "bottomleft")){
 
   if (exists("Displacements")==FALSE){
     stop("Please Calculate Displacements using (CalcDisp) and fit distriubtions (FitDisp) prior to executing PlotDist")
@@ -19,6 +19,10 @@ PlotDist <- function (Displacements, lines=TRUE, colours=c("#D55E00", "#DDCC77",
 
   if (exists("DistResults")==FALSE){
     stop("Please Fit Distributions using the FitDist function prior to executing PlotDist")
+  }
+
+  if (distPlot==FALSE){
+    distPlot=dist
   }
 
   if (Normalize){
@@ -33,7 +37,6 @@ PlotDist <- function (Displacements, lines=TRUE, colours=c("#D55E00", "#DDCC77",
     xlabel<-"Displacements (km)"
   }
 
-  x <- round(unlist(x), digits=8) # To limit discrepancies with floating numbers
   x <- sort(x)
   n <- length(x)
   ccdf <- 1-((0:(n - 1))/n)
@@ -46,7 +49,7 @@ PlotDist <- function (Displacements, lines=TRUE, colours=c("#D55E00", "#DDCC77",
 
   if (lines==TRUE){
     legendcols<-c()
-    if ("pl" %in% dist){
+    if ("pl" %in% distPlot){
       MyPowerLawCDF <- function(parameters, Displacements){
         PL_CDF  = 1 - (Displacements/parameters[2])^(-parameters[1]+1)
         return(PL_CDF)
@@ -69,7 +72,7 @@ PlotDist <- function (Displacements, lines=TRUE, colours=c("#D55E00", "#DDCC77",
       lines(xval, yval, col=colours[1],lwd=2)
       legendcols<-c(legendcols, colours[1])
     }
-    if ("exp" %in% dist){
+    if ("exp" %in% distPlot){
       MyExponentialPDF<- function(parameters, Displacements){
         Exp_CDF = exp(pexp(Displacements, parameters[1], lower.tail = FALSE, log.p = TRUE) - pexp(parameters[2], parameters[1], lower.tail = FALSE, log.p = TRUE))
         # Exp_CDF = parameters*exp(-parameters*Displacements)
@@ -93,7 +96,7 @@ PlotDist <- function (Displacements, lines=TRUE, colours=c("#D55E00", "#DDCC77",
       lines(xval, yval, col=colours[2],lwd=2)
       legendcols<-c(legendcols, colours[2])
     }
-    if ("lnorm" %in% dist){
+    if ("lnorm" %in% distPlot){
       MyLogNormalPDF <- function(parameters, Displacements){ # 1=mu, 2= sigma
         LN_PDF = exp((plnorm(Displacements, parameters[1], parameters[2], lower.tail=FALSE, log = TRUE)) -
         (plnorm(parameters[3],parameters[1], parameters[2], lower.tail = FALSE, log.p = TRUE)))
@@ -119,7 +122,7 @@ PlotDist <- function (Displacements, lines=TRUE, colours=c("#D55E00", "#DDCC77",
       legendcols<-c(legendcols, colours[3])
       }
     if (legend[1]==TRUE){
-        legend(legend[2], legend=dist, lwd=1 ,col=legendcols,bty="n")
+        legend(legend[2], legend=distPlot, lwd=1 ,col=legendcols,bty="n")
     }
   }
 }
