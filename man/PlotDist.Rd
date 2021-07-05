@@ -8,6 +8,7 @@ PlotDist(
   Displacements,
   lines = TRUE,
   colours = c("#D55E00", "#DDCC77", "#0072B2"),
+  distPlot = FALSE,
   legend = c(TRUE, "bottomleft")
 )
 }

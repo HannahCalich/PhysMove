@@ -1,7 +1,7 @@
 #' Map Infomap Communities
 #'
-#' This function allows you to create a map of infomap communities calculated using the \code{\link{InfomapCommuities}} function
-#' @param infomap_object output from the \code{\link{InfomapCommuities}} function
+#' This function allows you to create a map of infomap communities calculated using the \code{\link{InfomapCommunities}} function
+#' @param infomap_object output from the \code{\link{InfomapCommunities}} function
 #' @param core_communities Vector of communities to be plotted in map. Default is NULL
 #' @return A map illustrating Infomap communities
 #' @examples

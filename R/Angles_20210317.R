@@ -1,4 +1,4 @@
-#' Calculating Turning Angles from Trajectories
+#' Calculate Turning Angles from Trajectories
 #'
 #' To calculate turning angles between sets of three consecutive location estimates separated by set time period(s).
 #' @param species_df A data frame containing location data (rows) and columns with the following headers: "ref", "lon", "lat", "day". "ref" is the unique id number for each animal

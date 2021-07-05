@@ -14,7 +14,7 @@
 #' rG(species_df,plot=TRUE,nb, map=TRUE)
 #' @export
 
-gyrad <- function (species_df, map=TRUE, Colours=c("Black","Red"), plot=FALSE, nb=15){
+GyrationRad <- function (species_df, map=TRUE, Colours=c("Black","Red"), plot=FALSE, nb=15){
 
   MydistHaversine <- function(lon1, lat1, lon2, lat2) {
     radlat1 = rad * lat1

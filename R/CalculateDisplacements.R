@@ -1,13 +1,11 @@
 #' Calculate Displacements
 #'
 #' This function allows you to calculate the displacement distances traveled by individuals over set time windows.
-#' @param species_df A data frame containing location data (rows) and columns with the following headers: "ref", "lon", "lat", "day". "ref" is the unique id number for each animal
-#'      (e.g., their satellite tag number; integer format). "lon" and "lat" are the longitude and latitide of each position estimate in decimal degrees (numeric format). "day"
-#'      is the datetime stamp for each location estimate (POSIXct format following yyyy-mm-dd hh:mm:ss). See XXX data frame for an example.
+#' @param species_df A data frame containing location data (rows) and columns with the following headers: "ref", "lon", "lat", "day". "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer). "lon" and "lat" are the longitude and latitide of each position estimate in decimal degrees formatted in numeric format). "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss. See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.
 #' @param min_hr Minimum number of hours to consider for displacement calculations. Default is 24 hours.
 #' @param max_hr Maximum number of hours to consider for displacement calculations (default is 240 hours)
 #' @param interval_hr Time interval (in hours) used to identify time period intervals between min_hr and max_hr (default is 24 hours)
-#' @param range_hr Range (in hours) applied to interval_hr. This value helps the algorithm identify location estimates that are close to, but not exactly separated by the interval_hr. If multiple location estimates fall within this range the location estimate closest to the interval_hr will be used for calculations.
+#' @param range_hr Range (in hours). Range converts the hours value into a broader time window so the algorithm can search for location estimates separated by the input hours +/- a range value. This helps the algorithm identify location estimates that are close to, but not exactly separated by the hours input value. If multiple location estimates fall within this range the location estimate closest to hours input value will be used for calculations. For example, if hours = 24 and range = 6, the algorithm will search for locations spaced 18 to 32 hours apart. Default is 6.
 #' @return A list containing the displacements (distances traveled in km) recorded for each time period
 #' @examples CalculateDisplacements(species_df)
 #' @examples CalculateDisplacements(species_df, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
