@@ -9,7 +9,7 @@ Authors@R:
       person("Jorge", "Rodriguez", email = "jorgeprodriguezg@gmail.com", role = "ctb"),
       person("Victor", "Eguiluz", email = "victor@ifisc.uib-csic.esu", role = "ctb", comment = c(ORCID = "0000-0003-1133-1289")))
 Description: The PhysMove package aims to quantify movement patterns of satellite tagged animals using methods derrived from statistical physics.
-    See https://sequeiralab.com/ for more information. 
+    See DOI #### and https://sequeiralab.com/ for more information. 
 Depends: R (>= 4.0) 
 Imports:
     ggplot2 (>= 3.3.5),
