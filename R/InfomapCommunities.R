@@ -1,23 +1,33 @@
-#' Create Link List for Infomap Analysis
+#' Create a transition probability matrix (link list) and identify Infomap communities
 #'
-#' This function allows you to create a link list for the Network community detection Infomap (https://www.mapequation.org/infomap/#Install)
+#' This function allows you to create a transition probability matrix in link list format for the network community detection Infomap (https://www.mapequation.org/infomap/#Install)
 #' When function is finished please export LinkList as .txt file following "write.table(LinkListOutput, "LinkList2.txt", sep="/t", row.names = FALSE, col.names = FALSE)" and upload .txt file at https://www.mapequation.org/infomap/#Install
 #' Important settings to consider when configuring analysis for Infomap are: '-i link-list -k --tree -d'
 #' '-i link-list' identifies the input at a link list, '-k' enables self-links, '--tree' ensures the output is in .tree format, and '-d' assumed directed links."
 
-#' @param species_df A data frame containing location data (rows) and columns with the following headers: "ref", "lon", "lat", "day". "ref" is the unique id number for each animal
-#'      (e.g., their satellite tag number; integer format). "lon" and "lat" are the longitude and latitide of each position estimate in decimal degrees (numeric format). "day"
-#'      is the datetime stamp for each location estimate (POSIXct format following yyyy-mm-dd hh:mm:ss). See XXX data frame for an example.
-#' @param gridcell Grid cell size in degrees. Default is 0.25.
+
+#' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
+#' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
+#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+#' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+#' See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.
+#' @param gridCell Grid cell size in degrees. Default is 0.25.
 #' @param hours Number of hours to consider movements for. Default is 24.
-#' @param range_hr Range (in hours) applied to hours This value helps the algorithm identify location estimates that are close to, but not exactly separated by the interval_hr. If multiple location estimates fall within this range_hr the location estimate closest to the interval_hr will be used for calculations.
+#' @param range_hr Range (in hours) converts the hours parameter into a time window (hours +/-  range_hr) so the
+#' code can identify location estimates that are close to, but not exactly separated by a set number of hours.
+#' If multiple location estimates fall within this time window the location estimate closest to the set hours input value
+#' will be used for calculations. For example, if hours = 24 and range = 6, the algorithm will search for
+#' locations spaced 18 to 32 hours apart. Default is 6.
+#' @param infomap
+#' @param tpm Export the transition probability matrix, which
 #' @return A matrix containing the link list needed to calculate Infomap communities using https://www.mapequation.org/infomap/#Install, and a data frame of the LinkListCellNumbers that is used with the \code{\link{InfomapCoords}} function to interpret the output from Infomap.
 #' @examples
-#' InfomapCommunities(species_df)
-#' InfomapCommunities(species_df, gridcell=0.25, hours=24, range_hr=6, infomap=TRUE, tpm=FALSE)
+#' InfomapCommunities(expSample)
+#' InfomapCommunities(expSample, gridCell=0.25, hours=24, range_hr=6, infomap=TRUE, tpm=FALSE)
 #' @export
+#'
 
-InfomapCommunities <- function(species_df, gridcell=0.25, hours=24, range_hr=6, infomap=TRUE, tpm=FALSE){
+InfomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, infomap=TRUE, tpm=FALSE){
 
   outerror <- tryCatch({
     if (infomap==TRUE){
@@ -32,7 +42,7 @@ InfomapCommunities <- function(species_df, gridcell=0.25, hours=24, range_hr=6, 
     latmin <- -90
     longmax <- 180
     latmax <- 90
-    grid <- 1/gridcell
+    grid <- 1/gridCell
     coordlong <- floor(grid * (as.numeric(species_df[,2]) - longmin))
     coordlat <- floor(grid * (as.numeric(species_df[,3]) - latmin))
     species_df$cellnum <- coordlong + grid * (longmax - longmin) * coordlat
@@ -83,11 +93,11 @@ InfomapCommunities <- function(species_df, gridcell=0.25, hours=24, range_hr=6, 
       coordlat <- floor(CellCoords$Cell[i]/(grid*(longmax-longmin)))
       coordlong <- CellCoords$Cell[i] - (grid*(longmax-longmin)) * coordlat
       if (coordlong==0) {
-        CellCoords$long[i]  <- (longmin + (360 / grid)) - 0.5*gridcell
-        CellCoords$lat[i] <- (latmin + (coordlat / grid)) - 0.5*gridcell
+        CellCoords$long[i]  <- (longmin + (360 / grid)) - 0.5*gridCell
+        CellCoords$lat[i] <- (latmin + (coordlat / grid)) - 0.5*gridCell
       } else {
-        CellCoords$long[i]  <- (longmin + (coordlong/grid)) - 0.5*gridcell
-        CellCoords$lat[i] <- (latmin + (coordlat / grid)) + 0.5*gridcell
+        CellCoords$long[i]  <- (longmin + (coordlong/grid)) - 0.5*gridCell
+        CellCoords$lat[i] <- (latmin + (coordlat / grid)) + 0.5*gridCell
       }
     }
 

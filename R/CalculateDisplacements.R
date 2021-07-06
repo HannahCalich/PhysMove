@@ -1,14 +1,23 @@
-#' Calculate Displacements
+#' Calculate displacements
 #'
 #' This function allows you to calculate the displacement distances traveled by individuals over set time windows.
-#' @param species_df A data frame containing location data (rows) and columns with the following headers: "ref", "lon", "lat", "day". "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer). "lon" and "lat" are the longitude and latitide of each position estimate in decimal degrees formatted in numeric format). "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss. See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.
-#' @param min_hr Minimum number of hours to consider for displacement calculations. Default is 24 hours.
-#' @param max_hr Maximum number of hours to consider for displacement calculations (default is 240 hours)
-#' @param interval_hr Time interval (in hours) used to identify time period intervals between min_hr and max_hr (default is 24 hours)
-#' @param range_hr Range (in hours). Range converts the hours value into a broader time window so the algorithm can search for location estimates separated by the input hours +/- a range value. This helps the algorithm identify location estimates that are close to, but not exactly separated by the hours input value. If multiple location estimates fall within this range the location estimate closest to hours input value will be used for calculations. For example, if hours = 24 and range = 6, the algorithm will search for locations spaced 18 to 32 hours apart. Default is 6.
-#' @return A list containing the displacements (distances traveled in km) recorded for each time period
-#' @examples CalculateDisplacements(species_df)
-#' @examples CalculateDisplacements(species_df, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
+#' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
+#' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
+#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+#' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+#' See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.
+#' @param min_hr Minimum number of hours to consider for calculations. Default is 24 hours.
+#' @param max_hr Maximum number of hours to consider for calculations. Default is 240 hours.
+#' @param interval_hr Time interval (in hours) used to set intervals between min_hr and max_hr. Default is 24 hours.
+#' @param range_hr Range (in hours) converts interval_hr into a time window (interval_hr +/-  range_hr) so the
+#' code can identify location estimates that are close to, but not exactly separated by the interval_hr input value.
+#' If multiple location estimates fall within this time window the location estimate closest to the interval_hr input value
+#' will be used for calculations. For example, if interval_hr = 24 and range = 6, the algorithm will search for
+#' locations spaced 18 to 32 hours apart. Default is 6.
+#' @return A list containing the displacements (distances traveled in km) recorded for each time window.
+#' Each list element corresponds with the time windows set.
+#' @examples CalculateDisplacements(expSample)
+#' @examples CalculateDisplacements(expSample, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
 #' @export
 
 CalcDisp<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6){
@@ -68,8 +77,8 @@ CalcDisp<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6){
       }
     }
     MyList[[d]] <- MyDistance
-    print(paste0(length(MyList[[d]])," Displacements in ", MyTime[d]/(60*60), " hour(s)"))
+    print(paste0(length(MyList[[d]])," displacements in ", MyTime[d]/(60*60), " hour(s)"))
   }
-  assign("Displacements", MyList, envir = .GlobalEnv)
-  assign("TimeWindows",MyTime, envir = .GlobalEnv)
+  assign("displacements", MyList, envir = .GlobalEnv)
+  assign("timeWindows", MyTime, envir = .GlobalEnv)
 }
