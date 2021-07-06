@@ -1,22 +1,31 @@
-#' Calculate Turning Angles from Trajectories
+#' Calculate turning angles from trajectories
 #'
-#' To calculate turning angles between sets of three consecutive location estimates separated by set time period(s).
-#' @param species_df A data frame containing location data (rows) and columns with the following headers: "ref", "lon", "lat", "day". "ref" is the unique id number for each animal
-#'      (e.g., their satellite tag number; integer format). "lon" and "lat" are the longitude and latitide of each position estimate in decimal degrees (numeric format). "day"
-#'      is the datetime stamp for each location estimate (POSIXct format following yyyy-mm-dd hh:mm:ss). See XXX data frame for an example.
-#' @param min_hr Minimum number of hours to consider for displacement calculations. Default is 24 hours.
-#' @param max_hr Maximum number of hours to consider for displacement calculations (default is 240 hours)
-#' @param interval_hr Time interval (in hours) used to identify time period intervals between min_hr and max_hr (default is 24 hours)
-#' @param range_hr Range (in hours) applied to interval_hr. This value helps the algorithm identify location estimates that are close to, but not exactly separated by the interval_hr. If multiple location estimates fall within this range the location estimate closest to the interval_hr will be used for calculations.
-#' @param histplot Plot a histogram showing the frequency of turning angles from either all time periods combined or one specific time period. For example, histplot=c(TRUE,1) to plot only the 1st time period. Default histplot=c(TRUE, "all").
-#' @param spiderplot Plot a spider plot showing the frequency of turning angles from either all time periods combined or one specific time period. For example, spiderplot=c(TRUE,1) to plot only the 1st time period. Default spiderplot=c(TRUE, "all").
-#' @param colours Colour(s) for bars in histplot and lines in spiderplot. Default is "Navy".
-#' @return List of Turning Angles for each time period and a histogram and/or spiderplot of results, if desired
-#' @examples TurningAngles(species_df, max_hr=24)
-#' TurningAngles(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6, plot=TRUE)
+#' This function allows you to calculate turning angles between sets of three consecutive location estimates separated by set time period(s).
+#' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
+#' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
+#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+#' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+#' See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.
+#' @param min_hr Minimum number of hours to consider for calculations. Default is 24 hours.
+#' @param max_hr Maximum number of hours to consider for calculations. Default is 240 hours.
+#' @param interval_hr Time interval (in hours) used to set intervals between min_hr and max_hr. Default is 24 hours.
+#' @param range_hr Range (in hours) converts interval_hr into a time window (interval_hr +/-  range_hr) so the
+#' code can identify location estimates that are close to, but not exactly separated by the interval_hr input value.
+#' If multiple location estimates fall within this time window the location estimate closest to the interval_hr input value
+#' will be used for calculations. For example, if interval_hr = 24 and range = 6, the algorithm will search for
+#' locations spaced 18 to 32 hours apart. Default is 6.
+#' @param histPlot Plot a histogram showing the frequency of turning angles from all time windowscombined (default) or
+#' one specific time period. For example, histPlot=c(TRUE,1) to plot only the first time period. Default is histPlot=c(TRUE, "all").
+#' @param spiderPlot Plot a spider plot showing the frequency of turning angles from either all time windows combined
+#' (default) or one specific time period. For example, spiderPlot=c(TRUE,1) to plot only the first time period. Default spiderPlot=c(TRUE, "all").
+#' @param colours Colour(s) for bars in histPlot and lines in spiderPlot. Default is "Navy".
+#' @return List of Turning Angles for each time window where each list element corresponds with the time windows set.
+#' If histPlot and/or spiderPlot=TRUE, a histogram and/or spiderPlot of results are exported.
+#' @examples TurningAngles(expSample)
+#' @examples TurningAngles(expSample, min_hr=24, max_hr=240, interval_hr=24,range_hr=6, spiderPlot=c(TRUE, "all"), histPlot=c(FALSE, "all"), colours="Navy")
 #' @export
 
-TurningAngles<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6, spiderplot=c(TRUE, "all"), histplot=c(FALSE, "all"), colours="Navy"){
+TurningAngles<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6, spiderPlot=c(TRUE, "all"), histPlot=c(FALSE, "all"), colours="Navy"){
 
   min_hr<-min_hr*(60*60) #convert hours (input) to seconds
   max_hr<-max_hr*(60*60) #convert hours (input) to seconds
@@ -136,9 +145,9 @@ TurningAngles<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=
   }
   assign("AngleList",AngleList, envir = .GlobalEnv)
 
-  if (spiderplot[1]==TRUE){
-    if (spiderplot[2]!="all"){
-      spider <- spider[which(spider$Days==spiderplot[2]),]
+  if (spiderPlot[1]==TRUE){
+    if (spiderPlot[2]!="all"){
+      spider <- spider[which(spider$Days==spiderPlot[2]),]
     }
     colourpal<-rep(colours,length(Days))
     spider_plot<-ggplot2::ggplot(spider, ggplot2::aes(x = Pos.Angles, y = AngleProb, group=as.factor(Days),colour=as.factor(Days)))+
@@ -165,11 +174,11 @@ TurningAngles<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=
       plot(spider_plot)
   }
 
-  if (histplot[1]==TRUE){ #histogram of all angles combined
-    if (histplot[2]=="all"){
+  if (histPlot[1]==TRUE){ #histogram of all angles combined
+    if (histPlot[2]=="all"){
     h <- hist(unlist(AngleList), plot = FALSE, breaks = seq(-180, 180, bins)) # Anglelist is all angels for all time periods from all individuals
     } else {
-    h <- hist(unlist(AngleList[[histplot[2]]]), plot = FALSE, breaks = seq(-180, 180, bins)) # Anglelist is all angels for all time periods from all individuals
+    h <- hist(unlist(AngleList[[histPlot[2]]]), plot = FALSE, breaks = seq(-180, 180, bins)) # Anglelist is all angels for all time periods from all individuals
     }
     plot(h, main="", xlab="Turning Angles", xaxt="n",col=colours)
     axis(1, at=seq(-180,180,by=20), labels=seq(-180,180,by=20))
