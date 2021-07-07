@@ -1,40 +1,44 @@
-#' Plot best-fit distributions to CCDF of displacements
+#' Plot best-fit distributions to complementary cumulative distribution function (CCDF) of displacements
 #'
-#' This function allows you to create a complementary cumulative distribution function (CCDF) plot with fit lines (if  desired) for the distribution fits calculated with the  \code{\link{FitDist}} function.
-#' normalizes all of the displacements by dividing each displacement by the mean displacement from it's corresponding time period and combines the results into a vector of Normalized values.
-#' @param Displacements Input the output from \code{\link{CalculateDisplacements}} function.
-#' @param lines Add fit lines based on parameters calculated with \code{\link{FitDist}} function. Default is TRUE.
-#' @param colours Colours for each fit line. Default includes: red (#D55E00), yellow (#DDCC77), and blue (#0072B2).
-#' @param legend Adds legend to plot and specifies legend location. Default is c(TRUE, "bottomleft").
-#' @return Complementary cumulative distribution function (CCDF) plot with fit lines (if  desired).
-#' @examples PlotDist(Displacements, Lines=TRUE, colours=c("#D55E00", "#DDCC77", "#0072B2"))
-#' @examples PlotDist(Displacements)
+#' This function allows you to plot a complementary cumulative distribution function (CCDF) of displacements with fit lines
+#' based on the distribution fits calculated with the \code{\link{FitDist}} function.
+#' @param displacements The output from the \code{\link{CalcDisp}} function.
+#' @param fitLines Add fit lines based on the parameters calculated with the \code{\link{FitDist}} function. Default is TRUE.
+#' @param colours Colours for each fit line. Default is colours=c("red","gold2","blue").
+#' @param setDist Plot  a subset of the distribution fit lines calculated with the \code{\link{FitDist}} function. To plot a specific
+#' distribution fit line use setDist="pl", or to plot multiple distributions use setDist=c("pl","exp"). Options include "pl", "exp", and "lnorm".
+#' Default is NULL
+#' @param legend Add a legend to the plot when TRUE and change the position of the legend. Default is legend=c(TRUE, "bottomleft")
+#' @return Complementary cumulative distribution function (CCDF) plot of displacements with fit lines (if fitLines=TRUE).
+#' @examples PlotDist(displacements, fitLines=TRUE, colours=c("red","gold2","blue"), setDist=FALSE, legend=c(TRUE, "bottomleft"))
+#' @examples PlotDist(displacements)
 #' @export
 
-PlotDist <- function (Displacements, lines=TRUE, colours=c("#D55E00", "#DDCC77", "#0072B2"), distPlot=FALSE, legend=c(TRUE, "bottomleft")){
+PlotDist <- function (displacements, fitLines=TRUE, colours=c("red","gold2","blue"), setDist=NULL, legend=c(TRUE, "bottomleft")){
 
-  if (exists("Displacements")==FALSE){
-    stop("Please Calculate Displacements using (CalcDisp) and fit distriubtions (FitDisp) prior to executing PlotDist")
+  if (exists("displacements")==FALSE){
+    stop("Please Calculate displacements using (CalcDisp) and fit distriubtions (FitDisp) prior to executing PlotDist")
   }
 
   if (exists("DistResults")==FALSE){
     stop("Please Fit Distributions using the FitDist function prior to executing PlotDist")
   }
 
-  if (distPlot==FALSE){
-    distPlot=dist
+  if (is.null(setDist)){
+    setDist=dist
   }
 
   if (Normalize){
     x <- list()
     for (d in 1:length(TimeWindows)){
-      disp <- unlist(Displacements[d])
+      disp <- unlist(displacements[d])
       x[[d]] <- disp/mean(disp)
     }
-    xlabel<-"Normalized Displacements"
+    x <- unlist(x)
+    xlabel <- "Normalized displacements"
   } else {
-    x <- unlist(Displacements)
-    xlabel<-"Displacements (km)"
+    x <- unlist(displacements)
+    xlabel<-"displacements (km)"
   }
 
   x <- sort(x)
@@ -47,11 +51,14 @@ PlotDist <- function (Displacements, lines=TRUE, colours=c("#D55E00", "#DDCC77",
   myTicks2 = axTicks(2)
   axis(2, at = myTicks2, labels = formatC(myTicks2, digits = 0, format = 'e'))
 
-  if (lines==TRUE){
+  names(df)=c(xlabel,"CCDF")
+  assign("CCDFplotData", df, envir = .GlobalEnv)
+
+  if (fitLines==TRUE){
     legendcols<-c()
-    if ("pl" %in% distPlot){
-      MyPowerLawCDF <- function(parameters, Displacements){
-        PL_CDF  = 1 - (Displacements/parameters[2])^(-parameters[1]+1)
+    if ("pl" %in% setDist){
+      MyPowerLawCDF <- function(parameters, displacements){
+        PL_CDF  = 1 - (displacements/parameters[2])^(-parameters[1]+1)
         return(PL_CDF)
       }
       PL_xmin <- DistResults[which(DistResults$Distribution=="pl"),"xmin"]
@@ -72,10 +79,10 @@ PlotDist <- function (Displacements, lines=TRUE, colours=c("#D55E00", "#DDCC77",
       lines(xval, yval, col=colours[1],lwd=2)
       legendcols<-c(legendcols, colours[1])
     }
-    if ("exp" %in% distPlot){
-      MyExponentialPDF<- function(parameters, Displacements){
-        Exp_CDF = exp(pexp(Displacements, parameters[1], lower.tail = FALSE, log.p = TRUE) - pexp(parameters[2], parameters[1], lower.tail = FALSE, log.p = TRUE))
-        # Exp_CDF = parameters*exp(-parameters*Displacements)
+    if ("exp" %in% setDist){
+      MyExponentialPDF<- function(parameters, displacements){
+        Exp_CDF = exp(pexp(displacements, parameters[1], lower.tail = FALSE, log.p = TRUE) - pexp(parameters[2], parameters[1], lower.tail = FALSE, log.p = TRUE))
+        # Exp_CDF = parameters*exp(-parameters*displacements)
         return(Exp_CDF)
       }
       Exp_xmin <- DistResults[which(DistResults$Distribution=="exp"),"xmin"]
@@ -96,9 +103,9 @@ PlotDist <- function (Displacements, lines=TRUE, colours=c("#D55E00", "#DDCC77",
       lines(xval, yval, col=colours[2],lwd=2)
       legendcols<-c(legendcols, colours[2])
     }
-    if ("lnorm" %in% distPlot){
-      MyLogNormalPDF <- function(parameters, Displacements){ # 1=mu, 2= sigma
-        LN_PDF = exp((plnorm(Displacements, parameters[1], parameters[2], lower.tail=FALSE, log = TRUE)) -
+    if ("lnorm" %in% setDist){
+      MyLogNormalPDF <- function(parameters, displacements){ # 1=mu, 2= sigma
+        LN_PDF = exp((plnorm(displacements, parameters[1], parameters[2], lower.tail=FALSE, log = TRUE)) -
         (plnorm(parameters[3],parameters[1], parameters[2], lower.tail = FALSE, log.p = TRUE)))
          return(LN_PDF)
       }
@@ -122,7 +129,7 @@ PlotDist <- function (Displacements, lines=TRUE, colours=c("#D55E00", "#DDCC77",
       legendcols<-c(legendcols, colours[3])
       }
     if (legend[1]==TRUE){
-        legend(legend[2], legend=distPlot, lwd=1 ,col=legendcols,bty="n")
+        legend(legend[2], legend=setDist, lwd=1, col=legendcols, bty="n", y.intersp=0.75)
     }
   }
 }

@@ -2,21 +2,27 @@
 % Please edit documentation in R/CompareDistributions_20210629.R
 \name{CompDist}
 \alias{CompDist}
-\title{Identify the best-fit distribution for displacement data using weighted Akaike information criterion}
+\title{Identify the best-fit distribution for displacement data}
 \usage{
-CompDist(Displacements, force_AICc = FALSE)
+CompDist(displacements, force_AICc = FALSE)
 }
 \arguments{
-\item{Displacements}{Input the output from the \code{\link{CalculateDisplacements}} function. This function also requires outputs from the \code{\link{FitDist}} function}
+\item{displacements}{List of displacements that was output from the \code{\link{CalcDisp}} function.}
 
-\item{Force_AICc}{Force function to calculate AICc scores instead of AIC scores when n/K is > 40. Default is FALSE.}
+\item{force_AICc}{Force function to calculate AICc scores instead of AIC scores when n/K is > 40. Default is FALSE.}
 }
 \value{
-Updated "DistResults" data frame with summary statistics, AICc (or AIC) scores, and weighted AIC scores for each distribution fit.
+An Updated "distResults" data frame with AICc (or AIC) scores and weighted AICc (or AIC) scores for each distribution fit.
 }
 \description{
-This function allows you to identify the distribution that best-fits the pdf of the displacements, best-fit x-min, and parameters calculated using the \code{\link{CalculateDisplacements}} and \code{\link{FitDist}} functions. This function will automatically calculate AICc scores if n/K is <= 40 for the largest value of K, where n = sample size (N_Tail) and K = number of parameters in the model. See Burnham and Anderson (2004) for further details (DOI: 10.1177/0049124104268644).
+This function allows you to determine if a power law, exponential, or log-normal distribution best-fits a probability density function
+of the displacements using weighted Akaike Information Criterion. These fits use displacement data, xmin and parameter values that were
+previously calculated with the \code{\link{CalcDisp}} and \code{\link{FitDist}} functions. By default, this function will calculate
+AICc scores if n/K is <= 40 for the largest value of K, where n = sample size (nTail) and K = number of parameters in the model
+(see Burnham and Anderson (2004) for further details, DOI: 10.1177/0049124104268644). However, if force_AICc = TRUE AICc scores will be
+calculated regardless of n/K.
 }
 \examples{
-CompDist(Displacements)
+CompDist(displacements)
+CompDist(displacements, force_AICc=FALSE)
 }

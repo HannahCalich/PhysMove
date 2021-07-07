@@ -9,11 +9,11 @@
 #' @param gridCell Grid cell size in degrees. Default is 0.25.
 #' @param histPlot Plot a histogram of the normalized  entropy scores. Default is TRUE.
 #' @param legend Add a legend to the histPlot when TRUE and change the position of the legend. Default is legend=c(TRUE, "topleft").
-#' @param pdfPlot Create a  probability density line plot of the Entropy scores. Default is TRUE.
-#' @param nBins Number of bins used to calculate the pdf for s. Default is 40.
-#' @return Data vectors containing normalized entropy ('normalizedEntropy') scores for each individual,
-#' a data frame with the data used to create the pdf plot ('entropyPDFplot', if pdfPlot=TRUE), and data needed for the Predictability function
-#' (a list of occurrences and a vector of raw entropy scores, 'occurrences' and 'indivEntropy', respectively).
+#' @param pdfPlot Create a  probability density function line plot of the Entropy scores. Default is TRUE.
+#' @param nBins Number of bins used to calculate the pdf plot. Default is 40.
+#' @return Data vector containing normalized entropy ('normalizedEntropy') scores for each individual, a histogram plot of the normalized entropy scores
+#' (if histPlot=TRUE), a  probability density function line plot and a data frame with the data used to create the pdf plot ('entropyPDFplot', if pdfPlot=TRUE),
+#' and data needed for the Predictability function (a list of occurrences and a vector of raw entropy scores, 'occurrences' and 'indivEntropy', respectively).
 #' @examples
 #' Entropy(expSample)
 #' Entropy(expSample, gridCell=0.25, histPlot=TRUE, legend=c(TRUE, "topleft"), pdfPlot=FALSE, nBins=40)

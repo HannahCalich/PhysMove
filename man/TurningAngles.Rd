@@ -2,7 +2,7 @@
 % Please edit documentation in R/Angles_20210317.R
 \name{TurningAngles}
 \alias{TurningAngles}
-\title{Calculating Turning Angles from Trajectories}
+\title{Calculate turning angles from trajectories}
 \usage{
 TurningAngles(
   species_df,
@@ -10,37 +10,46 @@ TurningAngles(
   max_hr = 240,
   interval_hr = 24,
   range_hr = 6,
-  spiderplot = c(TRUE, "all"),
-  histplot = c(FALSE, "all"),
+  spiderPlot = c(TRUE, "all"),
+  histPlot = c(FALSE, "all"),
   colours = "Navy"
 )
 }
 \arguments{
-\item{species_df}{A data frame containing location data (rows) and columns with the following headers: "ref", "lon", "lat", "day". "ref" is the unique id number for each animal
-(e.g., their satellite tag number; integer format). "lon" and "lat" are the longitude and latitide of each position estimate in decimal degrees (numeric format). "day"
-is the datetime stamp for each location estimate (POSIXct format following yyyy-mm-dd hh:mm:ss). See XXX data frame for an example.}
+\item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
+"ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
+"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+"day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.}
 
-\item{min_hr}{Minimum number of hours to consider for displacement calculations. Default is 24 hours.}
+\item{min_hr}{Minimum number of hours to consider for calculations. Default is 24 hours.}
 
-\item{max_hr}{Maximum number of hours to consider for displacement calculations (default is 240 hours)}
+\item{max_hr}{Maximum number of hours to consider for calculations. Default is 240 hours.}
 
-\item{interval_hr}{Time interval (in hours) used to identify time period intervals between min_hr and max_hr (default is 24 hours)}
+\item{interval_hr}{Time interval (in hours) used to set intervals between min_hr and max_hr. Default is 24 hours.}
 
-\item{range_hr}{Range (in hours) applied to interval_hr. This value helps the algorithm identify location estimates that are close to, but not exactly separated by the interval_hr. If multiple location estimates fall within this range the location estimate closest to the interval_hr will be used for calculations.}
+\item{range_hr}{Range (in hours) converts interval_hr into a time window (interval_hr +/-  range_hr) so the
+code can identify location estimates that are close to, but not exactly separated by the interval_hr input value.
+If multiple location estimates fall within this time window the location estimate closest to the interval_hr input value
+will be used for calculations. For example, if interval_hr = 24 and range = 6, the algorithm will search for
+locations spaced 18 to 32 hours apart. Default is 6.}
 
-\item{spiderplot}{Plot a spider plot showing the frequency of turning angles from either all time periods combined or one specific time period. For example, spiderplot=c(TRUE,1) to plot only the 1st time period. Default spiderplot=c(TRUE, "all").}
+\item{spiderPlot}{Plot a spider plot showing the frequency of turning angles from either all time windows combined
+(default) or one specific time period. For example, spiderPlot=c(TRUE,1) to plot only the first time period. Default spiderPlot=c(TRUE, "all").}
 
-\item{histplot}{Plot a histogram showing the frequency of turning angles from either all time periods combined or one specific time period. For example, histplot=c(TRUE,1) to plot only the 1st time period. Default histplot=c(TRUE, "all").}
+\item{histPlot}{Plot a histogram showing the frequency of turning angles from all time windowscombined (default) or
+one specific time period. For example, histPlot=c(TRUE,1) to plot only the first time period. Default is histPlot=c(TRUE, "all").}
 
-\item{colours}{Colour(s) for bars in histplot and lines in spiderplot. Default is "Navy".}
+\item{colours}{Colour(s) for bars in histPlot and lines in spiderPlot. Default is "Navy".}
 }
 \value{
-List of Turning Angles for each time period and a histogram and/or spiderplot of results, if desired
+List of Turning Angles for each time window where each list element corresponds with the time windows set.
+If histPlot and/or spiderPlot=TRUE, a histogram and/or spiderPlot of results are exported.
 }
 \description{
-To calculate turning angles between sets of three consecutive location estimates separated by set time period(s).
+This function allows you to calculate turning angles between sets of three consecutive location estimates separated by set time period(s).
 }
 \examples{
-TurningAngles(species_df, max_hr=24)
-TurningAngles(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6, plot=TRUE)
+TurningAngles(expSample)
+TurningAngles(expSample, min_hr=24, max_hr=240, interval_hr=24,range_hr=6, spiderPlot=c(TRUE, "all"), histPlot=c(FALSE, "all"), colours="Navy")
 }

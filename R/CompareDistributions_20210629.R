@@ -23,9 +23,9 @@ CompDist <- function (displacements, force_AICc=FALSE){
     stop("Please fit distributions using the FitDist function prior to executing CompDist")
   }
 
-  if (Normalize){
+  if (normalize){
     x <- list()
-    for (d in 1:length(TimeWindows)){
+    for (d in 1:length(timeWindows)){
       disp <- unlist(displacements[d])
       x[[d]] <- disp/mean(disp)
     }
@@ -106,9 +106,10 @@ CompDist <- function (displacements, force_AICc=FALSE){
       distResults[which(distResults$distribution =="lnorm"),"AIC"]<-lnorm_AIC
     }
     rel_like <- exp(-1/2*((distResults$AIC)-min(distResults$AIC)))
+    distResults$AICw <- rel_like/sum(rel_like)
   } else { #use AICc according to Burnham and Anderson (2004)
     AICc_Scores<-c()
-    distResults<-cbind(distResults,"AICc"=c(NA), "AICw"=c(NA))
+    distResults<-cbind(distResults,"AICc"=c(NA), "AICcw"=c(NA))
     if ("pl" %in% dist){
       K<-K_all[which(dist=="pl")]
       n<-n_all[which(dist=="pl")]
@@ -131,7 +132,7 @@ CompDist <- function (displacements, force_AICc=FALSE){
       distResults[which(distResults$distribution =="lnorm"),"AICc"]<-lnorm_AICc
     }
     rel_like <- exp(-1/2*((distResults$AICc)-min(distResults$AICc)))
+    distResults$AICcw <- rel_like/sum(rel_like)
     }
-  distResults$AICcw <- rel_like/sum(rel_like)
   assign("distResults", distResults, envir = .GlobalEnv)
 }

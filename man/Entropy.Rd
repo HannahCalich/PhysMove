@@ -2,35 +2,43 @@
 % Please edit documentation in R/Entropy_20210318.R
 \name{Entropy}
 \alias{Entropy}
-\title{Entropy}
+\title{Calculate the entropy of trajectories}
 \usage{
 Entropy(
   species_df,
-  gridcell = 0.25,
-  hist = TRUE,
-  pdfplot = FALSE,
-  nb = 40,
-  legend = c(TRUE, "topleft")
+  gridCell = 0.25,
+  histPlot = TRUE,
+  legend = c(TRUE, "topleft"),
+  pdfPlot = FALSE,
+  nBins = 40
 )
 }
 \arguments{
-\item{species_df}{A data frame containing location data (rows) and columns with the following headers: "ref", "lon", "lat", "day". "ref" is the unique id number for each animal
-(e.g., their satellite tag number; integer format). "lon" and "lat" are the longitude and latitide of each position estimate in decimal degrees (numeric format). "day"
-is the datetime stamp for each location estimate (POSIXct format following yyyy-mm-dd hh:mm:ss). See XXX data frame for an example.}
+\item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
+"ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
+"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+"day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.}
 
-\item{nb}{Number of bins, used to determine the size of the bins used to calculate entropy frequency for plots. Default is 40.}
+\item{gridCell}{Grid cell size in degrees. Default is 0.25.}
 
-\item{grid}{Grid used to split 1-degree by 1-degree cells. A grid of 4 results in 0.25-degree by 0.25 degree grid cells, while a grid of 0.25 results in 4-degrees by 4-degree grid cells. Default is 4.}
+\item{histPlot}{Plot a histogram of the normalized  entropy scores. Default is TRUE.}
 
-\item{plot}{Create line plot of each individual's Entropy. Default is TRUE.}
+\item{legend}{Add a legend to the histPlot when TRUE and change the position of the legend. Default is legend=c(TRUE, "topleft").}
+
+\item{pdfPlot}{Create a  probability density function line plot of the Entropy scores. Default is TRUE.}
+
+\item{nBins}{Number of bins used to calculate the pdf plot. Default is 40.}
 }
 \value{
-Ind_Entropy vector containing Individual entropy values, NormalizedEntropy vector containing normalized values per individual, line plot (if desired).
+Data vector containing normalized entropy ('normalizedEntropy') scores for each individual, a histogram plot of the normalized entropy scores
+(if histPlot=TRUE), a  probability density function line plot and a data frame with the data used to create the pdf plot ('entropyPDFplot', if pdfPlot=TRUE),
+and data needed for the Predictability function (a list of occurrences and a vector of raw entropy scores, 'occurrences' and 'indivEntropy', respectively).
 }
 \description{
-This function allows you to calculate the entropy of individual trajectories, which provides insights to how ordered (or disordered) a trajectory was.
+This function allows you to calculate the entropy of individual trajectories, which provides insight to how ordered (or disordered) the trajectories were.
 }
 \examples{
-Entropy(species_df)
-Entropy(species_df,grid=4,plot=TRUE,nb=40)
+Entropy(expSample)
+Entropy(expSample, gridCell=0.25, histPlot=TRUE, legend=c(TRUE, "topleft"), pdfPlot=FALSE, nBins=40)
 }

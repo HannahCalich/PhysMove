@@ -1,20 +1,25 @@
 #' Occupancy
 #'
 #' This function allows you to calculate the occupancy patterns of satellite tagged animals. and plot a pdf of the occupancy scores
-#' @param species_df A data frame containing location data (rows) and columns with the following headers: "ref", "lon", "lat", "day". "ref" is the unique id number for each animal
-#'      (e.g., their satellite tag number; integer format). "lon" and "lat" are the longitude and latitide of each position estimate in decimal degrees (numeric format). "day"
-#'      is the datetime stamp for each location estimate (POSIXct format following yyyy-mm-dd hh:mm:ss). See XXX data frame for an example.
-#' @param gridcell Grid cell size in degrees. Default is 0.25.
-#' @param plot Create line plot of the probability density function of occupancy Default is TRUE.
-#' @param nb Number of bins, used to determine the size of the bins used to calculate occupancy for plot. Default is 20.
+#' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
+#' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
+#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+#' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+#' See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.
+#' @param gridCell Grid cell size in degrees. Default is 0.25.
 #' @param map Create a map illustrating where occupancy occurs. Default is TRUE.
-#' @return "MyOcc" data frame containing the location and corresponding occupancy data used in the plots, as well as a line plot and/or a map, if desired.
+#' @param colGrad  Colour gradient for map that illustrates low, moderate, and high occupancy, respectively
+#' (applied to ggplot2::scale_fill_gradientn). Default is colGrad=c("blue", "light blue","red").
+#' @param pdfPlot Create a  probability density line plot of the occupancy values. Default is TRUE.
+#' @param nBins Number of bins used to calculate the pdf plot. Default is 20.
+#' @return A data frame ('occupancyResults') that contains location and corresponding occupancy data, a map (if map=TRUE), a probability
+#' density function line plot and a data frame with the data used to create the pdf plot ('occupancyPDFplot', if pdfPlot=TRUE).
 #' @examples
-#' Occupancy(species_df)
-#' Occupancy(species_df,grid=4,plot=TRUE,nb=20,map=TRUE)
+#' Occupancy(expSample)
+#' Occupancy(expSample, gridcell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"), pdfPlot=FALSE, nBins=20)
 #' @export
 
-Occupancy<-function(species_df, gridcell=0.25, map=TRUE, plot=FALSE, nb=20){
+Occupancy<-function(species_df, gridcell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"), pdfPlot=FALSE, nBins=20){
 
   grid <- 1/gridcell
   Radius <- 6371 #Earth Radius in km (disp are in km)
@@ -60,7 +65,7 @@ Occupancy<-function(species_df, gridcell=0.25, map=TRUE, plot=FALSE, nb=20){
     }
   }
 
-  assign("Occupancy_results", OccExp, envir = .GlobalEnv)
+  assign("occupancyResults", OccExp, envir = .GlobalEnv)
 
   if (map==TRUE){
     xyz <- OccExp[,c(5,6,3)]
@@ -69,15 +74,15 @@ Occupancy<-function(species_df, gridcell=0.25, map=TRUE, plot=FALSE, nb=20){
       ggplot2::labs(x = "Longitude",y = "Latitude", fill = expression(atop("",atop(textstyle("Occupancy"),atop(textstyle("(counts"%*%"area"^-1*")"))))))+
       ggplot2::coord_sf(xlim = c(min(xyz$Longitude), max(xyz$Longitude)), ylim = c(min(xyz$Latitude), max(xyz$Latitude)))+
       ggplot2::theme_minimal()+
-      ggplot2::scale_fill_gradientn(colours = c("blue", "light blue","red"))+
+      ggplot2::scale_fill_gradientn(colours = c(colGrad))+
       ggplot2::borders("world", colour="gray50", fill="gray50", xlim = c(min(xyz$Longitude), max(xyz$Longitude)), ylim = c(min(xyz$Latitude), max(xyz$Latitude)))
     plot(z)
   }
 
-  if (plot==TRUE){
+  if (pdfPlot==TRUE){
     Occmin <- min(OccExp[which(OccExp$Occupancy!=0),3]) #what is the min occ value when occ > 0 (min occupancy of occupied cells)
-    bw <- log(max(OccExp$Occupancy)/Occmin)/log(nb)
-    freq <- rep(0, nb+1)
+    bw <- log(max(OccExp$Occupancy)/Occmin)/log(nBins)
+    freq <- rep(0, nBins+1)
     for(i in 1:nrow(OccExp)){
       if (OccExp[i,3]>0){
         b <- floor(log(OccExp[i,3]/Occmin)/log(bw) + 0.5) + 1
@@ -95,9 +100,8 @@ Occupancy<-function(species_df, gridcell=0.25, map=TRUE, plot=FALSE, nb=20){
     }
     plot(xs,ys,log="xy", xlim=c(Occmin/2,max(OccExp$Occupancy)*2), type="l", col="black", ylab="pdf",xlab=expression('Occupancy (km'^'-2'*')'))
     points(xs,ys,col="black", pch=19)
-  }
+    occplot<-data.frame(xs, ys)
+    names(occplot)=c("Occupancy(km^-2)","pdf")
+    assign("occupancyPDFplot", occplot, envir = .GlobalEnv)
+    }
 }
-
-# test<-data.frame("Ref"=c(123,123,123), "Long"=c(-179.8,-179.8,-178.9,-179.2,-179.2,-178.2 ), "Lat"=c(-89.9,-88.9,-89.9,-89.9,-88.9,-89.9))
-# species_df<-test
-# species_df

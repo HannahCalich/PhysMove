@@ -2,11 +2,11 @@
 % Please edit documentation in R/InfomapCommunities.R
 \name{InfomapCommunities}
 \alias{InfomapCommunities}
-\title{Create Link List for Infomap Analysis}
+\title{Identify Infomap communities and create a transition probability matrix}
 \usage{
 InfomapCommunities(
   species_df,
-  gridcell = 0.25,
+  gridCell = 0.25,
   hours = 24,
   range_hr = 6,
   infomap = TRUE,
@@ -14,26 +14,39 @@ InfomapCommunities(
 )
 }
 \arguments{
-\item{species_df}{A data frame containing location data (rows) and columns with the following headers: "ref", "lon", "lat", "day". "ref" is the unique id number for each animal
-(e.g., their satellite tag number; integer format). "lon" and "lat" are the longitude and latitide of each position estimate in decimal degrees (numeric format). "day"
-is the datetime stamp for each location estimate (POSIXct format following yyyy-mm-dd hh:mm:ss). See XXX data frame for an example.}
+\item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
+"ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
+"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+"day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.}
 
-\item{gridcell}{Grid cell size in degrees. Default is 0.25.}
+\item{gridCell}{Grid cell size in degrees. Default is 0.25.}
 
 \item{hours}{Number of hours to consider movements for. Default is 24.}
 
-\item{range_hr}{Range (in hours) applied to hours This value helps the algorithm identify location estimates that are close to, but not exactly separated by the interval_hr. If multiple location estimates fall within this range_hr the location estimate closest to the interval_hr will be used for calculations.}
+\item{range_hr}{Range (in hours) converts the hours parameter into a time window (hours +/-  range_hr) so the
+code can identify location estimates that are close to, but not exactly separated by a set number of hours.
+If multiple location estimates fall within this time window the location estimate closest to the set hours input value
+will be used for calculations. For example, if hours = 24 and range = 6, the algorithm will search for
+locations spaced 18 to 32 hours apart. Default is 6.}
+
+\item{infomap}{Identify Infomap communities. Default is TRUE.}
+
+\item{tpm}{Export the transition probability matrix in link list format. Default is FALSE.}
 }
 \value{
-A matrix containing the link list needed to calculate Infomap communities using https://www.mapequation.org/infomap/#Install, and a data frame of the LinkListCellNumbers that is used with the \code{\link{InfomapCoords}} function to interpret the output from Infomap.
+'infomap_object' that summarizes the hierarchical structure of the Infomap communities (regions where individuals are likely
+to stay for longer periods of time).If tpm=TRUE the transition probability matrix used to create 'infomap_object' is exported.
 }
 \description{
-This function allows you to create a link list for the Network community detection Infomap (https://www.mapequation.org/infomap/#Install)
-When function is finished please export LinkList as .txt file following "write.table(LinkListOutput, "LinkList2.txt", sep="/t", row.names = FALSE, col.names = FALSE)" and upload .txt file at https://www.mapequation.org/infomap/#Install
-Important settings to consider when configuring analysis for Infomap are: '-i link-list -k --tree -d'
-'-i link-list' identifies the input at a link list, '-k' enables self-links, '--tree' ensures the output is in .tree format, and '-d' assumed directed links."
+This function uses the network community detection Infomap to identify Infomap communities based on a transition probability matrix (tmp), which summarizes
+the probability of individuals moving from one grid cell to another. This function assumes directed movement, allows for self-links (where an individual
+stays in the same cell over time), and uses a tpm in link list format to create an Infomap 'monolayer_object'.
+Please note: to run this function you must first download the infomapecology package from gitub and install the infomap.exe.
+For details please see: https://ecological-complexity-lab.github.io/infomap_ecology_package/installation
+To learn more about Infomap please visit: https://www.mapequation.org/
 }
 \examples{
-InfomapCommunities(species_df)
-InfomapCommunities(species_df, gridcell=0.25, hours=24, range_hr=6, infomap=TRUE, tpm=FALSE)
+InfomapCommunities(expSample)
+InfomapCommunities(expSample, gridCell=0.25, hours=24, range_hr=6, infomap=TRUE, tpm=FALSE)
 }

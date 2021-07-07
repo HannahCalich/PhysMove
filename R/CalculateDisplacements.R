@@ -14,8 +14,9 @@
 #' If multiple location estimates fall within this time window the location estimate closest to the interval_hr input value
 #' will be used for calculations. For example, if interval_hr = 24 and range = 6, the algorithm will search for
 #' locations spaced 18 to 32 hours apart. Default is 6.
-#' @return A list containing the displacements (distances traveled in km) recorded for each time window.
-#' Each list element corresponds with the time windows set.
+#' @return A list ('displacements') containing the displacements in km recorded for each time window.
+#' Each list element corresponds with the time windows set. Time windows (in seconds) are exported as data vector 'timeWindows' as
+#' this information is required for additional PhysMove functions.
 #' @examples CalculateDisplacements(expSample)
 #' @examples CalculateDisplacements(expSample, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
 #' @export

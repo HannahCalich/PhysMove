@@ -2,33 +2,37 @@
 % Please edit documentation in R/PlotDistributions_20210319.R
 \name{PlotDist}
 \alias{PlotDist}
-\title{Plot best-fit distributions to CCDF of displacements}
+\title{Plot best-fit distributions to complementary cumulative distribution function (CCDF) of displacements}
 \usage{
 PlotDist(
-  Displacements,
-  lines = TRUE,
-  colours = c("#D55E00", "#DDCC77", "#0072B2"),
-  distPlot = FALSE,
+  displacements,
+  fitLines = TRUE,
+  colours = c("red", "gold2", "blue"),
+  setDist = NULL,
   legend = c(TRUE, "bottomleft")
 )
 }
 \arguments{
-\item{Displacements}{Input the output from \code{\link{CalculateDisplacements}} function.}
+\item{displacements}{The output from the \code{\link{CalcDisp}} function.}
 
-\item{lines}{Add fit lines based on parameters calculated with \code{\link{FitDist}} function. Default is TRUE.}
+\item{fitLines}{Add fit lines based on the parameters calculated with the \code{\link{FitDist}} function. Default is TRUE.}
 
-\item{colours}{Colours for each fit line. Default includes: red (#D55E00), yellow (#DDCC77), and blue (#0072B2).}
+\item{colours}{Colours for each fit line. Default is colours=c("red","gold2","blue").}
 
-\item{legend}{Adds legend to plot and specifies legend location. Default is c(TRUE, "bottomleft").}
+\item{setDist}{Plot  a subset of the distribution fit lines calculated with the \code{\link{FitDist}} function. To plot a specific
+distribution fit line use setDist="pl", or to plot multiple distributions use setDist=c("pl","exp"). Options include "pl", "exp", and "lnorm".
+Default is NULL}
+
+\item{legend}{Add a legend to the plot when TRUE and change the position of the legend. Default is legend=c(TRUE, "bottomleft")}
 }
 \value{
-Complementary cumulative distribution function (CCDF) plot with fit lines (if  desired).
+Complementary cumulative distribution function (CCDF) plot of displacements with fit lines (if fitLines=TRUE).
 }
 \description{
-This function allows you to create a complementary cumulative distribution function (CCDF) plot with fit lines (if  desired) for the distribution fits calculated with the  \code{\link{FitDist}} function.
-normalizes all of the displacements by dividing each displacement by the mean displacement from it's corresponding time period and combines the results into a vector of Normalized values.
+This function allows you to plot a complementary cumulative distribution function (CCDF) of displacements with fit lines
+based on the distribution fits calculated with the \code{\link{FitDist}} function.
 }
 \examples{
-PlotDist(Displacements, Lines=TRUE, colours=c("#D55E00", "#DDCC77", "#0072B2"))
-PlotDist(Displacements)
+PlotDist(displacements, fitLines=TRUE, colours=c("red","gold2","blue"), setDist=FALSE, legend=c(TRUE, "bottomleft"))
+PlotDist(displacements)
 }

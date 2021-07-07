@@ -10,9 +10,10 @@
 #' @param full To fit the distributions to the full range of displacement data. Default is FALSE.
 #' @param normalize Normalizes the displacement distances by dividing each displacement by the average displacement for that time window
 #' normalize=TRUE is required if working with displacements calculated over multiple time windows.
-#' @return A data frame "distResults" that contains the summary statistics for each distribution fit including the distribution name,
+#' @return A data frame 'distResults' that contains the summary statistics for each distribution fit including the distribution name,
 #' xmin (the x value used to fit the distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
-#' distributions respectively, and nTail (the number of data points greater than or equal to xmin).
+#' distributions respectively, and nTail (the number of data points greater than or equal to xmin). The distributions fit to the data and if the
+#' data were normalized are exported as values ('dist', and 'normalize', respectively) as this information is required by additional PhysMove functions.
 #' @examples FitDist(expSample)
 #' @examples FitDist(expSample, dist=c("exp","lnorm"), full=TRUE)
 #' @examples FitDist(expSample, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalize=TRUE)
@@ -86,9 +87,9 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
     xi <- x[x>=(PL_xmin)] # Use PL_xmin to calculate final datasets and parameters
     n <- length(xi)
     PL_alpha <- 1+n*((sum(log(xi/PL_xmin)))^-1) # calculate alpha using direct MLE based on PL_xmin
-    distResults[which(distResults$Distribution =="pl"),which(names(distResults)=="xmin")]<-PL_xmin
-    distResults[which(distResults$Distribution =="pl"),which(names(distResults)=="parameter1")]<-PL_alpha
-    distResults[which(distResults$Distribution =="pl"),which(names(distResults)=="nTail")]<-n
+    distResults[which(distResults$distribution =="pl"),which(names(distResults)=="xmin")]<-PL_xmin
+    distResults[which(distResults$distribution =="pl"),which(names(distResults)=="parameter1")]<-PL_alpha
+    distResults[which(distResults$distribution =="pl"),which(names(distResults)=="nTail")]<-n
   }
 
   if ("exp" %in% dist){
@@ -154,9 +155,9 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
       Exp_lambda = as.numeric(mle@coef[1])
       Exp_xmin <- xmin
     }
-    distResults[which(distResults$Distribution =="exp"),which(names(distResults)=="xmin")]<-Exp_xmin
-    distResults[which(distResults$Distribution =="exp"),which(names(distResults)=="parameter1")]<-Exp_lambda
-    distResults[which(distResults$Distribution =="exp"),which(names(distResults)=="nTail")]<-n
+    distResults[which(distResults$distribution =="exp"),which(names(distResults)=="xmin")]<-Exp_xmin
+    distResults[which(distResults$distribution =="exp"),which(names(distResults)=="parameter1")]<-Exp_lambda
+    distResults[which(distResults$distribution =="exp"),which(names(distResults)=="nTail")]<-n
   }
 
   if ("lnorm" %in% dist){
@@ -229,10 +230,10 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
       LN_sigma <-as.numeric(mle@coef[2])
       n <- length(x[x>=LN_xmin]) # truncate dataset at xmin
     }
-    distResults[which(distResults$Distribution =="lnorm"),which(names(distResults)=="xmin")]<-LN_xmin
-    distResults[which(distResults$Distribution =="lnorm"),which(names(distResults)=="parameter1")]<-LN_mu
-    distResults[which(distResults$Distribution =="lnorm"),which(names(distResults)=="Parameter2")]<-LN_sigma
-    distResults[which(distResults$Distribution =="lnorm"),which(names(distResults)=="nTail")]<-n
+    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="xmin")]<-LN_xmin
+    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="parameter1")]<-LN_mu
+    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="parameter2")]<-LN_sigma
+    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="nTail")]<-n
   }
   assign("distResults",distResults, envir = .GlobalEnv)
 }

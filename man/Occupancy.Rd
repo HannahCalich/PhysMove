@@ -4,28 +4,41 @@
 \alias{Occupancy}
 \title{Occupancy}
 \usage{
-Occupancy(species_df, gridcell = 0.25, map = TRUE, plot = FALSE, nb = 20)
+Occupancy(
+  species_df,
+  gridcell = 0.25,
+  map = TRUE,
+  colGrad = c("blue", "light blue", "red"),
+  pdfPlot = FALSE,
+  nBins = 20
+)
 }
 \arguments{
-\item{species_df}{A data frame containing location data (rows) and columns with the following headers: "ref", "lon", "lat", "day". "ref" is the unique id number for each animal
-(e.g., their satellite tag number; integer format). "lon" and "lat" are the longitude and latitide of each position estimate in decimal degrees (numeric format). "day"
-is the datetime stamp for each location estimate (POSIXct format following yyyy-mm-dd hh:mm:ss). See XXX data frame for an example.}
-
-\item{gridcell}{Grid cell size in degrees. Default is 0.25.}
+\item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
+"ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
+"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+"day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.}
 
 \item{map}{Create a map illustrating where occupancy occurs. Default is TRUE.}
 
-\item{plot}{Create line plot of the probability density function of occupancy Default is TRUE.}
+\item{colGrad}{Colour gradient for map that illustrates low, moderate, and high occupancy, respectively
+(applied to ggplot2::scale_fill_gradientn). Default is colGrad=c("blue", "light blue","red").}
 
-\item{nb}{Number of bins, used to determine the size of the bins used to calculate occupancy for plot. Default is 20.}
+\item{pdfPlot}{Create a  probability density line plot of the occupancy values. Default is TRUE.}
+
+\item{nBins}{Number of bins used to calculate the pdf plot. Default is 20.}
+
+\item{gridCell}{Grid cell size in degrees. Default is 0.25.}
 }
 \value{
-"MyOcc" data frame containing the location and corresponding occupancy data used in the plots, as well as a line plot and/or a map, if desired.
+A data frame ('occupancyResults') that contains location and corresponding occupancy data, a map (if map=TRUE), a probability
+density function line plot and a data frame with the data used to create the pdf plot ('occupancyPDFplot', if pdfPlot=TRUE).
 }
 \description{
 This function allows you to calculate the occupancy patterns of satellite tagged animals. and plot a pdf of the occupancy scores
 }
 \examples{
-Occupancy(species_df)
-Occupancy(species_df,grid=4,plot=TRUE,nb=20,map=TRUE)
+Occupancy(expSample)
+Occupancy(expSample, gridcell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"), pdfPlot=FALSE, nBins=20)
 }

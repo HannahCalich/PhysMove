@@ -2,39 +2,41 @@
 % Please edit documentation in R/FittingDistributions_20210630.R
 \name{FitDist}
 \alias{FitDist}
-\title{Fitting Distributions to CDFs of Displacements}
+\title{Fit distributions to displacements}
 \usage{
 FitDist(
-  Displacements,
+  displacements,
   dist = c("pl", "exp", "lnorm"),
   set_xmin = NULL,
-  Full = FALSE,
-  Normalize = TRUE
+  full = FALSE,
+  normalize = TRUE
 )
 }
 \arguments{
-\item{Displacements}{Input the output from \code{\link{CalculateDisplacements}} function. To fit distribution to all displacements input Displacements as is, else you can subset for temporal periods (e.g., Displacements[1]).}
+\item{displacements}{The output from the \code{\link{CalcDisp}} function.}
 
-\item{dist}{Continuous distributions to be fit. Possible values are power-law ("pl"), exponential ("exp), or lognormal ("lnorm") continuous distributions. Default is all three distributions (i.e., dist=c("pl","exp","lnorm")).}
+\item{dist}{Continuous distributions that will be fit to the displacements. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
+continuous distributions. Default is dist=c("pl","exp","lnorm").}
 
-\item{set_xmin}{To limit the fitted distribution to values above a specified xmin. Default set_xmin=NULL.}
+\item{set_xmin}{To limit the fitted distribution to values above a specified value. Default is NULL.}
 
-\item{Full}{To fit the fitted distribution to the full range of displacement data. Default Full=FALSE.Fit}
+\item{full}{To fit the distributions to the full range of displacement data. Default is FALSE.}
 
-\item{Normalize}{Normalizes the displacement distances by dividing each displacement by the average displacement for that time period. Required if working with displacements calculated over multiple time windows.}
-
-\item{AIC}{Calculate the weighted AIC values of the distribution fits to identify the best-fit distribution for your data. Note that AIC values are only meaningful if you are comparing model fits over the same distribution of data. Default AIC=FALSE}
-
-\item{Plot}{Plot the Complementary Cumulative Distribution Function for the displacements and add fit lines for each calculated distribution, if desired. Default is c(TRUE, TRUE).}
+\item{normalize}{Normalizes the displacement distances by dividing each displacement by the average displacement for that time window
+normalize=TRUE is required if working with displacements calculated over multiple time windows.}
 }
 \value{
-Dataframe with summary statistics for each distribution fit. N_Tail is the number of data points greater than or equal to current value of xmin
+A data frame "distResults" that contains the summary statistics for each distribution fit including the distribution name,
+xmin (the x value used to fit the distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
+distributions respectively, and nTail (the number of data points greater than or equal to xmin).
 }
 \description{
-This function allows you to identify the distribution that best-fits the pdf of the normalized displacements calculated using \code{\link{CalculateDisplacements}}.To begin, this function
-normalizes all of the displacements by dividing each displacement by the mean displacement from it's corresponding time period and combines the results into a vector of Normalized values.
+This function allows you to fit power law, exponential, or log-normal distributions to the displacements calculated with
+the \code{\link{CalcDisp}} function. If displacements were calculated over multiple time windows this function will normalize the
+displacements by dividing each displacement by the mean displacement of the corresponding time window
 }
 \examples{
-CalculateDisplacements(species_df, dist=c("pl","exp"))
-CalculateDisplacements(species_df, dist=c("pl","exp","lnorm"), set_xmin=NULL, Full=FALSE, AIC=TRUE, Normalize=TRUE)
+FitDist(expSample)
+FitDist(expSample, dist=c("exp","lnorm"), full=TRUE)
+FitDist(expSample, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalize=TRUE)
 }

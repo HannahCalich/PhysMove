@@ -2,28 +2,38 @@
 % Please edit documentation in R/CalculateDisplacements.R
 \name{CalcDisp}
 \alias{CalcDisp}
-\title{Calculate Displacements}
+\title{Calculate displacements}
 \usage{
 CalcDisp(species_df, min_hr = 24, max_hr = 240, interval_hr = 24, range_hr = 6)
 }
 \arguments{
-\item{species_df}{A data frame containing location data (rows) and columns with the following headers: "ref", "lon", "lat", "day". "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer). "lon" and "lat" are the longitude and latitide of each position estimate in decimal degrees formatted in numeric format). "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss. See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.}
+\item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
+"ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
+"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+"day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.}
 
-\item{min_hr}{Minimum number of hours to consider for displacement calculations. Default is 24 hours.}
+\item{min_hr}{Minimum number of hours to consider for calculations. Default is 24 hours.}
 
-\item{max_hr}{Maximum number of hours to consider for displacement calculations (default is 240 hours)}
+\item{max_hr}{Maximum number of hours to consider for calculations. Default is 240 hours.}
 
-\item{interval_hr}{Time interval (in hours) used to identify time period intervals between min_hr and max_hr (default is 24 hours)}
+\item{interval_hr}{Time interval (in hours) used to set intervals between min_hr and max_hr. Default is 24 hours.}
 
-\item{range_hr}{Range (in hours). Range converts the hours value into a broader time window so the algorithm can search for location estimates separated by the input hours +/- a range value. This helps the algorithm identify location estimates that are close to, but not exactly separated by the hours input value. If multiple location estimates fall within this range the location estimate closest to hours input value will be used for calculations. For example, if hours = 24 and range = 6, the algorithm will search for locations spaced 18 to 32 hours apart. Default is 6.}
+\item{range_hr}{Range (in hours) converts interval_hr into a time window (interval_hr +/-  range_hr) so the
+code can identify location estimates that are close to, but not exactly separated by the interval_hr input value.
+If multiple location estimates fall within this time window the location estimate closest to the interval_hr input value
+will be used for calculations. For example, if interval_hr = 24 and range = 6, the algorithm will search for
+locations spaced 18 to 32 hours apart. Default is 6.}
 }
 \value{
-A list containing the displacements (distances traveled in km) recorded for each time period
+A list ('displacements') containing the displacements in km recorded for each time window.
+Each list element corresponds with the time windows set. Time windows (in seconds) are exported as data vector "timeWindows" because this information is
+required in additional PhysMove functions.
 }
 \description{
 This function allows you to calculate the displacement distances traveled by individuals over set time windows.
 }
 \examples{
-CalculateDisplacements(species_df)
-CalculateDisplacements(species_df, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
+CalculateDisplacements(expSample)
+CalculateDisplacements(expSample, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
 }
