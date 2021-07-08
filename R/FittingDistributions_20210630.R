@@ -62,6 +62,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
   assign("normalize", normalize, envir = .GlobalEnv)
 
   if ("pl" %in% dist){
+    message("Fitting a power law distribution")
     if (full==FALSE){
       if (is.null(set_xmin)){
         for (i in 1:length(xmins)){
@@ -93,6 +94,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
   }
 
   if ("exp" %in% dist){
+    message("Fitting an exponential distribution")
     dat <- numeric(length(xmins)) #blank vectors for D values
     create_nll <- function(x){
       xi <- x[x>xmin]
@@ -161,6 +163,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
   }
 
   if ("lnorm" %in% dist){
+    message("Fitting a log-normal distribution")
     dat <- numeric(length(xmins)) #blank vectors for D values{
     create_nll <- function(x){
       xi <- x[x>xmin]

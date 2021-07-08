@@ -1,20 +1,23 @@
 #' Gyration Radius
 #'
 #' This function allows you to calculate the gyration radius of individual trajectories.
-#' @param species_df A data frame containing location data (rows) and columns with the following headers: "ref", "lon", "lat", "day". "ref" is the unique id number for each animal
-#'      (e.g., their satellite tag number; integer format). "lon" and "lat" are the longitude and latitide of each position estimate in decimal degrees (numeric format). "day"
-#'      is the datetime stamp for each location estimate (POSIXct format following yyyy-mm-dd hh:mm:ss). See XXX data frame for an example.
-#' @param plot Line plot illustrating the probability density function of gyration radii scores.  Default is TRUE.
-#' @param nb Number of bins, used to determine the size of the bins used to calculate predictability frequencies for plots. Default is 40.
+#' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
+#' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
+#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+#' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+#' See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}
 #' @param map Create a map illustrating gyration radii. Default is TRUE.
-#' @param Colours Colours for points and gyration radius, respectively. Default is c("Black","Red).
-#' @return Vector containing gyration radius values for each trajectory, line plot, and/or map (if desired).
+#' @param mapCol Colours for points and gyration radii on map, respectively. Default is c("Black","Red).
+#' @param pdfPlot Create a  probability density function line plot of the gyration radius values. Default is FALSE
+#' @param nBins Number of bins used to calculate the pdf plot. Default is 15.
+#' @return Vector containing gyration radius values for each trajectory ('gyrationRadius'), a  probability density function line plot
+#'  and a data frame with the data used to create the pdf plot ('gyrationradPDFplot', if pdfPlot=TRUE), a map of the gyration radius results (if map=TRUE).
 #' @examples
 #' rG(species_df)
-#' rG(species_df,plot=TRUE,nb, map=TRUE)
+#' rG(species_df,map=TRUE, mapCol=c("Black","Red"), pdfPlot=FALSE, nBins=15)
 #' @export
 
-GyrationRad <- function (species_df, map=TRUE, Colours=c("Black","Red"), plot=FALSE, nb=15){
+GyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red"), pdfPlot=FALSE, nBins=15){
 
   MydistHaversine <- function(lon1, lat1, lon2, lat2) {
     radlat1 = rad * lat1
@@ -59,7 +62,6 @@ GyrationRad <- function (species_df, map=TRUE, Colours=c("Black","Red"), plot=FA
   }
 
   MyrG <- unique(species_df[,c(1,11,13,15)])
-  assign("GyrationRadius", MyrG, envir = .GlobalEnv)
 
   if (map==TRUE){
     angle <- seq(1,360,1)
@@ -83,24 +85,28 @@ GyrationRad <- function (species_df, map=TRUE, Colours=c("Black","Red"), plot=FA
     }
     xyz <- MyrG[,c(3,2,4)]
     z <- ggplot2::ggplot() +
-      ggplot2::geom_point(data = xyz, ggplot2::aes(lon.avg.deg, lat.avg.deg), size=2, color = Colours[1])+
+      ggplot2::geom_point(data = xyz, ggplot2::aes(lon.avg.deg, lat.avg.deg), size=2, color = mapCol[1])+
       ggplot2::coord_sf(xlim = c(min(circles$long), max(circles$long)), ylim = c(min(circles$lat), max(circles$lat)))+
       ggplot2::theme_minimal()+
-      ggplot2::geom_polygon(data = circles, ggplot2::aes(long, lat, group = Ref), color = Colours[2], alpha=0)+
+      ggplot2::geom_polygon(data = circles, ggplot2::aes(long, lat, group = Ref), color = mapCol[2], alpha=0)+
       ggplot2::labs(x="Longitude", y="Latitude")+
       ggplot2::borders("world", colour="gray50", fill="gray50")
     print(z)
   }
 
-  if (plot==TRUE){
-    rGmin <- min(MyrG$rG)
-    bw <- (max(MyrG$rG)-rGmin)/nb
-    freq <- xs <- rep(0, nb+1)
+  if (pdfPlot==TRUE){
+    if (length(unique(species_df$ref))>1){ ##added -- talk to ANA
+      rGmin <- min(MyrG$rG)
+      bw <- (max(MyrG$rG)-rGmin)/nBins
+    } else { ##added -- talk to ANA
+    bw <- 1/nBins ##added -- talk to ANA
+    } ##added -- talk to ANA
+    freq <- xs <- rep(0, nBins+1)
     for(i in 1:nrow(MyrG)){
       b <- floor((MyrG[i,4]-rGmin)/bw + 0.5)+1 #otherwise floor goes to 0, which isn't recorded in freq
       freq[b] <- freq[b] + 1 #hist[k] in python = freq[b] here
     }
-    for(i in 1:(nb+1)){
+    for(i in 1:(nBins+1)){
       xs[i] <- rGmin+(i-1)*bw #bins for x axis on plot
     }
     lenrG = nrow(MyrG)
@@ -110,6 +116,10 @@ GyrationRad <- function (species_df, map=TRUE, Colours=c("Black","Red"), plot=FA
     # Plot RMS of displacements, and mean displacements on log-log scale
     plot(xs,freq,type="l",ylab="pdf", xlab=expression('r'[G]*' (km)'))
     points(xs,freq,col="black", pch=19)
+    gyradplot<-data.frame(xs, freq)
+    names(gyradplot)=c("Gyration Radius","pdf")
+    assign("gyrationradPDFplot", gyradplot, envir = .GlobalEnv)
   }
-
+  names(MyrG)<-c("ref","avg long", "avg lat", "rG (km)")
+  assign("gyrationRadius", MyrG, envir = .GlobalEnv)
 }

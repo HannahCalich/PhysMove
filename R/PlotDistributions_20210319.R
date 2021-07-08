@@ -17,11 +17,11 @@
 PlotDist <- function (displacements, fitLines=TRUE, colours=c("red","gold2","blue"), setDist=NULL, legend=c(TRUE, "bottomleft")){
 
   if (exists("displacements")==FALSE){
-    stop("Please Calculate displacements using (CalcDisp) and fit distriubtions (FitDisp) prior to executing PlotDist")
+    stop("Please calculate displacements using CalcDisp and fit distriubtions using FitDisp prior to executing PlotDist")
   }
 
-  if (exists("DistResults")==FALSE){
-    stop("Please Fit Distributions using the FitDist function prior to executing PlotDist")
+  if (exists("distResults")==FALSE){
+    stop("Please fit distributions using the FitDist function prior to executing PlotDist")
   }
 
   if (is.null(setDist)){

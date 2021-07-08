@@ -1,23 +1,30 @@
-#' Randomizing trajectories
+#' Randomize trajectories
 #'
-#' Randomizing trajectories to break any existing spatial or temporal correlations between location estimates. Here, the sequences of the displacements for each observed trajectory are reshuffled while the origin and end location of each trajectory are maintained.
-#' @param species_df A data frame containing location data (rows) and columns with the following headers: "ref", "lon", "lat", "day". "ref" is the unique id number for each animal
-#'      (e.g., their satellite tag number; integer format). "lon" and "lat" are the longitude and latitide of each position estimate in decimal degrees (numeric format). "day"
-#'      is the datetime stamp for each location estimate (POSIXct format following yyyy-mm-dd hh:mm:ss). See XXX data frame for an example.
-#' @param RandTraj Number of randomised trajectories per individual
-#' @param gridcell grid cell size in degrees. Default is 0.25.
-#' @param Colour Colour of line for data. Default="Navy".
-#' @return RandomizedResults data frame that includes the number of cells visited by each individual's original and reshuffled trajectories,RandomizedLat and RandomizedLon matricies for plotting tracks (see \code{\link{PlotRandomTracks}} function for further details),
-#' and a plot illustrating the number of cells visited by the original and reshuffled trajectories, if desired.
+#' This function allows you to investigate the influence spatial and/or temporal correlations may have on trajectories' space use patterns.
+#' This is done by maintaining the origin and end location of each trajectory, randomizing the order displacements occurred in between these points,
+#' and calculating how many grid cells the original and randomized trajectories visited, which summarizes their space use.
+#' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
+#' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
+#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+#' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+#' See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.
+#' @param randTraj Number of randomized trajectories per individual. Default is 500.
+#' @param gridCell Grid cell size in degrees. Default is 0.25.
+#' @param plot Plot the number of cells visited in the original trajectory versus the average number of cells visited in the
+#' reshuffled trajectories.
+#' Default is TRUE.
+#' @param legend Add a legend to the plot when TRUE and change the position of the legend. Default is legend=c(TRUE, "topleft").
+#' @return A data frame 'randomizedResults' that includes the number of cells visited by each original trajectory and the average number of
+#' cells visited by the reshuffled trajectories, a plot illustrating the number of cells visited by the original and reshuffled trajectories (if plot_TRUE),
+#' and 'randomizedLat' and 'randomizedLong' matrices and a 'randTraj' vector(which are required to plot the reshuffled tracks with the \code{\link{PlotRandomTracks} function}
 #' @examples
-#' Randomize(species_df)
-#' Randomize(species_df, RandTraj=500, grid=4, Plot=TRUE)
+#' Randomize(expSample)
+#' Randomize(expSample, randTraj=500, gridCell=0.25, plot=TRUE, legend=c(TRUE, "topleft"))
 #' @export
 
-Randomize<-function(species_df, RandTraj=500, gridcell=0.25, plot=TRUE, pchtype=19, colours=c("black","black"), title="", legend=c(TRUE, "topleft")) {
+Randomize<-function(species_df, randTraj=500, gridCell=0.25, plot=TRUE, legend=c(TRUE, "topleft")) {
 
-  grid = 1/gridcell
-
+  grid = 1/gridCell
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
   MyDiffLat <- MyDiffLong <- MyDiffTime <- rep(0, dim(species_df)[1]) # Create vector to store the differences in lat, long and time (time is needed for data that are not interpolated)
   for (i in 2:dim(species_df)[1]){
@@ -30,12 +37,12 @@ Randomize<-function(species_df, RandTraj=500, gridcell=0.25, plot=TRUE, pchtype=
     MyDiffTime[i] <- species_df[i,4] - species_df[i-1,4]
   }
   # Shuffle the differences per individual using sample without replacement
-  ShuffledLong <- ShuffledLat <- ShuffledTime <- matrix(0, nrow = dim(species_df)[1], ncol = RandTraj) # Create vector to store the shuffled differences per individual
+  ShuffledLong <- ShuffledLat <- ShuffledTime <- matrix(0, nrow = dim(species_df)[1], ncol = randTraj) # Create vector to store the shuffled differences per individual
 
   message("Randomizing trajectories, step 1/3")
 
   for (i in 1:length(species_index)){
-    for(T in 1:RandTraj){ ### number of randomised trajectories per individual
+    for(T in 1:randTraj){ ### number of randomised trajectories per individual
     # Randomize the order of the positions for each individual (eg instead of 1-65, the order might be 13,43,5)
       NewPositions <- sample(seq(1:(tail(species_index[[i]],1) - species_index[[i]][1])), tail(species_index[[i]],1) - species_index[[i]][1], replace = FALSE)
       # For each reshuffling (T), reserve the original first location per individual (i).
@@ -59,8 +66,9 @@ Randomize<-function(species_df, RandTraj=500, gridcell=0.25, plot=TRUE, pchtype=
     }
   }
 
-  assign("RandomizedLong",ShuffledLong, envir = .GlobalEnv)
-  assign("RandomizedLat",ShuffledLat, envir = .GlobalEnv)
+  assign("randomizedLong",ShuffledLong, envir = .GlobalEnv)
+  assign("randomizedLat",ShuffledLat, envir = .GlobalEnv)
+  assign("randTraj",randTraj, envir = .GlobalEnv)
 
   message("Calculating average number of cells visited by randomized trajectories, step 2/3")
 
@@ -70,11 +78,11 @@ Randomize<-function(species_df, RandTraj=500, gridcell=0.25, plot=TRUE, pchtype=
   latmin <- -90 # min(species_df[species_index[[1]],3])
   longmax <- 180 # max(species_df[species_index[[1]],2])
   latmax <- 90 # max(species_df[species_index[[1]],3])
-  longcells <- grid * (longmax - longmin) # 360*4 = 1440 cells of 0.25 degrees each in longitude ### 1/gridcell
+  longcells <- grid * (longmax - longmin) # 360*4 = 1440 cells of 0.25 degrees each in longitude ### 1/gridCell
   latcells <- grid * (latmax - latmin)  # 180*4 = 720 cells of 0.25 degrees each in latitude
   totalcells <- longcells * latcells
 
-  SumShuffledOccurrences <- matrix(0, nrow = length(species_index), ncol = RandTraj)
+  SumShuffledOccurrences <- matrix(0, nrow = length(species_index), ncol = randTraj)
   AvgShuffledOccurrences <- SumOriginalOccurrences <- c() # vector to store cell counts for each individual
 
   ### Loop through each shuffled position and store counts when individuals occur in each cell
@@ -82,7 +90,7 @@ Randomize<-function(species_df, RandTraj=500, gridcell=0.25, plot=TRUE, pchtype=
     # print(i)
     # vector to store counts of ShuffledOccurrences in each grid cell and store in list per shark
     ### totalcells calcualted in occupancy code, shoudld = 1036800 for 0.25 deg res
-    for(T in 1:RandTraj){ #For each random trajectory, determine what cell each point falls in 10){
+    for(T in 1:randTraj){ #For each random trajectory, determine what cell each point falls in 10){
       j<-1 #Do not turn this line off (it marks the position for each index per shark)
       ShuffledPresence <- rep(0, totalcells)
       for (j in 1:length(species_index[[i]])){ #For each point in a trajectory
@@ -111,16 +119,15 @@ Randomize<-function(species_df, RandTraj=500, gridcell=0.25, plot=TRUE, pchtype=
     SumOriginalOccurrences[i] <- sum(Presence)
   }
 
-  RandomizedResults<-cbind.data.frame(ref=unique(species_df$ref),SumOriginalOccurrences=SumOriginalOccurrences,AvgShuffledOccurrences=AvgShuffledOccurrences)
-  assign("RandomizedResults",RandomizedResults, envir = .GlobalEnv)
+  randomizedResults<-cbind.data.frame(ref=unique(species_df$ref),CellsInOriginalTrajectory=SumOriginalOccurrences,AvgCellsInRandomizedTrajectories=AvgShuffledOccurrences)
+  assign("randomizedResults",randomizedResults, envir = .GlobalEnv)
 
 ### Plot the cells used in original and shuffled trajectories showing shuffled visit less places than original
   if (plot==TRUE){
-  plot(SumOriginalOccurrences, AvgShuffledOccurrences,ylab="Avg Cells in Randomized Trajectories", xlab="Cells in Original Trajectory",
-       cex=1, pch=pchtype, main=title, col=colours[1])
-  abline(1,1, col=colours[2], lwd=2)
+  plot(SumOriginalOccurrences, AvgShuffledOccurrences, ylab="Avg Cells in Randomized Trajectories", xlab="Cells in Original Trajectory", pch=19)
+  abline(1, 1, lwd=2, lty=2)
     if (legend[1]==TRUE){
-      legend(legend[2], bty="n", c("Trajectories", "1:1 Relationship"), pch=c(pchtype,NA), lty=c(NA,1), lwd=c(NA,2), col=colours)
+      legend(legend[2], bty="n", c("Trajectories", "1:1 Relationship"), pch=c(19,NA), lty=c(NA,2), lwd=c(NA,2))
     }
   }
 }
