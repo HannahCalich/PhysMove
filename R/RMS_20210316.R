@@ -1,6 +1,6 @@
-#' Root-Mean-Square of Displacement
+#' Root-Mean-Square of Displacements
 #'
-#' This function allows you to calculate the root-mean-square of displacements and plot them scaled with time
+#' This function allows you to calculate root-mean-square displacements and plot them scaled with time
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
@@ -10,18 +10,24 @@
 #' @param timeUnit Unit used to calculate time between locations (e.g., "days", "hours", "seconds"). Default is "hours".
 #' @param plot Plot the root-mean-square of displacements versus the mean displacements against their corresponding time periods. Default is TRUE.
 #' @param colours Colours to plot the root-mean-square and mean displacement values, respectively. Default is colours=c("black","grey").
-#' @param pchType Pch symbols to plot the root-mean-square and mean displacement values, respectively. Pch values between 1 and 20 are valid. Default is pchType=c(16,16).
+#' @param pchType Pch symbols to plot the root-mean-square and mean displacement values, respectively. Pch values between 1 and 20 are valid.
+#' Default is pchType=c(16,16).
 #' @param legend Adds legend to plot and specifies legend location. Default is c(TRUE, "topleft").
-#' @param lm Run a linear model
-#' @return A data frame of root-mean-square displacement values ('RMSvalues'), a plot of the root-mean-square of displacement and
-#' the mean displacement values against their corresponding time periods (if plot=TRUE), results from a linear model ('RMSlinearModel', if lm=TRUE)
+#' @param lm Calculate a linear regression to examine the relationship between the root-mean-square displacement values (target variable)
+#' and time (predictor variable) and add fit line to the plot. The slope of this relationship is the RMS statistic and it can be determined by typing
+#' 'RMSlinearModel$coefficients[2]'. Default is TRUE.
+#' @return A data frame of the 'RMSresults' that includes: the 'TimeWindows' in log scale, the 'Count' (the cumulative
+#' count of displacements between each location within each log time window), the Mean Displacements 'MeanDisp', the mean-square displacement values
+#' 'dRMS', and the the mean displacement and root-mean-square displacement values normalized by count ('MeanDisp_per_count' and 'Sqrt_dRMS_per_count'), which
+#' are shown in the plot. A plot of the mean displacement values and the root-mean-square displacement values (per count) against their corresponding
+#' time periods (if plot=TRUE), and the results from the linear regression 'RMSlinearModel' (if lm=TRUE).
 #' @examples
 #' RMS(expSample)
 #' RMS(expSample, timeUnit="hours", wBins=1.1, plot=TRUE, pchType=c(16,16), colours=c("black","grey"), legend=c(TRUE, "topleft"), lm=FALSE)
 #' @export
 
 
-RMS <- function (species_df, timeUnit="hours", wBins=1.1, plot=TRUE, pchType=c(16,16), colours=c("black","grey"), legend=c(TRUE, "topleft"), lm=FALSE){
+RMS <- function (species_df, timeUnit="hours", wBins=1.1, plot=TRUE, pchType=c(16,16), colours=c("black","grey"), legend=c(TRUE, "topleft"), lm=TRUE){
 
   MydistHaversine <- function(lon1, lat1, lon2, lat2) {
     radlat1 = rad * lat1
@@ -58,11 +64,13 @@ RMS <- function (species_df, timeUnit="hours", wBins=1.1, plot=TRUE, pchType=c(1
   for(b in 1: length(bins)){
     mybins[b] <- tmin*wBins^(b)
   }
-  MyRMS <- as.data.frame(cbind("TimeWindows_log"=mybins, "Count"=Timefreq, "MeanDisp"=sumDist, "dRMS"=sumDist2))
+  MyRMS <- as.data.frame(cbind("TimeWindows_log"=mybins, "Count"=Timefreq, "MeanDisp"=sumDist, "dRMS"=sumDist2))## SPEAK TO ANA -- WHY WERE WE CALLING THIS A MEAN
   MyRMS <- MyRMS[(MyRMS[,1]!= 0) & (MyRMS[,3]!= 0) & (MyRMS[,4]!= 0),]
   MyRMS$MeanDisp_per_count <- MyRMS[,3]/MyRMS[,2]
   MyRMS$Sqrt_dRMS_per_count <- sqrt(MyRMS[,4]/MyRMS[,2])
-  assign("RMSvalues", MyRMS, envir = .GlobalEnv)
+  MyRMS_Export<-cbind(MyRMS[,c(1,5,6)])
+  names(MyRMS_Export)<-c("TmeWindows", "Displacements", "RMSdisplacements")
+  assign("RMSresults", MyRMS_Export, envir = .GlobalEnv)
 
   if (plot==TRUE){    # Plot RMS of displacements, and mean displacements on log-log scale
 
