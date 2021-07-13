@@ -28,7 +28,7 @@ PlotDist <- function (displacements, fitLines=TRUE, colours=c("red","gold2","blu
     setDist=dist
   }
 
-  if (Normalize){
+  if (normalize){
     x <- list()
     for (d in 1:length(TimeWindows)){
       disp <- unlist(displacements[d])
@@ -61,8 +61,8 @@ PlotDist <- function (displacements, fitLines=TRUE, colours=c("red","gold2","blu
         PL_CDF  = 1 - (displacements/parameters[2])^(-parameters[1]+1)
         return(PL_CDF)
       }
-      PL_xmin <- DistResults[which(DistResults$Distribution=="pl"),"xmin"]
-      PL_alpha <- DistResults[which(DistResults$Distribution=="pl"),"Parameter1"]
+      PL_xmin <- distResults[which(distResults$distribution=="pl"),"xmin"]
+      PL_alpha <- distResults[which(distResults$distribution=="pl"),"parameter1"]
       xval<-exp(seq(log(PL_xmin), log(max(x)), length.out = 100)) #log spaced sequence of displacements for log-log plot, matches poweRlaw x val
       yval <- 1- MyPowerLawCDF(c(PL_alpha, PL_xmin), xval)
       yval[xval < round(PL_xmin)] = 0
@@ -85,8 +85,8 @@ PlotDist <- function (displacements, fitLines=TRUE, colours=c("red","gold2","blu
         # Exp_CDF = parameters*exp(-parameters*displacements)
         return(Exp_CDF)
       }
-      Exp_xmin <- DistResults[which(DistResults$Distribution=="exp"),"xmin"]
-      Exp_lambda <- DistResults[which(DistResults$Distribution=="exp"),"Parameter1"]
+      Exp_xmin <- distResults[which(distResults$distribution=="exp"),"xmin"]
+      Exp_lambda <- distResults[which(distResults$distribution=="exp"),"parameter1"]
       xval<-exp(seq(log(Exp_xmin), log(max(x)), length.out = 100)) #log spaced sequence of displacements for log-log plot, matches poweRlaw x val
       yval <- MyExponentialPDF(c(Exp_lambda, Exp_xmin), xval) # This works rounded, might not need to change
       yval[xval < Exp_xmin] = 0
@@ -109,9 +109,9 @@ PlotDist <- function (displacements, fitLines=TRUE, colours=c("red","gold2","blu
         (plnorm(parameters[3],parameters[1], parameters[2], lower.tail = FALSE, log.p = TRUE)))
          return(LN_PDF)
       }
-      LN_xmin <- DistResults[which(DistResults$Distribution=="lnorm"),"xmin"]
-      LN_mu <- DistResults[which(DistResults$Distribution=="lnorm"),"Parameter1"]
-      LN_sigma <- DistResults[which(DistResults$Distribution=="lnorm"),"Parameter2"]
+      LN_xmin <- distResults[which(distResults$distribution=="lnorm"),"xmin"]
+      LN_mu <- distResults[which(distResults$distribution=="lnorm"),"parameter1"]
+      LN_sigma <- distResults[which(distResults$distribution=="lnorm"),"parameter2"]
       xval<-exp(seq(log(LN_xmin), log(max(x)), length.out = 100)) #log spaced sequence of displacements for log-log plot, matches poweRlaw x val
       yval <- MyLogNormalPDF(c(LN_mu, LN_sigma, LN_xmin), xval)
       yval[xval < LN_xmin] = 0
