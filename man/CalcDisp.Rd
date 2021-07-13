@@ -27,8 +27,8 @@ locations spaced 18 to 32 hours apart. Default is 6.}
 }
 \value{
 A list ('displacements') containing the displacements in km recorded for each time window.
-Each list element corresponds with the time windows set. Time windows (in seconds) are exported as data vector "timeWindows" because this information is
-required in additional PhysMove functions.
+Each list element corresponds with the time windows set. Time windows (in seconds) are exported as data vector 'timeWindows' as
+this information is required for additional PhysMove functions.
 }
 \description{
 This function allows you to calculate the displacement distances traveled by individuals over set time windows.

@@ -2,38 +2,44 @@
 % Please edit documentation in R/Reshuffle.R
 \name{Randomize}
 \alias{Randomize}
-\title{Randomizing trajectories}
+\title{Randomize trajectories}
 \usage{
 Randomize(
   species_df,
-  RandTraj = 500,
-  gridcell = 0.25,
+  randTraj = 500,
+  gridCell = 0.25,
   plot = TRUE,
-  pchtype = 19,
-  colours = c("black", "black"),
-  title = "",
   legend = c(TRUE, "topleft")
 )
 }
 \arguments{
-\item{species_df}{A data frame containing location data (rows) and columns with the following headers: "ref", "lon", "lat", "day". "ref" is the unique id number for each animal
-(e.g., their satellite tag number; integer format). "lon" and "lat" are the longitude and latitide of each position estimate in decimal degrees (numeric format). "day"
-is the datetime stamp for each location estimate (POSIXct format following yyyy-mm-dd hh:mm:ss). See XXX data frame for an example.}
+\item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
+"ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
+"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+"day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.}
 
-\item{RandTraj}{Number of randomised trajectories per individual}
+\item{randTraj}{Number of randomized trajectories per individual. Default is 500.}
 
-\item{gridcell}{grid cell size in degrees. Default is 0.25.}
+\item{gridCell}{Grid cell size in degrees. Default is 0.25.}
 
-\item{Colour}{Colour of line for data. Default="Navy".}
+\item{plot}{Plot the number of cells visited in the original trajectory versus the average number of cells visited in the
+reshuffled trajectories.
+Default is TRUE.}
+
+\item{legend}{Add a legend to the plot when TRUE and change the position of the legend. Default is legend=c(TRUE, "topleft").}
 }
 \value{
-RandomizedResults data frame that includes the number of cells visited by each individual's original and reshuffled trajectories,RandomizedLat and RandomizedLon matricies for plotting tracks (see \code{\link{PlotRandomTracks}} function for further details),
-and a plot illustrating the number of cells visited by the original and reshuffled trajectories, if desired.
+A data frame 'randomizedResults' that includes the number of cells visited by each original trajectory and the average number of
+cells visited by the reshuffled trajectories, a plot illustrating the number of cells visited by the original and reshuffled trajectories (if plot_TRUE),
+and 'randomizedLat' and 'randomizedLong' matrices and a 'randTraj' vector(which are required to plot the reshuffled tracks with the \code{\link{PlotRandomTracks} function}
 }
 \description{
-Randomizing trajectories to break any existing spatial or temporal correlations between location estimates. Here, the sequences of the displacements for each observed trajectory are reshuffled while the origin and end location of each trajectory are maintained.
+This function allows you to investigate the influence spatial and/or temporal correlations may have on trajectories' space use patterns.
+This is done by maintaining the origin and end location of each trajectory, randomizing the order displacements occurred in between these points,
+and calculating how many grid cells the original and randomized trajectories visited, which summarizes their space use.
 }
 \examples{
-Randomize(species_df)
-Randomize(species_df, RandTraj=500, grid=4, Plot=TRUE)
+Randomize(expSample)
+Randomize(expSample, randTraj=500, gridCell=0.25, plot=TRUE, legend=c(TRUE, "topleft"))
 }

@@ -7,31 +7,34 @@
 GyrationRad(
   species_df,
   map = TRUE,
-  Colours = c("Black", "Red"),
-  plot = FALSE,
-  nb = 15
+  mapCol = c("Black", "Red"),
+  pdfPlot = FALSE,
+  nBins = 15
 )
 }
 \arguments{
-\item{species_df}{A data frame containing location data (rows) and columns with the following headers: "ref", "lon", "lat", "day". "ref" is the unique id number for each animal
-(e.g., their satellite tag number; integer format). "lon" and "lat" are the longitude and latitide of each position estimate in decimal degrees (numeric format). "day"
-is the datetime stamp for each location estimate (POSIXct format following yyyy-mm-dd hh:mm:ss). See XXX data frame for an example.}
+\item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
+"ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
+"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+"day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}}
 
 \item{map}{Create a map illustrating gyration radii. Default is TRUE.}
 
-\item{Colours}{Colours for points and gyration radius, respectively. Default is c("Black","Red).}
+\item{mapCol}{Colours for points and gyration radii on map, respectively. Default is c("Black","Red).}
 
-\item{plot}{Line plot illustrating the probability density function of gyration radii scores.  Default is TRUE.}
+\item{pdfPlot}{Create a  probability density function line plot of the gyration radius values. Default is FALSE}
 
-\item{nb}{Number of bins, used to determine the size of the bins used to calculate predictability frequencies for plots. Default is 40.}
+\item{nBins}{Number of bins used to calculate the pdf plot. Default is 15.}
 }
 \value{
-Vector containing gyration radius values for each trajectory, line plot, and/or map (if desired).
+Vector containing gyration radius values for each trajectory ('gyrationRadius'), a  probability density function line plot
+ and a data frame with the data used to create the pdf plot ('gyrationradPDFplot', if pdfPlot=TRUE), a map of the gyration radius results (if map=TRUE).
 }
 \description{
 This function allows you to calculate the gyration radius of individual trajectories.
 }
 \examples{
 rG(species_df)
-rG(species_df,plot=TRUE,nb, map=TRUE)
+rG(species_df,map=TRUE, mapCol=c("Black","Red"), pdfPlot=FALSE, nBins=15)
 }

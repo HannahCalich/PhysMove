@@ -6,34 +6,49 @@
 \usage{
 PlotRandomTracks(
   species_df,
-  Ref,
-  RandTraj = 10,
-  colours = c("black", "red"),
-  pchtype = c(19, 19),
-  title = "",
+  ref = NULL,
+  numPlot = 1:5,
+  colours = c("black", "grey"),
+  pchType = c(16, 16),
+  startPoint = c("red", 10),
+  endPoint = c("blue", 10),
+  tracks = c("TRUE", "TRUE"),
   legend = c(TRUE, "topleft")
 )
 }
 \arguments{
-\item{species_df}{A data frame containing location data (rows) and columns with the following headers: "ref", "lon", "lat", "day". "ref" is the unique id number for each animal
-(e.g., their satellite tag number; integer format). "lon" and "lat" are the longitude and latitide of each position estimate in decimal degrees (numeric format). "day"
-is the datetime stamp for each location estimate (POSIXct format following yyyy-mm-dd hh:mm:ss). See XXX data frame for an example.}
+\item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
+"ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
+"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+"day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.}
 
-\item{Ref}{Trajectory ID number from species_df to plot}
+\item{ref}{Reference number of trajectory from species_df to plot.}
 
-\item{RandTraj}{Random trajectory(ies) to plot. Values can include either 1 number, or a range of numbers following #:# format. Default is 1:10.}
+\item{numPlot}{Number of randomized trajectories to plot. Input value can be any number that does not exceed the number of trajectories created in
+the \code{\link{Randomize}} function. Default is 1:5.}
 
-\item{Colours}{Colours for real trajectory locations (Colour option 1) and reshuffled trajectory locations (colour option 2). Default is Colours=c("black","red").}
+\item{colours}{Colours to plot points from original and randomized trajectories, respectively. Default is colours=c("black","grey").}
 
-\item{Legend}{Add legend to plot and specify location. Legend=c(TRUE, "topleft").}
+\item{pchType}{Pch symbols to plot points from original and randomized trajectories, respectively. Pch values between 1 and 20 are valid. Default is pchType=c(16,16).}
+
+\item{startPoint}{Colour and pch symbol for origin location. startPoint=NULL will force the startPoint symbology to match the symbology of the original
+trajectory. Pch values between 1 and 20 are valid. Default is startPoint=c("red",10)}
+
+\item{endPoint}{Colour and pch symbol for destination location. endPoint=NULL will force the endPoint symbology to match the symbology of the original
+trajectory. Pch values between 1 and 20 are valid. Default is endPoint=c("blue",10)}
+
+\item{tracks}{Add track lines to original and randomized trajectories respectively. Default is tracks=c("TRUE","TRUE).}
+
+\item{legend}{Add legend to plot and specify location. Legend=c(TRUE, "topleft").}
 }
 \value{
-Plot showing real and reshuffled trajectory locations.
+Plot showing real and reshuffled trajectory locations and a data frame with location data for the reshuffled trajectories on the map('randomizedTrajectories').
 }
 \description{
-Plot locations from real and reshuffled trajectories using RandomizedLat and RandomizedLong outputs from \code{\link{Randomize}} function
+Plot locations from original and reshuffled trajectories using randomizedLat and randomizedLong outputs from the \code{\link{Randomize}} function
 }
 \examples{
-PlotReshuffTracks<-function(species_df, Ref=33933, RandomizedLat, RandomizedLong, RandTraj=1)
-PlotReshuffTracks(species_df, Ref=33933, RandomizedLat, RandomizedLong, RandTraj=1:10, Colours=c("black","red"))
+PlotReshuffTracks<-function(expSample, ref=1)
+PlotReshuffTracks(expSample, ref=NULL, numPlot=1:5, colours=c("black","grey"), pchType=c(16,16), startPoint=c("red",10), endPoint=c("blue",10), tracks=c("TRUE","TRUE"), legend=c(TRUE, "topleft"))
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Entropy_20210318.R
 \name{Entropy}
 \alias{Entropy}
-\title{Calculate the entropy of trajectories}
+\title{Entropy of trajectories}
 \usage{
 Entropy(
   species_df,
@@ -22,18 +22,18 @@ See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \co
 
 \item{gridCell}{Grid cell size in degrees. Default is 0.25.}
 
-\item{histPlot}{Plot a histogram of the normalized  entropy scores. Default is TRUE.}
+\item{histPlot}{Plot a histogram of the normalized  entropy values. Default is TRUE.}
 
 \item{legend}{Add a legend to the histPlot when TRUE and change the position of the legend. Default is legend=c(TRUE, "topleft").}
 
-\item{pdfPlot}{Create a  probability density function line plot of the Entropy scores. Default is TRUE.}
+\item{pdfPlot}{Create a  probability density function line plot of the entropy values. Default is TRUE.}
 
 \item{nBins}{Number of bins used to calculate the pdf plot. Default is 40.}
 }
 \value{
-Data vector containing normalized entropy ('normalizedEntropy') scores for each individual, a histogram plot of the normalized entropy scores
+Data vector ('normalizedEntropy') containing normalized entropy values for each individual, a histogram plot of the normalized entropy values
 (if histPlot=TRUE), a  probability density function line plot and a data frame with the data used to create the pdf plot ('entropyPDFplot', if pdfPlot=TRUE),
-and data needed for the Predictability function (a list of occurrences and a vector of raw entropy scores, 'occurrences' and 'indivEntropy', respectively).
+and data needed for the Predictability function (a list of occurrences and a vector of raw entropy values, 'occurrences' and 'indivEntropy', respectively).
 }
 \description{
 This function allows you to calculate the entropy of individual trajectories, which provides insight to how ordered (or disordered) the trajectories were.

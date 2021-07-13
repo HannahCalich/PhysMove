@@ -2,35 +2,44 @@
 % Please edit documentation in R/Predictability_20210319.R
 \name{Predictability}
 \alias{Predictability}
-\title{Predictability}
+\title{Predictability of trajectories}
 \usage{
 Predictability(
   species_df,
-  start_val = 0.99,
-  hist = TRUE,
-  pdfplot = FALSE,
-  nb = 40,
-  legend = c(TRUE, "topleft")
+  startVal = 0.99,
+  histPlot = TRUE,
+  legend = c(TRUE, "topleft"),
+  pdfPlot = FALSE,
+  nBins = 40
 )
 }
 \arguments{
-\item{species_df}{A data frame containing location data (rows) and columns with the following headers: "ref", "lon", "lat", "day". "ref" is the unique id number for each animal
-(e.g., their satellite tag number; integer format). "lon" and "lat" are the longitude and latitide of each position estimate in decimal degrees (numeric format). "day"
-is the datetime stamp for each location estimate (POSIXct format following yyyy-mm-dd hh:mm:ss). See XXX data frame for an example.}
+\item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
+"ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
+"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+"day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.}
 
-\item{start_val}{Starting value used to find a root for the Limit of Predictability equation. If no value is provided function will loop through values starting at 0.99 and decreasing by 0.01 at each iteration until acceptable root values are identified. Default is 0.99}
+\item{startVal}{Starting value used to find a root for the limit of predictability equation. Function will loop through values
+starting at startVal and decrease by 0.01 at each iteration until an acceptable root value is identified. Default is 0.99}
 
-\item{nb}{Number of bins, used to determine the size of the bins used to calculate predictability frequencies for plots. Default is 40.}
+\item{histPlot}{Plot a histogram of the limit of predictability scores. Default is TRUE.}
 
-\item{plot}{Line plot illustrating the predictability of each trajectory.  Default is TRUE.}
+\item{legend}{Add a legend to the histPlot when TRUE and change the position of the legend. Default is legend=c(TRUE, "topleft")}
+
+\item{pdfPlot}{Create a probability density function line plot of the limit of predictability scores. Default is TRUE.}
+
+\item{nBins}{Number of bins used to calculate the pdf plot. Default is 40.}
 }
 \value{
-Predictability vector containing predictability values for each trajectory, line plot (if desired).
+Data vector ('predictability') containing limit of predictability values for each trajectory, a histogram plot of the limit of predictability values
+(if histPlot=TRUE), a  probability density function line plot and a data frame with the data used to create the pdf plot ('predictPDFData', if pdfPlot=TRUE).
 }
 \description{
-This function allows you to calculate the predictability of each trajectory based on each individual's entropy. This function requires "Ind_Entropy","Occurrences", and "NormalizedEntropy" from \code{\link{Entropy}} function
+This function allows you to calculate the limit of predictability for each trajectory based on each individual's entropy. This function requires
+'indivEntropy', 'occurrences', and 'normalizedEntropy' from the \code{\link{Entropy}} function.
 }
 \examples{
-Predictability(species_df)
-Predictability(species_df, start_val=0.99, plot=TRUE, nb=40)
+Predictability(expSample)
+Predictability(expSample, startVal=0.99, histPlot=TRUE, legend=c(TRUE, "topleft"), pdfPlot=FALSE, nBins=40)
 }
