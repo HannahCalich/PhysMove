@@ -62,7 +62,7 @@ Predictability<-function(species_df, startVal=0.99, histPlot=TRUE, legend=c(TRUE
     hist<-hist(Predictability, breaks = seq(0, 1, length.out = 21), plot=FALSE) #Determine hist values so you can automate plot better
     hist<-hist(Predictability, main="", xlab = "Predictability", xlim=c(0,1), ylim=c(0,(max(hist$counts)+2)),axes=FALSE,
                breaks = seq(0, 1, length.out = 21), border="black", col= "grey",xaxs="i",yaxs="i")
-    abline(v=0.5, col="red", lty=2, lwd =2)
+    segments(x0=0.5,y0=0,x1=0.5,y1=0.9*(max(hist$counts)+2),col="red", lty=2, lwd =2)
     myTicks = axTicks(1)
     myTicks2 = axTicks(2)
     axis(1, at=myTicks)
