@@ -4,21 +4,29 @@
 \alias{CommunityMap}
 \title{Map Infomap communities}
 \usage{
-CommunityMap(infomap_object, subset_communities, colPalette = "Dark2")
+CommunityMap(
+  infomap_object,
+  subset_communities,
+  colPalette = "Dark2",
+  land = TRUE
+)
 }
 \arguments{
-\item{infomap_object}{Monolayer object that was output from the \code{\link{InfomapCommuities}} function.}
+\item{infomap_object}{Monolayer object that was output from the \code{\link{InfomapCommunities}} function.}
 
 \item{subset_communities}{Vector of communities to be plotted in map. Default is NULL.}
 
 \item{colPalette}{Colour palette for map (applied to ggplot2::scale_fill_brewer). Default is "Dark2".}
+
+\item{land}{Add a land polygon to the map. Note that if there is no land in your region you'll receive a "nothing to draw" error.
+This can be fixed by using land=FALSE. Default is TRUE.}
 }
 \value{
 A map illustrating level 1 Infomap communities.
 }
 \description{
-This function allows you to create a map of the level 1 Infomap communities calculated using the \code{\link{InfomapCommuities}} function.
-To map only a subset of the communities, save the relevant level 1 community numbers to a vector and input as “subset_communities”.
+This function allows you to create a map of the level 1 Infomap communities calculated using the \code{\link{InfomapCommunities}} function.
+To map only a subset of the communities, save the relevant level 1 community numbers to a vector and input as subset_communities.
 }
 \examples{
 CommunityMap(infomap_object)

@@ -7,7 +7,8 @@
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.
 #' @param gridCell Grid cell size in degrees. Default is 0.25.
-#' @param map Create a map illustrating where occupancy occurs. Default is TRUE.
+#' @param map Create a map illustrating where occupancy occurs and add a world polygon, respectively. Note that if there is no land in your region
+#' you'll receive a "nothing to draw" error. This can be fixed by using map=c(TRUE,FALSE). Default is map=c(TRUE,TRUE).
 #' @param colGrad  Colour gradient for map that illustrates low, moderate, and high occupancy, respectively
 #' (applied to ggplot2::scale_fill_gradientn). Default is colGrad=c("blue", "light blue","red").
 #' @param pdfPlot Create a  probability density line plot of the occupancy values. Default is TRUE.
@@ -19,7 +20,7 @@
 #' Occupancy(expSample, gridcell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"), pdfPlot=FALSE, nBins=20)
 #' @export
 
-Occupancy<-function(species_df, gridcell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"), pdfPlot=FALSE, nBins=20){
+Occupancy<-function(species_df, gridcell=0.25, map=c(TRUE,TRUE), colGrad=c("blue", "light blue", "red"), pdfPlot=FALSE, nBins=20){
 
   grid <- 1/gridcell
   Radius <- 6371 #Earth Radius in km (disp are in km)
@@ -67,15 +68,17 @@ Occupancy<-function(species_df, gridcell=0.25, map=TRUE, colGrad=c("blue", "ligh
 
   assign("occupancyResults", OccExp, envir = .GlobalEnv)
 
-  if (map==TRUE){
+  if (map[1]==TRUE){
     xyz <- OccExp[,c(5,6,3)]
     z <- ggplot2::ggplot() +
       ggplot2::geom_tile(data=xyz, ggplot2::aes(x=Longitude, y=Latitude, fill=Occupancy))+
       ggplot2::labs(x = "Longitude",y = "Latitude", fill = expression(atop("",atop(textstyle("Occupancy"),atop(textstyle("(counts"%*%"area"^-1*")"))))))+
       ggplot2::coord_sf(xlim = c(min(xyz$Longitude), max(xyz$Longitude)), ylim = c(min(xyz$Latitude), max(xyz$Latitude)))+
       ggplot2::theme_minimal()+
-      ggplot2::scale_fill_gradientn(colours = c(colGrad))+
-      ggplot2::borders("world", colour="gray50", fill="gray50", xlim = c(min(xyz$Longitude), max(xyz$Longitude)), ylim = c(min(xyz$Latitude), max(xyz$Latitude)))
+      ggplot2::scale_fill_gradientn(colours = c(colGrad))
+  if(map[2]==TRUE){
+    z<-z+ggplot2::borders("world", colour="gray50", fill="gray50", xlim = c(min(xyz$Longitude), max(xyz$Longitude)), ylim = c(min(xyz$Latitude), max(xyz$Latitude)))
+    }
     plot(z)
   }
 

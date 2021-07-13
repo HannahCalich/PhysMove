@@ -7,7 +7,7 @@
 Occupancy(
   species_df,
   gridcell = 0.25,
-  map = TRUE,
+  map = c(TRUE, TRUE),
   colGrad = c("blue", "light blue", "red"),
   pdfPlot = FALSE,
   nBins = 20
@@ -20,7 +20,8 @@ Occupancy(
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.}
 
-\item{map}{Create a map illustrating where occupancy occurs. Default is TRUE.}
+\item{map}{Create a map illustrating where occupancy occurs and add a world polygon, respectively. Note that if there is no land in your region
+you'll receive a "nothing to draw" error. This can be fixed by using map=c(TRUE,FALSE). Default is map=c(TRUE,TRUE).}
 
 \item{colGrad}{Colour gradient for map that illustrates low, moderate, and high occupancy, respectively
 (applied to ggplot2::scale_fill_gradientn). Default is colGrad=c("blue", "light blue","red").}
