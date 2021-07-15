@@ -148,26 +148,42 @@ TurningAngles<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=
   names(AngleList) <- Days
   assign("AngleList",AngleList, envir = .GlobalEnv)
 
+  if (any(sapply(AngleList, function(x) length(x)==0))==TRUE){
+    warning("At least 1 'AngleList' list element is empty, which means that no location estimates were separated by at least 1 of the time windows supplied.
+    This may cause plotting errors. To troubleshoot, force all plotting functions to FALSE, review the exported 'AngleList', and
+    update your time windows accordingly.")
+  }
+
   if (spiderPlot[1]==TRUE){
     if (spiderPlot[2]!="all"){
       spider <- spider[which(spider$Days==spiderPlot[2]),]
     }
+
+    spider<-spider[complete.cases(spider), ] #remove rows with no data
+
     if (class(colours)=="function"){
-      colourpal <- colours(length(Days))
-    } else {
-      colourpal <- rep(colours,length(Days))
+      colours <- colours(length(spider))
     }
+
+    if (length(colours)!=length(spider$Days)){
+      colours <- rep (colours, length(spider$Days))
+    }
+
     if (legend==TRUE){
       title <- "Days"
       legendPos <- "right"
+    } else {
+      title <- ""
+      legendPos <- "ggplot2::element_blank()"
     }
+
     spider_plot <- ggplot2::ggplot(spider, ggplot2::aes(x = Pos.Angles, y = AngleProb, group=as.factor(Days),colour=as.factor(Days)))+
       ggplot2::coord_polar()+
       ggplot2::geom_hline(yintercept = c(0, max(spider$AngleProb)+0.01), colour = "black", size = 0.25) +
       ggplot2::geom_vline(xintercept = seq(0, 360, by = 90), colour = "black", size = 0.25) +
       ggplot2::geom_point(size = 0.4) +
       ggplot2::geom_line(size = 1)+
-      ggplot2::scale_colour_manual(title, values = colourpal)+
+      ggplot2::scale_colour_manual(title, values = colours)+
       ggplot2::scale_x_continuous(limits = c(0, 360), breaks = c(0,90,180,270), labels = c("0°","90°","180°","270°"))+
       ggplot2::xlab("") +
       ggplot2::ylab("")+
@@ -183,15 +199,24 @@ TurningAngles<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=
         panel.grid  = ggplot2::element_blank(),
         plot.margin = grid::unit(c(0, 0, 0, 0), "points"))
     plot(spider_plot)
+
+    assign("angleSpiderPlot",spider, envir = .GlobalEnv)
   }
 
   if (histPlot[1]==TRUE){ # Histogram of all angles combined
+    AngleList<-AngleList[-which((sapply(AngleList, function(x) length(x)==0))==TRUE)] #remove list elements with no data
     if (histPlot[2]=="all"){
     h <- hist(unlist(AngleList), plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angels for all time periods from all individuals
     } else {
     h <- hist(unlist(AngleList[[histPlot[2]]]), plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angels for selected time periods from all individuals
     }
-    plot(h, main = "", xlab = "Turning Angles", xaxt = "n",col = colours)
+
+    if (class(colours)=="function"){
+     colours <- colours(length(AngleList))
+    }
+
+    plot(h, main = "", xlab = "Turning Angles", xaxt = "n",col = colours[1])
     axis(1, at = seq(-180,180,by = 20), labels = seq(-180,180,by = 20))
+    assign("angleHistPlot", h, envir = .GlobalEnv)
   }
 }
