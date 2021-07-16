@@ -18,14 +18,15 @@
 #' (default) or one specific time period. For example, spiderPlot=c(TRUE,1) to plot only the first time period. Default spiderPlot=c(TRUE, "all").
 #' @param legend Add a legend to the spider plot. Default is TRUE.
 #' @param histPlot Plot a histogram showing the frequency of turning angles from all time windows combined (default) or
-#' one specific time period. For example, histPlot=c(TRUE,1) to plot only the first time period. Note that if both spiderPlot and histPlot = TRUE
-#' the histPlot will replace the spiderPlot if the user is not using RStudio. If the user is in RStudio they simply need to click the "previous plot"
-#' arrow to view the spiderPlot. Default is histPlot=c(TRUE, "all").
+#' one specific time period. For example, histPlot=c(TRUE,1) to plot only the first time period. Plot colour will be the first colour entered in the
+#' colours parameter. Note that if both spiderPlot and histPlot = TRUE the histPlot will repalce the spiderPlot if the user is not using RStudio.
+#' Default is histPlot=c(TRUE, "all").
 #' @param colours Colour(s) for bars in histPlot and lines in spiderPlot. Valid options include: base R (grDevices) color pallets (e.g., rainbow),
-#' specific colours (e.g., "Navy", or c("red","blue")), or hex numbers (e.g., "#FF0000"). Note that the grDevices color pallet names do not have quotations.
+#' specific colours (e.g., "Navy", or c("red","blue")), or hex numbers (e.g., "#FF0000"). Do not use quotations if using a grDevices color pallet.
 #' Default is rainbow.
 #' @return List of Turning Angles for each time window. The name of each list element corresponds with a time window in days.
-#' If histPlot and/or spiderPlot=TRUE, a histogram and/or spiderPlot of results are exported.
+#' If spiderPlot and/or histPlot = TRUE, a spiderPlot and/or histogram of results are exported along with the data used to create each plot ('angleSpiderPlot' and
+#' 'angleHistPlot', respectively).
 #' @examples TurningAngles(expSample)
 #' @examples TurningAngles(expSample, min_hr=24, max_hr=240, interval_hr=24,range_hr=6, spiderPlot=c(TRUE, "all"), legend=TRUE, histPlot=c(FALSE, "all"), colours=rainbow)
 #' @export
