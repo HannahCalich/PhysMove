@@ -45,9 +45,15 @@ RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, pchType=c(16
   bins <- seq(1,400,1) #400 time windows
   tmin <- 1.0/(60*60*24) # 1 second is min time
   sumDist2<-sumDist<-Timefreq <- rep(0, length(bins))
-  j<-k<-n<-b<-1
+  statusMessages<-c("25% complete", "50% complete", "75% complete")
+  percent<-c(dim(species_df)[1]*0.25,dim(species_df)[1]*0.5,dim(species_df)[1]*0.75)
+  p <- 1 #for status messages
 
   for(j in 1:dim(species_df)[1]){ # for each row
+    if (j %in% percent){
+      message(statusMessages[p])
+      p <- p+1
+    }
     n <- species_index[[paste(species_df[j,1])]][length(species_index[[paste(species_df[j,1])]])] #row where each individual ends
     for(k in (j+1):n){ #for each shark, calculate the distance between all locations (k)
       if (j+1 <= n){
@@ -60,6 +66,7 @@ RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, pchType=c(16
       }
     }
   }
+  message ("Calculations complete")
 
   mybins <- rep(0, length(bins)) # for the x axis of the plot
   for(b in 1: length(bins)){
