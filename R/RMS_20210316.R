@@ -7,7 +7,7 @@
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}
 #' @param wBins Bin width refers to the size of the bins used to calculate how frequently displacements occurred. Default is 1.
-#' @param timeUnit Unit used to calculate time between locations (e.g., "days", "hours", "seconds"). Default is "hours".
+#' @param timeUnit Unit used to calculate time between locations (e.g., "secs", "mins", "hours", "days", "weeks"). Default is "days".
 #' @param plot Plot the root-mean-square of displacements versus the mean displacements against their corresponding time periods. Default is TRUE.
 #' @param colours Colours to plot the root-mean-square and mean displacement values, respectively. Default is colours=c("black","grey").
 #' @param pchType Pch symbols to plot the root-mean-square and mean displacement values, respectively. Pch values between 1 and 20 are valid.
@@ -23,11 +23,11 @@
 #' time periods (if plot=TRUE), and the results from the linear regression 'RMSlinearModel' (if lm=TRUE).
 #' @examples
 #' RMS(expSample)
-#' RMS(expSample, timeUnit="hours", wBins=1.1, plot=TRUE, pchType=c(16,16), colours=c("black","grey"), legend=c(TRUE, "topleft"), lm=FALSE)
+#' RMS(expSample, timeUnit="days", wBins=1.1, plot=TRUE, pchType=c(16,16), colours=c("black","grey"), legend=c(TRUE, "topleft"), lm=FALSE)
 #' @export
 
 
-RMS <- function (species_df, timeUnit="hours", wBins=1.1, plot=TRUE, pchType=c(16,16), colours=c("black","grey"), legend=c(TRUE, "topleft"), lm=TRUE){
+RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, pchType=c(16,16), colours=c("black","grey"), legend=c(TRUE, "topleft"), lm=TRUE){
 
   MydistHaversine <- function(lon1, lat1, lon2, lat2) {
     radlat1 = rad * lat1
@@ -42,16 +42,17 @@ RMS <- function (species_df, timeUnit="hours", wBins=1.1, plot=TRUE, pchType=c(1
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x}) #Convert to Ana terms
   Radius <- 6371 #Earth Radius in km (disp are in km)
   rad <- 3.141592653589793/180 #Python has more digits of pi than R, so value pasted here instead of "pi"
-  bins <- seq(1,400,1)
-  tmin <- 1.0/(60*60*24) # 1 second in min time
+  bins <- seq(1,400,1) #400 time windows
+  tmin <- 1.0/(60*60*24) # 1 second is min time
   sumDist2<-sumDist<-Timefreq <- rep(0, length(bins))
   j<-k<-n<-b<-1
+
   for(j in 1:dim(species_df)[1]){ # for each row
     n <- species_index[[paste(species_df[j,1])]][length(species_index[[paste(species_df[j,1])]])] #row where each individual ends
     for(k in (j+1):n){ #for each shark, calculate the distance between all locations (k)
       if (j+1 <= n){
         myTime <- as.numeric(difftime(species_df[k,4],species_df[j,4],units=timeUnit))
-        b <- floor(log(myTime/tmin)/log(wBins) + 0.5) #log scale time bins
+        b <- floor(log(myTime/tmin)/log(wBins) + 0.5) #log scale time bin
         Timefreq[b] <- Timefreq[b] + 1 #Cumulative count of displacements between each location within each log time bin
         Dist <- MydistHaversine(species_df[k,2], species_df[k,3], species_df[j,2], species_df[j,3]) #Calculates distance from point 1 to all sucessive points
         sumDist[b] <- sumDist[b] + Dist
