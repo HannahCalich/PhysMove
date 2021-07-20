@@ -92,7 +92,7 @@ Occupancy<-function(species_df, gridcell=0.25, map=TRUE, colGrad=c("blue", "ligh
     freq <- rep(0, nBins+1)
     for(i in 1:nrow(OccExp)){
       if (OccExp[i,3]>0){
-        b <- ceiling(log(OccExp[i,3]/Occmin)/log(bw) + 0.5) # ceiling is used here because if b = 0 it'll throw errors (python code uses int(#) but 0 is valid in python)
+        b <- floor(log(OccExp[i,3]/Occmin)/log(bw) + 0.5) # ceiling is used here because if b = 0 it'll throw errors (python code uses int(#) but 0 is valid in python)
         freq[b] <- freq[b] + 1
       }
     }
@@ -106,10 +106,8 @@ Occupancy<-function(species_df, gridcell=0.25, map=TRUE, colGrad=c("blue", "ligh
     xs <- ys <- rep(0, length(freq))
 
     for (i in 1:length(freq)){
-      if (freq[i]>0){
         ys[i] <- freq[i]/(norm*Occmin*((bw^((i-1)+0.5))-(bw^((i-1)-0.5))))
         xs[i] <- Occmin*(bw^(i-1))
-      }
     }
     occplot <- data.frame(xs, ys)
     names(occplot) <- c("Occupancy(km^-2)","pdf")
