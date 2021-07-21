@@ -101,6 +101,6 @@ Predictability<-function(species_df, startVal=0.99, histPlot=TRUE, legend=c(TRUE
     axis(2, at=seq(min(myTicks2), max(myTicks2), (myTicks2[2]-myTicks2[1])/2), labels=NA, tcl=-0.2)
 
     names(predictplot)=c("piMAX","pdf")
-    assign("predictPDFData", predictplot, envir = .GlobalEnv)
+    assign("predictPDFplot", predictplot, envir = .GlobalEnv)
     }
 }
