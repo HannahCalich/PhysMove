@@ -29,10 +29,10 @@ GyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red"), pdfPlot=
     return(a*Radius)
   }
 
-  species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x}) #Convert to Ana terms
-  Radius <- 6371 #Earth Radius in km (disp are in km)
-  rad <- 3.141592653589793/180 #to convert degrees to radians
-  deg <- 180/3.141592653589793 #to convert radians to degrees
+  species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
+  Radius <- 6371 # Earth Radius in km (disp are in km)
+  rad <- 3.141592653589793/180 # Convert degrees to radians
+  deg <- 180/3.141592653589793 # Convert radians to degrees
 
   species_df$x <- Radius*sin((90-species_df$lat)*rad)*cos(species_df$lon*rad)
   species_df$y <- Radius*sin((90-species_df$lat)*rad)*sin(species_df$lon*rad)
@@ -42,43 +42,40 @@ GyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red"), pdfPlot=
 
   # Calculate average of x,y,z per shark
   for (i in 1:length(species_index)){ #for each individual
-    species_df[species_index[[i]],8] <- sum(species_df[species_index[[i]],"x"])/length(species_index[[i]]) #average x in rad
-    species_df[species_index[[i]],9] <- sum(species_df[species_index[[i]],"y"])/length(species_index[[i]]) #average y in rad
-    species_df[species_index[[i]],10] <- sum(species_df[species_index[[i]],"z"])/length(species_index[[i]]) #average z in rad
+    species_df[species_index[[i]],8] <- sum(species_df[species_index[[i]],"x"])/length(species_index[[i]]) # Average x in rad
+    species_df[species_index[[i]],9] <- sum(species_df[species_index[[i]],"y"])/length(species_index[[i]]) # Average y in rad
+    species_df[species_index[[i]],10] <- sum(species_df[species_index[[i]],"z"])/length(species_index[[i]]) # Average z in rad
   }
 
   # Convert average x,y,z to lat/lon in degrees
-  species_df[,11] <- atan2(species_df$y.avg.rad,species_df$x.avg.rad)*deg #Lon = atan(y.avg,x.avg)
-  species_df[,12] <- sqrt(species_df$x.avg.rad*species_df$x.avg.rad + species_df$y.avg.rad*species_df$y.avg.rad) #Hyp = sqrt(x.avg*x.avg + y.avg*y.avg)
-  species_df[,13] <- atan2(species_df$z.avg.rad, species_df$hyp)*deg #Lat = atan(z.avg,hyp)
+  species_df[,11] <- atan2(species_df$y.avg.rad,species_df$x.avg.rad)*deg # Lon = atan(y.avg,x.avg)
+  species_df[,12] <- sqrt(species_df$x.avg.rad*species_df$x.avg.rad + species_df$y.avg.rad*species_df$y.avg.rad) # Hyp = sqrt(x.avg*x.avg + y.avg*y.avg)
+  species_df[,13] <- atan2(species_df$z.avg.rad, species_df$hyp)*deg # Lat = atan(z.avg,hyp)
 
-  # 4) Gyration radius in KM (because mydistHaversine in km)
+  # Calculate Gyration radius in KM (mydistHaversine in km)
   # Full rG equation: rG = 1/N*(sqrt(sum((distance between observed loc and avg loc)^2))
-  for (i in 1:length(species_index)) { #for each shark
-    for (j in 1:length(species_index[[i]])) { #for each location
-      species_df[species_index[[i]][j],14]<- MydistHaversine(species_df[species_index[[i]][j],2],species_df[species_index[[i]][j],3], species_df[species_index[[i]][j],11],species_df[species_index[[i]][j],13]) #distance in KM between observed and avg locations
+  for (i in 1:length(species_index)) { # for each individual
+    for (j in 1:length(species_index[[i]])) { # for each location
+      species_df[species_index[[i]][j],14]<- MydistHaversine(species_df[species_index[[i]][j],2],species_df[species_index[[i]][j],3], species_df[species_index[[i]][j],11],species_df[species_index[[i]][j],13]) # Distance in KM between observed and avg locations
     }
-    species_df[species_index[[i]],15] <- sqrt((sum(species_df[species_index[[i]],14]^2))/(length(species_index[[i]]))) #This is consistent with ArcGIS 1SD Standard Distance tool
+    species_df[species_index[[i]],15] <- sqrt((sum(species_df[species_index[[i]],14]^2))/(length(species_index[[i]]))) # This is consistent with ArcGIS 1SD Standard Distance tool
   }
 
   MyrG <- unique(species_df[,c(1,11,13,15)])
 
   if (map==TRUE){
     angle <- seq(1,360,1)
-    Radius <- 6371 #Earth Radius in km (disp are in km)
-    rad <- 3.141592653589793/180 #Python has more digits of pi than R, so value pasted here instead of "pi"
     circles <- as.data.frame(matrix(0, ncol = 3, nrow = length(angle)*length(MyrG$ref)))
     names(circles)<-c("Ref","lat","long")
-    i<-j<-k<-1
-    for (i in 1:nrow(MyrG)){ #for each mean location
+    for (i in 1:nrow(MyrG)){ # For each mean location
       d <- MyrG$rG[i]
-      lat1 <- MyrG$lat.avg.deg[i]*(rad) # convert to radians
-      long1 <- MyrG$lon.avg.deg[i]*(rad) # convert to radians
+      lat1 <- MyrG$lat.avg.deg[i]*(rad)
+      long1 <- MyrG$lon.avg.deg[i]*(rad)
       circles$Ref[k:(k+(length(angle)-1))]<-MyrG$ref[i]
-      for (j in 1:length(angle)){ #calculate lat/long locations of points making a cirlce (360deg) around mean location
+      for (j in 1:length(angle)){ # calculate lat/long locations of points making a circle (360deg) around mean location
         a <- angle[j]*(rad)
         lat2 <- asin(sin(lat1)*cos(d/Radius) + cos(lat1)*sin(d/Radius)*cos(a))
-        circles$lat[j+(k-1)] <- lat2/rad # Calculate new lat in radians based on angle and distance, convert to deg
+        circles$lat[j+(k-1)] <- lat2/rad # Calculate new lat in rad based on angle and distance, convert to deg
         circles$long[j+(k-1)] <- (long1 + atan2(sin(a)*sin(d/Radius)*cos(lat1),cos(d/Radius)-sin(lat1)*sin(lat2)))/rad # Calculate new long in radians based on angle and distance, convert to deg
       }
     k <- k+length(angle)
@@ -103,23 +100,22 @@ GyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red"), pdfPlot=
     } ##added -- talk to ANA
     freq <- xs <- rep(0, nBins+1)
     for(i in 1:nrow(MyrG)){
-      b <- floor((MyrG[i,4]-rGmin)/bw + 0.5)+1 #otherwise floor goes to 0, which isn't recorded in freq
-      freq[b] <- freq[b] + 1 #hist[k] in python = freq[b] here
+      b <- floor((MyrG[i,4]-rGmin)/bw + 0.5)+1 # +1 is necessary because otherwise floor goes to 0, which isn't recorded in freq
+      freq[b] <- freq[b] + 1
     }
     for(i in 1:(nBins+1)){
-      xs[i] <- rGmin+(i-1)*bw #bins for x axis on plot
+      xs[i] <- rGmin+(i-1)*bw
     }
-    lenrG = nrow(MyrG)
+    lenrG <- nrow(MyrG)
     for (i in 1:length(freq)){
-      freq[i]<-freq[i]/(bw*lenrG)
+      freq[i] <- freq[i]/(bw*lenrG)
     }
-    # Plot RMS of displacements, and mean displacements on log-log scale
-    plot(xs,freq,type="l",ylab="pdf", xlab=expression('r'[G]*' (km)'))
-    points(xs,freq,col="black", pch=19)
-    gyradplot<-data.frame(xs, freq)
-    names(gyradplot)=c("Gyration Radius","pdf")
+    plot(xs, freq, type="l", ylab="pdf", xlab=expression('r'[G]*' (km)')) # Plot RMS of displacements, and mean displacements on log-log scale
+    points(xs, freq, pch=19)
+    gyradplot <- data.frame(xs, freq)
+    names(gyradplot) <- c("Gyration Radius","pdf")
     assign("gyrationradPDFplot", gyradplot, envir = .GlobalEnv)
   }
-  names(MyrG)<-c("ref","avg long", "avg lat", "rG (km)")
+  names(MyrG) < -c("ref","avg long", "avg lat", "rG (km)")
   assign("gyrationRadius", MyrG, envir = .GlobalEnv)
 }
