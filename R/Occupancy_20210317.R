@@ -84,14 +84,13 @@ Occupancy<-function(species_df, gridcell=0.25, map=TRUE, colGrad=c("blue", "ligh
 
   if (pdfPlot==TRUE){
     Occmin <- min(OccExp[which(OccExp$Occupancy!=0),3])
-    bw <- log(max(OccExp$Occupancy)/Occmin)/log(nBins) ## original
-    ### need to add an iterative loop that will change # breaks becaues after this runs bw can still be too small
-    if (log(bw)<1.2){
+    bw <- log(max(OccExp$Occupancy)/Occmin)/log(nBins) # This calculation to determine bin width is usually fine but in some circumstances the value is too small when log transformed so the following loop helps determine a new bw
+    if (bw<1.2){
       break_start <- 20
       repeat {
-        h <- hist(log(OccExp$Occupancy), breaks=20)
+        h <- hist(log(OccExp$Occupancy), breaks=break_start, plot=FALSE)
         bw <- exp(h$breaks[2]-h$breaks[1])
-        if (log(bw)>=1.2){
+        if (bw>=1.2){
           break
         } else {
           break_start <- break_start - 1
@@ -101,13 +100,15 @@ Occupancy<-function(species_df, gridcell=0.25, map=TRUE, colGrad=c("blue", "ligh
     freq <- rep(0, nBins+1)
     for(i in 1:nrow(OccExp)){
       if (OccExp[i,3]>0){
-        b <- floor(log(OccExp[i,3]/Occmin)/log(bw) + 0.5) #original
+        b <- floor(log(OccExp[i,3]/Occmin)/log(bw) + 0.5)
         freq[b] <- freq[b] + 1
       }
     }
     if (anyNA(freq)){
-      stop ("Cell size too small to create pdf plot") # If users do not increase nBins to make up for a small cell size then the above code will results in NA and invalid values, which cause the code to crash.
+      stop ("Cell size too small to create pdf plot")
     }
+    sumFreq<-sum(freq)
+    freq <- c(totalcells-sumFreq, freq)
     norm <- sum(freq)
     freq <- freq[freq>0]
     xs <- ys <- rep(0, length(freq))
