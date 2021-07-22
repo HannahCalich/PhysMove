@@ -19,19 +19,19 @@
 #' @param legend Add a legend to the spider plot. Default is TRUE.
 #' @param histPlot Plot a histogram showing the frequency of turning angles from all time windows combined (default) or
 #' one specific time period. For example, histPlot=c(TRUE,1) to plot only the first time period. Plot colour will be the first colour entered in the
-#' colours parameter. Note that if both spiderPlot and histPlot = TRUE the histPlot will repalce the spiderPlot if the user is not using RStudio.
+#' colours parameter. Note that if both spiderPlot and histPlot = TRUE the histPlot will replace the spiderPlot if the user is not using RStudio.
 #' Default is histPlot=c(TRUE, "all").
-#' @param colours Colour(s) for bars in histPlot and lines in spiderPlot. Valid options include: base R (grDevices) color pallets (e.g., rainbow),
-#' specific colours (e.g., "Navy", or c("red","blue")), or hex numbers (e.g., "#FF0000"). Do not use quotations if using a grDevices color pallet.
-#' Default is rainbow.
-#' @return List of Turning Angles for each time window. The name of each list element corresponds with a time window in days.
+#' @param colours Colour(s) for lines in spiderPlot and bars in histPlot. Valid options include: base R (grDevices) color pallets (e.g., colours=rainbow),
+#' specific colours (e.g., colours=c("Navy"), or colours=c("red","blue")), or hex numbers (e.g., colours=c("#FF0000")). While multiple colours can
+#' be used with spiderPlot, only the first colour will be used for histPlot. Default is rainbow.
+#' @return List of Turning Angles for each time window ('angleList'). The name of each list element corresponds with a time window in days.
 #' If spiderPlot and/or histPlot = TRUE, a spiderPlot and/or histogram of results are exported along with the data used to create each plot ('angleSpiderPlot' and
 #' 'angleHistPlot', respectively).
 #' @examples TurningAngles(expSample)
 #' @examples TurningAngles(expSample, min_hr=24, max_hr=240, interval_hr=24,range_hr=6, spiderPlot=c(TRUE, "all"), legend=TRUE, histPlot=c(FALSE, "all"), colours=rainbow)
 #' @export
 
-TurningAngles<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6, spiderPlot=c(TRUE, "all"), legend=TRUE, histPlot=c(FALSE, "all"), colours=rainbow){
+TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range_hr=6, spiderPlot=c(TRUE, "all"), legend=TRUE, histPlot=c(FALSE, "all"), colours=rainbow){
 
   min_hr <- min_hr*(60*60) # convert hours (input) to seconds
   max_hr <- max_hr*(60*60) # convert hours (input) to seconds
@@ -146,12 +146,12 @@ TurningAngles<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=
       spider <- rbind(spider,spider_temp)
     }
   }
-  names(AngleList) <- Days
-  assign("AngleList",AngleList, envir = .GlobalEnv)
+  names(AngleList) <- round(Days, 3)
+  assign("angleList",AngleList, envir = .GlobalEnv)
 
   if (any(sapply(AngleList, function(x) length(x)==0))==TRUE){
-    warning("At least 1 'AngleList' list element is empty, which means that no location estimates were separated by at least 1 of the time windows supplied.
-    This may cause plotting errors. To troubleshoot, force all plotting functions to FALSE, review the exported 'AngleList', and
+    warning("At least 1 list element in 'angleList' is empty, which means that no location estimates were separated by at least 1 of the time windows supplied.
+    Blank list elements are excluded from plots. To troubleshoot, force all plotting functions to FALSE, review the exported 'angleList', and
     update your time windows accordingly.")
   }
 
@@ -160,14 +160,15 @@ TurningAngles<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=
       spider <- spider[which(spider$Days==spiderPlot[2]),]
     }
 
-    spider<-spider[complete.cases(spider), ] #remove rows with no data
+    spider < -spider[complete.cases(spider), ] #remove rows with no data
+    spider$Days <- round(spider$Days,3)
 
-    if (class(colours)=="function"){
-      colours <- colours(length(spider))
-    }
-
-    if (length(colours)!=length(spider$Days)){
-      colours <- rep (colours, length(spider$Days))
+    if (class(colours)=="function"){ # If a colour pallet is added assign colours based on the pallet
+      plotColours <- colours(length(unique(spider$Days)))
+    } else { # Else if colours are added as a vector of text or hex numbers, make sure there are enough colours to plot
+      if (length(colours)!=length(spider$Days)){
+        plotColours <- rep(colours, length(unique(spider$Days)))
+      }
     }
 
     if (legend==TRUE){
@@ -184,7 +185,7 @@ TurningAngles<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=
       ggplot2::geom_vline(xintercept = seq(0, 360, by = 90), colour = "black", size = 0.25) +
       ggplot2::geom_point(size = 0.4) +
       ggplot2::geom_line(size = 1)+
-      ggplot2::scale_colour_manual(title, values = colours)+
+      ggplot2::scale_colour_manual(title, values = plotColours)+
       ggplot2::scale_x_continuous(limits = c(0, 360), breaks = c(0,90,180,270), labels = c("0°","90°","180°","270°"))+
       ggplot2::xlab("") +
       ggplot2::ylab("")+
@@ -205,18 +206,20 @@ TurningAngles<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=
   }
 
   if (histPlot[1]==TRUE){ # Histogram of all angles combined
-    AngleList<-AngleList[-which((sapply(AngleList, function(x) length(x)==0))==TRUE)] #remove list elements with no data
+    AngleList <- AngleList[lengths(AngleList)>0] # Remove list elements with no data
     if (histPlot[2]=="all"){
     h <- hist(unlist(AngleList), plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angels for all time periods from all individuals
     } else {
     h <- hist(unlist(AngleList[[histPlot[2]]]), plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angels for selected time periods from all individuals
     }
 
-    if (class(colours)=="function"){
-     colours <- colours(length(AngleList))
+    if (class(colours)=="function"){ # If a colour pallet is added assign colours based on the pallet
+      plotColours <- colours(1)
+    } else { # Else if colours are added as a vector of text or hex numbers, make sure there are enough colours to plot
+      plotColours <- colours[1]
     }
 
-    plot(h, main = "", xlab = "Turning Angles", xaxt = "n",col = colours[1])
+    plot(h, main = "", xlab = "Turning Angles", xaxt = "n",col = plotColours)
     axis(1, at = seq(-180,180,by = 20), labels = seq(-180,180,by = 20))
     assign("angleHistPlot", h, envir = .GlobalEnv)
   }
