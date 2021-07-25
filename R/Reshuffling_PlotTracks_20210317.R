@@ -11,15 +11,15 @@
 #' the \code{\link{Randomize}} function. Default is 1:5.
 #' @param colours Colours to plot points from original and randomized trajectories, respectively. Default is colours=c("black","grey").
 #' @param pchType Pch symbols to plot points from original and randomized trajectories, respectively. Pch values between 1 and 20 are valid. Default is pchType=c(16,16).
-#' @param startPoint Colour and pch symbol for origin location. startPoint=NULL will force the startPoint symbology to match the symbology of the original
+#' @param startPoint Colour and pch symbol for origin location. startPoint=NULL will cause the startPoint symbology to match the symbology of the original
 #' trajectory. Pch values between 1 and 20 are valid. Default is startPoint=c("red",10)
-#' @param endPoint Colour and pch symbol for destination location. endPoint=NULL will force the endPoint symbology to match the symbology of the original
+#' @param endPoint Colour and pch symbol for destination location. endPoint=NULL will cause the endPoint symbology to match the symbology of the original
 #' trajectory. Pch values between 1 and 20 are valid. Default is endPoint=c("blue",10)
 #' @param tracks Add track lines to original and randomized trajectories respectively. Default is tracks=c("TRUE","TRUE).
 #' @param legend Add legend to plot and specify location. Legend=c(TRUE, "topleft").
 #' @return Plot showing real and reshuffled trajectory locations and a data frame with location data for the reshuffled trajectories on the map('randomizedTrajectories').
 #' @examples PlotReshuffTracks<-function(expSample, ref=1)
-#' @examples PlotReshuffTracks(expSample, ref=NULL, numPlot=1:5, colours=c("black","grey"), pchType=c(16,16), startPoint=c("red",10), endPoint=c("blue",10), tracks=c("TRUE","TRUE"), legend=c(TRUE, "topleft"))
+#' @examples PlotReshuffTracks(expSample, ref=1, numPlot=1:5, colours=c("black","grey"), pchType=c(16,16), startPoint=c("red",10), endPoint=c("blue",10), tracks=c("TRUE","TRUE"), legend=c(TRUE, "topleft"))
 #' @export
 
 PlotRandomTracks<-function(species_df, ref=NULL, numPlot=1:5, colours=c("black","grey"), pchType=c(16,16), startPoint=c("red",10),
@@ -41,18 +41,18 @@ PlotRandomTracks<-function(species_df, ref=NULL, numPlot=1:5, colours=c("black",
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
   Individual <- species_df[which(species_df$ref ==ref),]
   a <-  as.character(unique(Individual$ref))
-  plotpoints<-data.frame("lat"=integer(0),"lon"=integer(0))
+  plotpoints <- data.frame("lat"=integer(0),"lon"=integer(0))
 
   for(T in numPlot){ #For the reshuffled data
-    lat_long<-data.frame("RandomTraj"=T, "lon"=randomizedLong[species_index[[a]],T],"lat"=randomizedLat[species_index[[a]],T])
-    plotpoints<-rbind(plotpoints,lat_long)
+    lat_long <- data.frame("RandomTraj"=T, "lon"=randomizedLong[species_index[[a]],T],"lat"=randomizedLat[species_index[[a]],T])
+    plotpoints <- rbind(plotpoints,lat_long)
     }
 
   assign("randomizedTrajectories", plotpoints, envir = .GlobalEnv)
-  xmin = min(c(plotpoints[,2],Individual[,2]))
-  xmax = max(c(plotpoints[,2],Individual[,2]))
-  ymin = min(c(plotpoints[,3],Individual[,3]))
-  ymax = max(c(plotpoints[,3],Individual[,3]))
+  xmin <- min(c(plotpoints[,2],Individual[,2]))
+  xmax <- max(c(plotpoints[,2],Individual[,2]))
+  ymin <- min(c(plotpoints[,3],Individual[,3]))
+  ymax <- max(c(plotpoints[,3],Individual[,3]))
 
   plot(plotpoints$lon, plotpoints$lat, col=colours[2], pch=pchType[2], ylab = "Latitude", xlab="Longitude", xlim=c(xmin-0.5,xmax+0.5), ylim=c(ymin-0.5,ymax+0.5))
 
