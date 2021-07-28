@@ -30,7 +30,7 @@ PlotDist <- function (displacements, fitLines=TRUE, colours=c("red","gold2","blu
 
   if (normalize){
     x <- list()
-    for (d in 1:length(TimeWindows)){
+    for (d in 1:length(timeWindows)){
       disp <- unlist(displacements[d])
       x[[d]] <- disp/mean(disp)
     }
@@ -133,3 +133,4 @@ PlotDist <- function (displacements, fitLines=TRUE, colours=c("red","gold2","blu
     }
   }
 }
+

@@ -14,9 +14,9 @@
 #' xmin (the x value used to fit the distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
 #' distributions respectively, and nTail (the number of data points greater than or equal to xmin). The distributions fit to the data and if the
 #' data were normalized are exported as values ('dist', and 'normalize', respectively) as this information is required by additional PhysMove functions.
-#' @examples FitDist(expSample)
-#' @examples FitDist(expSample, dist=c("exp","lnorm"), full=TRUE)
-#' @examples FitDist(expSample, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalize=TRUE)
+#' @examples FitDist(displacements)
+#' @examples FitDist(displacements, dist=c("pl", "exp","lnorm"), full=TRUE)
+#' @examples FitDist(displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalize=TRUE)
 #' @export
 
 FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalize=TRUE) {

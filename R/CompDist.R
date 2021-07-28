@@ -29,14 +29,15 @@ CompDist <- function (displacements, force_AICc=FALSE){
       disp <- unlist(displacements[d])
       x[[d]] <- disp/mean(disp)
     }
+    x <- unlist(x)
   } else {
   x <- unlist(displacements)
   }
 
-  xmins <- sort(unique(x)) #possible xmin values
+  xmins <- sort(unique(x))
   x <- sort(x)
-  n_all<-c()
-  K_all<-c()
+  n_all <- c()
+  K_all <- c()
 
   if ("pl" %in% dist){
     MyPowerLaw <- function(parameters, displacements){
@@ -47,8 +48,8 @@ CompDist <- function (displacements, force_AICc=FALSE){
     pl_alpha <- distResults[which(distResults$distribution=="pl"),"parameter1"]
     n_all <- c(n_all,distResults[which(distResults$distribution=="pl"),"nTail"])
     pl_pdf <- MyPowerLaw(c(pl_alpha, pl_xmin), x)
-    pl_pdf[x<pl_xmin] = 0
-    pl_logLik<-sum(log(pl_pdf[pl_pdf>0]))
+    pl_pdf[x<pl_xmin] <- 0
+    pl_logLik <- sum(log(pl_pdf[pl_pdf>0]))
     K_all <- c(K_all, 1)
   }
 
@@ -61,8 +62,8 @@ CompDist <- function (displacements, force_AICc=FALSE){
     exp_lambda <- distResults[which(distResults$distribution=="exp"),"parameter1"]
     n_all <- c(n_all,distResults[which(distResults$distribution=="exp"),"nTail"])
     exp_pdf <- MyexponentialTrunc(c(exp_lambda, exp_xmin), x)
-    exp_pdf[x<exp_xmin] = 0
-    exp_logLik<-sum(log(exp_pdf[exp_pdf>0]))
+    exp_pdf[x<exp_xmin] <- 0
+    exp_logLik <- sum(log(exp_pdf[exp_pdf>0]))
     K_all <- c(K_all, 1)
   }
 
@@ -76,60 +77,61 @@ CompDist <- function (displacements, force_AICc=FALSE){
     lnorm_sigma <- distResults[which(distResults$distribution=="lnorm"),"parameter2"]
     n_all <- c(n_all,distResults[which(distResults$distribution=="lnorm"),"nTail"])
     lnorm_pdf <- MyLogNormalTrunc(c(lnorm_mu, lnorm_sigma, lnorm_xmin), x)
-    lnorm_pdf[x<lnorm_xmin] = 0
-    lnorm_logLik<-sum(log(lnorm_pdf[lnorm_pdf>0]))
+    lnorm_pdf[x<lnorm_xmin] <- 0
+    lnorm_logLik <- sum(log(lnorm_pdf[lnorm_pdf>0]))
     K_all <- c(K_all,2)
   }
-  if (n_all[which.max(K_all)]/max(K_all)>40 & force_AICc==FALSE){ #use AIC according to Burnham and Anderson (2004)
+  if (n_all[which.max(K_all)]/max(K_all)>40 & force_AICc==FALSE){ # use AIC according to Burnham and Anderson (2004)
     if (length(unique(n_all))!=1){
       stop("The n/K ratio is > 40 and AIC values can be calculated, however, AIC values can only be compared
            over equal data ranges. Please re-run FitDist using the set_xmin parameter to fit each distribution to the same data range")
     }
-    AIC_Scores<-c()
-    distResults<-cbind(distResults,"AIC"=c(NA), "AICw"=c(NA))
+    AIC_Scores <- c()
+    distResults <- cbind(distResults,"AIC"=c(NA), "AICw"=c(NA))
     if ("pl" %in% dist){
       K<-K_all[which(dist=="pl")]
       pl_AIC <- -2*pl_logLik + 2*K
-      AIC_Scores<-c(AIC_Scores,pl_AIC)
-      distResults[which(distResults$distribution =="pl"),"AIC"]<-pl_AIC
+      AIC_Scores <- c(AIC_Scores,pl_AIC)
+      distResults[which(distResults$distribution =="pl"),"AIC"] <- pl_AIC
     }
     if ("exp" %in% dist){
       K<-K_all[which(dist=="exp")]
       exp_AIC <- -2*exp_logLik + 2*K
-      AIC_Scores<-c(AIC_Scores,exp_AIC)
-      distResults[which(distResults$distribution =="exp"),"AIC"]<-exp_AIC
+      AIC_Scores <- c(AIC_Scores,exp_AIC)
+      distResults[which(distResults$distribution =="exp"),"AIC"] <- exp_AIC
     }
     if ("lnorm" %in% dist){
       K<-K_all[which(dist=="lnorm")]
       lnorm_AIC <- -2*lnorm_logLik + 2*K
-      AIC_Scores<-c(AIC_Scores,lnorm_AIC)
-      distResults[which(distResults$distribution =="lnorm"),"AIC"]<-lnorm_AIC
+      AIC_Scores <- c(AIC_Scores,lnorm_AIC)
+      distResults[which(distResults$distribution =="lnorm"),"AIC"] <- lnorm_AIC
     }
     rel_like <- exp(-1/2*((distResults$AIC)-min(distResults$AIC)))
     distResults$AICw <- rel_like/sum(rel_like)
-  } else { #use AICc according to Burnham and Anderson (2004)
-    AICc_Scores<-c()
-    distResults<-cbind(distResults,"AICc"=c(NA), "AICcw"=c(NA))
+  }
+  else { # use AICc according to Burnham and Anderson (2004)
+    AICc_Scores < -c()
+    distResults <- cbind(distResults,"AICc"=c(NA), "AICcw"=c(NA))
     if ("pl" %in% dist){
-      K<-K_all[which(dist=="pl")]
-      n<-n_all[which(dist=="pl")]
+      K <- K_all[which(dist=="pl")]
+      n <- n_all[which(dist=="pl")]
       pl_AICc <- -2*pl_logLik + 2*K + ((2*K*(K+1))/(n-K-1))
-      AICc_Scores<-c(AICc_Scores,pl_AICc)
-      distResults[which(distResults$distribution =="pl"),"AICc"]<-pl_AICc
+      AICc_Scores <- c(AICc_Scores,pl_AICc)
+      distResults[which(distResults$distribution =="pl"),"AICc"] <- pl_AICc
     }
     if ("exp" %in% dist){
-      K<-K_all[which(dist=="exp")]
-      n<-n_all[which(dist=="exp")]
+      K <- K_all[which(dist=="exp")]
+      n <- n_all[which(dist=="exp")]
       exp_AICc <- -2*exp_logLik + 2*K + ((2*K*(K+1))/(n-K-1))
-      AICc_Scores<-c(AICc_Scores,exp_AICc)
-      distResults[which(distResults$distribution =="exp"),"AICc"]<-exp_AICc
+      AICc_Scores <- c(AICc_Scores,exp_AICc)
+      distResults[which(distResults$distribution =="exp"),"AICc"] <- exp_AICc
     }
     if ("lnorm" %in% dist){
-      K<-K_all[which(dist=="lnorm")]
-      n<-n_all[which(dist=="lnorm")]
+      K <- K_all[which(dist=="lnorm")]
+      n <- n_all[which(dist=="lnorm")]
       lnorm_AICc <- -2*lnorm_logLik + 2*K + ((2*K*(K+1))/(n-K-1))
-      AICc_Scores<-c(AICc_Scores,lnorm_AICc)
-      distResults[which(distResults$distribution =="lnorm"),"AICc"]<-lnorm_AICc
+      AICc_Scores <- c(AICc_Scores,lnorm_AICc)
+      distResults[which(distResults$distribution =="lnorm"),"AICc"] <- lnorm_AICc
     }
     rel_like <- exp(-1/2*((distResults$AICc)-min(distResults$AICc)))
     distResults$AICcw <- rel_like/sum(rel_like)
