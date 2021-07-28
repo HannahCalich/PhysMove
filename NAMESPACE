@@ -3,6 +3,7 @@
 export(CalcDisp)
 export(CommunityMap)
 export(CompDist)
+export(DispPDFPlot)
 export(Entropy)
 export(FitDist)
 export(GyrationRad)
