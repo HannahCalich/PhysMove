@@ -64,6 +64,6 @@ with(expSample, {
 })
 
 rm(list=ls()[! ls() %in% c("expSample")])
-expSample_v2<-expSample
+# expSample_v2<-expSample
 setwd("Y:/Git/PhysMove/data")
-save(expSample_v2, file = "expSample_v2.RData")
+save(expSample, file = "expSample.RData")

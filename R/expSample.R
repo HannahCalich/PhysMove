@@ -1,8 +1,8 @@
 #' Random location data where displacement lengths follow an exponential distribution
 #'
-#' A data frame containing location data from a sample trajectory that follows an exponential distribution.
+#' A data frame containing location data from 5 sample trajectories that follows an exponential distribution.
 #'
-#' @format A data frame with 1000 rows and 4 variables:
+#' @format A data frame with 2854 rows and 4 variables:
 #' \describe{
 #'   \item{ref}{trajectory's unique id number as an integer}
 #'   \item{lon}{longitude of each position estimate in decimal degrees}
