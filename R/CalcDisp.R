@@ -77,9 +77,20 @@ CalcDisp<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6){
         }
       }
     }
-    MyList[[d]] <- MyDistance
-    print(paste0(length(MyList[[d]])," displacements in ", MyTime[d]/(60*60), " hour(s)"))
+    if (is.null(MyDistance)){
+      MyList[[d]] <- NULL
+      print(paste0("0 displacements in ", MyTime[d]/(60*60), " hour(s) ± ", range_hr/(60*60), " hour(s)"))
+    } else {
+      MyList[[d]] <- MyDistance
+      print(paste0(length(MyList[[d]])," displacements in ", MyTime[d]/(60*60), " hour(s) ± ", range_hr/(60*60), " hour(s)"))
+      }
   }
-  assign("displacements", MyList, envir = .GlobalEnv)
+
+  if (any(sapply(MyList, function(x) length(x)==0))==TRUE){
+    warning("At least 1 of the displacement list element is empty, which means that no location estimates were separated by at least 1 of the time windows supplied.
+    To troubleshoot, review the exported 'displacement' list and update your time windows accordingly.")
+  }
+  displacements <- MyList
   assign("timeWindows", MyTime, envir = .GlobalEnv)
+  return(displacements)
 }
