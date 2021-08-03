@@ -14,6 +14,8 @@ Depends: R (>= 4.0)
 Imports:
     ggplot2 (>= 3.3.5),
     grid (>= 4.0.5),
+    gridExtra (>= 2.3),
+    maps (>= 3.3.0),
     RColorBrewer (>= 1.1),
     stats4 (>= 4.0.5),
     stringr (>= 1.4.0),
