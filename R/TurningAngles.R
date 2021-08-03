@@ -17,21 +17,21 @@
 #' @param spiderPlot Plot a spider plot showing the frequency of turning angles from either all time windows combined
 #' (default) or one specific time period. For example, spiderPlot=c(TRUE,1) to plot only the first time period. Default spiderPlot=c(TRUE, "all").
 #' @param legend Add a legend to the spider plot. Default is TRUE.
+#' @param colours Colour(s) for lines in spiderPlot. Valid input options include: base R (grDevices) color pallets (e.g., colours=rainbow),
+#' RColorBrewer palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that
+#' grDevies color pallets are functions and do not use quotations. If the palette does not have enough distinct colours to match the lines being plotted the function will
+#' automatically create a continuous pallet with the colours provided. Default is rainbow.
 #' @param histPlot Plot a histogram showing the frequency of turning angles from all time windows combined (default) or
-#' one specific time period. For example, histPlot=c(TRUE,1) to plot only the first time period. Plot colour will be the first colour entered in the
-#' colours parameter. Note that if both spiderPlot and histPlot = TRUE the histPlot will replace the spiderPlot if the user is not using RStudio.
+#' one specific time period. For example, histPlot=c(TRUE,1) to plot only the first time period. Plot colour is fixed as 'darkgrey' to avoid confusion with spider plot colours.
 #' Default is histPlot=c(TRUE, "all").
-#' @param colours Colour(s) for lines in spiderPlot and bars in histPlot. Valid options include: base R (grDevices) color pallets (e.g., colours=rainbow),
-#' specific colours (e.g., colours=c("Navy"), or colours=c("red","blue")), or hex numbers (e.g., colours=c("#FF0000")). While multiple colours can
-#' be used with spiderPlot, only the first colour will be used for histPlot. Default is rainbow.
-#' @return List of Turning Angles for each time window ('angleList'). The name of each list element corresponds with a time window in days.
-#' If spiderPlot and/or histPlot = TRUE, a spiderPlot and/or histogram of results are exported along with the data used to create each plot ('angleSpiderPlot' and
-#' 'angleHistPlot', respectively).
+#' @return List of turning angles for each time window, the name of each list element corresponds with a time window in days.
+#' If spiderPlot and/or histPlot = TRUE, a spiderPlot and/or histogram of results are created and the data used to create each plot are automatically assigned to the global
+#' environment ('angleSpiderPlot' and 'angleHistPlot', respectively).
 #' @examples TurningAngles(expSample)
-#' @examples TurningAngles(expSample, min_hr=24, max_hr=240, interval_hr=24,range_hr=6, spiderPlot=c(TRUE, "all"), legend=TRUE, histPlot=c(FALSE, "all"), colours=rainbow)
+#' @examples TurningAngles(expSample, min_hr=24, max_hr=240, interval_hr=24,range_hr=6, spiderPlot=c(TRUE, "all"), legend=TRUE, colours=rainbow, histPlot=c(FALSE, "all"))
 #' @export
 
-TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range_hr=6, spiderPlot=c(TRUE, "all"), legend=TRUE, histPlot=c(FALSE, "all"), colours=rainbow){
+TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range_hr=6, spiderPlot=c(TRUE, "all"), legend=TRUE, colours=rainbow, histPlot=c(FALSE, "all")){
 
   min_hr <- min_hr*(60*60) # convert hours (input) to seconds
   max_hr <- max_hr*(60*60) # convert hours (input) to seconds
@@ -53,12 +53,12 @@ TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
   MyTime <- c(seq(min_hr,max_hr,interval_hr))
 
-  AngleList <- list()
+  angleList <- list()
   bins <- 360 / 45
   Days <- MyTime/(24*60*60)
 
   for (d in 1:length(MyTime)){
-    AngleList[[d]] <- 0 # dummy value to initialize the list of angles for each time period
+    angleList[[d]] <- 0 # dummy value to initialize the list of angles for each time period
     for (i in 1:length(species_index)){ # for each individual
       for (j in 1:length((species_index[[i]]))){ # for each tracked location
         # Find locations separated by MyTime[d]
@@ -107,10 +107,10 @@ TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range
             if((ax*bx + ay*by) == 0) { ### prevent the case where tangent is infinite (when cosinus is zero) i.e., the individual did not move in one of the components (J = J1 or J1 = J2)
               if((ax*by - ay*bx) > 0){
                 angle <- pi/2
-                AngleList[[d]] <- append(AngleList[[d]], angle)
+                angleList[[d]] <- append(angleList[[d]], angle)
               } else if ((ax*by - ay*bx) < 0){
                 angle <- -pi/2
-                AngleList[[d]] <- append(AngleList[[d]], angle)
+                angleList[[d]] <- append(angleList[[d]], angle)
               }
             } else {
               angle <- atan((ax*by - ay*bx) / (ax*bx + ay*by)) ### in radians
@@ -123,20 +123,22 @@ TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range
                   angle <- angle + pi
                 }
               }
-              AngleList[[d]] <- append(AngleList[[d]], angle)
+              angleList[[d]] <- append(angleList[[d]], angle)
             }
           }
         }
       }
     }
-    AngleList[[d]] <- AngleList[[d]][-1] # Remove dummy value from start of list for each individual
-    AngleList[[d]] <- AngleList[[d]] / rad # Now transform all the angles from radians to degrees
+    angleList[[d]] <- angleList[[d]][-1] # Remove dummy value from start of list for each individual
+    angleList[[d]] <- angleList[[d]] / rad # Now transform all the angles from radians to degrees
 
-    h <- hist(unlist(AngleList[[d]]), plot = FALSE, breaks = seq(-180, 180, bins)) # AngleList is all angels for a time period from all individuals
-    AngleProb <- h$counts/length(unlist(AngleList[[d]]))
+    print(paste0(length(angleList[[d]])," angles in ", MyTime[d]/(60*60), " hour(s) ± ", range_hr/(60*60), " hour(s)"))
+
+    h <- hist(unlist(angleList[[d]]), plot = FALSE, breaks = seq(-180, 180, bins)) # angleList is all angels for a time period from all individuals
+    AngleProb <- h$counts/length(unlist(angleList[[d]]))
     AngleProb <- c(AngleProb[1:23],AngleProb[23],AngleProb[24:45]) # Duplicated angle at 0 since 360=0 and 360 is needed for plot
     Cols <- h$mids
-    Pos.Angles <- c(Cols[c(1:22)]+360,360,Cols[c(23:45)]) # Added 360 to list for plot. Angles at 360 are the same as at 0 (#Pos.Angles<-c(spider[c(1:22),1]+360,spider[c(23:45),1]) #instead of -180 to + 180, convert to 0 to 365)
+    Pos.Angles <- c(Cols[c(1:22)]+360,360,Cols[c(23:45)]) # Added 360 to list for plot. Angles at 360 are the same as at 0
 
     if (d == 1){
       spider <- as.data.frame(cbind(Pos.Angles,AngleProb,Days=c(rep(Days[d],length(AngleProb)))))
@@ -146,13 +148,10 @@ TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range
       spider <- rbind(spider,spider_temp)
     }
   }
-  names(AngleList) <- round(Days, 3)
-  assign("angleList",AngleList, envir = .GlobalEnv)
+  names(angleList) <- round(Days, 3)
 
-  if (any(sapply(AngleList, function(x) length(x)==0))==TRUE){
-    warning("At least 1 list element in 'angleList' is empty, which means that no location estimates were separated by at least 1 of the time windows supplied.
-    Blank list elements are excluded from plots. To troubleshoot, force all plotting functions to FALSE, review the exported 'angleList', and
-    update your time windows accordingly.")
+  if (any(sapply(angleList, function(x) length(x)==0))==TRUE){
+    warning("At least 1 of the angle list elements is empty, which means that no location estimates were separated \n  by at least 1 of the time windows supplied. Blank list elements are excluded from plots.")
   }
 
   if (spiderPlot[1]==TRUE){
@@ -160,15 +159,16 @@ TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range
       spider <- spider[which(spider$Days==spiderPlot[2]),]
     }
 
-    spider < -spider[complete.cases(spider), ] #remove rows with no data
+    spider <- spider[complete.cases(spider), ] #remove rows with no data
     spider$Days <- round(spider$Days,3)
 
-    if (class(colours)=="function"){ # If a colour pallet is added assign colours based on the pallet
-      plotColours <- colours(length(unique(spider$Days)))
-    } else { # Else if colours are added as a vector of text or hex numbers, make sure there are enough colours to plot
-      if (length(colours)!=length(spider$Days)){
-        plotColours <- rep(colours, length(unique(spider$Days)))
-      }
+    if (class(colours)=="function"){ # If a grDevices colour pallet is used
+      myColoursPal <- colours(length(unique(spider$Days)))
+    } else if (colours[1] %in% rownames(RColorBrewer::brewer.pal.info)){ # If a RColourBrewer pallet is used
+      myColoursPal <- colorRampPalette(RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[colours,1], colours))(length(unique(spider$Days))) # Use the submitted colour palette and extend if to the number of colours needed
+    } else {
+      myPal <- colorRampPalette(colours) # If hex codes or colour names are used
+      myColoursPal <- myPal(length(unique(spider$Days)))
     }
 
     if (legend==TRUE){
@@ -184,43 +184,50 @@ TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range
       ggplot2::geom_hline(yintercept = c(0, max(spider$AngleProb)+0.01), colour = "black", size = 0.25) +
       ggplot2::geom_vline(xintercept = seq(0, 360, by = 90), colour = "black", size = 0.25) +
       ggplot2::geom_point(size = 0.4) +
-      ggplot2::geom_line(size = 1)+
-      ggplot2::scale_colour_manual(title, values = plotColours)+
-      ggplot2::scale_x_continuous(limits = c(0, 360), breaks = c(0,90,180,270), labels = c("0°","90°","180°","270°"))+
+      ggplot2::geom_line(size = 1) +
+      ggplot2::scale_colour_manual(title, values = myColoursPal)+
+      ggplot2::scale_x_continuous(limits = c(0, 360), breaks = c(0,90,180,270), labels = c("0","90","180","270"))+ #0°
       ggplot2::xlab("") +
       ggplot2::ylab("")+
       ggplot2::labs(title="")+
       ggplot2::theme_bw()+
       ggplot2::theme(
-        plot.title = ggplot2::element_text(size = 15, face = "bold",hjust = 0.5),
-        axis.text.x = ggplot2::element_text(size = 12, margin = grid::unit(c(0, 0, 0, 0), "cm"), face = "bold"),
+        axis.text.x = ggplot2::element_text(size = 10, face = "bold"),
         axis.text.y = ggplot2::element_blank(),
         axis.ticks = ggplot2::element_blank(),
         legend.position = legendPos,
         panel.border = ggplot2::element_blank(),
         panel.grid  = ggplot2::element_blank(),
-        plot.margin = grid::unit(c(0, 0, 0, 0), "points"))
-    plot(spider_plot)
-
+        plot.margin = grid::unit(c(0,0,0,0), "cm"))
     assign("angleSpiderPlot",spider, envir = .GlobalEnv)
   }
 
   if (histPlot[1]==TRUE){ # Histogram of all angles combined
-    AngleList <- AngleList[lengths(AngleList)>0] # Remove list elements with no data
+    angleList <- angleList[lengths(angleList)>0] # Remove list elements with no data
     if (histPlot[2]=="all"){
-    h <- hist(unlist(AngleList), plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angels for all time periods from all individuals
+      angles.df <- as.data.frame(unlist(angleList))
+      names(angles.df) <- "Angles"
+      h <- hist(angles.df$Angles, plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angels for all time periods from all individuals
     } else {
-    h <- hist(unlist(AngleList[[histPlot[2]]]), plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angels for selected time periods from all individuals
+      angles.df <- as.data.frame(unlist(angleList[[histPlot[2]]]))
+      names(angles.df) <- "Angles"
+      h <- hist(angles.df$Angles, plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angels for selected time periods from all individuals
     }
-
-    if (class(colours)=="function"){ # If a colour pallet is added assign colours based on the pallet
-      plotColours <- colours(1)
-    } else { # Else if colours are added as a vector of text or hex numbers, make sure there are enough colours to plot
-      plotColours <- colours[1]
-    }
-
-    plot(h, main = "", xlab = "Turning Angles", xaxt = "n",col = plotColours)
-    axis(1, at = seq(-180,180,by = 20), labels = seq(-180,180,by = 20))
+    xlabels <- c("", "-160", "", "-120", "", "-80", "", "-40", "", "0", "", "40", "", "80", "", "120","", "160", "")
+    hist_plot <- ggplot2::ggplot(angles.df, aes(Angles))+
+      ggplot2::geom_histogram(breaks=h$breaks, color="black", fill="darkgrey")+ #myColoursPal) +
+      ggplot2::scale_x_continuous("Turning Angles", breaks=seq(-180,180,20), labels=xlabels)+
+      ggplot2::labs(y = "Frequency")+
+      ggplot2::theme_classic()
     assign("angleHistPlot", h, envir = .GlobalEnv)
   }
+
+  if (spiderPlot[1]==TRUE & histPlot[1]==TRUE){
+    gridExtra::grid.arrange(spider_plot, hist_plot, nrow=2, ncol=1, heights=c(2,1))
+  } else if (spiderPlot[1]==TRUE){
+    plot(spider_plot)
+  } else if (histPlot[1]==TRUE){
+    plot(hist_plot)
+  }
+  return(angleList)
 }
