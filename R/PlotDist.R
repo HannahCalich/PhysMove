@@ -10,8 +10,8 @@
 #' Default is NULL
 #' @param legend Add a legend to the plot when TRUE and change the position of the legend. Default is legend=c(TRUE, "bottomleft")
 #' @return Complementary cumulative distribution function (CCDF) plot of displacements with fit lines (if fitLines=TRUE).
-#' @examples PlotDist(displacements, fitLines=TRUE, colours=c("red","gold2","blue"), setDist=FALSE, legend=c(TRUE, "bottomleft"))
 #' @examples PlotDist(displacements)
+#' @examples PlotDist(displacements, fitLines=TRUE, colours=c("red","gold2","blue"), setDist=FALSE, legend=c(TRUE, "bottomleft"))
 #' @export
 
 PlotDist <- function (displacements, fitLines=TRUE, colours=c("red","gold2","blue"), setDist=NULL, legend=c(TRUE, "bottomleft")){
