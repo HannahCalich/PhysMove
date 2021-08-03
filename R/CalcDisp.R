@@ -2,8 +2,8 @@
 #'
 #' This function allows you to calculate the displacement distances traveled by individuals over set time windows.
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
-#' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
-#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+#' "ref" is the unique id number for each individual (e.g., their satellite tag number formatted as an integer),
+#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.
 #' @param min_hr Minimum number of hours to consider for calculations. Default is 24 hours.
@@ -14,11 +14,11 @@
 #' If multiple location estimates fall within this time window the location estimate closest to the interval_hr input value
 #' will be used for calculations. For example, if interval_hr = 24 and range = 6, the algorithm will search for
 #' locations spaced 18 to 32 hours apart. Default is 6.
-#' @return A list ('displacements') containing the displacements in km recorded for each time window.
-#' Each list element corresponds with the time windows set. Time windows (in seconds) are exported as data vector 'timeWindows' as
-#' this information is required for additional PhysMove functions.
-#' @examples CalculateDisplacements(expSample)
-#' @examples CalculateDisplacements(expSample, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
+#' @return A list containing the displacements in km recorded for each time window. Each list element corresponds with the time
+#' windows set (i.e, the first list element is the first time window). 'timeWindows', the time windows (in seconds) used to calculate
+#' displacements, is automatically assigned to the global environment as it is required for additional PhysMove functions.
+#' @examples CalcDisp(expSample)
+#' @examples CalcDisp(expSample, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
 #' @export
 
 CalcDisp<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6){
@@ -88,7 +88,7 @@ CalcDisp<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6){
 
   if (any(sapply(MyList, function(x) length(x)==0))==TRUE){
     warning("At least 1 of the displacement list element is empty, which means that no location estimates were separated by at least 1 of the time windows supplied.
-    To troubleshoot, review the exported 'displacement' list and update your time windows accordingly.")
+    To troubleshoot, review the list of displacements created with this function and update your time windows accordingly.")
   }
   displacements <- MyList
   assign("timeWindows", MyTime, envir = .GlobalEnv)
