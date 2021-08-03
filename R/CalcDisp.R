@@ -87,7 +87,7 @@ CalcDisp<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6){
   }
 
   if (any(sapply(MyList, function(x) length(x)==0))==TRUE){
-    warning("At least 1 of the displacement list element is empty, which means that no location estimates were separated by at least 1 of the time windows supplied.
+    warning("At least 1 of the displacement list elements is empty, which means that no location estimates were separated by at least 1 of the time windows supplied.
     To troubleshoot, review the list of displacements created with this function and update your time windows accordingly.")
   }
   displacements <- MyList
