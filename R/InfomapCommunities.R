@@ -12,16 +12,20 @@
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.
 #' @param gridCell Grid cell size in degrees. Default is 0.25.
-#' @param hours Number of hours to consider movements for. Default is 24.
+#' @param hours Identify locations separated by this number of hours for movement calculations. Default is 24.
 #' @param range_hr Range (in hours) converts the hours parameter into a time window (hours +/-  range_hr) so the
 #' code can identify location estimates that are close to, but not exactly separated by a set number of hours.
 #' If multiple location estimates fall within this time window the location estimate closest to the set hours input value
 #' will be used for calculations. For example, if hours = 24 and range = 6, the algorithm will search for
 #' locations spaced 18 to 32 hours apart. Default is 6.
-#' @param infomap Identify Infomap communities. Default is TRUE.
-#' @param tpm Export the transition probability matrix in link list format. Default is FALSE.
-#' @return 'infomap_object' that summarizes the hierarchical structure of the Infomap communities (regions where individuals are likely
-#' to stay for longer periods of time).If tpm=TRUE the transition probability matrix used to create 'infomap_object' is exported.
+#' @param infomap Identify Infomap communities. If infomap=TRUE, default messages from the infomapecology package will appear as various
+#' functions are run. Note that if warnings arise about columns or rows summing to 0 this means an individual moved into a cell and did not leave, which is
+#' a valid movement and not cause for alarm. Default is TRUE.
+#' @param tpm Export the transition probability matrix in link list format. If tpm=TRUE, a 'TransitionProbabilityMatrix' data frame will be automatically
+#' assigned to the global environment. Default is FALSE.
+#' @return An 'infomap_object' that summarizes the hierarchical structure of the Infomap communities (regions where individuals are likely
+#' to stay for longer periods of time). If tpm=TRUE the transition probability matrix used to create the 'infomap_object' is automatically assigned
+#' to the global environment.
 #' @examples
 #' InfomapCommunities(expSample)
 #' InfomapCommunities(expSample, gridCell=0.25, hours=24, range_hr=6, infomap=TRUE, tpm=FALSE)
@@ -30,13 +34,12 @@
 
 InfomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, infomap=TRUE, tpm=FALSE){
 
-  outerror <- tryCatch({
-    if (infomap==TRUE){
-        if(infomapecology::check_infomap()!=TRUE){
-          warning()
-          break()
-        }
+    if (infomap==TRUE){ # If you want to calculate Infomap communities
+      library(infomapecology) # This was added as the package::function method does not seem to work with the infomapecology package yet so we are using library() then detach() to reduce impacts on global functions
+      if(infomapecology::check_infomap()!=TRUE){ # If the infomap.exe file has not been installed or cannot be found in working directory stop and send warning
+        stop ('Cannot find infomap.exe, please set working directory to folder containing infomap.exe file. \n  For information on installing infomap.exe visit https://ecological-complexity-lab.github.io/infomap_ecology_package/installation')
       }
+    }
 
     species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
     longmin <- -180
@@ -52,7 +55,6 @@ InfomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, 
     totalcells <- (grid * (longmax - longmin)) * (grid * (latmax - latmin))
     DestinationCells <- list()
     DestinationCells[[totalcells + 1 ]] <- 0
-
     for (i in 1:length(species_index)){
       for(j in 1:length((species_index[[i]]))){
         Jumpj<-which(species_df[species_index[[i]],4] >= species_df[species_index[[i]][j],4] + MyTime - range_hr & species_df[species_index[[i]],4] <= species_df[species_index[[i]][j],4] + MyTime + range_hr)
@@ -80,15 +82,15 @@ InfomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, 
 
     for(i in 1:length(DestinationCells)){ # total number of origin cells
       MyP <- as.numeric(table(DestinationCells[[i]]))/length(DestinationCells[[i]]) # Calculate the probability of each destination cell being visited
-      Probability<-data.frame("OriginCell"=c(as.numeric(paste(names(DestinationCells[i])))),
+      Probability <- data.frame("OriginCell"=c(as.numeric(paste(names(DestinationCells[i])))),
                               "DestinationCell"=c(as.numeric(names(table(DestinationCells[[i]])))), "Probability"=c(MyP))
-      Probability.Total<-rbind(Probability.Total, Probability)
+      Probability.Total <- rbind(Probability.Total, Probability)
     }
-    Probability.Total$OriginCell<-Probability.Total$OriginCell+1
-    Probability.Total$DestinationCell<-Probability.Total$DestinationCell+1
-    empty.vector<-c(rep(0,times=totalcells)) # make vector for each cell in world (n=1036800 cells for 0.25 deg resolution)
-    Visited.Cells<-unique(as.vector(t(cbind(Probability.Total$OriginCell,Probability.Total$DestinationCell)))) # convert transition probability matrix to consecutive vector of origin then destination cells, maintaining movement order
-    CellCoords<-data.frame("Cell"=Visited.Cells)
+    Probability.Total$OriginCell <- Probability.Total$OriginCell+1
+    Probability.Total$DestinationCell <- Probability.Total$DestinationCell+1
+    empty.vector <- c(rep(0,times=totalcells)) # make vector for each cell in world (n=1036800 cells for 0.25 deg resolution)
+    Visited.Cells <- unique(as.vector(t(cbind(Probability.Total$OriginCell,Probability.Total$DestinationCell)))) # convert transition probability matrix to consecutive vector of origin then destination cells, maintaining movement order
+    CellCoords <- data.frame("Cell"=Visited.Cells)
 
     for(i in 1:nrow(CellCoords)){ # Find center point of cell for plotting
       coordlat <- floor(CellCoords$Cell[i]/(grid*(longmax-longmin)))
@@ -102,50 +104,40 @@ InfomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, 
       }
     }
 
-    visited.order<-replace(empty.vector, Visited.Cells, seq(1,length(Visited.Cells),1)) # re-numbers vector of visited cells (all cells in world)
-    order.df<-data.frame("OriginCell"=as.numeric(c(Probability.Total$OriginCell)), "OriginNode"=as.numeric(c("0")),
+    visited.order <- replace(empty.vector, Visited.Cells, seq(1,length(Visited.Cells),1)) # re-numbers vector of visited cells (all cells in world)
+    order.df <- data.frame("OriginCell"=as.numeric(c(Probability.Total$OriginCell)), "OriginNode"=as.numeric(c("0")),
                          "DestinationCell"=as.numeric(c(Probability.Total$DestinationCell)), "DestinationNode"=as.numeric(c("0")),
                          "Probability"=as.numeric(c(Probability.Total$Probability)))
 
     for (c in 1:length(visited.order)){ # for all cells in the world, go through all the visited cells, and renumber the order that they were visited starting at 1
-      order.df$OriginNode[which(c==order.df[,1])]<-as.numeric(paste(visited.order[c]))
-      order.df$DestinationNode[which(c==order.df[,3])]<-as.numeric(paste(visited.order[c]))
+      order.df$OriginNode[which(c==order.df[,1])] <- as.numeric(paste(visited.order[c]))
+      order.df$DestinationNode[which(c==order.df[,3])] <- as.numeric(paste(visited.order[c]))
     }
 
-    order.df<-merge(order.df, CellCoords, by.x="OriginCell", by.y="Cell", all.x=TRUE)
-    names(order.df)[6:7]<-c("OriginLong","OriginLat")
-    order.df<-merge(order.df, CellCoords, by.x="DestinationCell", by.y="Cell", all.x=TRUE)
-    names(order.df)[8:9]<-c("DestinationLong","DestinationLat")
-    order.df<-order.df[,c(3,2,6,7,4,1,8,9,5)]
-
-    LinkList<-order.df[,c(1,5,9)] # remove cell numbers (infomap requires order of cell visits only)
-    colnames(LinkList)<-c("from", "to", "weight") # rename columns following infomap requirements
-    LinkList$from<-sub("^","Node",LinkList$from)
-    LinkList$to<-sub("^","Node",LinkList$to)
-
-    names(order.df) <-c(rep(c("Node", "Cell", "Long", "Lat"),2),"Probability")
-    nodenames<-rbind(order.df[,c(1:4)],order.df[,c(5:8)])
-    nodenames<-unique(nodenames[order(nodenames$Node),])
-    names(nodenames)<-c("node_name","cell", "long", "lat")
-    nodenames$node_name<-sub("^","Node",nodenames$node_name)
+    order.df <- merge(order.df, CellCoords, by.x="OriginCell", by.y="Cell", all.x=TRUE)
+    names(order.df)[6:7] <- c("OriginLong","OriginLat")
+    order.df <- merge(order.df, CellCoords, by.x="DestinationCell", by.y="Cell", all.x=TRUE)
+    names(order.df)[8:9] <- c("DestinationLong","DestinationLat")
+    order.df <- order.df[,c(3,2,6,7,4,1,8,9,5)]
+    LinkList <- order.df[,c(1,5,9)] # remove cell numbers (infomap requires order of cell visits only)
+    colnames(LinkList) <- c("from", "to", "weight") # rename columns following infomap requirements
+    LinkList$from <- sub("^","Node",LinkList$from)
+    LinkList$to <- sub("^","Node",LinkList$to)
+    names(order.df) <- c(rep(c("Node", "Cell", "Long", "Lat"),2),"Probability")
+    nodenames <-  rbind(order.df[,c(1:4)],order.df[,c(5:8)])
+    nodenames <- unique(nodenames[order(nodenames$Node),])
+    names(nodenames) <- c("node_name","cell", "long", "lat")
+    nodenames$node_name <- sub("^","Node",nodenames$node_name)
 
     if (infomap==TRUE){
-      monolayer_object<-infomapecology::create_monolayer_object(LinkList, directed = T, bipartite = F,node_metadata = nodenames)
-      infomap_object<-infomapecology::run_infomap_monolayer(monolayer_object, infomap_executable='infomap', flow_model='directed', silent=T, verbose=F, two_level=F, ...="-k")
-      assign("infomap_object",infomap_object, envir = .GlobalEnv)
+      monolayer_object <- infomapecology::create_monolayer_object(LinkList, directed = T, bipartite = F, node_metadata = nodenames)
+      infomap_object <- infomapecology::run_infomap_monolayer(monolayer_object, infomap_executable='infomap', flow_model='directed', silent=T, verbose=F, two_level=F, ...="-k")
+      return(infomap_object)
     }
 
     if (tpm==TRUE){
-      names(order.df)<-c("OriginNode", "OriginCell", "OriginLong", "OriginLat","DestinationNode", "DestinationCell", "DestinationLong", "DestinationLat","Probability")
+      names(order.df) <- c("OriginNode", "OriginCell", "OriginLong", "OriginLat","DestinationNode", "DestinationCell", "DestinationLong", "DestinationLat","Probability")
       assign("TransitionProbabilityMatrix", order.df, envir = .GlobalEnv)
     }
-  },
-  error=function(cond){
-    message(paste("Trouble installing or locating infomapecology package. \nTo resolve: load the package directly via library(infomapecology), or reinstall the infomapecology package in R. \nFor more information visit https://ecological-complexity-lab.github.io/infomap_ecology_package/installation"))
-  },
-  warning=function(cond){
-    message(paste("Cannot find infomap.exe, please set working directory to folder containing infomap.exe file. \nFor more information visit https://ecological-complexity-lab.github.io/infomap_ecology_package/installation"))
-  }
-  )
-  return(invisible(outerror))
+    detach("package:infomapecology", unload = TRUE) # This was added as the package::function method does not seem to work with the infomapecology package yet so I am using library() then detach() to reduce impacts on global functions
 }
