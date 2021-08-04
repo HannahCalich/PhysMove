@@ -214,7 +214,7 @@ TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range
       h <- hist(angles.df$Angles, plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angels for selected time periods from all individuals
     }
     xlabels <- c("", "-160", "", "-120", "", "-80", "", "-40", "", "0", "", "40", "", "80", "", "120","", "160", "")
-    hist_plot <- ggplot2::ggplot(angles.df, aes(Angles))+
+    hist_plot <- ggplot2::ggplot(angles.df, ggplot2::aes(Angles))+
       ggplot2::geom_histogram(breaks=h$breaks, color="black", fill="darkgrey")+ #myColoursPal) +
       ggplot2::scale_x_continuous("Turning Angles", breaks=seq(-180,180,20), labels=xlabels)+
       ggplot2::labs(y = "Frequency")+
