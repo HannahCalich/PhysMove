@@ -15,8 +15,9 @@
 #' will be used for calculations. For example, if interval_hr = 24 and range = 6, the algorithm will search for
 #' locations spaced 18 to 32 hours apart. Default is 6.
 #' @return A list containing the displacements in km recorded for each time window. Each list element corresponds with the time
-#' windows set (i.e, the first list element is the first time window). 'timeWindows', the time windows (in seconds) used to calculate
-#' displacements, is automatically assigned to the global environment as it is required for additional PhysMove functions.
+#' windows set (i.e., the first list element is the first time window). 'timeWindows', the time windows (in seconds) used to calculate
+#' displacements is automatically assigned to the global environment as this information is required for additional PhysMove functions
+#' such as the \code{\link{FitDist}} function.
 #' @examples CalcDisp(expSample)
 #' @examples CalcDisp(expSample, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
 #' @export
