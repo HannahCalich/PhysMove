@@ -10,10 +10,11 @@
 #' @param full To fit the distributions to the full range of displacement data. Default is FALSE.
 #' @param normalize Normalizes the displacement distances by dividing each displacement by the average displacement for that time window
 #' normalize=TRUE is required if working with displacements calculated over multiple time windows.
-#' @return A data frame 'distResults' that contains the summary statistics for each distribution fit including the distribution name,
+#' @return A data frame that contains the summary statistics for each distribution fit including the distribution name,
 #' xmin (the x value used to fit the distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
-#' distributions respectively, and nTail (the number of data points greater than or equal to xmin). The distributions fit to the data and if the
-#' data were normalized are exported as values ('dist', and 'normalize', respectively) as this information is required by additional PhysMove functions.
+#' distributions respectively, and nTail (the number of data points greater than or equal to xmin). A vector of the distributions fit to the
+#' data and a vector stating if the data were normalized are automatically assigned to the global environment as
+#' they are needed for the \code{\link{CompDist}} function ('dist' and 'normalize', respectively).
 #' @examples FitDist(displacements)
 #' @examples FitDist(displacements, dist=c("pl", "exp","lnorm"), full=TRUE)
 #' @examples FitDist(displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalize=TRUE)
@@ -21,9 +22,9 @@
 
 FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalize=TRUE) {
 
- if (class(displacements)!="list"){
+  if (class(displacements)!="list"){
    stop("Distributions can only be fit to the output from the CalcDisp function.")
- }
+  }
 
   if ((!is.null(set_xmin)) & (full==TRUE)){
     stop("To fit distributions to the full range of data use full=TRUE and leave set_xmin as default (NULL).")
@@ -56,7 +57,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
   dat <- numeric(length(xmins)) #blank vectors for D values
   x <- sort(x)
   N <- length(x)
-  distResults<-data.frame("distribution"=dist, "xmin"= c(NA), "parameter1"=c(NA), "parameter2"=c(NA), "nTail"= c(NA)) #make sure dist= is loaded
+  distResults <- data.frame("distribution"=dist, "xmin"= c(NA), "parameter1"=c(NA), "parameter2"=c(NA), "nTail"= c(NA)) #make sure dist= is loaded
 
   assign("dist",dist, envir = .GlobalEnv)
   assign("normalize", normalize, envir = .GlobalEnv)
@@ -238,5 +239,5 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
     distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="parameter2")]<-LN_sigma
     distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="nTail")]<-n
   }
-  assign("distResults",distResults, envir = .GlobalEnv)
+  return(distResults)
 }
