@@ -1,7 +1,7 @@
 #' Identify the best-fit distribution for displacement data
 #'
 #' This function allows you to determine if a power law, exponential, or log-normal distribution best-fits a probability density function
-#' of the displacements using weighted Akaike Information Criterion. These fits use displacement data, xmin and parameter values that were
+#' of the displacements using weighted Akaike Information Criterion (AIC). These fits use displacement data, xmin and parameter values that were
 #' previously calculated with the \code{\link{CalcDisp}} and \code{\link{FitDist}} functions. By default, this function will calculate
 #' AICc scores if n/K is <= 40 for the largest value of K, where n = sample size (nTail) and K = number of parameters in the model
 #' (see Burnham and Anderson (2004) for further details, DOI: 10.1177/0049124104268644). However, if force_AICc = TRUE AICc scores will be
