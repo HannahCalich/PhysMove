@@ -6,15 +6,15 @@
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}
-#' @param map Create a map illustrating gyration radii. Default is TRUE.
+#' @param map Create a map illustrating the gyration radius of each trajectory. Default is TRUE.
 #' @param mapCol Colours for points and gyration radii on map, respectively. Default is c("Black","Red).
-#' @param pdfPlot Create a  probability density function line plot of the gyration radius values. Default is FALSE
+#' @param pdfPlot Create a  probability density function line plot of the gyration radius values. Note that a pdf plot cannot be
+#' created if the data set only has 1 individual. Default is FALSE
 #' @param nBins Number of bins used to calculate the pdf plot. Default is 15.
-#' @return Vector containing gyration radius values for each trajectory ('gyrationRadius'), a  probability density function line plot
-#'  and a data frame with the data used to create the pdf plot ('gyrationradPDFplot', if pdfPlot=TRUE), a map of the gyration radius results (if map=TRUE).
-#' @examples
-#' rG(species_df)
-#' rG(species_df,map=TRUE, mapCol=c("Black","Red"), pdfPlot=FALSE, nBins=15)
+#' @return Gyration radius values for each trajectory. If map=TRUE a map of the gyration radius results is created. If pdfPlot=TRUE, a
+#' pdf plot of results is created and the data used to create the pdf plot are automatically assigned to the global environment ('gyrationradPDFplot').
+#' GyrationRad(species_df)
+#' GyrationRad(species_df, map=TRUE, mapCol=c("Black","Red"), pdfPlot=FALSE, nBins=15)
 #' @export
 
 GyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red"), pdfPlot=FALSE, nBins=15){
@@ -67,6 +67,7 @@ GyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red"), pdfPlot=
     angle <- seq(1,360,1)
     circles <- as.data.frame(matrix(0, ncol = 3, nrow = length(angle)*length(MyrG$ref)))
     names(circles)<-c("Ref","lat","long")
+    k <- 1 # do not comment, needed in loop
     for (i in 1:nrow(MyrG)){ # For each mean location
       d <- MyrG$rG[i]
       lat1 <- MyrG$lat.avg.deg[i]*(rad)
@@ -86,36 +87,40 @@ GyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red"), pdfPlot=
       ggplot2::coord_sf(xlim = c(min(circles$long), max(circles$long)), ylim = c(min(circles$lat), max(circles$lat)))+
       ggplot2::theme_minimal()+
       ggplot2::geom_polygon(data = circles, ggplot2::aes(long, lat, group = Ref), color = mapCol[2], alpha=0)+
-      ggplot2::labs(x="Longitude", y="Latitude")+
-      ggplot2::borders("world", colour="gray50", fill="gray50")
+      ggplot2::labs(x="Longitude", y="Latitude")
+
+    tryCatch({ # This prevents the plot from crashing if the mapped area does not overlap with the world polygon (e.g., for pelagic species)
+      z <- z +
+        ggplot2::borders("world", colour="gray50", fill="gray50", xlim = c(min(circles$long), max(circles$long)), ylim = c(min(circles$lat), max(circles$lat)))
+    }, error = function(e){message('Please note: World polygon does not overlap with gyration radius results')})
     print(z)
   }
 
   if (pdfPlot==TRUE){
-    if (length(unique(species_df$ref))>1){ ##added -- talk to ANA
+    if (length(unique(species_df$ref))>1){
       rGmin <- min(MyrG$rG)
       bw <- (max(MyrG$rG)-rGmin)/nBins
-    } else { ##added -- talk to ANA
-    bw <- 1/nBins ##added -- talk to ANA
-    } ##added -- talk to ANA
-    freq <- xs <- rep(0, nBins+1)
-    for(i in 1:nrow(MyrG)){
-      b <- floor((MyrG[i,4]-rGmin)/bw + 0.5)+1 # +1 is necessary because otherwise floor goes to 0, which isn't recorded in freq
-      freq[b] <- freq[b] + 1
+      freq <- xs <- rep(0, nBins+1)
+      for(i in 1:nrow(MyrG)){
+        b <- floor((MyrG[i,4]-rGmin)/bw + 0.5)+1 # +1 is necessary because otherwise floor goes to 0, which isn't recorded in freq
+        freq[b] <- freq[b] + 1
+      }
+      for(i in 1:(nBins+1)){
+        xs[i] <- rGmin+(i-1)*bw
+      }
+      lenrG <- nrow(MyrG)
+      for (i in 1:length(freq)){
+        freq[i] <- freq[i]/(bw*lenrG)
+      }
+      plot(xs, freq, type="l", ylab="pdf", xlab=expression('r'[G]*' (km)')) # Plot RMS of displacements, and mean displacements on log-log scale
+      points(xs, freq, pch=19)
+      gyradplot <- data.frame(xs, freq)
+      names(gyradplot) <- c("Gyration Radius","pdf")
+      assign("gyrationradPDFplot", gyradplot, envir = .GlobalEnv)
+    } else {
+      warning("Cannot create pdf plot with data from only 1 individual")
     }
-    for(i in 1:(nBins+1)){
-      xs[i] <- rGmin+(i-1)*bw
-    }
-    lenrG <- nrow(MyrG)
-    for (i in 1:length(freq)){
-      freq[i] <- freq[i]/(bw*lenrG)
-    }
-    plot(xs, freq, type="l", ylab="pdf", xlab=expression('r'[G]*' (km)')) # Plot RMS of displacements, and mean displacements on log-log scale
-    points(xs, freq, pch=19)
-    gyradplot <- data.frame(xs, freq)
-    names(gyradplot) <- c("Gyration Radius","pdf")
-    assign("gyrationradPDFplot", gyradplot, envir = .GlobalEnv)
   }
-  names(MyrG) < -c("ref","avg long", "avg lat", "rG (km)")
-  assign("gyrationRadius", MyrG, envir = .GlobalEnv)
+  names(MyrG) <- c("ref","avg long", "avg lat", "rG (km)")
+  return(MyrG)
 }
