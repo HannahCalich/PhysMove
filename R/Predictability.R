@@ -7,7 +7,7 @@
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.
-#' @param normEnt Normalized entropy values for each trajectory from the \code{\link{Entropy}} function.
+#' @param normEnt Data frame of results output from the \code{\link{Entropy}} function.
 #' @param startVal Starting value used to find a root for the limit of predictability equation. Function will loop through values
 #' starting at startVal and decrease by 0.01 at each iteration until an acceptable root value is identified. Default is 0.99
 #' @param histPlot Plot a histogram of the limit of predictability scores. Default is TRUE.
@@ -18,11 +18,11 @@
 #' probability density function line plot of results is created and the data used to create the pdf plot are automatically assigned to the global environment
 #' ('predictPDFData').
 #' @examples
-#' Predictability(expSample, normEnt)
-#' Predictability(expSample, startVal=0.99, histPlot=TRUE, legend=c(TRUE, "topleft"), pdfPlot=FALSE, nBins=40)
+#' Predictability(expSample, entropyResults)
+#' Predictability(expSample, entropyResults, startVal=0.99, histPlot=TRUE, legend=c(TRUE, "topleft"), pdfPlot=FALSE, nBins=40)
 #' @export
 
-Predictability<-function(species_df, entResults, startVal=0.99, histPlot=TRUE, legend=c(TRUE, "topleft"), pdfPlot=FALSE, nBins=40){
+Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRUE, legend=c(TRUE, "topleft"), pdfPlot=FALSE, nBins=40){
 
   if (nrow(entResults)!=length(unique(species_df$ref))){
     stop("The number of individuals in the species_df does not match the number of normalized entropy values, check to ensure the right data has \n  been entered.")
