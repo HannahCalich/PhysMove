@@ -3,7 +3,7 @@
 #' This function allows you to fit power law, exponential, or log-normal distributions to the displacements calculated with
 #' the \code{\link{CalcDisp}} function. If displacements were calculated over multiple time windows this function will normalize the
 #' displacements by dividing each displacement by the mean displacement of the corresponding time window
-#' @param displacements The output from the \code{\link{CalcDisp}} function.
+#' @param displacements List of displacements output from the \code{\link{CalcDisp}} function.
 #' @param dist Continuous distributions that will be fit to the displacements. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
 #' continuous distributions. Default is dist=c("pl","exp","lnorm").
 #' @param set_xmin To limit the fitted distribution to values above a specified value. Default is NULL.
@@ -12,11 +12,11 @@
 #' normalize=TRUE is required if working with displacements calculated over multiple time windows.
 #' @return A data frame that contains the summary statistics for each distribution fit including the distribution name,
 #' xmin (the x value used to fit the distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
-#' distributions respectively, and nTail (the number of data points greater than or equal to xmin). A vector of the distributions fit to the
-#' data and a vector stating if the data were normalized are automatically assigned to the global environment as
-#' they are needed for the \code{\link{CompDist}} function ('dist' and 'normalize', respectively).
+#' distributions respectively, and nTail (the number of data points greater than or equal to xmin). A vector stating if the data were normalized or not,
+#' ('normalize') is automatically assigned to the global environment as this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}
+#'functions.
 #' @examples FitDist(displacements)
-#' @examples FitDist(displacements, dist=c("pl", "exp","lnorm"), full=TRUE)
+#' @examples FitDist(displacements, dist=c("exp","lnorm"), full=TRUE)
 #' @examples FitDist(displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalize=TRUE)
 #' @export
 
