@@ -80,10 +80,10 @@ CalcDisp<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6){
     }
     if (is.null(MyDistance)){
       MyList[[d]] <- NULL
-      print(paste0("0 displacements in ", MyTime[d]/(60*60), " hour(s) ± ", range_hr/(60*60), " hour(s)"))
+      print(paste0("0 displacements in ", MyTime[d]/(60*60), " ± ", range_hr/(60*60), " hour(s)"))
     } else {
       MyList[[d]] <- MyDistance
-      print(paste0(length(MyList[[d]])," displacements in ", MyTime[d]/(60*60), " hour(s) ± ", range_hr/(60*60), " hour(s)"))
+      print(paste0(length(MyList[[d]])," displacements in ", MyTime[d]/(60*60), " ± ", range_hr/(60*60), " hour(s)"))
       }
   }
 
@@ -92,6 +92,6 @@ CalcDisp<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6){
     To troubleshoot, review the list of displacements created with this function and update your time windows accordingly.")
   }
   displacements <- MyList
-  assign("timeWindows", MyTime, envir = .GlobalEnv)
+  # assign("timeWindows", MyTime, envir = .GlobalEnv)
   return(displacements)
 }
