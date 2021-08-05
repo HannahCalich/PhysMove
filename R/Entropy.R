@@ -1,6 +1,8 @@
 #' Entropy of trajectories
 #'
-#' This function allows you to calculate the entropy of individual trajectories, which provides insight to how ordered (or disordered) the trajectories were.
+#' This function allows you to calculate the normalized entropy of individual trajectories (individual entropy scores are
+#' normalized by the log number of cells each trajectory visited), which provides insight to how ordered or disordered the trajectories were.
+#' Values close to 1 indicate high entropy (disordered trajectories) while values closer to 0 indicate low entropy (ordered trajectories).
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
@@ -12,10 +14,10 @@
 #' @param pdfPlot Create a  probability density function line plot of the entropy values. Note that a pdf plot cannot be
 #' created if the data set only has 1 individual. Default is FALSE.
 #' @param nBins Number of bins used to calculate the pdf plot. Default is 40.
-#' @return Normalized entropy values for each trajectory. If histPlot=TRUE a histogram of the normalized entropy scores is created. If pdfPlot=TRUE, a
+#' @return Data frame of the normalized entropy values for each trajectory (main result) as well as the individual entropy
+#' values (not normalized) and the number of cells each trajectory visited. If histPlot=TRUE a histogram of the normalized entropy scores is created. If pdfPlot=TRUE, a
 #' probability density function line plot of results is created and the data used to create the pdf plot are automatically assigned to the global environment
-#' ('entropyPDFplot'). A list of occurrences and a vector of individual entropy (non-normalized) values are automatically assigned to the global environment as
-#' they are needed for the \code{\link{Predictability}} function ('occurrences' and 'indivEntropy', respectively).
+#' ('entropyPDFplot').
 #' @examples
 #' Entropy(expSample)
 #' Entropy(expSample, gridCell=0.25, histPlot=TRUE, legend=c(TRUE, "topleft"), pdfPlot=FALSE, nBins=40)
