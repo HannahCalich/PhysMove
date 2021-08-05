@@ -3,7 +3,7 @@
 #' This function allows you to determine if a power law, exponential, or log-normal distribution best-fits a probability density function
 #' of the displacements using weighted Akaike Information Criterion (AIC). These fits use displacement data, xmin and parameter values that were
 #' previously calculated with the \code{\link{CalcDisp}} and \code{\link{FitDist}} functions. By default, this function will calculate
-#' AICc scores if n/K is <= 40 for the largest value of K, where n = sample size (nTail) and K = number of parameters in the model
+#' AICc (AIC corrected for small sample sizes) scores if n/K is <= 40 for the largest value of K, where n = sample size (nTail) and K = number of parameters in the model
 #' (see Burnham and Anderson (2004) for further details, DOI: 10.1177/0049124104268644). However, if force_AICc = TRUE AICc scores will be
 #' calculated regardless of n/K.
 #' @param displacements List of displacements that was output from the \code{\link{CalcDisp}} function.
@@ -13,7 +13,7 @@
 #' @examples CompDist(displacements, force_AICc=FALSE)
 #' @export
 
-CompDist <- function (displacements, force_AICc=FALSE){
+CompDist <- function (displacements, distResults, force_AICc=FALSE){
 
   if (exists("displacements")==FALSE){
     stop("Please calculate displacements using the CalcDisp function and fit distriubtions using the FitDisp function prior to executing CompDist")
@@ -25,7 +25,7 @@ CompDist <- function (displacements, force_AICc=FALSE){
 
   if (normalize){
     x <- list()
-    for (d in 1:length(timeWindows)){
+    for (d in 1:length(displacements)){
       disp <- unlist(displacements[d])
       x[[d]] <- disp/mean(disp)
     }
@@ -34,6 +34,7 @@ CompDist <- function (displacements, force_AICc=FALSE){
   x <- unlist(displacements)
   }
 
+  dist <- distResults$distribution
   xmins <- sort(unique(x))
   x <- sort(x)
   n_all <- c()
@@ -130,11 +131,12 @@ CompDist <- function (displacements, force_AICc=FALSE){
       K <- K_all[which(dist=="lnorm")]
       n <- n_all[which(dist=="lnorm")]
       lnorm_AICc <- -2*lnorm_logLik + 2*K + ((2*K*(K+1))/(n-K-1))
+      # (-2 * c(ll)) + (k * df) * (1 + ((df + 1) / (no - df - 1)))
       AICc_Scores <- c(AICc_Scores,lnorm_AICc)
       distResults[which(distResults$distribution =="lnorm"),"AICc"] <- lnorm_AICc
     }
     rel_like <- exp(-1/2*((distResults$AICc)-min(distResults$AICc)))
     distResults$AICcw <- rel_like/sum(rel_like)
     }
-  assign("distResults", distResults, envir = .GlobalEnv)
+  return(distResults)
 }
