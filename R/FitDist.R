@@ -34,17 +34,13 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
     stop("Data must be normalized for displacements from multiple time windows to be collated into 1 dataset.")
   }
 
-  if (exists("timeWindows")==FALSE){
-    stop("Please calculate displacements using the CalcDisp function prior to executing FitDist.")
-  }
-
   if (("pl" %in% dist|"exp" %in% dist|"lnorm" %in% dist)!=TRUE){
     stop("Distributions can only be fit to 'pl','exp', or 'lnorm' distributions.")
   }
 
   if (normalize){
     x <- list()
-    for (d in 1:length(timeWindows)){
+    for (d in 1:length(displacements)){
       disp <- unlist(displacements[d])
       x[[d]] <- disp/mean(disp)
     }
@@ -59,7 +55,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
   N <- length(x)
   distResults <- data.frame("distribution"=dist, "xmin"= c(NA), "parameter1"=c(NA), "parameter2"=c(NA), "nTail"= c(NA)) #make sure dist= is loaded
 
-  assign("dist",dist, envir = .GlobalEnv)
+  # assign("dist",dist, envir = .GlobalEnv)
   assign("normalize", normalize, envir = .GlobalEnv)
 
   if ("pl" %in% dist){
@@ -234,10 +230,10 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
       LN_sigma <-as.numeric(mle@coef[2])
       n <- length(x[x>=LN_xmin]) # truncate dataset at xmin
     }
-    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="xmin")]<-LN_xmin
-    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="parameter1")]<-LN_mu
-    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="parameter2")]<-LN_sigma
-    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="nTail")]<-n
+    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="xmin")] <- LN_xmin
+    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="parameter1")] <- LN_mu
+    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="parameter2")] <- LN_sigma
+    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="nTail")] <- n
   }
   return(distResults)
 }
