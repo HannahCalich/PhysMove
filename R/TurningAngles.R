@@ -19,7 +19,7 @@
 #' @param legend Add a legend to the spider plot. Default is TRUE.
 #' @param colours Colour(s) for lines in spiderPlot. Valid input options include: base R (grDevices) color pallets (e.g., colours=rainbow),
 #' RColorBrewer palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that
-#' grDevies color pallets are functions and do not use quotations. If the palette does not have enough distinct colours to match the lines being plotted the function will
+#' grDevices color pallets are functions and do not use quotations. If the palette does not have enough distinct colours to match the lines being plotted the function will
 #' automatically create a continuous pallet with the colours provided. Default is rainbow.
 #' @param histPlot Plot a histogram showing the frequency of turning angles from all time windows combined (default) or
 #' one specific time period. For example, histPlot=c(TRUE,1) to plot only the first time period. Plot colour is fixed as 'darkgrey' to avoid confusion with spider plot colours.
