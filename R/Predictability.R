@@ -7,7 +7,7 @@
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.
-#' @param normEnt Data frame of results output from the \code{\link{Entropy}} function.
+#' @param entropyResults Data frame of results output from the \code{\link{Entropy}} function.
 #' @param startVal Starting value used to find a root for the limit of predictability equation. Function will loop through values
 #' starting at startVal and decrease by 0.01 at each iteration until an acceptable root value is identified. Default is 0.99
 #' @param histPlot Plot a histogram of the limit of predictability scores. Default is TRUE.
