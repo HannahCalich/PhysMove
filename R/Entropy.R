@@ -14,7 +14,7 @@
 #' @param nBins Number of bins used to calculate the pdf plot. Default is 40.
 #' @return Normalized entropy values for each trajectory. If histPlot=TRUE a histogram of the normalized entropy scores is created. If pdfPlot=TRUE, a
 #' probability density function line plot of results is created and the data used to create the pdf plot are automatically assigned to the global environment
-#' ('entropyPDFplot'). A list of occurrences and a vector of non-normalized individual entropy values are automatically assigned to the global environment as
+#' ('entropyPDFplot'). A list of occurrences and a vector of individual entropy (non-normalized) values are automatically assigned to the global environment as
 #' they are needed for the \code{\link{Predictability}} function ('occurrences' and 'indivEntropy', respectively).
 #' @examples
 #' Entropy(expSample)
@@ -44,22 +44,21 @@ Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE, legend=c(TRUE, "topl
     }
     occurrences[[i]] <- Presence # Converts the occurrence count to a list for each individual
   }
-  assign("occurrences", occurrences, envir = .GlobalEnv)
 
   Entropy <- probOccur <- occurrences # List to store all probabilities in each cell (per individual)
-  indivEntropy <- normalizedEntropy <- c()
+  CellsVisited <- indivEntropy <- normalizedEntropy <- c()
 
   for (i in 1:length(species_index)){ # Loop through each position and store probability of the ind visiting each grid cell
-    CellsVisited <- length(which(occurrences[[i]]!=0))# Number of grid cells visited by individual i
+    CellsVisited[i] <- length(which(occurrences[[i]]!=0))# Number of grid cells visited by individual i
     for (j in 1:totalcells){
       probOccur[[i]][j] <- occurrences[[i]][j] / length(species_index[[i]]) # Number of occurrences from individual i in each grid cell of the world / number of points per individual i
       Entropy[[i]][j] <- probOccur[[i]][j] * log(probOccur[[i]][j]) # Entropy calculation per cell (probability of occurrence in a cell * log of the probability of occurrence in that same cell)
     }
     indivEntropy[i] <- -1 * sum(na.omit(Entropy[[i]])) # Calculate entropy by individual by summing the calculated entropies per cell following the equation: S = -Sum(probij * log(probij))
-    normalizedEntropy[i] <- indivEntropy[i] / log(CellsVisited)  # Normalized to allow for direct comparison of the entropies of trajectories with different numbers of visited areas
+    normalizedEntropy[i] <- indivEntropy[i] / log(CellsVisited[i])  # Normalized to allow for direct comparison of the entropies of trajectories with different numbers of visited areas
     # and informs about the complexity of the visitation pattern ranging between 0 (one visited cell) and 1 (uniform, every cell is visited with the same probability).
   }
-  assign("indivEntropy", indivEntropy, envir = .GlobalEnv)
+  entropyResults <- as.data.frame(cbind("ref"=unique(species_df$ref),"normalizedEntropy"=normalizedEntropy,"indivEntropy"=indivEntropy,"cellsVisited"=CellsVisited))
 
   if (histPlot==TRUE){
     hist <- hist(normalizedEntropy, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
@@ -108,5 +107,5 @@ Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE, legend=c(TRUE, "topl
       warning("Cannot create pdf plot with data from only 1 individual")
     }
   }
-  return(normalizedEntropy)
+  return(entropyResults)
 }

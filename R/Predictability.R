@@ -22,25 +22,20 @@
 #' Predictability(expSample, startVal=0.99, histPlot=TRUE, legend=c(TRUE, "topleft"), pdfPlot=FALSE, nBins=40)
 #' @export
 
-Predictability<-function(species_df, normEnt, startVal=0.99, histPlot=TRUE, legend=c(TRUE, "topleft"), pdfPlot=FALSE, nBins=40){
+Predictability<-function(species_df, entResults, startVal=0.99, histPlot=TRUE, legend=c(TRUE, "topleft"), pdfPlot=FALSE, nBins=40){
 
-  if ((exists("indivEntropy") & exists("occurrences"))==FALSE){
-    stop("Results from the Entropy function are required to run the Predictability function, please run the Entropy function first and ensure \n  the 'occurrences' and 'indivEntropy' outputs not modified as the object names must match for this function to run properly.")
-  }
-
-  if (length(indivEntropy)!=length(unique(species_df$ref))){
-    stop("The number of individuals in the species_df does not match the number of normEnt values, check to ensure the right data has \n  been entered.")
+  if (nrow(entResults)!=length(unique(species_df$ref))){
+    stop("The number of individuals in the species_df does not match the number of normalized entropy values, check to ensure the right data has \n  been entered.")
   }
 
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
   Predictability <- c()
 
   for (i in 1:length(species_index) ){
-    CellsVisited <- length(which(occurrences[[i]]!=0))
-    model <- function(x) c(F1 = x*log(x) + (1-x)*log(1-x) - (1-x)*log(CellsVisited-1) + indivEntropy[i])
+    model <- function(x) c(F1 = x*log(x) + (1-x)*log(1-x) - (1-x)*log(entResults$cellsVisited[i]-1) + entResults$indivEntropy[i])
 
     if(startVal==0.99){
-      ss <- suppressWarnings(rootSolve::multiroot(f = model, start = 1-normEnt[i]))
+      ss <- suppressWarnings(rootSolve::multiroot(f = model, start = 1-entResults$normalizedEntropy[i]))
       if (ss$root > 0 & ss$root < 1){
         Predictability[i] <- ss$root
     } else {
