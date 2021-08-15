@@ -24,7 +24,7 @@
 
 Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRUE, legend=c(TRUE, "topleft"), pdfPlot=FALSE, nBins=40){
 
-  if (nrow(entResults)!=length(unique(species_df$ref))){
+  if (nrow(entropyResults)!=length(unique(species_df$ref))){
     stop("The number of individuals in the species_df does not match the number of normalized entropy values, check to ensure the right data has \n  been entered.")
   }
 
@@ -32,10 +32,10 @@ Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRU
   Predictability <- c()
 
   for (i in 1:length(species_index) ){
-    model <- function(x) c(F1 = x*log(x) + (1-x)*log(1-x) - (1-x)*log(entResults$cellsVisited[i]-1) + entResults$indivEntropy[i])
+    model <- function(x) c(F1 = x*log(x) + (1-x)*log(1-x) - (1-x)*log(entropyResults$cellsVisited[i]-1) + entropyResults$indivEntropy[i])
 
     if(startVal==0.99){
-      ss <- suppressWarnings(rootSolve::multiroot(f = model, start = 1-entResults$normalizedEntropy[i]))
+      ss <- suppressWarnings(rootSolve::multiroot(f = model, start = 1-entropyResults$normalizedEntropy[i]))
       if (ss$root > 0 & ss$root < 1){
         Predictability[i] <- ss$root
     } else {
