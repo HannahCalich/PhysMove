@@ -15,7 +15,8 @@
 #' @param legend Add a legend to the plot when TRUE and change the position of the legend. Default is legend=c(TRUE, "topleft").
 #' @return A data frame 'randomizedResults' that includes the number of cells visited by each original trajectory and the average number of
 #' cells visited by the randomized trajectories, a plot illustrating the number of cells visited by the original and randomized trajectories (if plot = TRUE),
-#' and 'randomizedLat' and 'randomizedLong' matrices and a 'randTraj' vector that are required to plot the reshuffled tracks with the \code{\link{PlotRandomTracks} function}
+#' and 'randomizedLat' and 'randomizedLong' matrices and a 'randTraj' vector, which are automatically assigned to the global environment as they are
+#' required to plot the reshuffled tracks with the \code{\link{PlotRandomTracks} function}
 #' @examples
 #' Randomize(expSample)
 #' Randomize(expSample, randTraj=500, gridCell=0.25, plot=TRUE, legend=c(TRUE, "topleft"))
