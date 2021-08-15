@@ -12,8 +12,9 @@
 #' (applied to ggplot2::scale_fill_gradientn). Default is colGrad=c("blue", "light blue","red").
 #' @param pdfPlot Create a  probability density line plot of the occupancy values. Default is TRUE.
 #' @param nBins Number of bins used to calculate the pdf plot. Default is 20.
-#' @return A data frame ('occupancyResults') that contains location and corresponding occupancy data, a map (if map = TRUE), a probability
-#' density function line plot and a data frame with the data used to create the pdf plot ('occupancyPDFplot', if pdfPlot = TRUE).
+#' @return A data frame ('occupancyResults') that contains location and corresponding occupancy data, a map (if map = TRUE), the total number of cells
+#' used in analysis 'totalCells' is automatically assigned to the global environment because this information is required by the \code{\link{pdfPlot} function}
+#' a probability density function line plot and a data frame with the data used to create the pdf plot ('occupancyPDFplot', if pdfPlot = TRUE).
 #' @examples
 #' Occupancy(expSample)
 #' Occupancy(expSample, gridcell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"), pdfPlot=FALSE, nBins=20)
@@ -64,7 +65,6 @@ Occupancy<-function(species_df, gridcell=0.25, map=TRUE, colGrad=c("blue", "ligh
       OccExp$Latitude[i] <- (latmin + (coordlat / grid)) + 0.5*gridcell
     }
   }
-  assign("occupancyResults", OccExp, envir = .GlobalEnv)
 
   if (map==TRUE){
     xyz <- OccExp[,c(5,6,3)]
@@ -82,45 +82,47 @@ Occupancy<-function(species_df, gridcell=0.25, map=TRUE, colGrad=c("blue", "ligh
     plot(z)
   }
 
-  if (pdfPlot==TRUE){
-    Occmin <- min(OccExp[which(OccExp$Occupancy!=0),3])
-    bw <- log(max(OccExp$Occupancy)/Occmin)/log(nBins) # This calculation to determine bin width is usually fine but in some circumstances the value is too small when log transformed so the following loop helps determine a new bw
-    if (bw<1.2){
-      break_start <- 20
-      repeat {
-        h <- hist(log(OccExp$Occupancy), breaks=break_start, plot=FALSE)
-        bw <- exp(h$breaks[2]-h$breaks[1])
-        if (bw>=1.2){
-          break
-        } else {
-          break_start <- break_start - 1
-        }
-      }
-    }
-    freq <- rep(0, nBins+1)
-    for(i in 1:nrow(OccExp)){
-      if (OccExp[i,3]>0){
-        b <- floor(log(OccExp[i,3]/Occmin)/log(bw) + 0.5)
-        freq[b] <- freq[b] + 1
-      }
-    }
-    if (anyNA(freq)){
-      stop ("Cell size too small to create pdf plot")
-    }
-    sumFreq<-sum(freq)
-    freq <- c(totalcells-sumFreq, freq)
-    norm <- sum(freq)
-    freq <- freq[freq>0]
-    xs <- ys <- rep(0, length(freq))
-
-    for (i in 1:length(freq)){
-        ys[i] <- freq[i]/(norm*Occmin*((bw^((i-1)+0.5))-(bw^((i-1)-0.5))))
-        xs[i] <- Occmin*(bw^(i-1))
-    }
-    occplot <- data.frame(xs, ys)
-    names(occplot) <- c("Occupancy(km^-2)","pdf")
-    assign("occupancyPDFplot", occplot, envir = .GlobalEnv)
-    plot(xs, ys, log = "xy", type = "l", ylab = "pdf", xlab = expression('Occupancy (km'^'-2'*')'))
-    points(xs, ys, pch = 19)
-    }
+  # if (pdfPlot==TRUE){
+    # Occmin <- min(OccExp[which(OccExp$Occupancy!=0),3])
+    # bw <- log(max(OccExp$Occupancy)/Occmin)/log(nBins) # This calculation to determine bin width is usually fine but in some circumstances the value is too small when log transformed so the following loop helps determine a new bw
+    # if (bw<1.2){
+    #   break_start <- 20
+    #   repeat {
+    #     h <- hist(log(OccExp$Occupancy), breaks=break_start, plot=FALSE)
+    #     bw <- exp(h$breaks[2]-h$breaks[1])
+    #     if (bw>=1.2){
+    #       break
+    #     } else {
+    #       break_start <- break_start - 1
+    #     }
+    #   }
+    # }
+    # freq <- rep(0, nBins+1)
+    # for(i in 1:nrow(OccExp)){
+    #   if (OccExp[i,3]>0){
+    #     b <- floor(log(OccExp[i,3]/Occmin)/log(bw) + 0.5)
+    #     freq[b] <- freq[b] + 1
+    #   }
+    # }
+    # if (anyNA(freq)){
+    #   stop ("Cell size too small to create pdf plot")
+    # }
+    # sumFreq<-sum(freq)
+    # freq <- c(totalcells-sumFreq, freq)
+    # norm <- sum(freq)
+    # freq <- freq[freq>0]
+    # xs <- ys <- rep(0, length(freq))
+    #
+    # for (i in 1:length(freq)){
+    #     ys[i] <- freq[i]/(norm*Occmin*((bw^((i-1)+0.5))-(bw^((i-1)-0.5))))
+    #     xs[i] <- Occmin*(bw^(i-1))
+    # }
+    # occplot <- data.frame(xs, ys)
+    # names(occplot) <- c("Occupancy(km^-2)","pdf")
+    # assign("occupancyPDFplot", occplot, envir = .GlobalEnv)
+    # plot(xs, ys, log = "xy", type = "l", ylab = "pdf", xlab = expression('Occupancy (km'^'-2'*')'))
+    # points(xs, ys, pch = 19)
+    # }
+   assign("totalCells", totalcells, envir = .GlobalEnv)
+   return(OccExp)
 }
