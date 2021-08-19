@@ -9,25 +9,20 @@
 #' @param wBins Bin width refers to the size of the bins used to calculate how frequently displacements occurred. Default is 1.
 #' @param timeUnit Unit used to calculate time between locations (e.g., "secs", "mins", "hours", "days", "weeks"). Default is "days".
 #' @param plot Plot the root-mean-square of displacements versus the mean displacements against their corresponding time periods. Default is TRUE.
-#' @param colours Colours to plot the root-mean-square and mean displacement values, respectively. Default is colours=c("black","grey").
-#' @param pchType Pch symbols to plot the root-mean-square and mean displacement values, respectively. Pch values between 1 and 20 are valid.
-#' Default is pchType=c(16,16).
-#' @param legend Adds legend to plot and specifies legend location. Default is c(TRUE, "topleft").
 #' @param lm Calculate a linear regression to examine the relationship between the root-mean-square displacement values (target variable)
-#' and time (predictor variable) and add fit line to the plot. The slope of this relationship is the RMS statistic and it can be determined by typing
+#' and time (predictor variable) and add fit line to the plot (if plot=TRUE). The slope of this relationship is the RMS statistic and it can be determined by typing
 #' 'RMSlinearModel$coefficients[2]'. Default is TRUE.
-#' @return A data frame of the 'RMSresults' that includes: the 'TimeWindows' in log scale, the 'Count' (the cumulative
-#' count of displacements between each location within each log time window), the Mean Displacements 'MeanDisp', the mean-square displacement values
-#' 'dRMS', and the the mean displacement and root-mean-square displacement values normalized by count ('MeanDisp_per_count' and 'Sqrt_dRMS_per_count'), which
-#' are shown in the plot. A plot of the mean displacement values and the root-mean-square displacement values (per count) against their corresponding
-#' time periods (if plot=TRUE), and the results from the linear regression 'RMSlinearModel' (if lm=TRUE).
+#' @return The 'timeWindows' in log-sized bins along with their corresponding 'meanDisplacements', and root-mean-square displacement 'rmsDisplacements'
+#' values. If plot = TRUE, a plot of the mean displacement values and the root-mean-square displacement values against their corresponding
+#' time period is created. If lm = TRUE, a linear regression is run, a fit line is added to the plot (if plot = TRUE), and the results
+#' 'RMSlinearModel' are automatically assigned to the global environment.
 #' @examples
 #' RMS(expSample)
-#' RMS(expSample, timeUnit="days", wBins=1.1, plot=TRUE, pchType=c(16,16), colours=c("black","grey"), legend=c(TRUE, "topleft"), lm=FALSE)
+#' RMS(expSample, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE)
 #' @export
 
 
-RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, pchType=c(16,16), colours=c("black","grey"), legend=c(TRUE, "topleft"), lm=TRUE){
+RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
 
   MydistHaversine <- function(lon1, lat1, lon2, lat2) {
     radlat1 = rad * lat1
@@ -44,9 +39,9 @@ RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, pchType=c(16
   rad <- 3.141592653589793/180 #Python has more digits of pi than R, so value pasted here instead of "pi"
   bins <- seq(1,400,1) #400 time windows
   tmin <- 1.0/(60*60*24) # 1 second is min time
-  sumDist2<-sumDist<-Timefreq <- rep(0, length(bins))
-  statusMessages<-c("25% complete", "50% complete", "75% complete")
-  percent<-c(dim(species_df)[1]*0.25,dim(species_df)[1]*0.5,dim(species_df)[1]*0.75)
+  sumDist2 <- sumDist <- Timefreq <- rep(0, length(bins))
+  statusMessages <- c("25% complete", "50% complete", "75% complete")
+  percent <- c(round(dim(species_df)[1]*0.25),round(dim(species_df)[1]*0.5),round(dim(species_df)[1]*0.75))
   p <- 1 #for status messages
 
   for(j in 1:dim(species_df)[1]){ # for each row
@@ -72,36 +67,71 @@ RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, pchType=c(16
   for(b in 1: length(bins)){
     mybins[b] <- tmin*wBins^(b)
   }
-  MyRMS <- as.data.frame(cbind("TimeWindows_log"=mybins, "Count"=Timefreq, "MeanDisp"=sumDist, "dRMS"=sumDist2))## SPEAK TO ANA -- WHY WERE WE CALLING THIS A MEAN
+  MyRMS <- as.data.frame(cbind("TimeWindows_log"=mybins, "Count"=Timefreq, "MeanDisp"=sumDist, "dRMS"=sumDist2))
   MyRMS <- MyRMS[(MyRMS[,1]!= 0) & (MyRMS[,3]!= 0) & (MyRMS[,4]!= 0),]
   MyRMS$MeanDisp_per_count <- MyRMS[,3]/MyRMS[,2]
   MyRMS$Sqrt_dRMS_per_count <- sqrt(MyRMS[,4]/MyRMS[,2])
-  MyRMS_Export<-cbind(MyRMS[,c(1,5,6)])
-  names(MyRMS_Export)<-c("TmeWindows", "Displacements", "RMSdisplacements")
-  assign("RMSresults", MyRMS_Export, envir = .GlobalEnv)
-
-  if (plot==TRUE){    # Plot RMS of displacements, and mean displacements on log-log scale
-
-    yminval = log(min(c(min(MyRMS$MeanDisp_per_count),min(MyRMS$Sqrt_dRMS_per_count))))
-    ymaxval = log(max(c(max(MyRMS$MeanDisp_per_count),max(MyRMS$Sqrt_dRMS_per_count))))
-    plot(log(MyRMS[,1]),log(MyRMS$MeanDisp_per_count),  xaxt="n", yaxt="n", ylim=c(yminval,ymaxval),
-         xlim=c(log(min(MyRMS$TimeWindows_log)),log(max(MyRMS$TimeWindows_log))),col=colours[1],pch=pchType[1],
-         xlab=paste("T(", timeUnit, ")", sep = ""),ylab="")#,log="xy")
-    myTicks = axTicks(1)
-    axis(1, at = myTicks, labels = formatC(myTicks, digits = 0, format = 'e'))
-    myTicks2 = axTicks(2)
-    axis(2, at = myTicks2, labels = formatC(myTicks2, digits = 0, format = 'e'))
-    title(ylab=expression('<'*d^q*'>'^(1/q)*(km)), line=2)
-    points(log(MyRMS[,1]), log(MyRMS$Sqrt_dRMS_per_count), col=colours[2],pch=pchType[2])
-    if (legend[1]==TRUE){
-      legend(legend[2], bty="n", c("Mean Disp.", "RMS Disp."), col=colours, pch=pchType)
-    }
-  }
+  plot.df <- cbind(MyRMS[,c(1,5,6)])
+  names(plot.df) <- c("timeWindow", "meanDisplacements", "rmsDisplacements")
 
   if (lm==TRUE){
-    model<-lm(log(MyRMS$Sqrt_dRMS_per_count) ~ log(MyRMS$TimeWindows_log), data = MyRMS)
-    abline(model)
-    assign("RMSlinearModel",model, envir = .GlobalEnv)
+    fit <- lm(log(MyRMS$Sqrt_dRMS_per_count) ~ log(MyRMS$TimeWindows_log), data = MyRMS)
+    assign("RMSlinearModel",fit, envir = .GlobalEnv)
   }
 
+  if (plot==TRUE){    # Plot RMS of displacements, and mean displacements on log-log scale
+    ylabel <- expression('<'*d^q*'>'^(1/q)* (km))
+    xlabel <- paste('T(',timeUnit,')')
+    a <- ggplot2::ggplot(plot.df, ggplot2::aes(plot.df[,1],plot.df[,3]))
+    if (lm==TRUE){
+    a <- a +
+      ggplot2::stat_smooth(formula = y ~ x, method="lm", col="red")
+    }
+    a <- a +
+      ggplot2::geom_point(ggplot2::aes(y = plot.df[,2], colour = "Mean disp.")) +
+      ggplot2::geom_point(ggplot2::aes(y = plot.df[,3], colour = "RMS disp."))+
+      ggplot2::scale_colour_manual(values = c("dark grey", "black"), guide = ggplot2::guide_legend(reverse = TRUE))+
+      ggplot2::scale_x_log10(
+        breaks = function(x) {
+          brks <- scales::extended_breaks(Q = c(1, 5))(log10(x))
+          10^(brks[brks %% 1 == 0])
+        },
+        labels = scales::math_format(format = log10)
+      ) +
+      ggplot2::scale_y_log10(
+        breaks = function(x) {
+          brks <- scales::extended_breaks(Q = c(1, 5))(log10(x))
+          10^(brks[brks %% 1 == 0])
+        },
+        labels = scales::math_format(format = log10)
+      ) +
+      ggplot2::theme_bw()+ ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
+                                          panel.grid.minor = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
+                                          axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour = "black"),
+                                          axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour = "black"),
+                                          legend.position = c(0, 1), legend.justification = c(0, 1), legend.direction = 'vertical',
+                                          legend.background =ggplot2::element_blank(), legend.title = ggplot2::element_blank())+
+      ggplot2::annotation_logticks(short=grid::unit(-0.1, "cm"), mid=grid::unit(-0.1, "cm"), long=grid::unit(-0.3,"cm")) +
+      ggplot2::coord_cartesian(clip="off")+
+      ggplot2::xlab(xlabel)+
+      ggplot2::ylab(ylabel)
+    plot(a)
+    }
+  return(plot.df)
 }
+
+
+
+
+#   plot(log(MyRMS[,1]),log(MyRMS$MeanDisp_per_count))#,  xaxt="n", yaxt="n", ylim=c(yminval,ymaxval),
+#        xlim=c(log(min(MyRMS$TimeWindows_log)),log(max(MyRMS$TimeWindows_log))), xlab=paste("T(", timeUnit, ")", sep = ""),ylab="")#,log="xy")
+#   myTicks = axTicks(1)
+#   axis(1, at = myTicks, labels = formatC(myTicks, digits = 0, format = 'e'))
+#   myTicks2 = axTicks(2)
+#   axis(2, at = myTicks2, labels = formatC(myTicks2, digits = 0, format = 'e'))
+#   title(ylab=expression('<'*d^q*'>'^(1/q)*(km)), line=2)
+#   points(log(MyRMS[,1]), log(MyRMS$Sqrt_dRMS_per_count), col="red")
+#   if (legend[1]==TRUE){
+#     legend(legend[2], bty="n", c("Mean Disp.", "RMS Disp."), col=colours, pch=pchType)
+#   }
+# }
