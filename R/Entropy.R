@@ -7,23 +7,20 @@
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-#' See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.
+#' See attached sample data \code{\link{speciesA}}.
 #' @param gridCell Grid cell size in degrees. Default is 0.25.
 #' @param histPlot Plot a histogram of the normalized  entropy values. Default is TRUE.
 #' @param legend Add a legend to the histPlot when TRUE and change the position of the legend. Default is legend=c(TRUE, "topleft").
-#' @param pdfPlot Create a  probability density function line plot of the entropy values. Note that a pdf plot cannot be
-#' created if the data set only has 1 individual. Default is FALSE.
-#' @param nBins Number of bins used to calculate the pdf plot. Default is 40.
 #' @return Data frame of the normalized entropy values for each trajectory (main result) as well as the individual entropy
 #' values (not normalized) and the number of cells each trajectory visited. If histPlot=TRUE a histogram of the normalized entropy scores is created. If pdfPlot=TRUE, a
 #' probability density function line plot of results is created and the data used to create the pdf plot are automatically assigned to the global environment
 #' ('entropyPDFplot').
 #' @examples
-#' Entropy(expSample)
-#' Entropy(expSample, gridCell=0.25, histPlot=TRUE, legend=c(TRUE, "topleft"), pdfPlot=FALSE, nBins=40)
+#' Entropy(speciesA)
+#' Entropy(speciesA, gridCell=0.25, histPlot=TRUE, legend=c(TRUE, "topleft")0)
 #' @export
 
-Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE, legend=c(TRUE, "topleft"), pdfPlot=FALSE, nBins=40){
+Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE, legend=c(TRUE, "topleft")){
 
   grid <- 1/gridCell
   longmin <- -180
@@ -75,38 +72,6 @@ Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE, legend=c(TRUE, "topl
     axis(2, at=seq(min(myTicks2), max(myTicks2), (myTicks2[2]-myTicks2[1])/2), labels=NA, tcl=-0.2)
     if (legend[1]==TRUE){
       legend(legend[2], bty="n", c("Normalized Entropy = 0.5"), lty=2, lwd=2, col="red")
-    }
-  }
-
-  if (pdfPlot==TRUE){
-    if (length(unique(species_df$ref))>1){
-      bw <- 1/nBins
-      freq <- xs <- rep(0, nBins)
-      nind <- length(normalizedEntropy)
-      for(i in 1:nind){
-        b <- floor(normalizedEntropy[i]/bw+0.5)
-        freq[b] <- freq[b] +1
-      }
-      for (i in 1:nBins){
-        xs[i] <- i*bw
-      }
-      for (i in 1:length(freq)){
-        freq[i] <- freq[i]/(bw*nind)
-      }
-      entplot <- data.frame(xs, freq)
-      plot(entplot$xs, entplot$freq, type="l", lwd = 1, col="black", ylab="pdf", xlim=c(0,1), xaxt="n",
-           xlab=expression('S/S'[unif]), ylim=c(0,max(entplot$freq)+1), xaxs="i",yaxs="i")
-      points(xs, freq, col="black", pch=19)
-      myTicks = axTicks(1)
-      myTicks2 = axTicks(2)
-      axis(1, at=myTicks, tcl=-0.5)
-      axis(1, at=seq(min(myTicks), max(myTicks), (myTicks[2]-myTicks[1])/2), labels=NA, tcl=-0.2)
-      axis(2, at = myTicks2)
-      axis(2, at=seq(min(myTicks2), max(myTicks2), (myTicks2[2]-myTicks2[1])/2), labels=NA, tcl=-0.2)
-      names(entplot) <- c("S/Sunif","pdf")
-      assign("entropyPDFplot", entplot, envir = .GlobalEnv)
-    } else {
-      warning("Cannot create pdf plot with data from only 1 individual")
     }
   }
   return(entropyResults)
