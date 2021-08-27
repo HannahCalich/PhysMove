@@ -6,23 +6,21 @@
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-#' See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.
+#' See attached sample data \code{\link{speciesA}}.
 #' @param entropyResults Data frame of results output from the \code{\link{Entropy}} function.
 #' @param startVal Starting value used to find a root for the limit of predictability equation. Function will loop through values
 #' starting at startVal and decrease by 0.01 at each iteration until an acceptable root value is identified. Default is 0.99
 #' @param histPlot Plot a histogram of the limit of predictability scores. Default is TRUE.
 #' @param legend Add a legend to the histPlot when TRUE and change the position of the legend. Default is legend=c(TRUE, "topleft")
-#' @param pdfPlot Create a probability density function line plot of the limit of predictability scores. Default is TRUE.
-#' @param nBins Number of bins used to calculate the pdf plot. Default is 40.
 #' @return Limit of predictability values for each trajectory. If histPlot=TRUE a histogram of the limit of predictability scores is created. If pdfPlot=TRUE, a
 #' probability density function line plot of results is created and the data used to create the pdf plot are automatically assigned to the global environment
 #' ('predictPDFData').
 #' @examples
-#' Predictability(expSample, entropyResults)
-#' Predictability(expSample, entropyResults, startVal=0.99, histPlot=TRUE, legend=c(TRUE, "topleft"), pdfPlot=FALSE, nBins=40)
+#' Predictability(speciesA, entropyResults)
+#' Predictability(speciesA, entropyResults, startVal=0.99, histPlot=TRUE, legend=c(TRUE, "topleft"))
 #' @export
 
-Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRUE, legend=c(TRUE, "topleft"), pdfPlot=FALSE, nBins=40){
+Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRUE, legend=c(TRUE, "topleft")){
 
   if (nrow(entropyResults)!=length(unique(species_df$ref))){
     stop("The number of individuals in the species_df does not match the number of normalized entropy values, check to ensure the right data has \n  been entered.")
@@ -71,38 +69,6 @@ Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRU
     axis(2, at=seq(min(myTicks2), max(myTicks2), (myTicks2[2]-myTicks2[1])/2), labels=NA, tcl=-0.2)
     if (legend[1]==TRUE){
       legend(legend[2], bty="n", c("Predictability = 0.5"), lty=2, lwd=2, col="red")
-    }
-  }
-
-  if (pdfPlot==TRUE){
-    if (length(unique(species_df$ref))>1){
-      bw <- 1/nBins
-      freq <- xs <- rep(0, nBins)
-      nind <- length(Predictability)
-      for(i in 1:nind){
-        b <- floor(Predictability[i]/bw+0.5)
-        freq[b] <- freq[b] +1
-      }
-      for (i in 1:nBins){
-        xs[i] <- i*bw
-      }
-      for (i in 1:length(freq)){
-        freq[i] <- freq[i]/(bw*nind)
-      }
-      predictplot <- data.frame(xs, freq)
-      plot(predictplot$xs, predictplot$freq, type="l", col="black", ylab="pdf",xlab=expression(pi^'MAX'))
-      points(predictplot$xs, predictplot$freq, col="black", pch=19)
-      myTicks <- axTicks(1)
-      myTicks2 <- axTicks(2)
-      axis(1, at=myTicks, tcl=-0.5)
-      axis(1, at=seq(min(myTicks), max(myTicks), (myTicks[2]-myTicks[1])/2), labels=NA, tcl=-0.2)
-      axis(2, at = myTicks2)
-      axis(2, at=seq(min(myTicks2), max(myTicks2), (myTicks2[2]-myTicks2[1])/2), labels=NA, tcl=-0.2)
-
-      names(predictplot)=c("piMAX","pdf")
-      assign("predictPDFplot", predictplot, envir = .GlobalEnv)
-    } else {
-      warning("Cannot create pdf plot with data from only 1 individual")
     }
   }
   return(Predictability)
