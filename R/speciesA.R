@@ -1,8 +1,8 @@
-#' Random location data where displacement lengths follow a log-normal distribution
+#' Sample location data to demonstrate PhysMove functions
 #'
-#' A data frame containing location data from a sample trajectory that follows a log-normal distribution.
+#' A data frame containing location data from 25 sample trajectories.
 #'
-#' @format A data frame with 1000 rows and 4 variables:
+#' @format A data frame with 15623 rows and 4 variables:
 #' \describe{
 #'   \item{ref}{trajectory's unique id number as an integer}
 #'   \item{lon}{longitude of each position estimate in decimal degrees}
@@ -11,4 +11,4 @@
 #'   ...
 #' }
 #' @source \url{https://github.com/HannahCalich/PhysMove/tree/master/data-raw}
-"lnormSample"
+"speciesA"
