@@ -6,7 +6,8 @@
 #' @param displacements List of displacements output from the \code{\link{CalcDisp}} function.
 #' @param dist Continuous distributions that will be fit to the displacements. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
 #' continuous distributions. Default is dist=c("pl","exp","lnorm").
-#' @param set_xmin To limit the fitted distribution to values above a specified value. Default is NULL.
+#' @param set_xmin To limit the fitted distribution to values above a specified value. Keep in mind that if your data were normalized
+#' this value will have to be a normalized value as well. Default is NULL.
 #' @param full To fit the distributions to the full range of displacement data. Default is FALSE.
 #' @param normalize Normalizes the displacement distances by dividing each displacement by the average displacement for that time window
 #' normalize=TRUE is required if working with displacements calculated over multiple time windows.
