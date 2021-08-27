@@ -5,8 +5,8 @@
 #' @param result Data used to create plot.
 #' @param desc Description of input data. This parameter is used to determine how the data are plotted and to assign appropriate x and y plot labels.
 #' Valid input options include: "Occupancy" (e.g., from the \code{\link{Occupancy}} function), "GyrationRad"  (e.g., from the \code{\link{GyrationRad}} function),
-#' "Entropy" (e.g., from the \code{\link{Entropy}} function), and "Predictability" (from the \code{\link{Predictability}} function). Occupancy pdfs are
-#' created on a log-log scale due to the nature of the data ranges while the other desc types are create on a standard xy plot (to plot occupancy on a standard
+#' "Entropy" (e.g., from the \code{\link{Entropy}} function), and "Predictability" (from the \code{\link{Predictability}} function). Occupancy pdfs are based on
+#' the total number of cells globally based on the provided grid cell size and are created on created on a log-log scale due to the nature of the data ranges while the other desc types are create on a standard xy plot (to plot occupancy on a standard
 #' xy scale leave desc as default). Default is NULL.
 #' @param nBins Number of bins used to calculate the pdf plot (e.g., nBins=25). By default, if desc="Occupancy" the code will use 20 log-sized bins (due to the
 #' nature of the data ranges) else the number of bins is determined by the data ranges. If the input result values range from 0 to 1 (e.g., entropy or
@@ -70,14 +70,14 @@ pdfPlot<-function(result, desc=NULL, nBins){
       xlabel <- expression('Occupancy (km'^'-2'*')')
       plotLog<-"xy" # Restricted to occupancy because the plot is based on log-10 scales which is too large for the other data types
     } else { # If description is not "Occupancy"
-      if (any(result<0 | result>1)){ # If values range from 0-1 (e.g., entropy or predictability scores)
+      if (all(result>=0 & result<=1)){ # If values range from 0-1 (e.g., entropy or predictability scores)
         if (missing(nBins)){
           nBins <- 40
         }
         bw <- 1/nBins
         freq <- xs <- rep(0, nBins)
         len <- length(result)
-        for(i in 1:nind){
+        for(i in 1:len){
           b <- floor(result[i]/bw+0.5)
           freq[b] <- freq[b] +1
         }
