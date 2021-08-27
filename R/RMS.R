@@ -5,7 +5,7 @@
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-#' See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}
+#' See attached sample data \code{\link{speciesA}}.
 #' @param wBins Bin width refers to the size of the bins used to calculate how frequently displacements occurred. Default is 1.
 #' @param timeUnit Unit used to calculate time between locations (e.g., "secs", "mins", "hours", "days", "weeks"). Default is "days".
 #' @param plot Plot the root-mean-square of displacements versus the mean displacements against their corresponding time periods. Default is TRUE.
@@ -17,8 +17,8 @@
 #' time period is created. If lm = TRUE, a linear regression is run, a fit line is added to the plot (if plot = TRUE), and the results
 #' 'RMSlinearModel' are automatically assigned to the global environment.
 #' @examples
-#' RMS(expSample)
-#' RMS(expSample, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE)
+#' RMS(speciesA)
+#' RMS(speciesA, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE)
 #' @export
 
 
@@ -119,19 +119,3 @@ RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
     }
   return(plot.df)
 }
-
-
-
-
-#   plot(log(MyRMS[,1]),log(MyRMS$MeanDisp_per_count))#,  xaxt="n", yaxt="n", ylim=c(yminval,ymaxval),
-#        xlim=c(log(min(MyRMS$TimeWindows_log)),log(max(MyRMS$TimeWindows_log))), xlab=paste("T(", timeUnit, ")", sep = ""),ylab="")#,log="xy")
-#   myTicks = axTicks(1)
-#   axis(1, at = myTicks, labels = formatC(myTicks, digits = 0, format = 'e'))
-#   myTicks2 = axTicks(2)
-#   axis(2, at = myTicks2, labels = formatC(myTicks2, digits = 0, format = 'e'))
-#   title(ylab=expression('<'*d^q*'>'^(1/q)*(km)), line=2)
-#   points(log(MyRMS[,1]), log(MyRMS$Sqrt_dRMS_per_count), col="red")
-#   if (legend[1]==TRUE){
-#     legend(legend[2], bty="n", c("Mean Disp.", "RMS Disp."), col=colours, pch=pchType)
-#   }
-# }
