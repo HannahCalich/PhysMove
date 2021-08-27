@@ -10,7 +10,7 @@
 #' @param distResults Data frame of results output from the \code{\link{FitDist}} function.
 #' @param force_AICc Force function to calculate AICc scores instead of AIC scores when n/K is > 40. Default is FALSE.
 #' @return A data frame with that contains the summary statistics for each distribution fit (from the \code{\link{FitDist}} function) as well as
-#' the AICc/AIC scores and weighted AICc/AIC scores (AICcw/AICw) for each distribution fit.
+#' the AICc/AIC scores and weighted AICc/AIC scores (wAICc/wAIC) for each distribution fit.
 #' @examples CompDist(displacements)
 #' @examples CompDist(displacements, force_AICc=FALSE)
 #' @export
@@ -90,7 +90,7 @@ CompDist <- function (displacements, distResults, force_AICc=FALSE){
            over equal data ranges. Please re-run FitDist using the set_xmin parameter to fit each distribution to the same data range")
     }
     AIC_Scores <- c()
-    distResults <- cbind(distResults,"AIC"=c(NA), "AICw"=c(NA))
+    distResults <- cbind(distResults,"AIC"=c(NA), "wAIC"=c(NA))
     if ("pl" %in% dist){
       K<-K_all[which(dist=="pl")]
       pl_AIC <- -2*pl_logLik + 2*K
@@ -110,11 +110,11 @@ CompDist <- function (displacements, distResults, force_AICc=FALSE){
       distResults[which(distResults$distribution =="lnorm"),"AIC"] <- lnorm_AIC
     }
     rel_like <- exp(-1/2*((distResults$AIC)-min(distResults$AIC)))
-    distResults$AICw <- rel_like/sum(rel_like)
+    distResults$wAIC <- rel_like/sum(rel_like)
   }
   else { # use AICc according to Burnham and Anderson (2004)
-    AICc_Scores < -c()
-    distResults <- cbind(distResults,"AICc"=c(NA), "AICcw"=c(NA))
+    AICc_Scores <- c()
+    distResults <- cbind(distResults,"AICc"=c(NA), "wAICc"=c(NA))
     if ("pl" %in% dist){
       K <- K_all[which(dist=="pl")]
       n <- n_all[which(dist=="pl")]
@@ -138,7 +138,7 @@ CompDist <- function (displacements, distResults, force_AICc=FALSE){
       distResults[which(distResults$distribution =="lnorm"),"AICc"] <- lnorm_AICc
     }
     rel_like <- exp(-1/2*((distResults$AICc)-min(distResults$AICc)))
-    distResults$AICcw <- rel_like/sum(rel_like)
+    distResults$wAICc <- rel_like/sum(rel_like)
     }
   return(distResults)
 }
