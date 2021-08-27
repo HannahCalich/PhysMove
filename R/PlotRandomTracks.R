@@ -1,79 +1,91 @@
-#' Randomized Trajectories
+#' Plot Randomized Tracks
 #'
-#' Plot locations from original and reshuffled trajectories using randomizedLat and randomizedLong outputs from the \code{\link{Randomize}} function
+#' Plot locations from original and reshuffled tracks using randomizedLat and randomizedLong outputs from the \code{\link{Randomize}} function
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-#' See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.
-#' @param ref Reference number of trajectory from species_df to plot.
-#' @param numPlot Number of randomized trajectories to plot. Input value can be any number that does not exceed the number of trajectories created in
-#' the \code{\link{Randomize}} function. Default is 1:5.
-#' @param colours Colours to plot points from original and randomized trajectories, respectively. Default is colours=c("black","grey").
-#' @param pchType Pch symbols to plot points from original and randomized trajectories, respectively. Pch values between 1 and 20 are valid. Default is pchType=c(16,16).
-#' @param startPoint Colour and pch symbol for origin location. startPoint=NULL will cause the startPoint symbology to match the symbology of the original
-#' trajectory. Pch values between 1 and 20 are valid. Default is startPoint=c("red",10)
-#' @param endPoint Colour and pch symbol for destination location. endPoint=NULL will cause the endPoint symbology to match the symbology of the original
-#' trajectory. Pch values between 1 and 20 are valid. Default is endPoint=c("blue",10)
-#' @param tracks Add track lines to original and randomized trajectories respectively. Default is tracks=c("TRUE","TRUE).
-#' @param legend Add legend to plot and specify location. Legend=c(TRUE, "topleft").
-#' @return Plot showing real and reshuffled trajectory locations and a data frame with location data for the reshuffled trajectories on the map('randomizedTrajectories').
-#' @examples PlotReshuffTracks<-function(expSample, ref=1)
-#' @examples PlotReshuffTracks(expSample, ref=1, numPlot=1:5, colours=c("black","grey"), pchType=c(16,16), startPoint=c("red",10), endPoint=c("blue",10), tracks=c("TRUE","TRUE"), legend=c(TRUE, "topleft"))
+#' See attached sample data \code{\link{speciesA}}.
+#' @param ref Reference number of track from species_df to plot.
+#' @param numPlot Number of randomized tracks to plot. The randomized tracks were consecutively numbered from 1 to however many you set in the
+#' \code{\link{Randomize}} function. The input value can either be any of these individual numbers (e.g., 23), or a range of numbers (e.g., 1:10),
+#' which will plot all of the random tracks created within the range. Default is 1:5.
+#' @param colours Colours to plot points from original and randomized tracks, respectively. Default is colours=c("black","grey70").
+#' @param tracks Add track lines to the plot. Default is TRUE.
+#' @param startCol Colour for origin location. startCol=NULL will cause the symbology of the origin location to match the symbology of the rest
+#' of the original track. Default is startCol="red".
+#' @param endCol Colour for destination location. endCol=NULL will cause the symbology of the destination location to match the symbology of the rest
+#' of the original track. Default is endCol="blue".
+#' @return Plot showing the original and randomized track locations and the randomized tracks data used to create the map (original tracks are
+#' from species_df).
+#' @examples PlotRandomTracks<-function(speciesA, ref=1)
+#' @examples PlotRandomTracks<-(speciesA, ref=1, numPlot=1:5, colours=c("black","grey70"), tracks=TRUE, startCol="red", endCol="blue")
 #' @export
 
-PlotRandomTracks<-function(species_df, ref=NULL, numPlot=1:5, colours=c("black","grey"), pchType=c(16,16), startPoint=c("red",10),
-                           endPoint=c("blue",10), tracks=c("TRUE","TRUE"), legend=c(TRUE, "topleft")){
+PlotRandomTracks<-function(species_df, ref=NULL, numPlot=1:5, colours=c("black","grey70"),
+                           tracks=TRUE, startCol="red", endCol="blue"){
 
-  if ((exists("randomizedLat")& exists("randomizedLong")& exists("randTraj"))==FALSE){
-    stop("Please create randomized trajectoiries using the Randomize function prior to executing PlotRandomTracks")
+  if ((exists("randomizedLat")& exists("randomizedLong")& exists("randTrack"))==FALSE){
+    stop("Please create randomized tracks using the Randomize function prior to executing PlotRandomTracks")
   }
 
   if(is.null(ref)==TRUE || !(ref %in% species_df$ref)){
-    stop("What trajectory would you like to plot? Please update the 'ref' parameter to a valid reference number from your species_df")
+    stop("What track would you like to plot? Please update the 'ref' parameter to a valid reference number from your species_df")
   }
 
-  if (length(numPlot)>randTraj){
-    stop("You cannot plot more random trajectories than you created with the Randomize function. Please adjust the numPlot value or
-         re-run Randomize to create more trajectories")
+  if (length(numPlot)>randTrack){
+    stop("You cannot plot more random tracks than you created with the Randomize function. Please adjust the numPlot value or
+         re-run Randomize to create more tracks")
   }
 
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
   Individual <- species_df[which(species_df$ref ==ref),]
   a <-  as.character(unique(Individual$ref))
-  plotpoints <- data.frame("lat"=integer(0),"lon"=integer(0))
+  plotpoints <- data.frame("lat"=integer(0),"lon"=integer(0)) # Format the df, the 0s are removed
 
-  for(T in numPlot){ #For the reshuffled data
+  for(T in numPlot){ #For the randomized data
     lat_long <- data.frame("RandomTraj"=T, "lon"=randomizedLong[species_index[[a]],T],"lat"=randomizedLat[species_index[[a]],T])
     plotpoints <- rbind(plotpoints,lat_long)
-    }
-
-  assign("randomizedTrajectories", plotpoints, envir = .GlobalEnv)
-  xmin <- min(c(plotpoints[,2],Individual[,2]))
-  xmax <- max(c(plotpoints[,2],Individual[,2]))
-  ymin <- min(c(plotpoints[,3],Individual[,3]))
-  ymax <- max(c(plotpoints[,3],Individual[,3]))
-
-  plot(plotpoints$lon, plotpoints$lat, col=colours[2], pch=pchType[2], ylab = "Latitude", xlab="Longitude", xlim=c(xmin-0.5,xmax+0.5), ylim=c(ymin-0.5,ymax+0.5))
-
-  if (tracks[2]==TRUE){ #if we want lines for randomized trajectories
-    for(T in numPlot){ #for each trajectory
-      lines(plotpoints[which(plotpoints$RandomTraj==T),2], plotpoints[which(plotpoints$RandomTraj==T),3], col=colours[2])
-    }
-  }
-  points(Individual[,2],Individual[,3], col=colours[1], pch=pchType[1]) #Plot real track on top
-  if (tracks[1]==TRUE){
-    lines(Individual[,2],Individual[,3], col=colours[1])
-  }
-  if (!is.null(startPoint)){
-    points(Individual[1,2],Individual[1,3], col=startPoint[1], pch=as.numeric(startPoint[2]))
-  }
-  if (!is.null(endPoint)){
-    points(Individual[nrow(Individual),2],Individual[nrow(Individual),3], col=endPoint[1], pch=as.numeric(endPoint[2]))
   }
 
-  if (legend[1]==TRUE){
-    legend(legend[2], legend=c("Original", "Randomized"), pch=pchType, col=colours, bty="n")
+  Individual <- cbind(Track=rep("Original",nrow(Individual)),Individual)
+  Individual <- Individual[,1:4]
+  plotpoints <- cbind(Track=rep("Randomized",nrow(plotpoints)),plotpoints)
+  names(plotpoints) <- names(Individual) # make sure col names match
+  plot.df <- rbind(plotpoints,Individual)
+  plot.df <- cbind(plot.df, "trackRef"=paste(plot.df$Track,plot.df$ref,sep="_"))
+
+  a <- ggplot2::ggplot(plot.df, ggplot2::aes(x=lon, y=lat,group=trackRef, color=Track)) +
+    ggplot2::geom_point()+
+    ggplot2::theme_bw()+ ggplot2::theme(axis.line = ggplot2::element_line(colour = "black"),
+                                        panel.grid.major = ggplot2::element_line(),
+                                        panel.grid.minor = ggplot2::element_blank(),
+                                        axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour="black"),
+                                        axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour="black"))+
+    ggplot2::scale_colour_manual(values = colours)+
+    ggplot2::xlab("Longitude")+
+    ggplot2::ylab("Latitude")
+
+  if (tracks==TRUE){
+    a <- a +
+      ggplot2::geom_path(data = subset(plot.df, Track == 'Randomized'))+
+      ggplot2::geom_path(data = subset(plot.df, Track == 'Original'))+
+      ggplot2::geom_point(data = subset(plot.df, Track == 'Original'))
   }
+
+  if (!is.null(startCol)){
+    startPt <- Individual[1,]
+    startPt$trackRef <- 1
+    a <- a +
+      ggplot2::geom_point(data=startPt, ggplot2::aes(x=lon, y=lat, group=trackRef, color=Track),colour=startCol)
+  }
+
+  if (!is.null(endCol)){
+    endPt <- Individual[nrow(Individual),]
+    endPt$trackRef <- 1
+    a <- a +
+      ggplot2::geom_point(data=endPt, ggplot2::aes(x=lon, y=lat, group=trackRef, color=Track),colour=endCol)
+  }
+  plot(a)
+  return(plotpoints)
 }
-
