@@ -86,9 +86,9 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
     xi <- x[x>=(PL_xmin)] # Use PL_xmin to calculate final datasets and parameters
     n <- length(xi)
     PL_alpha <- 1+n*((sum(log(xi/PL_xmin)))^-1) # calculate alpha using direct MLE based on PL_xmin
-    distResults[which(distResults$distribution =="pl"),which(names(distResults)=="xmin")]<-PL_xmin
-    distResults[which(distResults$distribution =="pl"),which(names(distResults)=="parameter1")]<-PL_alpha
-    distResults[which(distResults$distribution =="pl"),which(names(distResults)=="nTail")]<-n
+    distResults[which(distResults$distribution =="pl"),which(names(distResults)=="xmin")] <- PL_xmin
+    distResults[which(distResults$distribution =="pl"),which(names(distResults)=="parameter1")] <- PL_alpha
+    distResults[which(distResults$distribution =="pl"),which(names(distResults)=="nTail")] <- n
   }
 
   if ("exp" %in% dist){
@@ -107,26 +107,26 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
     }
     if (full==FALSE){
       if (is.null(set_xmin)){
-        init <-c()
+        init <- c()
         xmin <- min(x)
         xi <- x[x>xmin] # truncate dataset at xmin
         n <- length(xi) #size of truncated data set
-        pars = c(mean(xi)) # Initialize create_nll function with mean and sd of log xi
+        pars <- c(mean(xi)) # Initialize create_nll function with mean and sd of log xi
         my_nll <- create_nll(xi) # Calculate negative log likelihood
-        mle = stats4::mle(minuslogl = my_nll, start=list(lambda=pars), method = "L-BFGS-B", lower = 0)
-        init = c(as.numeric(mle@coef[1])) # Records parameters of fit
-        pars.list = c()
+        mle <- stats4::mle(minuslogl = my_nll, start=list(lambda=pars), method = "L-BFGS-B", lower = 0)
+        init <- c(as.numeric(mle@coef[1])) # Records parameters of fit
+        pars.list <- c()
         for (i in 1:(length(xmins)-length(pars)-1)){
           xmin <- xmins[i]
           xi <- x[x>xmin]
           n <- length(xi)
           my_nll <- create_nll(xi)
-          mle = stats4::mle(minuslogl = my_nll, start=list(lambda=init), method = "L-BFGS-B", lower = 0)
-          pars.list[i] = as.numeric(mle@coef[1])
+          mle <- stats4::mle(minuslogl = my_nll, start=list(lambda=init), method = "L-BFGS-B", lower = 0)
+          pars.list[i] <- as.numeric(mle@coef[1])
           n <- length(x[x>=xmin])
-          xi = x[(N-n+1):N] #identify truncated values to use with cdf. This includes xmin while earlier xi did not.
-          fx = 1-exp(-pars.list[i]*(xi-xmin))
-          fx[xi<xmin] = 0
+          xi <- x[(N-n+1):N] #identify truncated values to use with cdf. This includes xmin while earlier xi did not.
+          fx <- 1-exp(-pars.list[i]*(xi-xmin))
+          fx[xi<xmin] <- 0
           sx <- ((0:(n - 1))/n)[1:length(fx)]
           dat[i] <- max(abs(sx-fx), na.rm=TRUE) # max difference between fitted and empirical cdfs (KS test)
         }
@@ -141,8 +141,8 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
         xi <- x[x>xmin] # truncate dataset at xmin
         n <- length(x[x>=xmin]) #size of truncated data set
         my_nll <- create_nll(xi)
-        mle = stats4::mle(minuslogl = my_nll, start=list(lambda=mean(xi)), method = "L-BFGS-B", lower = 0)
-        Exp_lambda = as.numeric(mle@coef[1])
+        mle <- stats4::mle(minuslogl = my_nll, start=list(lambda=mean(xi)), method = "L-BFGS-B", lower = 0)
+        Exp_lambda <- as.numeric(mle@coef[1])
         Exp_xmin <- xmin
       }
     }
@@ -151,13 +151,13 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
       xi <- x
       n <- length(xi)
       my_nll <- create_nll(xi)
-      mle = stats4::mle(minuslogl = my_nll, start=list(lambda=mean(xi)), method = "L-BFGS-B", lower = 0)
-      Exp_lambda = as.numeric(mle@coef[1])
+      mle <- stats4::mle(minuslogl = my_nll, start=list(lambda=mean(xi)), method = "L-BFGS-B", lower = 0)
+      Exp_lambda <- as.numeric(mle@coef[1])
       Exp_xmin <- xmin
     }
-    distResults[which(distResults$distribution =="exp"),which(names(distResults)=="xmin")]<-Exp_xmin
-    distResults[which(distResults$distribution =="exp"),which(names(distResults)=="parameter1")]<-Exp_lambda
-    distResults[which(distResults$distribution =="exp"),which(names(distResults)=="nTail")]<-n
+    distResults[which(distResults$distribution =="exp"),which(names(distResults)=="xmin")] <- Exp_xmin
+    distResults[which(distResults$distribution =="exp"),which(names(distResults)=="parameter1")] <- Exp_lambda
+    distResults[which(distResults$distribution =="exp"),which(names(distResults)=="nTail")] <- n
   }
 
   if ("lnorm" %in% dist){
@@ -180,21 +180,21 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
         xmin <- min(x)
         xi <- x[x>xmin] # truncate dataset at xmin
         n <- length(xi) #size of truncated data set
-        pars = c(mean(log(xi)), sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
+        pars <- c(mean(log(xi)), sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
         my_nll <- create_nll(xi) # Calculate negative log likelihood
-        mle = stats4::mle(minuslogl = my_nll, start=list(mu=pars[1],sigma=pars[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
-        init = c(as.numeric(mle@coef[1]), as.numeric(mle@coef[2])) # Records parameters of fit
+        mle <- stats4::mle(minuslogl = my_nll, start=list(mu=pars[1],sigma=pars[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
+        init <- c(as.numeric(mle@coef[1]), as.numeric(mle@coef[2])) # Records parameters of fit
         pars.mat <- matrix(ncol=2, nrow=(length(xmins)-1))
         for (i in 1:(length(xmins)-length(pars)-1)){ #-2 needed here because if xi <- x[x>xmin] results in an xi of 1 val you can't calc sd(log(xi)), and the NA throws errors. Also, a fit to the last two values would be meaningless. #poweRlaw code does this through "max_data_pt_needed"
           xmin <- xmins[i]
           xi <- x[x>xmin] # truncate dataset at xmin
           n <- length(xi) #size of truncated data set
           my_nll <- create_nll(xi) # Calculate negative log likelihood
-          mle = stats4::mle(minuslogl = my_nll, start=list(mu=init[1],sigma=init[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
+          mle <- stats4::mle(minuslogl = my_nll, start=list(mu=init[1],sigma=init[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
           pars.mat[i,] = c(as.numeric(mle@coef[1]), as.numeric(mle@coef[2])) # Records parameters of fit
           n <- length(x[x>=xmin]) #create cdf including xmin
-          xi = x[(N-n+1):N] #identify truncated values to use with cdf
-          fx = (plnorm(xi, pars.mat[i,1], pars.mat[i,2], lower.tail = TRUE)/plnorm(xmin, pars.mat[i,1], pars.mat[i,2], lower.tail = FALSE))-(1/plnorm(xmin, pars.mat[i,1], pars.mat[i,2], lower.tail = FALSE))+1
+          xi <- x[(N-n+1):N] #identify truncated values to use with cdf
+          fx <- (plnorm(xi, pars.mat[i,1], pars.mat[i,2], lower.tail = TRUE)/plnorm(xmin, pars.mat[i,1], pars.mat[i,2], lower.tail = FALSE))-(1/plnorm(xmin, pars.mat[i,1], pars.mat[i,2], lower.tail = FALSE))+1
           fx[xi<xmin] = 0
           sx <- ((0:(n - 1))/n)[1:length(fx)] #CDF for empirical data
           dat[i] <- max(abs(sx-fx)) # max difference between fitted and empirical cdfs
@@ -202,7 +202,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
         D <- min(dat[dat>0], na.rm=TRUE) # find smallest D value
         row <- which.max(dat==D) #which.max is needed for cases where identical D values are calculated. In this case pick the highest row as it containes the most data.
         LN_xmin <- xmins[row] # find corresponding xmin value such that LN_xmin is the D value that minimizes the distance between sx and fx
-        LN_mu <-  pars.mat[row,1] # determine parameters that correspond with LN_xmin
+        LN_mu <- pars.mat[row,1] # determine parameters that correspond with LN_xmin
         LN_sigma <- pars.mat[row,2]
         n <- length(x[x>=LN_xmin]) # truncate dataset at xmin
       }
@@ -210,12 +210,12 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
         xmin <- set_xmin
         xi <- x[x>xmin] # truncate dataset at xmin
         n <- length(xi) #size of truncated data set
-        pars = c(mean(log(xi)), sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
+        pars <- c(mean(log(xi)), sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
         my_nll <- create_nll(xi) # Calculate negative log likelihood
-        mle = stats4::mle(minuslogl = my_nll, start=list(mu=pars[1],sigma=pars[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
+        mle <- stats4::mle(minuslogl = my_nll, start=list(mu=pars[1],sigma=pars[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
         LN_xmin <- xmin
         LN_mu <- as.numeric(mle@coef[1])
-        LN_sigma <-as.numeric(mle@coef[2])
+        LN_sigma <- as.numeric(mle@coef[2])
         n <- length(x[x>=LN_xmin]) # truncate dataset at xmin
       }
     }
@@ -223,9 +223,9 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
       xmin <- min(x)
       xi <- x[x>xmin] # truncate dataset at xmin
       n <- length(xi) #size of truncated data set
-      pars = c(mean(log(xi)), sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
+      pars <- c(mean(log(xi)), sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
       my_nll <- create_nll(xi) # Calculate negative log likelihood
-      mle = stats4::mle(minuslogl = my_nll, start=list(mu=pars[1],sigma=pars[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
+      mle <- stats4::mle(minuslogl = my_nll, start=list(mu=pars[1],sigma=pars[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
       LN_xmin <- xmin
       LN_mu <- as.numeric(mle@coef[1])
       LN_sigma <-as.numeric(mle@coef[2])
