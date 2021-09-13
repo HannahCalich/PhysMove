@@ -6,12 +6,12 @@
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{speciesA}}.
-#' @param wBins Bin width refers to the size of the bins used to calculate how frequently displacements occurred. Default is 1.
+#' @param wBins Bin width refers to the size of the time bins used to calculate how frequently displacements occurred. Default is 1.
 #' @param timeUnit Unit used to calculate time between locations (e.g., "secs", "mins", "hours", "days", "weeks"). Default is "days".
 #' @param plot Plot the root-mean-square of displacements versus the mean displacements against their corresponding time periods. Default is TRUE.
 #' @param lm Calculate a linear regression to examine the relationship between the root-mean-square displacement values (target variable)
-#' and time (predictor variable) and add fit line to the plot (if plot=TRUE). The slope of this relationship is the RMS statistic and it can be determined by typing
-#' 'RMSlinearModel$coefficients[2]'. Default is TRUE.
+#' and time (predictor variable) and add fit line to the plot (if plot=TRUE). The slope of this relationship (the scaline exponent) is the RMS
+#' statistic and it can be determined by typing 'RMSlinearModel$coefficients[2]'. Default is TRUE.
 #' @return The 'timeWindows' in log-sized bins along with their corresponding 'meanDisplacements', and root-mean-square displacement 'rmsDisplacements'
 #' values. If plot = TRUE, a plot of the mean displacement values and the root-mean-square displacement values against their corresponding
 #' time period is created. If lm = TRUE, a linear regression is run, a fit line is added to the plot (if plot = TRUE), and the results
