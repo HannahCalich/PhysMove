@@ -6,11 +6,9 @@
 \usage{
 Occupancy(
   species_df,
-  gridcell = 0.25,
+  gridCell = 0.25,
   map = TRUE,
-  colGrad = c("blue", "light blue", "red"),
-  pdfPlot = FALSE,
-  nBins = 20
+  colGrad = c("blue", "light blue", "red")
 )
 }
 \arguments{
@@ -18,27 +16,25 @@ Occupancy(
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.}
+See attached sample data \code{\link{speciesA}}.}
+
+\item{gridCell}{Grid cell size in degrees. Default is 0.25.}
 
 \item{map}{Create a map illustrating where occupancy occurs. Default is TRUE.}
 
 \item{colGrad}{Colour gradient for occupancy map that illustrates low, moderate, and high occupancy, respectively
 (applied to ggplot2::scale_fill_gradientn). Default is colGrad=c("blue", "light blue","red").}
-
-\item{pdfPlot}{Create a  probability density line plot of the occupancy values. Default is TRUE.}
-
-\item{nBins}{Number of bins used to calculate the pdf plot. Default is 20.}
-
-\item{gridCell}{Grid cell size in degrees. Valid options are Default is 0.25.}
 }
 \value{
-A data frame ('occupancyResults') that contains location and corresponding occupancy data, a map (if map = TRUE), a probability
-density function line plot and a data frame with the data used to create the pdf plot ('occupancyPDFplot', if pdfPlot = TRUE).
+Occupancy values and corresponding locations (center value of each grid cell). If map=TRUE a map is created. The total
+number of cells used in analysis 'totalCells' is automatically assigned to the global environment because this information is
+required by the \code{\link{pdfPlot}} function.
 }
 \description{
-This function allows you to calculate the occupancy patterns of satellite tagged animals. and plot a pdf of the occupancy scores
+This function allows you to calculate the occupancy patterns of location estimates and create a map.
+A pdf plot of the occupancy values can be created with the \code{\link{pdfPlot}} function.
 }
 \examples{
-Occupancy(expSample)
-Occupancy(expSample, gridcell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"), pdfPlot=FALSE, nBins=20)
+Occupancy(speciesA)
+Occupancy(speciesA, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"))
 }

@@ -6,33 +6,35 @@
 \usage{
 PlotDist(
   displacements,
+  distResults,
   fitLines = TRUE,
-  colours = c("red", "gold2", "blue"),
   setDist = NULL,
-  legend = c(TRUE, "bottomleft")
+  colours = c("red", "gold2", "blue")
 )
 }
 \arguments{
-\item{displacements}{The output from the \code{\link{CalcDisp}} function.}
+\item{displacements}{List of displacements output from the \code{\link{CalcDisp}} function.}
+
+\item{distResults}{Data frame of results output from the \code{\link{FitDist}} function.}
 
 \item{fitLines}{Add fit lines based on the parameters calculated with the \code{\link{FitDist}} function. Default is TRUE.}
 
-\item{colours}{Colours for each fit line. Default is colours=c("red","gold2","blue").}
+\item{setDist}{Plot a subset of lines for each distribution fit calculated with the \code{\link{FitDist}} function (e.g., setDist=c("pl","exp"))
+Options include "pl", "exp", and "lnorm". The lines will be drawn in order from "pl", then "exp", then "lnrom" (when applicable).
+By default all lines are plotted. Default is NULL.}
 
-\item{setDist}{Plot  a subset of the distribution fit lines calculated with the \code{\link{FitDist}} function. To plot a specific
-distribution fit line use setDist="pl", or to plot multiple distributions use setDist=c("pl","exp"). Options include "pl", "exp", and "lnorm".
-Default is NULL}
-
-\item{legend}{Add a legend to the plot when TRUE and change the position of the legend. Default is legend=c(TRUE, "bottomleft")}
+\item{colours}{Colours for each fit line. The colours correspond to the drawing order: "pl", "exp", "lnorm" (when applicable).
+Valid input options include colour names or hex numbers. Default is colours=c("red","gold2","blue").}
 }
 \value{
 Complementary cumulative distribution function (CCDF) plot of displacements with fit lines (if fitLines=TRUE).
 }
 \description{
 This function allows you to plot a complementary cumulative distribution function (CCDF) of displacements with fit lines
-based on the distribution fits calculated with the \code{\link{FitDist}} function.
+based on the displacements output from the \code{\link{CalcDisp}} function and the distribution fits calculated with the
+\code{\link{FitDist}} function.
 }
 \examples{
-PlotDist(displacements, fitLines=TRUE, colours=c("red","gold2","blue"), setDist=FALSE, legend=c(TRUE, "bottomleft"))
-PlotDist(displacements)
+PlotDist(displacements, distResults)
+PlotDist(displacements, distResults, fitLines=TRUE, setDist=NULL, colours=c("red","gold2","blue"))
 }

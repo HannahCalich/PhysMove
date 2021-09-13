@@ -13,12 +13,13 @@ FitDist(
 )
 }
 \arguments{
-\item{displacements}{The output from the \code{\link{CalcDisp}} function.}
+\item{displacements}{List of displacements output from the \code{\link{CalcDisp}} function.}
 
 \item{dist}{Continuous distributions that will be fit to the displacements. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
 continuous distributions. Default is dist=c("pl","exp","lnorm").}
 
-\item{set_xmin}{To limit the fitted distribution to values above a specified value. Default is NULL.}
+\item{set_xmin}{To limit the fitted distribution to values above a specified value. Keep in mind that if your data were normalized
+this value will have to be a normalized value as well. Default is NULL.}
 
 \item{full}{To fit the distributions to the full range of displacement data. Default is FALSE.}
 
@@ -26,10 +27,11 @@ continuous distributions. Default is dist=c("pl","exp","lnorm").}
 normalize=TRUE is required if working with displacements calculated over multiple time windows.}
 }
 \value{
-A data frame 'distResults' that contains the summary statistics for each distribution fit including the distribution name,
+A data frame that contains the summary statistics for each distribution fit including the distribution name,
 xmin (the x value used to fit the distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
-distributions respectively, and nTail (the number of data points greater than or equal to xmin). The distributions fit to the data and if the
-data were normalized are exported as values ('dist', and 'normalize', respectively) as this information is required by additional PhysMove functions.
+distributions respectively, and nTail (the number of data points greater than or equal to xmin). A vector stating if the data were normalized or not,
+('normalize') is automatically assigned to the global environment as this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}
+functions.
 }
 \description{
 This function allows you to fit power law, exponential, or log-normal distributions to the displacements calculated with
@@ -38,6 +40,6 @@ displacements by dividing each displacement by the mean displacement of the corr
 }
 \examples{
 FitDist(displacements)
-FitDist(displacements, dist=c("pl", "exp","lnorm"), full=TRUE)
+FitDist(displacements, dist=c("exp","lnorm"), full=TRUE)
 FitDist(displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalize=TRUE)
 }

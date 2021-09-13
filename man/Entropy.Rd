@@ -8,9 +8,7 @@ Entropy(
   species_df,
   gridCell = 0.25,
   histPlot = TRUE,
-  legend = c(TRUE, "topleft"),
-  pdfPlot = FALSE,
-  nBins = 40
+  legend = c(TRUE, "topleft")
 )
 }
 \arguments{
@@ -18,27 +16,26 @@ Entropy(
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.}
+See attached sample data \code{\link{speciesA}}.}
 
 \item{gridCell}{Grid cell size in degrees. Default is 0.25.}
 
 \item{histPlot}{Plot a histogram of the normalized  entropy values. Default is TRUE.}
 
 \item{legend}{Add a legend to the histPlot when TRUE and change the position of the legend. Default is legend=c(TRUE, "topleft").}
-
-\item{pdfPlot}{Create a  probability density function line plot of the entropy values. Default is TRUE.}
-
-\item{nBins}{Number of bins used to calculate the pdf plot. Default is 40.}
 }
 \value{
-Data vector ('normalizedEntropy') containing normalized entropy values for each individual, a histogram plot of the normalized entropy values
-(if histPlot=TRUE), a  probability density function line plot and a data frame with the data used to create the pdf plot ('entropyPDFplot', if pdfPlot=TRUE),
-and data needed for the Predictability function (a list of occurrences and a vector of raw entropy values, 'occurrences' and 'indivEntropy', respectively).
+Data frame of the normalized entropy values for each trajectory (main result) as well as the individual entropy
+values (not normalized) and the number of cells each trajectory visited. If histPlot=TRUE a histogram of the normalized entropy scores is created. If pdfPlot=TRUE, a
+probability density function line plot of results is created and the data used to create the pdf plot are automatically assigned to the global environment
+('entropyPDFplot').
 }
 \description{
-This function allows you to calculate the entropy of individual trajectories, which provides insight to how ordered (or disordered) the trajectories were.
+This function allows you to calculate the normalized entropy of individual trajectories (individual entropy scores are
+normalized by the log number of cells each trajectory visited), which provides insight to how ordered or disordered the trajectories were.
+Values close to 1 indicate high entropy (disordered trajectories) while values closer to 0 indicate low entropy (ordered trajectories).
 }
 \examples{
-Entropy(expSample)
-Entropy(expSample, gridCell=0.25, histPlot=TRUE, legend=c(TRUE, "topleft"), pdfPlot=FALSE, nBins=40)
+Entropy(speciesA)
+Entropy(speciesA, gridCell=0.25, histPlot=TRUE, legend=c(TRUE, "topleft")0)
 }

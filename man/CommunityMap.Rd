@@ -4,24 +4,28 @@
 \alias{CommunityMap}
 \title{Map Infomap communities}
 \usage{
-CommunityMap(infomap_object, subset_communities, colPalette = "Dark2")
+CommunityMap(infomap_object, subset_communities, colours = "Dark2")
 }
 \arguments{
-\item{infomap_object}{Monolayer object that was output from the \code{\link{InfomapCommunities}} function.}
+\item{infomap_object}{Infomap monolayer object output from the \code{\link{InfomapCommunities}} function.}
 
-\item{subset_communities}{Vector of communities to be plotted in map. Default is NULL.}
+\item{subset_communities}{Concatenated vector of level 1 communities to be mapped. For example, subset_communities=c(1,2,3) will plot level 1 communities
+1, 2, and 3. This parameter is particularly useful if Infomap has identified many communities and they are difficult to distinguish in the map
+Default is NULL.}
 
-\item{colPalette}{ggplot2 colour palette for map. Default is "Dark2".}
+\item{colours}{Colour(s) for each community in the map. Valid input options include: base R (grDevices) color pallets (e.g., colours=rainbow), RColorBrewer
+palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that grDevies color
+pallets do not use quotations. If the palette does not have enough distinct colours to match the communities being plotted the function will automatically
+create a continuous pallet with the colours provided. Default is "Dark2".}
 }
 \value{
 A map illustrating level 1 Infomap communities.
 }
 \description{
 This function allows you to create a map of the level 1 Infomap communities calculated using the \code{\link{InfomapCommunities}} function.
-To map only a subset of the communities, save the relevant level 1 community numbers to a vector and input as subset_communities.
+To map only a selection of the communities use the subset_communities parameter.
 }
 \examples{
 CommunityMap(infomap_object)
-CommunityMap(infomap_object, subset_communities)
-CommunityMap(infomap_object, c(1,2,3))
+CommunityMap(infomap_object, subset_communities=c(1,2,3), colours="Dark2")
 }

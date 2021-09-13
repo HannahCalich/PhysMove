@@ -8,10 +8,10 @@ CalcDisp(species_df, min_hr = 24, max_hr = 240, interval_hr = 24, range_hr = 6)
 }
 \arguments{
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
-"ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
-"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+"ref" is the unique id number for each individual (e.g., their satellite tag number formatted as an integer),
+"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.}
+See attached sample data \code{\link{speciesA}}.}
 
 \item{min_hr}{Minimum number of hours to consider for calculations. Default is 24 hours.}
 
@@ -26,14 +26,13 @@ will be used for calculations. For example, if interval_hr = 24 and range = 6, t
 locations spaced 18 to 32 hours apart. Default is 6.}
 }
 \value{
-A list ('displacements') containing the displacements in km recorded for each time window.
-Each list element corresponds with the time windows set. Time windows (in seconds) are exported as data vector 'timeWindows' as
-this information is required for additional PhysMove functions.
+A list containing the displacements in km recorded for each time window. Each list element corresponds with the time
+windows set (i.e., the first list element is the first time window).
 }
 \description{
 This function allows you to calculate the displacement distances traveled by individuals over set time windows.
 }
 \examples{
-CalculateDisplacements(expSample)
-CalculateDisplacements(expSample, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
+CalcDisp(speciesA)
+CalcDisp(speciesA, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
 }

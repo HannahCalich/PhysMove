@@ -10,10 +10,7 @@ TurningAngles(
   max_hr = 240,
   interval_hr = 24,
   range_hr = 6,
-  spiderPlot = c(TRUE, "all"),
-  legend = TRUE,
-  histPlot = c(FALSE, "all"),
-  colours = rainbow
+  histPlot = c(TRUE, "all")
 )
 }
 \arguments{
@@ -21,7 +18,7 @@ TurningAngles(
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.}
+See attached sample data \code{\link{speciesA}}.}
 
 \item{min_hr}{Minimum number of hours to consider for calculations. Default is 24 hours (i.e., 1 day).}
 
@@ -35,29 +32,18 @@ If multiple location estimates fall within this time window the location estimat
 will be used for calculations. For example, if interval_hr = 24 and range = 6, the algorithm will search for
 locations spaced 18 to 32 hours apart. Default for range_hr is 6.}
 
-\item{spiderPlot}{Plot a spider plot showing the frequency of turning angles from either all time windows combined
-(default) or one specific time period. For example, spiderPlot=c(TRUE,1) to plot only the first time period. Default spiderPlot=c(TRUE, "all").}
-
-\item{legend}{Add a legend to the spider plot. Default is TRUE.}
-
 \item{histPlot}{Plot a histogram showing the frequency of turning angles from all time windows combined (default) or
-one specific time period. For example, histPlot=c(TRUE,1) to plot only the first time period. Plot colour will be the first colour entered in the
-colours parameter. Note that if both spiderPlot and histPlot = TRUE the histPlot will replace the spiderPlot if the user is not using RStudio.
+one specific time period. For example, histPlot=c(TRUE,1) to plot only the first time period.
 Default is histPlot=c(TRUE, "all").}
-
-\item{colours}{Colour(s) for lines in spiderPlot and bars in histPlot. Valid options include: base R (grDevices) color pallets (e.g., colours=rainbow),
-specific colours (e.g., colours=c("Navy"), or colours=c("red","blue")), or hex numbers (e.g., colours=c("#FF0000")). While multiple colours can
-be used with spiderPlot, only the first colour will be used for histPlot. Default is rainbow.}
 }
 \value{
-List of Turning Angles for each time window ('angleList'). The name of each list element corresponds with a time window in days.
-If spiderPlot and/or histPlot = TRUE, a spiderPlot and/or histogram of results are exported along with the data used to create each plot ('angleSpiderPlot' and
-'angleHistPlot', respectively).
+List of turning angles for each time window, the name of each list element corresponds with a time window in days. If histPlot = TRUE,
+a histogram of results is created.
 }
 \description{
 This function allows you to calculate turning angles between sets of three consecutive location estimates separated by set time period(s).
 }
 \examples{
-TurningAngles(expSample)
-TurningAngles(expSample, min_hr=24, max_hr=240, interval_hr=24,range_hr=6, spiderPlot=c(TRUE, "all"), legend=TRUE, histPlot=c(FALSE, "all"), colours=rainbow)
+TurningAngles(speciesA)
+TurningAngles(speciesA, min_hr=24, max_hr=240, interval_hr=24,range_hr=6, spiderPlot=c(TRUE, "all"), legend=TRUE, colours=rainbow, histPlot=c(FALSE, "all"))
 }

@@ -4,37 +4,25 @@
 \alias{GyrationRad}
 \title{Gyration Radius}
 \usage{
-GyrationRad(
-  species_df,
-  map = TRUE,
-  mapCol = c("Black", "Red"),
-  pdfPlot = FALSE,
-  nBins = 15
-)
+GyrationRad(species_df, map = TRUE, mapCol = c("Black", "Red"))
 }
 \arguments{
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}}
+See attached sample data \code{\link{speciesA}}.}
 
-\item{map}{Create a map illustrating gyration radii. Default is TRUE.}
+\item{map}{Create a map illustrating the gyration radius of each trajectory. Default is TRUE.}
 
 \item{mapCol}{Colours for points and gyration radii on map, respectively. Default is c("Black","Red).}
-
-\item{pdfPlot}{Create a  probability density function line plot of the gyration radius values. Default is FALSE}
-
-\item{nBins}{Number of bins used to calculate the pdf plot. Default is 15.}
 }
 \value{
-Vector containing gyration radius values for each trajectory ('gyrationRadius'), a  probability density function line plot
- and a data frame with the data used to create the pdf plot ('gyrationradPDFplot', if pdfPlot=TRUE), a map of the gyration radius results (if map=TRUE).
+Gyration radius values for each trajectory. If map=TRUE a map of the gyration radius results is created. If pdfPlot=TRUE, a
+pdf plot of results is created and the data used to create the pdf plot are automatically assigned to the global environment ('gyrationradPDFplot').
+GyrationRad(speciesA)
+GyrationRad(speciesA, map=TRUE, mapCol=c("Black","Red"))
 }
 \description{
 This function allows you to calculate the gyration radius of individual trajectories.
-}
-\examples{
-rG(species_df)
-rG(species_df,map=TRUE, mapCol=c("Black","Red"), pdfPlot=FALSE, nBins=15)
 }

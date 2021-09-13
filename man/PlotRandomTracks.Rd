@@ -2,18 +2,16 @@
 % Please edit documentation in R/PlotRandomTracks.R
 \name{PlotRandomTracks}
 \alias{PlotRandomTracks}
-\title{Randomized Trajectories}
+\title{Plot Randomized Tracks}
 \usage{
 PlotRandomTracks(
   species_df,
   ref = NULL,
   numPlot = 1:5,
-  colours = c("black", "grey"),
-  pchType = c(16, 16),
-  startPoint = c("red", 10),
-  endPoint = c("blue", 10),
-  tracks = c("TRUE", "TRUE"),
-  legend = c(TRUE, "topleft")
+  colours = c("black", "grey70"),
+  tracks = TRUE,
+  startCol = "red",
+  endCol = "blue"
 )
 }
 \arguments{
@@ -21,34 +19,32 @@ PlotRandomTracks(
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.}
+See attached sample data \code{\link{speciesA}}.}
 
-\item{ref}{Reference number of trajectory from species_df to plot.}
+\item{ref}{Reference number of track from species_df to plot.}
 
-\item{numPlot}{Number of randomized trajectories to plot. Input value can be any number that does not exceed the number of trajectories created in
-the \code{\link{Randomize}} function. Default is 1:5.}
+\item{numPlot}{Number of randomized tracks to plot. The randomized tracks were consecutively numbered from 1 to however many you set in the
+\code{\link{Randomize}} function. The input value can either be any of these individual numbers (e.g., 23), or a range of numbers (e.g., 1:10),
+which will plot all of the random tracks created within the range. Default is 1:5.}
 
-\item{colours}{Colours to plot points from original and randomized trajectories, respectively. Default is colours=c("black","grey").}
+\item{colours}{Colours to plot points from original and randomized tracks, respectively. Default is colours=c("black","grey70").}
 
-\item{pchType}{Pch symbols to plot points from original and randomized trajectories, respectively. Pch values between 1 and 20 are valid. Default is pchType=c(16,16).}
+\item{tracks}{Add track lines to the plot. Default is TRUE.}
 
-\item{startPoint}{Colour and pch symbol for origin location. startPoint=NULL will cause the startPoint symbology to match the symbology of the original
-trajectory. Pch values between 1 and 20 are valid. Default is startPoint=c("red",10)}
+\item{startCol}{Colour for origin location. startCol=NULL will cause the symbology of the origin location to match the symbology of the rest
+of the original track. Default is startCol="red".}
 
-\item{endPoint}{Colour and pch symbol for destination location. endPoint=NULL will cause the endPoint symbology to match the symbology of the original
-trajectory. Pch values between 1 and 20 are valid. Default is endPoint=c("blue",10)}
-
-\item{tracks}{Add track lines to original and randomized trajectories respectively. Default is tracks=c("TRUE","TRUE).}
-
-\item{legend}{Add legend to plot and specify location. Legend=c(TRUE, "topleft").}
+\item{endCol}{Colour for destination location. endCol=NULL will cause the symbology of the destination location to match the symbology of the rest
+of the original track. Default is endCol="blue".}
 }
 \value{
-Plot showing real and reshuffled trajectory locations and a data frame with location data for the reshuffled trajectories on the map('randomizedTrajectories').
+Plot showing the original and randomized track locations and the randomized tracks data used to create the map (original tracks are
+from species_df).
 }
 \description{
-Plot locations from original and reshuffled trajectories using randomizedLat and randomizedLong outputs from the \code{\link{Randomize}} function
+Plot locations from original and reshuffled tracks using randomizedLat and randomizedLong outputs from the \code{\link{Randomize}} function
 }
 \examples{
-PlotReshuffTracks<-function(expSample, ref=1)
-PlotReshuffTracks(expSample, ref=1, numPlot=1:5, colours=c("black","grey"), pchType=c(16,16), startPoint=c("red",10), endPoint=c("blue",10), tracks=c("TRUE","TRUE"), legend=c(TRUE, "topleft"))
+PlotRandomTracks<-function(speciesA, ref=1)
+PlotRandomTracks<-(speciesA, ref=1, numPlot=1:5, colours=c("black","grey70"), tracks=TRUE, startCol="red", endCol="blue")
 }

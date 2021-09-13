@@ -2,43 +2,43 @@
 % Please edit documentation in R/Randomize.R
 \name{Randomize}
 \alias{Randomize}
-\title{Randomize trajectories}
+\title{Randomize tracks}
 \usage{
-Randomize(
-  species_df,
-  randTraj = 500,
-  gridCell = 0.25,
-  plot = TRUE,
-  legend = c(TRUE, "topleft")
-)
+Randomize(species_df, randTrack = 500, gridCell = 0.25, plot = TRUE, lm = TRUE)
 }
 \arguments{
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.}
+See attached sample data \code{\link{speciesA}}.}
 
-\item{randTraj}{Number of randomized trajectories per individual. Default is 500.}
+\item{randTrack}{Number of randomized tracks per individual. Default is 500.}
 
 \item{gridCell}{Grid cell size in degrees. Default is 0.25.}
 
-\item{plot}{Plot the number of cells visited in the original trajectory versus the average number of cells visited in the
-reshuffled trajectories. Default is TRUE.}
+\item{plot}{Plot the number of cells visited in the original track versus the average number of cells visited in the
+reshuffled tracks. Default is TRUE.}
 
-\item{legend}{Add a legend to the plot when TRUE and change the position of the legend. Default is legend=c(TRUE, "topleft").}
+\item{lm}{Calculate a linear regression to examine the relationship between the number of cells visited in the original tracks
+(target variable) and the average number of cells visited by the randomized tracks (predictor variable). If plot = TRUE this parameter
+adds a solid black fit line to the data points and a black dashed line, which represents a 1:1 relationship. The slope of the fit line can
+be determined by typing 'RandomizelinearModel$coefficients[2]'. Default is TRUE.}
 }
 \value{
-A data frame 'randomizedResults' that includes the number of cells visited by each original trajectory and the average number of
-cells visited by the randomized trajectories, a plot illustrating the number of cells visited by the original and randomized trajectories (if plot = TRUE),
-and 'randomizedLat' and 'randomizedLong' matrices and a 'randTraj' vector that are required to plot the reshuffled tracks with the \code{\link{PlotRandomTracks} function}
+The number of cells visited by each original track and the average number of cells visited by the randomized tracks, for each
+ref. If plot = TRUE, a plot illustrating the number of cells visited by the original and randomized tracks is created.
+If lm = TRUE, a linear regression is run, a fit line and reference line are added to the plot (if plot = TRUE), and the results
+'RandomizelinearModel' are automatically assigned to the global environment. Three additional variables are automatically assigned
+to the global environment as they are required to plot the reshuffled tracks with the \code{\link{PlotRandomTracks} function}
+('randomizedLat', 'randomizedLong' and 'randTrack').
 }
 \description{
-This function allows you to investigate the influence spatial and/or temporal correlations may have on trajectories' space use patterns.
-This is done by maintaining the origin and end location of each trajectory, randomizing the order displacements occurred in between these points,
-and calculating how many grid cells the original and randomized trajectories visited, which summarizes their space use.
+This function allows you to investigate the influence spatial and/or temporal correlations may have on an indiivudals' space use patterns.
+This is done by maintaining the origin and end location of each track, randomizing the order displacements occurred in between these points,
+and calculating how many grid cells the original and randomized tracks visited, which summarizes their space use.
 }
 \examples{
-Randomize(expSample)
-Randomize(expSample, randTraj=500, gridCell=0.25, plot=TRUE, legend=c(TRUE, "topleft"))
+Randomize(speciesA)
+Randomize(speciesA, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE)
 }

@@ -18,11 +18,11 @@ InfomapCommunities(
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.}
+See attached sample data \code{\link{speciesA}}.}
 
 \item{gridCell}{Grid cell size in degrees. Default is 0.25.}
 
-\item{hours}{Number of hours to consider movements for. Default is 24.}
+\item{hours}{Identify locations separated by this number of hours for movement calculations. Default is 24.}
 
 \item{range_hr}{Range (in hours) converts the hours parameter into a time window (hours +/-  range_hr) so the
 code can identify location estimates that are close to, but not exactly separated by a set number of hours.
@@ -30,13 +30,17 @@ If multiple location estimates fall within this time window the location estimat
 will be used for calculations. For example, if hours = 24 and range = 6, the algorithm will search for
 locations spaced 18 to 32 hours apart. Default is 6.}
 
-\item{infomap}{Identify Infomap communities. Default is TRUE.}
+\item{infomap}{Identify Infomap communities. If infomap=TRUE, default messages from the infomapecology package will appear as various
+functions are run. Note that if warnings arise about columns or rows summing to 0 this means an individual moved into a cell and did not leave, which is
+a valid movement and not cause for alarm. Default is TRUE.}
 
-\item{tpm}{Export the transition probability matrix in link list format. Default is FALSE.}
+\item{tpm}{Export the transition probability matrix in link list format. If tpm=TRUE, a 'TransitionProbabilityMatrix' data frame will be automatically
+assigned to the global environment. Default is FALSE.}
 }
 \value{
-'infomap_object' that summarizes the hierarchical structure of the Infomap communities (regions where individuals are likely
-to stay for longer periods of time).If tpm=TRUE the transition probability matrix used to create 'infomap_object' is exported.
+An 'infomap_object' that summarizes the hierarchical structure of the Infomap communities (regions where individuals are likely
+to stay for longer periods of time). If tpm=TRUE the transition probability matrix used to create the 'infomap_object' is automatically assigned
+to the global environment.
 }
 \description{
 This function uses the network community detection Infomap to identify Infomap communities based on a transition probability matrix (tmp), which summarizes
@@ -47,6 +51,6 @@ For details please see: https://ecological-complexity-lab.github.io/infomap_ecol
 To learn more about Infomap please visit: https://www.mapequation.org/
 }
 \examples{
-InfomapCommunities(expSample)
-InfomapCommunities(expSample, gridCell=0.25, hours=24, range_hr=6, infomap=TRUE, tpm=FALSE)
+InfomapCommunities(speciesA)
+InfomapCommunities(speciesA, gridCell=0.25, hours=24, range_hr=6, infomap=TRUE, tpm=FALSE)
 }

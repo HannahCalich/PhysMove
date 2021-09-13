@@ -1,7 +1,7 @@
 #' Occupancy
 #'
-#' This function allows you to calculate the occupancy patterns of location estimates and creat a map.
-#' A pdf plot of the occupancy values can be created with the\code{\link{pdfPlot}} function.
+#' This function allows you to calculate the occupancy patterns of location estimates and create a map.
+#' A pdf plot of the occupancy values can be created with the \code{\link{pdfPlot}} function.
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
@@ -11,12 +11,11 @@
 #' @param map Create a map illustrating where occupancy occurs. Default is TRUE.
 #' @param colGrad  Colour gradient for occupancy map that illustrates low, moderate, and high occupancy, respectively
 #' (applied to ggplot2::scale_fill_gradientn). Default is colGrad=c("blue", "light blue","red").
-#' @return Occupancy values and corresponding locations (center value of each grid cell). If map=TRUE a map is created. The total number of cells
-#' used in analysis 'totalCells' is automatically assigned to the global environment because this information is required by the
-#' \code{\link{pdfPlot} function.
-#' @examples
-#' Occupancy(speciesA)
-#' Occupancy(speciesA, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"))
+#' @return Occupancy values and corresponding locations (center value of each grid cell). If map=TRUE a map is created. The total
+#' number of cells used in analysis 'totalCells' is automatically assigned to the global environment because this information is
+#' required by the \code{\link{pdfPlot}} function.
+#' @examples Occupancy(speciesA)
+#' @examples Occupancy(speciesA, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"))
 #' @export
 
 Occupancy<-function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red")){

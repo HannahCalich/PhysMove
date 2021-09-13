@@ -6,11 +6,10 @@
 \usage{
 Predictability(
   species_df,
+  entropyResults,
   startVal = 0.99,
   histPlot = TRUE,
-  legend = c(TRUE, "topleft"),
-  pdfPlot = FALSE,
-  nBins = 40
+  legend = c(TRUE, "topleft")
 )
 }
 \arguments{
@@ -18,7 +17,9 @@ Predictability(
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}.}
+See attached sample data \code{\link{speciesA}}.}
+
+\item{entropyResults}{Data frame of results output from the \code{\link{Entropy}} function.}
 
 \item{startVal}{Starting value used to find a root for the limit of predictability equation. Function will loop through values
 starting at startVal and decrease by 0.01 at each iteration until an acceptable root value is identified. Default is 0.99}
@@ -26,20 +27,17 @@ starting at startVal and decrease by 0.01 at each iteration until an acceptable 
 \item{histPlot}{Plot a histogram of the limit of predictability scores. Default is TRUE.}
 
 \item{legend}{Add a legend to the histPlot when TRUE and change the position of the legend. Default is legend=c(TRUE, "topleft")}
-
-\item{pdfPlot}{Create a probability density function line plot of the limit of predictability scores. Default is TRUE.}
-
-\item{nBins}{Number of bins used to calculate the pdf plot. Default is 40.}
 }
 \value{
-Data vector ('predictability') containing limit of predictability values for each trajectory, a histogram plot of the limit of predictability values
-(if histPlot=TRUE), a  probability density function line plot and a data frame with the data used to create the pdf plot ('predictPDFData', if pdfPlot=TRUE).
+Limit of predictability values for each trajectory. If histPlot=TRUE a histogram of the limit of predictability scores is created. If pdfPlot=TRUE, a
+probability density function line plot of results is created and the data used to create the pdf plot are automatically assigned to the global environment
+('predictPDFData').
 }
 \description{
 This function allows you to calculate the limit of predictability for each trajectory based on each individual's entropy. This function requires
-'indivEntropy', 'occurrences', and 'normalizedEntropy' from the \code{\link{Entropy}} function.
+'indivEntropy', 'occurrences', and 'normEnt' from the \code{\link{Entropy}} function.
 }
 \examples{
-Predictability(expSample)
-Predictability(expSample, startVal=0.99, histPlot=TRUE, legend=c(TRUE, "topleft"), pdfPlot=FALSE, nBins=40)
+Predictability(speciesA, entropyResults)
+Predictability(speciesA, entropyResults, startVal=0.99, histPlot=TRUE, legend=c(TRUE, "topleft"))
 }

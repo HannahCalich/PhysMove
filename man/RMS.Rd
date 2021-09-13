@@ -4,52 +4,35 @@
 \alias{RMS}
 \title{Root-Mean-Square of Displacements}
 \usage{
-RMS(
-  species_df,
-  timeUnit = "days",
-  wBins = 1.1,
-  plot = TRUE,
-  pchType = c(16, 16),
-  colours = c("black", "grey"),
-  legend = c(TRUE, "topleft"),
-  lm = TRUE
-)
+RMS(species_df, timeUnit = "days", wBins = 1.1, plot = TRUE, lm = TRUE)
 }
 \arguments{
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-See attached sample data \code{\link{plSample}}, \code{\link{expSample}}, or \code{\link{lnormSample}}}
+See attached sample data \code{\link{speciesA}}.}
 
 \item{timeUnit}{Unit used to calculate time between locations (e.g., "secs", "mins", "hours", "days", "weeks"). Default is "days".}
 
-\item{wBins}{Bin width refers to the size of the bins used to calculate how frequently displacements occurred. Default is 1.}
+\item{wBins}{Bin width refers to the size of the time bins used to calculate how frequently displacements occurred. Default is 1.}
 
 \item{plot}{Plot the root-mean-square of displacements versus the mean displacements against their corresponding time periods. Default is TRUE.}
 
-\item{pchType}{Pch symbols to plot the root-mean-square and mean displacement values, respectively. Pch values between 1 and 20 are valid.
-Default is pchType=c(16,16).}
-
-\item{colours}{Colours to plot the root-mean-square and mean displacement values, respectively. Default is colours=c("black","grey").}
-
-\item{legend}{Adds legend to plot and specifies legend location. Default is c(TRUE, "topleft").}
-
 \item{lm}{Calculate a linear regression to examine the relationship between the root-mean-square displacement values (target variable)
-and time (predictor variable) and add fit line to the plot. The slope of this relationship is the RMS statistic and it can be determined by typing
-'RMSlinearModel$coefficients[2]'. Default is TRUE.}
+and time (predictor variable) and add fit line to the plot (if plot=TRUE). The slope of this relationship (the scaline exponent) is the RMS
+statistic and it can be determined by typing 'RMSlinearModel$coefficients[2]'. Default is TRUE.}
 }
 \value{
-A data frame of the 'RMSresults' that includes: the 'TimeWindows' in log scale, the 'Count' (the cumulative
-count of displacements between each location within each log time window), the Mean Displacements 'MeanDisp', the mean-square displacement values
-'dRMS', and the the mean displacement and root-mean-square displacement values normalized by count ('MeanDisp_per_count' and 'Sqrt_dRMS_per_count'), which
-are shown in the plot. A plot of the mean displacement values and the root-mean-square displacement values (per count) against their corresponding
-time periods (if plot=TRUE), and the results from the linear regression 'RMSlinearModel' (if lm=TRUE).
+The 'timeWindows' in log-sized bins along with their corresponding 'meanDisplacements', and root-mean-square displacement 'rmsDisplacements'
+values. If plot = TRUE, a plot of the mean displacement values and the root-mean-square displacement values against their corresponding
+time period is created. If lm = TRUE, a linear regression is run, a fit line is added to the plot (if plot = TRUE), and the results
+'RMSlinearModel' are automatically assigned to the global environment.
 }
 \description{
 This function allows you to calculate root-mean-square displacements and plot them scaled with time
 }
 \examples{
-RMS(expSample)
-RMS(expSample, timeUnit="days", wBins=1.1, plot=TRUE, pchType=c(16,16), colours=c("black","grey"), legend=c(TRUE, "topleft"), lm=FALSE)
+RMS(speciesA)
+RMS(speciesA, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE)
 }
