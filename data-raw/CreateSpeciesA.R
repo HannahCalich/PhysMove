@@ -73,10 +73,14 @@ with(speciesA, {
     lines(lon[ref == l], lat[ref == l], type = "l", col = cols$col[match(l, cols$id)])
   }
 })
-print(tracks)
-print(summary(samplesize))
-print(summary(dates))
+# print(tracks)
+# print(summary(samplesize))
+# print(summary(dates))
 rm(list=ls()[! ls() %in% c("speciesA")])
-setwd("Y:/Git/PhysMove/data")
-save(speciesA, file = "speciesA.RData")
+
+##################################
+## Set working directory and save
+##################################
+# setwd()
+# save(speciesA, file = "speciesA.RData")
 
