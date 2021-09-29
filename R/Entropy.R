@@ -56,6 +56,9 @@ Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE, legend=c(TRUE, "topl
     indivEntropy[i] <- -1 * sum(na.omit(Entropy[[i]])) # Calculate entropy by individual by summing the calculated entropies per cell following the equation: S = -Sum(probij * log(probij))
     normalizedEntropy[i] <- indivEntropy[i] / log(CellsVisited[i])  # Normalized to allow for direct comparison of the entropies of trajectories with different numbers of visited areas
     # and informs about the complexity of the visitation pattern ranging between 0 (one visited cell) and 1 (uniform, every cell is visited with the same probability).
+    if (CellsVisited[i]==1){
+      warning(paste("Ref",unique(species_df$ref)[i],"only visited 1 cell so normalized entropy scores cannot be calculated and NaN is produced"), immediate. = TRUE)
+    }
   }
   entropyResults <- as.data.frame(cbind("ref"=unique(species_df$ref),"normalizedEntropy"=normalizedEntropy,"indivEntropy"=indivEntropy,"cellsVisited"=CellsVisited))
 
