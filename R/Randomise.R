@@ -1,33 +1,33 @@
-#' Randomize tracks
+#' Randomise tracks
 #'
 #' This function allows you to investigate the influence spatial and/or temporal correlations may have on an indiivudals' space use patterns.
 #' This is done by maintaining the origin and end location of each track, randomizing the order displacements occurred in between these points,
-#' and calculating how many grid cells the original and randomized tracks visited, which summarizes their space use.
+#' and calculating how many grid cells the original and Randomised tracks visited, which summarizes their space use.
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{speciesA}}.
-#' @param randTrack Number of randomized tracks per individual. Default is 500.
+#' @param randTrack Number of Randomised tracks per individual. Default is 500.
 #' @param gridCell Grid cell size in degrees. Default is 0.25.
 #' @param plot Plot the number of cells visited in the original track versus the average number of cells visited in the
 #' reshuffled tracks. Default is TRUE.
 #' @param lm Calculate a linear regression to examine the relationship between the number of cells visited in the original tracks
-#' (target variable) and the average number of cells visited by the randomized tracks (predictor variable). If plot = TRUE this parameter
+#' (target variable) and the average number of cells visited by the Randomised tracks (predictor variable). If plot = TRUE this parameter
 #' adds a solid black fit line to the data points and a black dashed line, which represents a 1:1 relationship. The slope of the fit line can
-#' be determined by typing 'RandomizelinearModel$coefficients[2]'. Default is TRUE.
-#' @return The number of cells visited by each original track and the average number of cells visited by the randomized tracks, for each
-#' ref. If plot = TRUE, a plot illustrating the number of cells visited by the original and randomized tracks is created.
+#' be determined by typing 'RandomiselinearModel$coefficients[2]'. Default is TRUE.
+#' @return The number of cells visited by each original track and the average number of cells visited by the Randomised tracks, for each
+#' ref. If plot = TRUE, a plot illustrating the number of cells visited by the original and Randomised tracks is created.
 #' If lm = TRUE, a linear regression is run, a fit line and reference line are added to the plot (if plot = TRUE), and the results
-#' 'RandomizelinearModel' are automatically assigned to the global environment. Three additional variables are automatically assigned
+#' 'RandomiselinearModel' are automatically assigned to the global environment. Three additional variables are automatically assigned
 #' to the global environment as they are required to plot the reshuffled tracks with the \code{\link{PlotRandomTracks} function}
-#' ('randomizedLat', 'randomizedLong' and 'randTrack').
+#' ('RandomisedLat', 'RandomisedLong' and 'randTrack').
 #' @examples
-#' Randomize(speciesA)
-#' Randomize(speciesA, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE)
+#' Randomise(speciesA)
+#' Randomise(speciesA, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE)
 #' @export
 
-Randomize<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE) {
+Randomise<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE) {
 
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
   MyDiffLat <- MyDiffLong <- MyDiffTime <- rep(0, dim(species_df)[1]) # Create vector to store the differences in lat, long and time (time is needed for data that are not interpolated)
@@ -46,8 +46,8 @@ Randomize<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE
   message("Randomizing trajectories, step 1/3")
 
   for (i in 1:length(species_index)){
-    for(T in 1:randTrack){ # Number of randomized trajectories per individual
-    # Randomize the order of the positions for each individual (e.g., instead of 1,2,3, the order might be 13,43,5)
+    for(T in 1:randTrack){ # Number of Randomised trajectories per individual
+    # Randomise the order of the positions for each individual (e.g., instead of 1,2,3, the order might be 13,43,5)
       NewPositions <- sample(seq(1:(tail(species_index[[i]],1) - species_index[[i]][1])), tail(species_index[[i]],1) - species_index[[i]][1], replace = FALSE)
       # For each reshuffling (T), reserve the original first location per individual (i).
       ShuffledLong[species_index[[i]][1], T] <- species_df[species_index[[i]][1], 2] # first position for each individual is the origin
@@ -70,11 +70,11 @@ Randomize<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE
     }
   }
 
-  assign("randomizedLong",ShuffledLong, envir = .GlobalEnv)
-  assign("randomizedLat",ShuffledLat, envir = .GlobalEnv)
+  assign("RandomisedLong",ShuffledLong, envir = .GlobalEnv)
+  assign("RandomisedLat",ShuffledLat, envir = .GlobalEnv)
   assign("randTrack",randTrack, envir = .GlobalEnv)
 
-  message("Calculating average number of cells visited by randomized trajectories, step 2/3")
+  message("Calculating average number of cells visited by Randomised trajectories, step 2/3")
 
   # Compare the number of visited cells used in the original and reshuffled trajectories
   grid <- 1/gridCell
@@ -119,11 +119,11 @@ Randomize<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE
     SumOriginalOccurrences[i] <- sum(Presence)
   }
   plot.df <- cbind.data.frame(ref=unique(species_df$ref),CellsInOriginalTrajectory=SumOriginalOccurrences,
-                              AvgCellsInRandomizedTrajectories=AvgShuffledOccurrences)
+                              AvgCellsInRandomisedTrajectories=AvgShuffledOccurrences)
 
   if (lm==TRUE){
-    fit <- lm(plot.df$AvgCellsInRandomizedTrajectories ~ plot.df$CellsInOriginalTrajectory, data = plot.df)
-    assign("RandomizelinearModel",fit, envir = .GlobalEnv)
+    fit <- lm(plot.df$AvgCellsInRandomisedTrajectories ~ plot.df$CellsInOriginalTrajectory, data = plot.df)
+    assign("RandomiselinearModel",fit, envir = .GlobalEnv)
   }
 
   if (plot==TRUE){
@@ -134,7 +134,7 @@ Randomize<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE
                                           axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour="black"),
                                           axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour="black"))+
       ggplot2::xlab("Sum of cells in original track")+
-      ggplot2::ylab("Average sum of cells in randomized tracks")
+      ggplot2::ylab("Average sum of cells in Randomised tracks")
     if (lm==TRUE){
       a <- a +
         ggplot2::geom_abline(slope=1, intercept=1, col="black", lwd=0.5, lty=2)+
