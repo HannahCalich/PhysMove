@@ -30,15 +30,15 @@ Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRU
   Predictability <- c()
 
   for (i in 1:length(species_index) ){
-    if (entropyResults$indivEntropy[i]==0){
-      warning(paste("The individual entropy of Ref",unique(species_df$ref)[i],"is 0 so predictability cannot be calculated and NaN is produced"), immediate. = TRUE)
+    if (entropyResults$cellsVisited[i]==1){
+      warning(paste("Ref",unique(species_df$ref)[i],"only visited 1 cell so predictability scores cannot be calculated and NaN is produced"), immediate. = TRUE)
       Predictability[i] <- NaN
       next
     }
     model <- function(x) c(F1 = x*log(x) + (1-x)*log(1-x) - (1-x)*log(entropyResults$cellsVisited[i]-1) + entropyResults$indivEntropy[i])
 
-    if(startVal==0.99){
-      ss <- suppressWarnings(rootSolve::multiroot(f = model, start = 1-entropyResults$normalizedEntropy[i]))
+    if (startVal==0.99){
+      ss <- suppressWarnings(rootSolve::multiroot(f = model, start = (1.01-entropyResults$normalizedEntropy[i]))) # +0.01 added to deal with cases where NormEnt = 1
       if (ss$root > 0 & ss$root < 1){
         Predictability[i] <- ss$root
     } else {
@@ -54,8 +54,7 @@ Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRU
         }
         Predictability[i] <- ss$root
       }
-    }
-    else if (startVal!=0.99) {
+    } else if (startVal!=0.99) {
       ss <- rootSolve::multiroot(f = model, start = startVal)
       Predictability[i] <- ss$root
     }
