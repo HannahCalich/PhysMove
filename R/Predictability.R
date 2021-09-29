@@ -30,7 +30,7 @@ Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRU
   Predictability <- c()
 
   for (i in 1:length(species_index) ){
-    if (indivEntropy[i]==0){
+    if (entropyResults$indivEntropy[i]==0){
       warning(paste("The individual entropy of Ref",unique(species_df$ref)[i],"is 0 so predictability cannot be calculated and NaN is produced"), immediate. = TRUE)
       Predictability[i] <- NaN
       next
