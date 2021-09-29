@@ -2,7 +2,7 @@
 % Please edit documentation in R/PlotRandomTracks.R
 \name{PlotRandomTracks}
 \alias{PlotRandomTracks}
-\title{Plot Randomized Tracks}
+\title{Plot Randomised Tracks}
 \usage{
 PlotRandomTracks(
   species_df,
@@ -23,11 +23,11 @@ See attached sample data \code{\link{speciesA}}.}
 
 \item{ref}{Reference number of track from species_df to plot.}
 
-\item{numPlot}{Number of randomized tracks to plot. The randomized tracks were consecutively numbered from 1 to however many you set in the
-\code{\link{Randomize}} function. The input value can either be any of these individual numbers (e.g., 23), or a range of numbers (e.g., 1:10),
+\item{numPlot}{Number of Randomised tracks to plot. The Randomised tracks were consecutively numbered from 1 to however many you set in the
+\code{\link{Randomise}} function. The input value can either be any of these individual numbers (e.g., 23), or a range of numbers (e.g., 1:10),
 which will plot all of the random tracks created within the range. Default is 1:5.}
 
-\item{colours}{Colours to plot points from original and randomized tracks, respectively. Default is colours=c("black","grey70").}
+\item{colours}{Colours to plot points from original and Randomised tracks, respectively. Default is colours=c("black","grey70").}
 
 \item{tracks}{Add track lines to the plot. Default is TRUE.}
 
@@ -38,11 +38,11 @@ of the original track. Default is startCol="red".}
 of the original track. Default is endCol="blue".}
 }
 \value{
-Plot showing the original and randomized track locations and the randomized tracks data used to create the map (original tracks are
+Plot showing the original and Randomised track locations and the Randomised tracks data used to create the map (original tracks are
 from species_df).
 }
 \description{
-Plot locations from original and reshuffled tracks using randomizedLat and randomizedLong outputs from the \code{\link{Randomize}} function
+Plot locations from original and reshuffled tracks using RandomisedLat and RandomisedLong outputs from the \code{\link{Randomise}} function
 }
 \examples{
 PlotRandomTracks<-function(speciesA, ref=1)
