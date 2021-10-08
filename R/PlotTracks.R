@@ -42,15 +42,18 @@ PlotTracks<-function(species_df, ref=NULL, tracks=TRUE, colours=rainbow){
     myColoursPal <- myPal(length(unique(plot.df$ref)))
   }
 
-  a <- ggplot2::ggplot(plot.df, ggplot2::aes(x=lon, y=lat, color=as.factor(ref))) + #group=ref,
-    ggplot2::geom_point()+
-    ggplot2::theme_bw()+ ggplot2::theme(axis.line = ggplot2::element_line(colour = "black"),
+  a <- ggplot2::ggplot(plot.df, ggplot2::aes(x=lon, y=lat))+#, color=as.factor(ref))) +
+    ggplot2::geom_point(ggplot2::aes(fill=as.factor(ref)),pch=21,size=1.8,colour="grey20",stroke=0.5)+
+    # ggplot2::geom_point(size=1)+
+    # ggplot2::geom_point(size=2, colour="black")+
+    ggplot2::theme_bw(base_size=18)+
+    ggplot2::theme(axis.line=ggplot2::element_line(colour = "black"),
                                         panel.grid.major = ggplot2::element_line(),
                                         panel.grid.minor = ggplot2::element_blank(),
                                         axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour="black"),
                                         axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour="black"),
                                         legend.position = "none")+
-    ggplot2::scale_colour_manual(values = unique(myColoursPal))+
+    ggplot2::scale_colour_manual(values=c(unique(myColoursPal)))+
     ggplot2::xlab("Longitude")+
     ggplot2::ylab("Latitude")
   tryCatch({
@@ -61,8 +64,8 @@ PlotTracks<-function(species_df, ref=NULL, tracks=TRUE, colours=rainbow){
 
   if (tracks==TRUE){
     a <- a +
-      ggplot2::geom_path()+
-      ggplot2::geom_point()
+      ggplot2::geom_path(ggplot2::aes(colour=as.factor(ref)))+
+      ggplot2::geom_point(ggplot2::aes(fill=as.factor(ref)),pch=21,size=1.8,colour="grey20",stroke=0.5)
   }
   plot(a)
 }
