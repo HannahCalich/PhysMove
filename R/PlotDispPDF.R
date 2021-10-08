@@ -2,19 +2,20 @@
 #'
 #' This function allows you to plot probability density functions (PDFs) of raw or normalised displacements. Displacements must be in
 #' list format where each list element corresponds to displacements calculated over a specific time window, which is the default output
-#' format from the \code{\link{CalcDisp}} function.
+#' format from the \code{\link{CalcDispS}} function.
 #' @param displacements Displacements in list format (e.g., the output from the \code{\link{CalcDisp}} function).
 #' @param normalised Normalise the displacements by the mean displacement for each time window.
 #' @param colours Colour(s) for plot points. Valid input options include: base R (grDevices) color pallets (e.g., colours=rainbow), RColorBrewer
 #' palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that grDevies color
 #' pallets do not use quotations. If the palette does not have enough distinct colours to match the communities being plotted the function will automatically
 #' create a continuous pallet with the colours provided. Default is "Dark2".
+#' @legend Add legend with legend=TRUE. Default is TRUE.
 #' @return Probability density function (PDF) plots of binned raw or normalised (if normalised=TRUE) displacements.
 #' @examples DispPDFplot(displacements)
 #' @examples DispPDFplot(displacements, normalised=TRUE, colours=rainbow)
 #' @export
 
-PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow){
+PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=TRUE){
 
   if (class(colours)=="function"){ # If a grDevices colour pallet is used
     myColoursPal <- colours(length(displacements))
@@ -89,7 +90,8 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow){
         },
         labels = scales::math_format(format = log10),
       ) +
-      ggplot2::theme_bw()+ ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
+      ggplot2::theme_bw(base_size=18)+
+      ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
                                           panel.grid.minor = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
                                           axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour="black"),
                                           axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour="black"),
@@ -98,6 +100,9 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow){
       ggplot2::coord_cartesian(clip="off")+
       ggplot2::xlab("Displacements (km)")+
       ggplot2::ylab("PDF")
+    if(legend==FALSE){
+      a <- a + ggplot2::theme(legend.position = "none")
+    }
     plot(a)
     return(pdfPlotAll)
   }
@@ -156,7 +161,8 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow){
           },
           labels = scales::math_format(format = log10),
         ) +
-        ggplot2::theme_bw()+ ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
+        ggplot2::theme_bw(base_size=18)+
+        ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
                                             panel.grid.minor = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
                                             axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour="black"),
                                             axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour="black"),
@@ -165,6 +171,10 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow){
         ggplot2::coord_cartesian(clip="off")+
         ggplot2::xlab("Normalised displacements")+
         ggplot2::ylab("PDF")
+
+    if(legend==FALSE){
+      a <- a + ggplot2::theme(legend.position = "none")
+    }
     plot(a)
     return(pdfPlotAll)
   }
