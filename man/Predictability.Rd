@@ -4,13 +4,7 @@
 \alias{Predictability}
 \title{Predictability of trajectories}
 \usage{
-Predictability(
-  species_df,
-  entropyResults,
-  startVal = 0.99,
-  histPlot = TRUE,
-  legend = c(TRUE, "topleft")
-)
+Predictability(species_df, entropyResults, startVal = 0.99, histPlot = TRUE)
 }
 \arguments{
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
@@ -25,13 +19,9 @@ See attached sample data \code{\link{speciesA}}.}
 starting at startVal and decrease by 0.01 at each iteration until an acceptable root value is identified. Default is 0.99}
 
 \item{histPlot}{Plot a histogram of the limit of predictability scores. Default is TRUE.}
-
-\item{legend}{Add a legend to the histPlot when TRUE and change the position of the legend. Default is legend=c(TRUE, "topleft")}
 }
 \value{
-Limit of predictability values for each trajectory. If histPlot=TRUE a histogram of the limit of predictability scores is created. If pdfPlot=TRUE, a
-probability density function line plot of results is created and the data used to create the pdf plot are automatically assigned to the global environment
-('predictPDFData').
+Limit of predictability values for each trajectory. If histPlot=TRUE a histogram of the limit of predictability scores is created.
 }
 \description{
 This function allows you to calculate the limit of predictability for each trajectory based on each individual's entropy. This function requires
@@ -39,5 +29,5 @@ This function allows you to calculate the limit of predictability for each traje
 }
 \examples{
 Predictability(speciesA, entropyResults)
-Predictability(speciesA, entropyResults, startVal=0.99, histPlot=TRUE, legend=c(TRUE, "topleft"))
+Predictability(speciesA, entropyResults, startVal=0.99, histPlot=TRUE)
 }

@@ -4,7 +4,7 @@
 \alias{PlotDispPDF}
 \title{Create probability density function (PDF) plots of displacements}
 \usage{
-PlotDispPDF(displacements, normalised = TRUE, colours = rainbow)
+PlotDispPDF(displacements, normalised = TRUE, colours = rainbow, legend = TRUE)
 }
 \arguments{
 \item{displacements}{Displacements in list format (e.g., the output from the \code{\link{CalcDisp}} function).}
@@ -15,6 +15,8 @@ PlotDispPDF(displacements, normalised = TRUE, colours = rainbow)
 palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that grDevies color
 pallets do not use quotations. If the palette does not have enough distinct colours to match the communities being plotted the function will automatically
 create a continuous pallet with the colours provided. Default is "Dark2".}
+
+\item{legend}{Add legend with legend=TRUE. Default is TRUE.}
 }
 \value{
 Probability density function (PDF) plots of binned raw or normalised (if normalised=TRUE) displacements.
@@ -22,7 +24,7 @@ Probability density function (PDF) plots of binned raw or normalised (if normali
 \description{
 This function allows you to plot probability density functions (PDFs) of raw or normalised displacements. Displacements must be in
 list format where each list element corresponds to displacements calculated over a specific time window, which is the default output
-format from the \code{\link{CalcDisp}} function.
+format from the \code{\link{CalcDispS}} function.
 }
 \examples{
 DispPDFplot(displacements)

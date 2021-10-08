@@ -9,7 +9,7 @@ FitDist(
   dist = c("pl", "exp", "lnorm"),
   set_xmin = NULL,
   full = FALSE,
-  normalize = TRUE
+  normalise = TRUE
 )
 }
 \arguments{
@@ -18,28 +18,28 @@ FitDist(
 \item{dist}{Continuous distributions that will be fit to the displacements. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
 continuous distributions. Default is dist=c("pl","exp","lnorm").}
 
-\item{set_xmin}{To limit the fitted distribution to values above a specified value. Keep in mind that if your data were normalized
-this value will have to be a normalized value as well. Default is NULL.}
+\item{set_xmin}{To limit the fitted distribution to values above a specified value. Keep in mind that if your data were normalised
+this value will have to be a normalised value as well. Default is NULL.}
 
 \item{full}{To fit the distributions to the full range of displacement data. Default is FALSE.}
 
-\item{normalize}{Normalizes the displacement distances by dividing each displacement by the average displacement for that time window
-normalize=TRUE is required if working with displacements calculated over multiple time windows.}
+\item{normalise}{Normalises the displacement distances by dividing each displacement by the average displacement for that time window
+normalise=TRUE is required if working with displacements calculated over multiple time windows.}
 }
 \value{
 A data frame that contains the summary statistics for each distribution fit including the distribution name,
 xmin (the x value used to fit the distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
-distributions respectively, and nTail (the number of data points greater than or equal to xmin). A vector stating if the data were normalized or not,
-('normalize') is automatically assigned to the global environment as this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}
+distributions respectively, and nTail (the number of data points greater than or equal to xmin). A vector stating if the data were normalised or not,
+('normalise') is automatically assigned to the global environment as this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}
 functions.
 }
 \description{
 This function allows you to fit power law, exponential, or log-normal distributions to the displacements calculated with
-the \code{\link{CalcDisp}} function. If displacements were calculated over multiple time windows this function will normalize the
+the \code{\link{CalcDisp}} function. If displacements were calculated over multiple time windows this function will normalise the
 displacements by dividing each displacement by the mean displacement of the corresponding time window
 }
 \examples{
 FitDist(displacements)
 FitDist(displacements, dist=c("exp","lnorm"), full=TRUE)
-FitDist(displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalize=TRUE)
+FitDist(displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalise=TRUE)
 }

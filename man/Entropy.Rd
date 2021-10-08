@@ -4,12 +4,7 @@
 \alias{Entropy}
 \title{Entropy of trajectories}
 \usage{
-Entropy(
-  species_df,
-  gridCell = 0.25,
-  histPlot = TRUE,
-  legend = c(TRUE, "topleft")
-)
+Entropy(species_df, gridCell = 0.25, histPlot = TRUE)
 }
 \arguments{
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
@@ -21,8 +16,6 @@ See attached sample data \code{\link{speciesA}}.}
 \item{gridCell}{Grid cell size in degrees. Default is 0.25.}
 
 \item{histPlot}{Plot a histogram of the normalized  entropy values. Default is TRUE.}
-
-\item{legend}{Add a legend to the histPlot when TRUE and change the position of the legend. Default is legend=c(TRUE, "topleft").}
 }
 \value{
 Data frame of the normalized entropy values for each trajectory (main result) as well as the individual entropy
@@ -37,5 +30,5 @@ Values close to 1 indicate high entropy (disordered trajectories) while values c
 }
 \examples{
 Entropy(speciesA)
-Entropy(speciesA, gridCell=0.25, histPlot=TRUE, legend=c(TRUE, "topleft")0)
+Entropy(speciesA, gridCell=0.25, histPlot=TRUE)
 }

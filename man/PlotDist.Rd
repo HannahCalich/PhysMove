@@ -9,7 +9,8 @@ PlotDist(
   distResults,
   fitLines = TRUE,
   setDist = NULL,
-  colours = c("red", "gold2", "blue")
+  colours = c("red", "gold2", "blue"),
+  legend = TRUE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ By default all lines are plotted. Default is NULL.}
 
 \item{colours}{Colours for each fit line. The colours correspond to the drawing order: "pl", "exp", "lnorm" (when applicable).
 Valid input options include colour names or hex numbers. Default is colours=c("red","gold2","blue").}
+
+\item{legend}{Add legend with legend=TRUE. Default is TRUE.}
 }
 \value{
 Complementary cumulative distribution function (CCDF) plot of displacements with fit lines (if fitLines=TRUE).

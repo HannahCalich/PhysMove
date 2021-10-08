@@ -4,10 +4,14 @@
 \alias{PlotAngles}
 \title{Plot turning angles with a spider/radar chart}
 \usage{
-PlotAngles(angleList, timeWindows = "all", colours = rainbow, legend = c(TRUE))
+PlotAngles(angleList, timePlot = "all", colours = rainbow, legend = c(TRUE))
 }
 \arguments{
 \item{angleList}{List of angles calculates with the \code{\link{TurningAngles}} function.}
+
+\item{timePlot}{Plot angles from all time windows or only plot angles from one specific time window. For example,
+timePlot=1 will only plot angles from the first time window while timePlot="all" will plot all time windows.
+Default is timePlot="all".}
 
 \item{colours}{Colour(s) for lines in spiderPlot. Valid input options include: base R (grDevices) color pallets (e.g., colours=rainbow),
 RColorBrewer palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that
@@ -15,10 +19,6 @@ grDevices color pallets are functions and do not use quotations. If the palette 
 automatically create a continuous pallet with the colours provided. Default is rainbow.}
 
 \item{legend}{Add a legend to the spider plot. Default is TRUE.}
-
-\item{timeWindowss}{Plot angles from all time windows or only plot angles from one specific time window. For example,
-timeWindows=1 will only plot angles from the first time window while timeWindows="all" will plot all time windows.
-Default is timeWindows="all".}
 }
 \value{
 Spider/radar chart of the angles calculated with the \code{\link{TurningAngles}} function and the data used to create the spider/radar chart.
@@ -29,5 +29,5 @@ the \code{\link{TurningAngles}} function.
 }
 \examples{
 PlotAngles(angleList)
-PlotAngles(angleList, timeWindows="all", colours=rainbow, legend=TRUE)
+PlotAngles(angleList, timePlot="all", colours=rainbow, legend=TRUE)
 }

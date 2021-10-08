@@ -11,7 +11,8 @@ PlotRandomTracks(
   colours = c("black", "grey70"),
   tracks = TRUE,
   startCol = "red",
-  endCol = "blue"
+  endCol = "blue",
+  legend = TRUE
 )
 }
 \arguments{
@@ -36,6 +37,8 @@ of the original track. Default is startCol="red".}
 
 \item{endCol}{Colour for destination location. endCol=NULL will cause the symbology of the destination location to match the symbology of the rest
 of the original track. Default is endCol="blue".}
+
+\item{legend}{legend Add legend with legend=TRUE (default).}
 }
 \value{
 Plot showing the original and Randomised track locations and the Randomised tracks data used to create the map (original tracks are
@@ -46,5 +49,5 @@ Plot locations from original and reshuffled tracks using RandomisedLat and Rando
 }
 \examples{
 PlotRandomTracks<-function(speciesA, ref=1)
-PlotRandomTracks<-(speciesA, ref=1, numPlot=1:5, colours=c("black","grey70"), tracks=TRUE, startCol="red", endCol="blue")
+PlotRandomTracks<-(speciesA, ref=1, numPlot=1:5, colours=c("black","grey70"), tracks=TRUE, startCol="red", endCol="blue", legend=TRUE)
 }
