@@ -10,17 +10,16 @@
 #' See attached sample data \code{\link{speciesA}}.
 #' @param gridCell Grid cell size in degrees. Default is 0.25.
 #' @param histPlot Plot a histogram of the normalized  entropy values. Default is TRUE.
-#' @param legend Add a legend to the histPlot when TRUE and change the position of the legend. Default is legend=c(TRUE, "topleft").
 #' @return Data frame of the normalized entropy values for each trajectory (main result) as well as the individual entropy
 #' values (not normalized) and the number of cells each trajectory visited. If histPlot=TRUE a histogram of the normalized entropy scores is created. If pdfPlot=TRUE, a
 #' probability density function line plot of results is created and the data used to create the pdf plot are automatically assigned to the global environment
 #' ('entropyPDFplot').
 #' @examples
 #' Entropy(speciesA)
-#' Entropy(speciesA, gridCell=0.25, histPlot=TRUE, legend=c(TRUE, "topleft")0)
+#' Entropy(speciesA, gridCell=0.25, histPlot=TRUE)
 #' @export
 
-Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE, legend=c(TRUE, "topleft")){
+Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE){
 
   grid <- 1/gridCell
   longmin <- -180
@@ -63,19 +62,16 @@ Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE, legend=c(TRUE, "topl
   entropyResults <- as.data.frame(cbind("ref"=unique(species_df$ref),"normalizedEntropy"=normalizedEntropy,"indivEntropy"=indivEntropy,"cellsVisited"=CellsVisited))
 
   if (histPlot==TRUE){
-    hist <- hist(normalizedEntropy, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
-    hist <- hist(normalizedEntropy, main="", xlab="Normalized Entropy", xlim=c(0,1), ylim=c(0,(max(hist$counts)+2)),axes=FALSE,
-               breaks=seq(0, 1, length.out=21), border="black", col= "grey", xaxs="i", yaxs="i")
-    segments(x0=0.5, y0=0, x1=0.5, y1=0.9*(max(hist$counts)+2), col="red", lty=2, lwd =2)
-    myTicks <- axTicks(1)
-    myTicks2 <- axTicks(2)
-    axis(1, at=myTicks)
-    axis(1, at=seq(min(myTicks), max(myTicks), (myTicks[2]-myTicks[1])/2), labels=NA, tcl=-0.2)
-    axis(2, at = myTicks2)
-    axis(2, at=seq(min(myTicks2), max(myTicks2), (myTicks2[2]-myTicks2[1])/2), labels=NA, tcl=-0.2)
-    if (legend[1]==TRUE){
-      legend(legend[2], bty="n", c("Normalized Entropy = 0.5"), lty=2, lwd=2, col="red")
-    }
+    h <- hist(normalizedEntropy, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
+    hist_plot <- ggplot2::ggplot(entropyResults, ggplot2::aes(normalizedEntropy))+
+      ggplot2::geom_histogram(breaks=h$breaks, color="black", fill="darkgrey")+
+      ggplot2::scale_y_continuous(breaks=function(x) seq(ceiling(x[1]), floor(x[2]), by = 2))+
+      ggplot2::scale_x_continuous("Normalized Entropy", breaks=seq(0,1,0.1), labels=xlab)+
+      ggplot2::labs(y = "Frequency")+
+      ggplot2::theme_classic(base_size = 18)#+
+      # ggplot2::geom_vline(ggplot2::aes(xintercept=0.5, color="0.5"), linetype="dashed", size=1) +
+      # ggplot2::scale_color_manual(name = "", values = c("0.5" = "red"))
+    plot(hist_plot)
   }
   return(entropyResults)
 }
