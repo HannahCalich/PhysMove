@@ -81,7 +81,7 @@ RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
 
   if (plot==TRUE){    # Plot RMS of displacements, and mean displacements on log-log scale
     ylabel <- expression('<'*d^q*'>'^(1/q)* (km))
-    xlabel <- paste('T(',timeUnit,')')
+    xlabel <- paste('T(',timeUnit,')',sep="")
     a <- ggplot2::ggplot(plot.df, ggplot2::aes(plot.df[,1],plot.df[,3]))
     if (lm==TRUE){
     a <- a +
@@ -105,7 +105,8 @@ RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
         },
         labels = scales::math_format(format = log10)
       ) +
-      ggplot2::theme_bw()+ ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
+      ggplot2::theme_bw(base_size = 18)+
+      ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
                                           panel.grid.minor = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
                                           axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour = "black"),
                                           axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour = "black"),
