@@ -153,7 +153,8 @@ pdfPlot<-function(result, desc=NULL, nBins){
           },
           labels = scales::math_format(format = log10)
         ) +
-        ggplot2::theme_bw()+ ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
+        ggplot2::theme_bw(base_size=18)+
+        ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
                                             panel.grid.minor = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
                                             axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour="black"),
                                             axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour="black"))+
@@ -166,7 +167,8 @@ pdfPlot<-function(result, desc=NULL, nBins){
       b <- ggplot2::ggplot(plot.df, ggplot2::aes(plot.df[,1], plot.df[,2])) +
         ggplot2::geom_line()+
         ggplot2::geom_point()+
-        ggplot2::theme_bw()+ ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
+        ggplot2::theme_bw(base_size=18)+
+        ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
                                             panel.grid.minor = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
                                             axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour="black"),
                                             axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour="black"))+
@@ -179,22 +181,3 @@ pdfPlot<-function(result, desc=NULL, nBins){
   }
   return(plot.df)
 }
-
-#LOG PLOT
-
-# major <- 10^(seq(min(as.numeric(round(log10(myTicks),1))),(max(as.numeric(round(log10(myTicks),1)))+1),1))
-# labels <- sapply(seq(min(as.numeric(round(log10(myTicks),1))),(max(as.numeric(round(log10(myTicks),1)))+1),1), function(i)  as.expression(bquote(10^ .(i))))
-# axis(1, at=major, labels=labels, tcl=-0.5)
-#
-#
-# major2 <- 10^(seq(min(as.numeric(round(log10(myTicks2),1))),(max(as.numeric(round(log10(myTicks2),1)))+1),1))
-# labels2 <- sapply(seq(min(as.numeric(round(log10(myTicks2),1))),(max(as.numeric(round(log10(myTicks2),1)))+1),1), function(i)  as.expression(bquote(10^ .(i))))
-# axis(2, at=major2, labels=labels2, tcl=-0.5)
-# minor <- outer(0:9, 10^(min(major):max(major)))
-# axis(2, at=minor, tcl= -0.2, labels=NA)
-
-# ##NOT LOG PLOT
-# axis(1, at=myTicks, tcl=-0.5)
-# axis(2, at=myTicks2, tcl=-0.5)
-# axis(1, at=seq(min(myTicks), max(myTicks), (myTicks[2]-myTicks[1])/2), labels=NA, tcl=-0.2)
-# axis(2, at=seq(min(myTicks2), max(myTicks2), (myTicks2[2]-myTicks2[1])/2), labels=NA, tcl=-0.2)
