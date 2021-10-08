@@ -11,16 +11,13 @@
 #' @param startVal Starting value used to find a root for the limit of predictability equation. Function will loop through values
 #' starting at startVal and decrease by 0.01 at each iteration until an acceptable root value is identified. Default is 0.99
 #' @param histPlot Plot a histogram of the limit of predictability scores. Default is TRUE.
-#' @param legend Add a legend to the histPlot when TRUE and change the position of the legend. Default is legend=c(TRUE, "topleft")
-#' @return Limit of predictability values for each trajectory. If histPlot=TRUE a histogram of the limit of predictability scores is created. If pdfPlot=TRUE, a
-#' probability density function line plot of results is created and the data used to create the pdf plot are automatically assigned to the global environment
-#' ('predictPDFData').
+#' @return Limit of predictability values for each trajectory. If histPlot=TRUE a histogram of the limit of predictability scores is created.
 #' @examples
 #' Predictability(speciesA, entropyResults)
-#' Predictability(speciesA, entropyResults, startVal=0.99, histPlot=TRUE, legend=c(TRUE, "topleft"))
+#' Predictability(speciesA, entropyResults, startVal=0.99, histPlot=TRUE)
 #' @export
 
-Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRUE, legend=c(TRUE, "topleft")){
+Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRUE){
 
   if (nrow(entropyResults)!=length(unique(species_df$ref))){
     stop("The number of individuals in the species_df does not match the number of normalized entropy values, check to ensure the right data has \n  been entered.")
@@ -59,21 +56,19 @@ Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRU
       Predictability[i] <- ss$root
     }
   }
-
+  Predictability <- as.data.frame(Predictability)
   if (histPlot==TRUE){
-    hist <- hist(Predictability, breaks=seq(0, 1, length.out = 21), plot=FALSE) #Determine hist values so you can automate plot better
-    hist <- hist(Predictability, main="", xlab="Predictability", xlim=c(0,1), ylim=c(0,(max(hist$counts)+2)), axes=FALSE,
-               breaks=seq(0, 1, length.out=21), border="black", col= "grey", xaxs="i", yaxs="i")
-    segments(x0=0.5, y0=0, x1=0.5, y1=0.9*(max(hist$counts)+2) ,col="red", lty=2, lwd =2)
-    myTicks <- axTicks(1)
-    myTicks2 <- axTicks(2)
-    axis(1, at=myTicks)
-    axis(1, at=seq(min(myTicks), max(myTicks), (myTicks[2]-myTicks[1])/2), labels=NA, tcl=-0.2)
-    axis(2, at = myTicks2)
-    axis(2, at=seq(min(myTicks2), max(myTicks2), (myTicks2[2]-myTicks2[1])/2), labels=NA, tcl=-0.2)
-    if (legend[1]==TRUE){
-      legend(legend[2], bty="n", c("Predictability = 0.5"), lty=2, lwd=2, col="red")
-    }
+    h <- hist(Predictability$Predictability, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
+    xlab <- c(0,"",0.2,"",0.4,"",0.6,"",0.8,"",1)
+    hist_plot <- ggplot2::ggplot(Predictability, ggplot2::aes(Predictability))+
+      ggplot2::geom_histogram(breaks=h$breaks, color="black", fill="darkgrey")+
+      ggplot2::scale_y_continuous(breaks=function(x) seq(ceiling(x[1]), floor(x[2]), by = 2))+
+      ggplot2::scale_x_continuous("Predictability", breaks=seq(0,1,0.1), labels=xlab)+
+      ggplot2::labs(y = "Frequency")+
+      ggplot2::theme_classic(base_size = 18)#+
+    # ggplot2::geom_vline(ggplot2::aes(xintercept=0.5, color="0.5"), linetype="dashed", size=1) +
+    # ggplot2::scale_color_manual(name = "", values = c("0.5" = "red"))
+    plot(hist_plot)
   }
   return(Predictability)
 }
