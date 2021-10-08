@@ -3,9 +3,9 @@
 #' This function allows you to create a spider/radar chart illustrating the frequency of turning angles from
 #' the \code{\link{TurningAngles}} function.
 #' @param angleList List of angles calculates with the \code{\link{TurningAngles}} function.
-#' @param timeWindowss Plot angles from all time windows or only plot angles from one specific time window. For example,
-#' timeWindows=1 will only plot angles from the first time window while timeWindows="all" will plot all time windows.
-#' Default is timeWindows="all".
+#' @param timePlot Plot angles from all time windows or only plot angles from one specific time window. For example,
+#' timePlot=1 will only plot angles from the first time window while timePlot="all" will plot all time windows.
+#' Default is timePlot="all".
 #' @param colours Colour(s) for lines in spiderPlot. Valid input options include: base R (grDevices) color pallets (e.g., colours=rainbow),
 #' RColorBrewer palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that
 #' grDevices color pallets are functions and do not use quotations. If the palette does not have enough distinct colours to match the lines being plotted the function will
@@ -13,10 +13,10 @@
 #' @param legend Add a legend to the spider plot. Default is TRUE.
 #' @return Spider/radar chart of the angles calculated with the \code{\link{TurningAngles}} function and the data used to create the spider/radar chart.
 #' @examples PlotAngles(angleList)
-#' @examples PlotAngles(angleList, timeWindows="all", colours=rainbow, legend=TRUE)
+#' @examples PlotAngles(angleList, timePlot="all", colours=rainbow, legend=TRUE)
 #' @export
 
-PlotAngles<-function(angleList, timeWindows="all", colours=rainbow, legend=c(TRUE)){
+PlotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=c(TRUE)){
 
   bins <- 360 / 45
   timeWindows <- as.numeric(names(angleList))
@@ -36,8 +36,8 @@ PlotAngles<-function(angleList, timeWindows="all", colours=rainbow, legend=c(TRU
     }
   }
 
-  if (timeWindows!="all"){
-    spider <- spider[which(spider$timeWindows==timeWindows),]
+  if (timePlot!="all"){
+    spider <- spider[which(spider$timeWindows==timePlot),]
   }
 
   spider <- spider[complete.cases(spider), ] #remove rows with no data
@@ -72,9 +72,9 @@ PlotAngles<-function(angleList, timeWindows="all", colours=rainbow, legend=c(TRU
     ggplot2::xlab("") +
     ggplot2::ylab("")+
     ggplot2::labs(title="")+
-    ggplot2::theme_bw()+
+    ggplot2::theme_bw(base_size=18)+
     ggplot2::theme(
-      axis.text.x = ggplot2::element_text(size = 10, face = "bold"),
+      axis.text.x = ggplot2::element_text(size = 15, face = "bold"),
       axis.text.y = ggplot2::element_blank(),
       axis.ticks = ggplot2::element_blank(),
       legend.position = legendPos,
