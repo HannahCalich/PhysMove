@@ -1,27 +1,27 @@
 #' Fit distributions to displacements
 #'
 #' This function allows you to fit power law, exponential, or log-normal distributions to the displacements calculated with
-#' the \code{\link{CalcDisp}} function. If displacements were calculated over multiple time windows this function will normalize the
+#' the \code{\link{CalcDisp}} function. If displacements were calculated over multiple time windows this function will normalise the
 #' displacements by dividing each displacement by the mean displacement of the corresponding time window
 #' @param displacements List of displacements output from the \code{\link{CalcDisp}} function.
 #' @param dist Continuous distributions that will be fit to the displacements. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
 #' continuous distributions. Default is dist=c("pl","exp","lnorm").
-#' @param set_xmin To limit the fitted distribution to values above a specified value. Keep in mind that if your data were normalized
-#' this value will have to be a normalized value as well. Default is NULL.
+#' @param set_xmin To limit the fitted distribution to values above a specified value. Keep in mind that if your data were normalised
+#' this value will have to be a normalised value as well. Default is NULL.
 #' @param full To fit the distributions to the full range of displacement data. Default is FALSE.
-#' @param normalize Normalizes the displacement distances by dividing each displacement by the average displacement for that time window
-#' normalize=TRUE is required if working with displacements calculated over multiple time windows.
+#' @param normalise Normalises the displacement distances by dividing each displacement by the average displacement for that time window
+#' normalise=TRUE is required if working with displacements calculated over multiple time windows.
 #' @return A data frame that contains the summary statistics for each distribution fit including the distribution name,
 #' xmin (the x value used to fit the distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
-#' distributions respectively, and nTail (the number of data points greater than or equal to xmin). A vector stating if the data were normalized or not,
-#' ('normalize') is automatically assigned to the global environment as this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}
+#' distributions respectively, and nTail (the number of data points greater than or equal to xmin). A vector stating if the data were normalised or not,
+#' ('normalise') is automatically assigned to the global environment as this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}
 #'functions.
 #' @examples FitDist(displacements)
 #' @examples FitDist(displacements, dist=c("exp","lnorm"), full=TRUE)
-#' @examples FitDist(displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalize=TRUE)
+#' @examples FitDist(displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalise=TRUE)
 #' @export
 
-FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalize=TRUE) {
+FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalise=TRUE) {
 
   if (class(displacements)!="list"){
    stop("Distributions can only be fit to the output from the CalcDisp function.")
@@ -31,15 +31,15 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
     stop("To fit distributions to the full range of data use full=TRUE and leave set_xmin as default (NULL).")
   }
 
-  if ((length(displacements)>1) & (normalize==FALSE)){
-    stop("Data must be normalized for displacements from multiple time windows to be collated into 1 dataset.")
+  if ((length(displacements)>1) & (normalise==FALSE)){
+    stop("Data must be normalised for displacements from multiple time windows to be collated into 1 dataset.")
   }
 
   if (("pl" %in% dist|"exp" %in% dist|"lnorm" %in% dist)!=TRUE){
     stop("Distributions can only be fit to 'pl','exp', or 'lnorm' distributions.")
   }
 
-  if (normalize){
+  if (normalise){
     x <- list()
     for (d in 1:length(displacements)){
       disp <- unlist(displacements[d])
@@ -57,7 +57,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
   distResults <- data.frame("distribution"=dist, "xmin"= c(NA), "parameter1"=c(NA), "parameter2"=c(NA), "nTail"= c(NA)) #make sure dist= is loaded
 
   # assign("dist",dist, envir = .GlobalEnv)
-  assign("normalize", normalize, envir = .GlobalEnv)
+  assign("normalise", normalise, envir = .GlobalEnv)
 
   if ("pl" %in% dist){
     message("Fitting a power law distribution")
