@@ -11,12 +11,13 @@
 #' By default all lines are plotted. Default is NULL.
 #' @param colours Colours for each fit line. The colours correspond to the drawing order: "pl", "exp", "lnorm" (when applicable).
 #' Valid input options include colour names or hex numbers. Default is colours=c("red","gold2","blue").
+#' @legend Add legend with legend=TRUE. Default is TRUE.
 #' @return Complementary cumulative distribution function (CCDF) plot of displacements with fit lines (if fitLines=TRUE).
 #' @examples PlotDist(displacements, distResults)
 #' @examples PlotDist(displacements, distResults, fitLines=TRUE, setDist=NULL, colours=c("red","gold2","blue"))
 #' @export
 
-PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, colours=c("red","gold2","blue")){
+PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, colours=c("red","gold2","blue"), legend=TRUE){
 
   if (exists("displacements")==FALSE){
     stop("Please calculate displacements using CalcDisp and fit distriubtions using FitDisp prior to executing PlotDist")
@@ -54,17 +55,17 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
     plotCol <- c(plotCol,NA)
   }
 
-  if (normalize){
+  if (normalise){
     x <- list()
     for (d in 1:length(displacements)){
       disp <- unlist(displacements[d])
       x[[d]] <- disp/mean(disp)
     }
     x <- unlist(x)
-    xlabel <- "Normalized displacements"
+    xlabel <- "Normalised displacements"
   } else {
     x <- unlist(displacements)
-    xlabel <- "displacements (km)"
+    xlabel <- "Displacements (km)"
   }
 
   x <- sort(x)
@@ -88,7 +89,8 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
       },
       labels = scales::math_format(format = log10),
     ) +
-    ggplot2::theme_bw()+ ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
+    ggplot2::theme_bw(base_size = 18)+
+    ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
                                         panel.grid.minor = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
                                         axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour="black"),
                                         axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour="black"),
@@ -184,6 +186,9 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
         ggplot2::geom_line(data=plLine, ggplot2::aes(x=xval,y=yval, colour=plotCol[1]),lwd=1)
     }
     a <- a + ggplot2:: scale_color_identity(breaks=na.omit(plotCol), labels=setDist, guide="legend")
+    if(legend==FALSE){
+      a <- a + ggplot2::theme(legend.position = "none")
+    }
   }
   plot(a)
   return(df)
