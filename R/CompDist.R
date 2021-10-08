@@ -25,7 +25,7 @@ CompDist <- function (displacements, distResults, force_AICc=FALSE){
     stop("Please fit distributions using the FitDist function prior to executing CompDist")
   }
 
-  if (normalize){
+  if (normalise){
     x <- list()
     for (d in 1:length(displacements)){
       disp <- unlist(displacements[d])
