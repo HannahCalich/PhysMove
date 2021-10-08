@@ -16,7 +16,7 @@
 #' of the original track. Default is startCol="red".
 #' @param endCol Colour for destination location. endCol=NULL will cause the symbology of the destination location to match the symbology of the rest
 #' of the original track. Default is endCol="blue".
-#' @legend legend Add legend with legend=TRUE (default).
+#' @param legend legend Add legend with legend=TRUE (default).
 #' @return Plot showing the original and Randomised track locations and the Randomised tracks data used to create the map (original tracks are
 #' from species_df).
 #' @examples PlotRandomTracks<-function(speciesA, ref=1)

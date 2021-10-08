@@ -11,7 +11,7 @@
 #' By default all lines are plotted. Default is NULL.
 #' @param colours Colours for each fit line. The colours correspond to the drawing order: "pl", "exp", "lnorm" (when applicable).
 #' Valid input options include colour names or hex numbers. Default is colours=c("red","gold2","blue").
-#' @legend Add legend with legend=TRUE. Default is TRUE.
+#' @param legend Add legend with legend=TRUE. Default is TRUE.
 #' @return Complementary cumulative distribution function (CCDF) plot of displacements with fit lines (if fitLines=TRUE).
 #' @examples PlotDist(displacements, distResults)
 #' @examples PlotDist(displacements, distResults, fitLines=TRUE, setDist=NULL, colours=c("red","gold2","blue"))
