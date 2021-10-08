@@ -60,6 +60,7 @@ for (i in 1:tracks){
   }
 }
 speciesA<-speciesA[-1,]
+row.names(speciesA) <- 1:nrow(speciesA)
 cols <- data.frame(
   col = rainbow(length(unique(speciesA$ref))),
   id = unique(speciesA$ref)
