@@ -16,14 +16,15 @@
 #' of the original track. Default is startCol="red".
 #' @param endCol Colour for destination location. endCol=NULL will cause the symbology of the destination location to match the symbology of the rest
 #' of the original track. Default is endCol="blue".
+#' @legend legend Add legend with legend=TRUE (default).
 #' @return Plot showing the original and Randomised track locations and the Randomised tracks data used to create the map (original tracks are
 #' from species_df).
 #' @examples PlotRandomTracks<-function(speciesA, ref=1)
-#' @examples PlotRandomTracks<-(speciesA, ref=1, numPlot=1:5, colours=c("black","grey70"), tracks=TRUE, startCol="red", endCol="blue")
+#' @examples PlotRandomTracks<-(speciesA, ref=1, numPlot=1:5, colours=c("black","grey70"), tracks=TRUE, startCol="red", endCol="blue", legend=TRUE)
 #' @export
 
 PlotRandomTracks<-function(species_df, ref=NULL, numPlot=1:5, colours=c("black","grey70"),
-                           tracks=TRUE, startCol="red", endCol="blue"){
+                           tracks=TRUE, startCol="red", endCol="blue", legend=TRUE){
 
   if ((exists("RandomisedLat")& exists("RandomisedLong")& exists("randTrack"))==FALSE){
     stop("Please create Randomised tracks using the Randomise function prior to executing PlotRandomTracks")
@@ -55,36 +56,63 @@ PlotRandomTracks<-function(species_df, ref=NULL, numPlot=1:5, colours=c("black",
   plot.df <- rbind(plotpoints,Individual)
   plot.df <- cbind(plot.df, "trackRef"=paste(plot.df$Track,plot.df$ref,sep="_"))
 
-  a <- ggplot2::ggplot(plot.df, ggplot2::aes(x=lon, y=lat,group=trackRef, color=Track)) +
-    ggplot2::geom_point()+
-    ggplot2::theme_bw()+ ggplot2::theme(axis.line = ggplot2::element_line(colour = "black"),
-                                        panel.grid.major = ggplot2::element_line(),
-                                        panel.grid.minor = ggplot2::element_blank(),
-                                        axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour="black"),
-                                        axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour="black"))+
-    ggplot2::scale_colour_manual(values = colours)+
-    ggplot2::xlab("Longitude")+
+  if (is.null(startCol)){
+    startCol <- colours[1]
+  }
+  startPt <- Individual[1,]
+  startPt$Track <- "Start"
+  startPt$trackRef <- "Original_1"
+  plot.df <- rbind(plot.df, startPt)
+
+  if (is.null(endCol)){
+    endCol <- colours[1]
+  }
+  endPt <- Individual[nrow(Individual),]
+  endPt$Track <- "End"
+  endPt$trackRef <- "Original_1"
+  plot.df <- rbind(plot.df, endPt)
+
+  plot.df$Track <- factor(plot.df$Track, levels = c("Original", "Randomised", "Start","End"))
+  colours <- c(colours, startCol, endCol)
+
+  a <- ggplot2::ggplot(plot.df, ggplot2::aes(x=lon, y=lat, color=Track)) +
+    ggplot2::geom_point(ggplot2::aes(x=lon, y=lat, color=Track))+
+    ggplot2::geom_point(data=startPt, ggplot2::aes(x=lon, y=lat, group=Track, color="Start")) +
+    ggplot2::geom_point(data=endPt, ggplot2::aes(x=lon, y=lat, group=Track, color="End")) +
+    ggplot2::theme_bw(base_size=18)+
+    ggplot2::theme(axis.line=ggplot2::element_line(colour="black"),
+                                        panel.grid.major=ggplot2::element_line(),
+                                        panel.grid.minor=ggplot2::element_blank(),
+                                        axis.text.x=ggplot2::element_text(margin=ggplot2::margin(t=10), colour="black"),
+                                        axis.text.y=ggplot2::element_text(margin=ggplot2::margin(r=10), colour="black"),
+                                        legend.title = ggplot2::element_blank())+
+    ggplot2::xlab("Longitude") +
     ggplot2::ylab("Latitude")
 
   if (tracks==TRUE){
     a <- a +
-      ggplot2::geom_path(data = subset(plot.df, Track == 'Randomised'))+
-      ggplot2::geom_path(data = subset(plot.df, Track == 'Original'))+
-      ggplot2::geom_point(data = subset(plot.df, Track == 'Original'))
+      ggplot2::geom_path(data=subset(plot.df, Track=='Randomised'))+
+      ggplot2::geom_path(data=subset(plot.df, Track=='Original'))+
+      ggplot2::geom_point(data=subset(plot.df, Track=='Original'))+
+      ggplot2::geom_point(data=startPt, ggplot2::aes(x=lon, y=lat, group=Track, color="Start")) +
+      ggplot2::geom_point(data=endPt, ggplot2::aes(x=lon, y=lat, group=Track, color="End"))
   }
 
-  if (!is.null(startCol)){
-    startPt <- Individual[1,]
-    startPt$trackRef <- 1
-    a <- a +
-      ggplot2::geom_point(data=startPt, ggplot2::aes(x=lon, y=lat, group=trackRef, color=Track),colour=startCol)
+  if (startCol==colours[1] & endCol==colours[1]){ #If start and end colours were not provided or match the original track colour
+    a <- a + ggplot2::scale_colour_manual(values = colours, labels = c("Original", "Randomised", "", ""),
+                                          guide = ggplot2::guide_legend(override.aes = list(
+                                          linetype = c("solid","solid", "blank", "blank"),
+                                          shape = c(16,16, NA, NA),
+                                          labels = c("Original", "Randomised", "", ""))))
+  } else {
+   a <- a + ggplot2::scale_colour_manual(values = colours, labels = c("Original", "Randomised", "Start point", "End point"),
+                                         guide = ggplot2::guide_legend(override.aes = list(
+                                         linetype = c("solid","solid", "blank", "blank"),
+                                         shape = c(16, 16, 16, 16))))
   }
 
-  if (!is.null(endCol)){
-    endPt <- Individual[nrow(Individual),]
-    endPt$trackRef <- 1
-    a <- a +
-      ggplot2::geom_point(data=endPt, ggplot2::aes(x=lon, y=lat, group=trackRef, color=Track),colour=endCol)
+  if (legend==FALSE){
+    a <- a + ggplot2::theme(legend.position = "none")
   }
   plot(a)
   return(plotpoints)
