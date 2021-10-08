@@ -122,23 +122,24 @@ Randomise<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE
                               AvgCellsInRandomisedTrajectories=AvgShuffledOccurrences)
 
   if (lm==TRUE){
-    fit <- lm(plot.df$AvgCellsInRandomisedTrajectories ~ plot.df$CellsInOriginalTrajectory, data = plot.df)
+    fit <- lm(plot.df$AvgCellsInRandomisedTrajectories ~ plot.df$CellsInOriginalTrajectory, data=plot.df)
     assign("RandomiselinearModel",fit, envir = .GlobalEnv)
   }
 
   if (plot==TRUE){
     a <- ggplot2::ggplot(plot.df, ggplot2::aes(x=plot.df[,2], y=plot.df[,3])) +
       ggplot2::geom_point(size=2)+
-      ggplot2::theme_bw()+ ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
-                                          panel.grid.minor = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
-                                          axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour="black"),
-                                          axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour="black"))+
+      ggplot2::theme_bw(base_size=18)+
+      ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
+                                          panel.grid.minor=ggplot2::element_blank(), axis.line=ggplot2::element_line(colour="black"),
+                                          axis.text.x=ggplot2::element_text(margin=ggplot2::margin(t=10), colour="black"),
+                                          axis.text.y=ggplot2::element_text(margin=ggplot2::margin(r=10), colour="black"))+
       ggplot2::xlab("Sum of cells in original track")+
-      ggplot2::ylab("Average sum of cells in Randomised tracks")
+      ggplot2::ylab(expression(atop("Average sum of cells", paste("in Randomised tracks")))) #("Average sum of cells \n in Randomised tracks")
     if (lm==TRUE){
       a <- a +
         ggplot2::geom_abline(slope=1, intercept=1, col="black", lwd=0.5, lty=2)+
-        ggplot2::stat_smooth(formula = y ~ x, method="lm", col="black", lwd=0.5)+
+        ggplot2::stat_smooth(formula=y~x, method="lm", col="black", lwd=0.5)+
         ggplot2::geom_point(size=2) # Add points back in again to they are on top layer
     }
     plot(a)
