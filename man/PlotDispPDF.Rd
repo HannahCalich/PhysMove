@@ -24,7 +24,7 @@ Probability density function (PDF) plots of binned raw or normalised (if normali
 \description{
 This function allows you to plot probability density functions (PDFs) of raw or normalised displacements. Displacements must be in
 list format where each list element corresponds to displacements calculated over a specific time window, which is the default output
-format from the \code{\link{CalcDispS}} function.
+format from the \code{\link{CalcDisp}} function.
 }
 \examples{
 DispPDFplot(displacements)
