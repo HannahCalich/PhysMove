@@ -62,25 +62,26 @@ PlotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=c(TRUE))
   }
 
   spider_plot <- ggplot2::ggplot(spider, ggplot2::aes(x = angles, y = probability, group=as.factor(timeWindows),colour=as.factor(timeWindows)))+
-    ggplot2::coord_polar()+
+    ggplot2::coord_polar(clip="off")+
     ggplot2::geom_hline(yintercept = c(0, max(spider$probability)+0.01), colour = "black", size = 0.25) +
     ggplot2::geom_vline(xintercept = seq(0, 360, by = 90), colour = "black", size = 0.25) +
     ggplot2::geom_point(size = 0.4) +
     ggplot2::geom_line(size = 1) +
     ggplot2::scale_colour_manual(title, values = myColoursPal)+
-    ggplot2::scale_x_continuous(limits = c(0, 360), breaks = c(0,90,180,270), labels = c("0","90","180","270"))+ #0°
+    ggplot2::scale_x_continuous(limits=c(0, 360), breaks=c(0,90,180,270), labels=c("0"," 90","180","270  "))+
     ggplot2::xlab("") +
     ggplot2::ylab("")+
     ggplot2::labs(title="")+
     ggplot2::theme_bw(base_size=18)+
     ggplot2::theme(
-      axis.text.x = ggplot2::element_text(size = 15, face = "bold"),
+      axis.text.x = ggplot2::element_text(face = "bold"),
       axis.text.y = ggplot2::element_blank(),
       axis.ticks = ggplot2::element_blank(),
       legend.position = legendPos,
       panel.border = ggplot2::element_blank(),
       panel.grid  = ggplot2::element_blank(),
-      plot.margin = grid::unit(c(0,0,0,0), "cm"))
+      plot.margin = grid::unit(c(0,0,0,0), "cm"),
+      legend.box.margin=margin(0,0,0,-5))
   plot(spider_plot)
   return(spider)
 }
