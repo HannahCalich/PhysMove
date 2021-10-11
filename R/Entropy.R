@@ -66,7 +66,7 @@ Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE){
     hist_plot <- ggplot2::ggplot(entropyResults, ggplot2::aes(normalizedEntropy))+
       ggplot2::geom_histogram(breaks=h$breaks, color="black", fill="darkgrey")+
       ggplot2::scale_y_continuous(breaks=function(x) seq(ceiling(x[1]), floor(x[2]), by = 2))+
-      ggplot2::scale_x_continuous("Normalized Entropy", breaks=seq(0,1,0.1), labels=xlab)+
+      ggplot2::scale_x_continuous("Normalized Entropy", breaks=seq(0,1,0.1), labels=c("0.0", "", "0.2", "", "0.4", "", "0.6", "", "0.8", "", "1.0"))+
       ggplot2::labs(y = "Frequency")+
       ggplot2::theme_classic(base_size = 18)#+
       # ggplot2::geom_vline(ggplot2::aes(xintercept=0.5, color="0.5"), linetype="dashed", size=1) +
