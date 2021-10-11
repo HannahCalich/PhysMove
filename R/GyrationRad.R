@@ -82,7 +82,7 @@ GyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red")){
     z <- ggplot2::ggplot() +
       ggplot2::geom_point(data = xyz, ggplot2::aes(lon.avg.deg, lat.avg.deg), size=2, color = mapCol[1])+
       ggplot2::coord_sf(xlim = c(min(circles$long), max(circles$long)), ylim = c(min(circles$lat), max(circles$lat)))+
-      ggplot2::theme_minimal()+
+      ggplot2::theme_minimal(base_size = 18)+
       ggplot2::geom_polygon(data = circles, ggplot2::aes(long, lat, group = Ref), color = mapCol[2], alpha=0)+
       ggplot2::labs(x="Longitude", y="Latitude")
 
