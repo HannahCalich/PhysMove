@@ -129,15 +129,18 @@ InfomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, 
     names(nodenames) <- c("node_name","cell", "long", "lat")
     nodenames$node_name <- sub("^","Node",nodenames$node_name)
 
-    if (infomap==TRUE){
-      monolayer_object <- infomapecology::create_monolayer_object(LinkList, directed = T, bipartite = F, node_metadata = nodenames)
-      infomap_object <- infomapecology::run_infomap_monolayer(monolayer_object, infomap_executable='infomap', flow_model='directed', silent=T, verbose=F, two_level=F, ...="-k")
-      return(infomap_object)
-    }
-
     if (tpm==TRUE){
       names(order.df) <- c("OriginNode", "OriginCell", "OriginLong", "OriginLat","DestinationNode", "DestinationCell", "DestinationLong", "DestinationLat","Probability")
       assign("TransitionProbabilityMatrix", order.df, envir = .GlobalEnv)
     }
+
+    if (infomap==TRUE){
+      monolayer_object <- infomapecology::create_monolayer_object(LinkList, directed = T, bipartite = F, node_metadata = nodenames)
+      infomap_object <- suppressWarnings(infomapecology::run_infomap_monolayer(monolayer_object, infomap_executable='infomap', flow_model='directed',
+                                                                               silent=T, verbose=F, two_level=F, ...="-k"))
+      return(infomap_object)
+    }
+
+
     detach("package:infomapecology", unload = TRUE) # This was added as the package::function method does not seem to work with the infomapecology package yet so I am using library() then detach() to reduce impacts on global functions
 }
