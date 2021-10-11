@@ -42,7 +42,7 @@ CommunityMap <- function(infomap_object, subset_communities, colours="Dark2"){
     ggplot2::geom_tile(data=xyz, ggplot2::aes(x=long, y=lat, fill=as.factor(module_level1)))+
     ggplot2::labs(x = "Longitude",y = "Latitude", fill = "Community")+
     ggplot2::coord_sf(xlim = c(min(xyz$long), max(xyz$long)), ylim = c(min(xyz$lat), max(xyz$lat)))+
-    ggplot2::theme_minimal()+
+    ggplot2::theme_minimal(base_size = 18)+
     ggplot2::scale_fill_manual(values = myColoursPal) #input values for colour palette as hex codes
 
   tryCatch({ # This prevents the plot from crashing if the mapped area does not overlap with the world polygon (e.g., for pelagic species)
