@@ -28,8 +28,8 @@ Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRU
 
   for (i in 1:length(species_index) ){
     if (entropyResults$cellsVisited[i]==1){
-      warning(paste("Ref",unique(species_df$ref)[i],"only visited 1 cell so Pred scores cannot be calculated and NaN is produced. NaN values will be excluded from histPlot"), immediate. = TRUE)
-      Pred[i] <- NaN
+      warning(paste("Ref",unique(species_df$ref)[i],"only visited 1 cell so Pred scores cannot be calculated and NA is produced. NA values will be excluded from histPlot"), immediate. = TRUE)
+      Pred[i] <- NA
       next
     }
     model <- function(x) c(F1 = x*log(x) + (1-x)*log(1-x) - (1-x)*log(entropyResults$cellsVisited[i]-1) + entropyResults$indivEntropy[i])
