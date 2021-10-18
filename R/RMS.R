@@ -75,48 +75,57 @@ RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
   names(plot.df) <- c("timeWindow", "meanDisplacements", "rmsDisplacements")
 
   if (lm==TRUE){
-    fit <- lm(log(MyRMS$Sqrt_dRMS_per_count) ~ log(MyRMS$TimeWindows_log), data = MyRMS)
-    assign("RMSlinearModel",fit, envir = .GlobalEnv)
+    if (nrow(MyRMS)>1){
+      fit <- lm(log(MyRMS$Sqrt_dRMS_per_count) ~ log(MyRMS$TimeWindows_log), data = MyRMS)
+      assign("RMSlinearModel",fit, envir = .GlobalEnv)
+      rm(fit)
+    } else {
+      warning("Not enough data fit linear model")
+    }
   }
 
-  if (plot==TRUE){    # Plot RMS of displacements, and mean displacements on log-log scale
-    ylabel <- expression('<'*d^q*'>'^(1/q)* (km))
-    xlabel <- paste('T(',timeUnit,')',sep="")
-    a <- ggplot2::ggplot(plot.df, ggplot2::aes(plot.df[,1],plot.df[,3]))
-    if (lm==TRUE){
-    a <- a +
-      ggplot2::stat_smooth(formula = y ~ x, method="lm", col="red")
+  if (plot==TRUE){ # Plot RMS of displacements, and mean displacements on log-log scale
+    if (nrow(plot.df)>1){
+      ylabel <- expression('<'*d^q*'>'^(1/q)* (km))
+      xlabel <- paste('T(',timeUnit,')',sep="")
+      a <- ggplot2::ggplot(plot.df, ggplot2::aes(plot.df[,1],plot.df[,3]))
+      if (lm==TRUE){
+      a <- a +
+        ggplot2::stat_smooth(formula = y ~ x, method="lm", col="red")
+      }
+      a <- a +
+        ggplot2::geom_point(ggplot2::aes(y = plot.df[,2], colour = "Mean disp.")) +
+        ggplot2::geom_point(ggplot2::aes(y = plot.df[,3], colour = "RMS disp."))+
+        ggplot2::scale_colour_manual(values = c("dark grey", "black"), guide = ggplot2::guide_legend(reverse = TRUE))+
+        ggplot2::scale_x_log10(
+          breaks = function(x) {
+            brks <- scales::extended_breaks(Q = c(1, 5))(log10(x))
+            10^(brks[brks %% 1 == 0])
+          },
+          labels = scales::math_format(format = log10)
+        ) +
+        ggplot2::scale_y_log10(
+          breaks = function(x) {
+            brks <- scales::extended_breaks(Q = c(1, 5))(log10(x))
+            10^(brks[brks %% 1 == 0])
+          },
+          labels = scales::math_format(format = log10)
+        ) +
+        ggplot2::theme_bw(base_size = 18)+
+        ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
+                                            panel.grid.minor = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
+                                            axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour = "black"),
+                                            axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour = "black"),
+                                            legend.position = c(0, 1), legend.justification = c(0, 1), legend.direction = 'vertical',
+                                            legend.background =ggplot2::element_blank(), legend.title = ggplot2::element_blank())+
+        ggplot2::annotation_logticks(short=grid::unit(-0.1, "cm"), mid=grid::unit(-0.1, "cm"), long=grid::unit(-0.3,"cm")) +
+        ggplot2::coord_cartesian(clip="off")+
+        ggplot2::xlab(xlabel)+
+        ggplot2::ylab(ylabel)
+      plot(a)
+    } else {
+      warning("Not enough data to create plot")
     }
-    a <- a +
-      ggplot2::geom_point(ggplot2::aes(y = plot.df[,2], colour = "Mean disp.")) +
-      ggplot2::geom_point(ggplot2::aes(y = plot.df[,3], colour = "RMS disp."))+
-      ggplot2::scale_colour_manual(values = c("dark grey", "black"), guide = ggplot2::guide_legend(reverse = TRUE))+
-      ggplot2::scale_x_log10(
-        breaks = function(x) {
-          brks <- scales::extended_breaks(Q = c(1, 5))(log10(x))
-          10^(brks[brks %% 1 == 0])
-        },
-        labels = scales::math_format(format = log10)
-      ) +
-      ggplot2::scale_y_log10(
-        breaks = function(x) {
-          brks <- scales::extended_breaks(Q = c(1, 5))(log10(x))
-          10^(brks[brks %% 1 == 0])
-        },
-        labels = scales::math_format(format = log10)
-      ) +
-      ggplot2::theme_bw(base_size = 18)+
-      ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
-                                          panel.grid.minor = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
-                                          axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour = "black"),
-                                          axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour = "black"),
-                                          legend.position = c(0, 1), legend.justification = c(0, 1), legend.direction = 'vertical',
-                                          legend.background =ggplot2::element_blank(), legend.title = ggplot2::element_blank())+
-      ggplot2::annotation_logticks(short=grid::unit(-0.1, "cm"), mid=grid::unit(-0.1, "cm"), long=grid::unit(-0.3,"cm")) +
-      ggplot2::coord_cartesian(clip="off")+
-      ggplot2::xlab(xlabel)+
-      ggplot2::ylab(ylabel)
-    plot(a)
-    }
+  }
   return(plot.df)
 }

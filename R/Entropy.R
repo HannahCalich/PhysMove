@@ -35,8 +35,8 @@ Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE){
   for (i in 1:length(species_index)){ # Loop through each position and store counts when they occur in each cell
     Presence <- rep(0, totalcells) # Vector to store counts of occurrences in each grid cell and store in list per individual
     for (j in 1:length((species_index[[i]]))){
-      coordlong <- floor(grid * (species_df[species_index[[i]][j],2] - longmin))
-      coordlat <- floor(grid * (species_df[species_index[[i]][j],3] - latmin))
+      coordlong <- as.numeric(floor(grid * (species_df[species_index[[i]][j],2] - longmin)))
+      coordlat <- as.numeric(floor(grid * (species_df[species_index[[i]][j],3] - latmin)))
       cellnum <- coordlong + grid * (longmax - longmin) * coordlat
       Presence[cellnum] <- Presence[cellnum] + 1 # Recording how many occurrences occurred in each cell
     }
@@ -56,14 +56,15 @@ Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE){
     normalizedEntropy[i] <- indivEntropy[i] / log(CellsVisited[i])  # Normalized to allow for direct comparison of the entropies of trajectories with different numbers of visited areas
     # and informs about the complexity of the visitation pattern ranging between 0 (one visited cell) and 1 (uniform, every cell is visited with the same probability).
     if (CellsVisited[i]==1){
-      warning(paste("Ref",unique(species_df$ref)[i],"only visited 1 cell so normalized entropy scores cannot be calculated and NaN is produced"), immediate. = TRUE)
+      warning(paste("Ref",unique(species_df$ref)[i],"only visited 1 cell so normalized entropy scores cannot be calculated and NaN is produced. NaN values will be excluded from histPlot"), immediate. = TRUE)
     }
   }
   entropyResults <- as.data.frame(cbind("ref"=unique(species_df$ref),"normalizedEntropy"=normalizedEntropy,"indivEntropy"=indivEntropy,"cellsVisited"=CellsVisited))
 
   if (histPlot==TRUE){
-    h <- hist(normalizedEntropy, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
-    hist_plot <- ggplot2::ggplot(entropyResults, ggplot2::aes(normalizedEntropy))+
+    entropyResults.plot <- entropyResults[!is.na(entropyResults$normalizedEntropy),]
+    h <- hist(entropyResults.plot$normalizedEntropy, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
+    hist_plot <- ggplot2::ggplot(entropyResults.plot, ggplot2::aes(normalizedEntropy))+
       ggplot2::geom_histogram(breaks=h$breaks, color="black", fill="darkgrey")+
       ggplot2::scale_y_continuous(breaks=function(x) seq(ceiling(x[1]), floor(x[2]), by = 2))+
       ggplot2::scale_x_continuous("Normalized Entropy", breaks=seq(0,1,0.1), labels=c("0.0", "", "0.2", "", "0.4", "", "0.6", "", "0.8", "", "1.0"))+

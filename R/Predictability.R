@@ -24,12 +24,12 @@ Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRU
   }
 
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
-  Predictability <- c()
+  Pred <- c()
 
   for (i in 1:length(species_index) ){
     if (entropyResults$cellsVisited[i]==1){
-      warning(paste("Ref",unique(species_df$ref)[i],"only visited 1 cell so predictability scores cannot be calculated and NaN is produced"), immediate. = TRUE)
-      Predictability[i] <- NaN
+      warning(paste("Ref",unique(species_df$ref)[i],"only visited 1 cell so Pred scores cannot be calculated and NaN is produced. NaN values will be excluded from histPlot"), immediate. = TRUE)
+      Pred[i] <- NaN
       next
     }
     model <- function(x) c(F1 = x*log(x) + (1-x)*log(1-x) - (1-x)*log(entropyResults$cellsVisited[i]-1) + entropyResults$indivEntropy[i])
@@ -37,7 +37,7 @@ Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRU
     if (startVal==0.99){
       ss <- suppressWarnings(rootSolve::multiroot(f = model, start = (1.01-entropyResults$normalizedEntropy[i]))) # +0.01 added to deal with cases where NormEnt = 1
       if (ss$root > 0 & ss$root < 1){
-        Predictability[i] <- ss$root
+        Pred[i] <- ss$root
     } else {
         start_value_default <- 0.99
         repeat{
@@ -49,18 +49,21 @@ Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRU
             startVal<-startVal-0.01
           }
         }
-        Predictability[i] <- ss$root
+        Pred[i] <- ss$root
       }
     } else if (startVal!=0.99) {
       ss <- rootSolve::multiroot(f = model, start = startVal)
-      Predictability[i] <- ss$root
+      Pred[i] <- ss$root
     }
   }
-  Predictability <- as.data.frame(Predictability)
+
+  predictabilityResults <- as.data.frame(cbind("ref"=unique(species_df$ref),"Predictability"=Pred))
+
   if (histPlot==TRUE){
-    h <- hist(Predictability$Predictability, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
+    Predictability.plot <- as.data.frame(predictabilityResults[!is.na(predictabilityResults$Predictability),])
+    h <- hist(Predictability.plot$Predictability, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
     xlab <- c(0,"",0.2,"",0.4,"",0.6,"",0.8,"",1)
-    hist_plot <- ggplot2::ggplot(Predictability, ggplot2::aes(Predictability))+
+    hist_plot <- ggplot2::ggplot(Predictability.plot, ggplot2::aes(Predictability))+
       ggplot2::geom_histogram(breaks=h$breaks, color="black", fill="darkgrey")+
       ggplot2::scale_y_continuous(breaks=function(x) seq(ceiling(x[1]), floor(x[2]), by = 2))+
       ggplot2::scale_x_continuous("Predictability", breaks=seq(0,1,0.1), labels=c("0.0", "", "0.2", "", "0.4", "", "0.6", "", "0.8", "", "1.0"))+
@@ -70,5 +73,5 @@ Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRU
     # ggplot2::scale_color_manual(name = "", values = c("0.5" = "red"))
     plot(hist_plot)
   }
-  return(Predictability)
+  return(predictabilityResults)
 }
