@@ -112,16 +112,16 @@ pdfPlot<-function(result, desc=NULL, nBins){
     }
 
     if (desc=="Predictability"){
-      names(plot.df) <- c("pi^'MAX'","pdf")
-      xlabel <- expression(pi^'MAX')
+      names(plot.df) <- c("Limit of Predictability","pdf")
+      xlabel <- expression('Limit of Predictability')
     }
     if (desc=="Entropy"){
-      names(plot.df) <- labels <- c("'S/S'[unif]","pdf")
-      xlabel <- expression('S/S'[unif])
+      names(plot.df) <- labels <- c("Normalised Entropy","pdf")
+      xlabel <- expression('Normalised Entropy')
     }
     if (desc=="GyrationRad"){
-      names(plot.df) <- labels <- c("r'[G]*'(km)","pdf")
-      xlabel <- expression('r'[G]*'(km)')
+      names(plot.df) <- labels <- c("Gyration Radius (km)","pdf")
+      xlabel <- expression('Gyration Radius (km)')
     }
     if (desc=="generic"){
       names(plot.df) <- labels <- c("x","pdf")
