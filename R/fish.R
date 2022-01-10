@@ -11,4 +11,4 @@
 #'   ...
 #' }
 #' @source \url{https://github.com/HannahCalich/PhysMove/tree/master/data-raw}
-"speciesA"
+"fish"
