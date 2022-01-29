@@ -2,7 +2,7 @@
 % Please edit documentation in R/PlotAngles.R
 \name{PlotAngles}
 \alias{PlotAngles}
-\title{Plot turning angles with a spider/radar chart}
+\title{Plot turning angles with a circle plot}
 \usage{
 PlotAngles(angleList, timePlot = "all", colours = rainbow, legend = c(TRUE))
 }
@@ -13,18 +13,18 @@ PlotAngles(angleList, timePlot = "all", colours = rainbow, legend = c(TRUE))
 timePlot=1 will only plot angles from the first time window while timePlot="all" will plot all time windows.
 Default is timePlot="all".}
 
-\item{colours}{Colour(s) for lines in spiderPlot. Valid input options include: base R (grDevices) color pallets (e.g., colours=rainbow),
+\item{colours}{Colour(s) for lines in cirle plot Valid input options include: base R (grDevices) color pallets (e.g., colours=rainbow),
 RColorBrewer palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that
 grDevices color pallets are functions and do not use quotations. If the palette does not have enough distinct colours to match the lines being plotted the function will
 automatically create a continuous pallet with the colours provided. Default is rainbow.}
 
-\item{legend}{Add a legend to the spider plot. Default is TRUE.}
+\item{legend}{Add a legend to the cirle plot. Default is TRUE.}
 }
 \value{
-Spider/radar chart of the angles calculated with the \code{\link{TurningAngles}} function and the data used to create the spider/radar chart.
+Circle plot of the angles calculated with the \code{\link{TurningAngles}} function and the data used to create the circle plot.
 }
 \description{
-This function allows you to create a spider/radar chart illustrating the frequency of turning angles from
+This function allows you to create a circle plot illustrating the frequency of turning angles from
 the \code{\link{TurningAngles}} function.
 }
 \examples{

@@ -45,5 +45,5 @@ This function allows you to calculate turning angles between sets of three conse
 }
 \examples{
 TurningAngles(speciesA)
-TurningAngles(speciesA, min_hr=24, max_hr=240, interval_hr=24,range_hr=6, spiderPlot=c(TRUE, "all"), legend=TRUE, colours=rainbow, histPlot=c(FALSE, "all"))
+TurningAngles(speciesA, min_hr=24, max_hr=240, interval_hr=24,range_hr=6, histPlot=c(FALSE, "all"))
 }
