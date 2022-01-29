@@ -19,9 +19,7 @@ See attached sample data \code{\link{speciesA}}.}
 }
 \value{
 Data frame of the normalized entropy values for each trajectory (main result) as well as the individual entropy
-values (not normalized) and the number of cells each trajectory visited. If histPlot=TRUE a histogram of the normalized entropy scores is created. If pdfPlot=TRUE, a
-probability density function line plot of results is created and the data used to create the pdf plot are automatically assigned to the global environment
-('entropyPDFplot').
+values (not normalized) and the number of cells each trajectory visited. If histPlot=TRUE a histogram of the normalized entropy scores is created.
 }
 \description{
 This function allows you to calculate the normalized entropy of individual trajectories (individual entropy scores are

@@ -18,8 +18,7 @@ See attached sample data \code{\link{speciesA}}.}
 \item{mapCol}{Colours for points and gyration radii on map, respectively. Default is c("Black","Red).}
 }
 \value{
-Gyration radius values for each trajectory. If map=TRUE a map of the gyration radius results is created. If pdfPlot=TRUE, a
-pdf plot of results is created and the data used to create the pdf plot are automatically assigned to the global environment ('gyrationradPDFplot').
+Gyration radius values for each trajectory. If map=TRUE a map of the gyration radius results is created.
 GyrationRad(speciesA)
 GyrationRad(speciesA, map=TRUE, mapCol=c("Black","Red"))
 }

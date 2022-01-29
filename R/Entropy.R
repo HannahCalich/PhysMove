@@ -11,9 +11,7 @@
 #' @param gridCell Grid cell size in degrees. Default is 0.25.
 #' @param histPlot Plot a histogram of the normalized  entropy values. Default is TRUE.
 #' @return Data frame of the normalized entropy values for each trajectory (main result) as well as the individual entropy
-#' values (not normalized) and the number of cells each trajectory visited. If histPlot=TRUE a histogram of the normalized entropy scores is created. If pdfPlot=TRUE, a
-#' probability density function line plot of results is created and the data used to create the pdf plot are automatically assigned to the global environment
-#' ('entropyPDFplot').
+#' values (not normalized) and the number of cells each trajectory visited. If histPlot=TRUE a histogram of the normalized entropy scores is created.
 #' @examples
 #' Entropy(speciesA)
 #' Entropy(speciesA, gridCell=0.25, histPlot=TRUE)

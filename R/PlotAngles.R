@@ -1,17 +1,17 @@
-#' Plot turning angles with a spider/radar chart
+#' Plot turning angles with a circle plot
 #'
-#' This function allows you to create a spider/radar chart illustrating the frequency of turning angles from
+#' This function allows you to create a circle plot illustrating the frequency of turning angles from
 #' the \code{\link{TurningAngles}} function.
 #' @param angleList List of angles calculates with the \code{\link{TurningAngles}} function.
 #' @param timePlot Plot angles from all time windows or only plot angles from one specific time window. For example,
 #' timePlot=1 will only plot angles from the first time window while timePlot="all" will plot all time windows.
 #' Default is timePlot="all".
-#' @param colours Colour(s) for lines in spiderPlot. Valid input options include: base R (grDevices) color pallets (e.g., colours=rainbow),
+#' @param colours Colour(s) for lines in cirle plot Valid input options include: base R (grDevices) color pallets (e.g., colours=rainbow),
 #' RColorBrewer palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that
 #' grDevices color pallets are functions and do not use quotations. If the palette does not have enough distinct colours to match the lines being plotted the function will
 #' automatically create a continuous pallet with the colours provided. Default is rainbow.
-#' @param legend Add a legend to the spider plot. Default is TRUE.
-#' @return Spider/radar chart of the angles calculated with the \code{\link{TurningAngles}} function and the data used to create the spider/radar chart.
+#' @param legend Add a legend to the cirle plot. Default is TRUE.
+#' @return Circle plot of the angles calculated with the \code{\link{TurningAngles}} function and the data used to create the circle plot.
 #' @examples PlotAngles(angleList)
 #' @examples PlotAngles(angleList, timePlot="all", colours=rainbow, legend=TRUE)
 #' @export
@@ -28,29 +28,29 @@ PlotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=c(TRUE))
     angles <- c(Cols[c(1:22)]+360,360,Cols[c(23:45)]) # Added 360 to list for plot. Angles at 360 are the same as at 0
 
     if (d==1){
-      spider <- as.data.frame(cbind(angles, probability, timeWindows=c(rep(timeWindows[d], length(probability)))))
+      circle.plot <- as.data.frame(cbind(angles, probability, timeWindows=c(rep(timeWindows[d], length(probability)))))
     }
     if (d > 1){
-      spider_temp <- as.data.frame(cbind(angles, probability, timeWindows=c(rep(timeWindows[d], length(probability)))))
-      spider <- rbind(spider, spider_temp)
+      circle.plot_temp <- as.data.frame(cbind(angles, probability, timeWindows=c(rep(timeWindows[d], length(probability)))))
+      circle.plot <- rbind(circle.plot, circle.plot_temp)
     }
   }
 
   if (timePlot!="all"){
-    spider <- spider[which(spider$timeWindows==timePlot),]
+    circle.plot <- circle.plot[which(circle.plot$timeWindows==timePlot),]
   }
 
-  spider <- spider[complete.cases(spider), ] #remove rows with no data
-  spider$timeWindows <- round(spider$timeWindows,3)
-  spider <- spider[,c(3,2,1)]
+  circle.plot <- circle.plot[complete.cases(circle.plot), ] #remove rows with no data
+  circle.plot$timeWindows <- round(circle.plot$timeWindows,3)
+  circle.plot <- circle.plot[,c(3,2,1)]
 
   if (class(colours)=="function"){ # If a grDevices colour pallet is used
-    myColoursPal <- colours(length(unique(spider$timeWindows)))
+    myColoursPal <- colours(length(unique(circle.plot$timeWindows)))
   } else if (colours[1] %in% rownames(RColorBrewer::brewer.pal.info)){ # If a RColourBrewer pallet is used
-    myColoursPal <- colorRampPalette(RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[colours,1], colours))(length(unique(spider$timeWindows))) # Use the submitted colour palette and extend if to the number of colours needed
+    myColoursPal <- colorRampPalette(RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[colours,1], colours))(length(unique(circle.plot$timeWindows))) # Use the submitted colour palette and extend if to the number of colours needed
   } else {
     myPal <- colorRampPalette(colours) # If hex codes or colour names are used
-    myColoursPal <- myPal(length(unique(spider$timeWindows)))
+    myColoursPal <- myPal(length(unique(circle.plot$timeWindows)))
   }
 
   if (legend==TRUE){
@@ -61,9 +61,9 @@ PlotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=c(TRUE))
     legendPos <- "ggplot2::element_blank()"
   }
 
-  spider_plot <- ggplot2::ggplot(spider, ggplot2::aes(x = angles, y = probability, group=as.factor(timeWindows),colour=as.factor(timeWindows)))+
+  circle.plot_plot <- ggplot2::ggplot(circle.plot, ggplot2::aes(x = angles, y = probability, group=as.factor(timeWindows),colour=as.factor(timeWindows)))+
     ggplot2::coord_polar(clip="off")+
-    ggplot2::geom_hline(yintercept = c(0, max(spider$probability)+0.01), colour = "black", size = 0.25) +
+    ggplot2::geom_hline(yintercept = c(0, max(circle.plot$probability)+0.01), colour = "black", size = 0.25) +
     ggplot2::geom_vline(xintercept = seq(0, 360, by = 90), colour = "black", size = 0.25) +
     ggplot2::geom_point(size = 0.4) +
     ggplot2::geom_line(size = 1) +
@@ -82,6 +82,6 @@ PlotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=c(TRUE))
       panel.grid  = ggplot2::element_blank(),
       plot.margin = grid::unit(c(0,0,0,0), "cm"),
       legend.box.margin=margin(0,0,0,-5))
-  plot(spider_plot)
-  return(spider)
+  plot(circle.plot_plot)
+  return(circle.plot)
 }
