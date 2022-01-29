@@ -13,7 +13,7 @@
 # evidence of directed motion, and high intraspecific variation
 
 # Set track parameters
-tracks <- 25 # how many tracks do you want to make?
+n.tracks <- 25 # how many tracks do you want to make?
 lambda <- 0.125 # exponential exponent for all tracks
 distmin <- 2.5e-1 # minimum distance in km
 
@@ -25,22 +25,22 @@ random <- 0.4 # percent of angles showing random movement
 
 # Tagging location
 set.seed(1)
-startLatRange <- runif(tracks,0,2) # random tagging location between 0-2 deg latitude
+startLatRange <- runif(n.tracks,0,2) # random tagging location between 0-2 deg latitude
 set.seed(1)
-startLonRange <- runif(tracks,0,2) # random tagging location between 0-2 deg longitude
+startLonRange <- runif(n.tracks,0,2) # random tagging location between 0-2 deg longitude
 
 # Tagging dates
 set.seed(1)
 dates <- sample(seq(as.POSIXct('2015-01-01 12:00:00'), as.POSIXct('2020-01-01 24:00:00'),
-                    by="day"), tracks)
+                    by="day"), n.tracks)
 
 # Create dataframe
-fish <- data.frame("ref"=0,"lon"=startLonRange[1],"lat"=startLatRange[1],"day"=dates[1])
+tracks <- data.frame("ref"=0,"lon"=startLonRange[1],"lat"=startLatRange[1],"day"=dates[1])
 # start loop, delete row at end of loop
 
 # Number of locations per track
 set.seed(1)
-samplesize <- floor(runif(tracks,200,1000)) # how many locations is the track going to have
+samplesize <- floor(runif(n.tracks,200,1000)) # how many locations is the track going to have
 # default is: min 200 and max 1000
 
 # Parameters needed to create location data
@@ -49,7 +49,7 @@ rad <- 3.141592653589793/180 #Python has more digits of pi than R, so value past
 
 # Create tracks with parameters set above
 i=1
-for (i in 1:tracks){ # for each track
+for (i in 1:n.tracks){ # for each track
   set.seed(1)
   r <- runif(samplesize[i]-1,0,1) # create i displacements based on a uniform distribution between 0-1
   exp_x <- distmin-(1/lambda)*log(1-r) # convert displacements to an exponential distribution with an xmin
@@ -68,7 +68,7 @@ for (i in 1:tracks){ # for each track
   # randomize the order of the angles, if  rounding during "calculate angles" caused too many angles
   # this will correct it
   angles <- sample(angles,samplesize[i])
-  fish <- rbind(fish,c(data.frame("ref"=rep(i,samplesize[i]),"lon"=rep(startLonRange[i],samplesize[i]),"lat"=rep(startLatRange[i],samplesize[i]),
+  tracks <- rbind(tracks,c(data.frame("ref"=rep(i,samplesize[i]),"lon"=rep(startLonRange[i],samplesize[i]),"lat"=rep(startLatRange[i],samplesize[i]),
                                           "day"=rep(dates[i],samplesize[i]))))
   if (i==1){ # start position for dataframe
     startRow <- 1
@@ -80,27 +80,27 @@ for (i in 1:tracks){ # for each track
   for (j in 1:(samplesize[i]-1)){ # for each new location in each track
     d <- exp_x[j] # random displacement from exp dist
     a <- angles[j]*(rad) # random angle from those created previously
-    lat1 <- fish$lat[startRow+j]*(rad) # convert current lat location to radians
-    long1 <- fish$lon[startRow+j]*(rad) # convert current long location to radians
+    lat1 <- tracks$lat[startRow+j]*(rad) # convert current lat location to radians
+    long1 <- tracks$lon[startRow+j]*(rad) # convert current long location to radians
     # calculate new lat in radians based on angle and distance
     lat2 <- asin(sin(lat1)*cos(d/Radius) + cos(lat1)*sin(d/Radius)*cos(a))
     # calculate new long in radians based on angle and distance
     long2 <- long1 + atan2(sin(a)*sin(d/Radius)*cos(lat1),cos(d/Radius)-sin(lat1)*sin(lat2))
-    fish$lon[startRow+j+1] <- long2/rad # convert to degrees and save in dataframe
-    fish$lat[startRow+j+1] <- lat2/rad # convert to degrees and save in dataframe
+    tracks$lon[startRow+j+1] <- long2/rad # convert to degrees and save in dataframe
+    tracks$lat[startRow+j+1] <- lat2/rad # convert to degrees and save in dataframe
     # Advance time by 1 day
-    fish$day[startRow+j+1] <- fish$day[startRow+j]+(24*60*60)
+    tracks$day[startRow+j+1] <- tracks$day[startRow+j]+(24*60*60)
   }
 }
-fish <- fish[-1,] #remove starting location
-row.names(fish) <- 1:nrow(fish) # rename rows 1:n
+tracks <- tracks[-1,] #remove starting location
+row.names(tracks) <- 1:nrow(tracks) # rename rows 1:n
 
 # Plot tracks
 cols <- data.frame(
-  col = rainbow(length(unique(fish$ref))),
-  id = unique(fish$ref)
+  col = rainbow(length(unique(tracks$ref))),
+  id = unique(tracks$ref)
 )
-with(fish, {
+with(tracks, {
   plot(lon,lat,pch = 16, col = cols$col[match(ref, cols$id)], type = "p",
        ylim=c(min(lat)-0.25,max(lat)+0.25),xlim=c(min(lon)-0.25,max(lon)+0.25),cex=0.5,
        ylab="Latitude", xlab="Longitude")
@@ -110,11 +110,12 @@ with(fish, {
   }
 })
 
-rm(list=ls()[! ls() %in% c("fish")]) # remove temporary vectors etc
+
+rm(list=ls()[! ls() %in% c("tracks")]) # remove temporary vectors etc
 
 ##################################
 ## Set working directory and save
 ##################################
 # setwd()
-save(fish, file = "fish.RData")
+save(tracks, file = "tracks.RData")
 
