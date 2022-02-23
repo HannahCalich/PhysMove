@@ -11,9 +11,9 @@ Randomise(species_df, randTrack = 500, gridCell = 0.25, plot = TRUE, lm = TRUE)
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-See attached sample data \code{\link{speciesA}}.}
+See attached sample data \code{\link{tracks}}.}
 
-\item{randTrack}{Number of Randomised tracks per individual. Default is 500.}
+\item{randTrack}{Number of randomised tracks per individual. Default is 500.}
 
 \item{gridCell}{Grid cell size in degrees. Default is 0.25.}
 
@@ -31,7 +31,7 @@ ref. If plot = TRUE, a plot illustrating the number of cells visited by the orig
 If lm = TRUE, a linear regression is run, a fit line and reference line are added to the plot (if plot = TRUE), and the results
 'RandomiselinearModel' are automatically assigned to the global environment. Three additional variables are automatically assigned
 to the global environment as they are required to plot the reshuffled tracks with the \code{\link{PlotRandomTracks} function}
-('RandomisedLat', 'RandomisedLong' and 'randTrack').
+('RandomisedLat' and 'RandomisedLong').
 }
 \description{
 This function allows you to investigate the influence spatial and/or temporal correlations may have on an indiivudals' space use patterns.
@@ -39,6 +39,6 @@ This is done by maintaining the origin and end location of each track, randomizi
 and calculating how many grid cells the original and Randomised tracks visited, which summarizes their space use.
 }
 \examples{
-Randomise(speciesA)
-Randomise(speciesA, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE)
+Randomise(tracks)
+Randomise(tracks, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE)
 }

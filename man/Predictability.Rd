@@ -11,11 +11,11 @@ Predictability(species_df, entropyResults, startVal = 0.99, histPlot = TRUE)
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-See attached sample data \code{\link{speciesA}}.}
+See attached sample data \code{\link{tracks}}.}
 
 \item{entropyResults}{Data frame of results output from the \code{\link{Entropy}} function.}
 
-\item{startVal}{Starting value used to find a root for the limit of predictability equation. Function will loop through values
+\item{startVal}{Starting value used to find a root value for the limit of predictability equation. Function will loop through values
 starting at startVal and decrease by 0.01 at each iteration until an acceptable root value is identified. Default is 0.99}
 
 \item{histPlot}{Plot a histogram of the limit of predictability scores. Default is TRUE.}
@@ -25,9 +25,9 @@ Limit of predictability values for each trajectory. If histPlot=TRUE a histogram
 }
 \description{
 This function allows you to calculate the limit of predictability for each trajectory based on each individual's entropy. This function requires
-'indivEntropy', 'occurrences', and 'normEnt' from the \code{\link{Entropy}} function.
+'indivEntropy', 'cellsVisited', and 'normalisedEntropy' from the \code{\link{Entropy}} function.
 }
 \examples{
-Predictability(speciesA, entropyResults)
-Predictability(speciesA, entropyResults, startVal=0.99, histPlot=TRUE)
+Predictability(tracks, entropyResults)
+Predictability(tracks, entropyResults, startVal=0.99, histPlot=TRUE)
 }

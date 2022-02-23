@@ -4,7 +4,7 @@
 \alias{PlotAngles}
 \title{Plot turning angles with a circle plot}
 \usage{
-PlotAngles(angleList, timePlot = "all", colours = rainbow, legend = c(TRUE))
+PlotAngles(angleList, timePlot = "all", colours = rainbow, legend = TRUE)
 }
 \arguments{
 \item{angleList}{List of angles calculates with the \code{\link{TurningAngles}} function.}

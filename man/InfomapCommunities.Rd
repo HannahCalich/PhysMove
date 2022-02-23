@@ -18,7 +18,7 @@ InfomapCommunities(
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-See attached sample data \code{\link{speciesA}}.}
+See attached sample data \code{\link{tracks}}.}
 
 \item{gridCell}{Grid cell size in degrees. Default is 0.25.}
 
@@ -51,6 +51,6 @@ For details please see: https://ecological-complexity-lab.github.io/infomap_ecol
 To learn more about Infomap please visit: https://www.mapequation.org/
 }
 \examples{
-InfomapCommunities(speciesA)
-InfomapCommunities(speciesA, gridCell=0.25, hours=24, range_hr=6, infomap=TRUE, tpm=FALSE)
+InfomapCommunities(tracks)
+InfomapCommunities(tracks, gridCell=0.25, hours=24, range_hr=6, infomap=TRUE, tpm=FALSE)
 }

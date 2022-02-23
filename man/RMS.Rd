@@ -11,7 +11,7 @@ RMS(species_df, timeUnit = "days", wBins = 1.1, plot = TRUE, lm = TRUE)
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-See attached sample data \code{\link{speciesA}}.}
+See attached sample data \code{\link{tracks}}.}
 
 \item{timeUnit}{Unit used to calculate time between locations (e.g., "secs", "mins", "hours", "days", "weeks"). Default is "days".}
 
@@ -20,8 +20,8 @@ See attached sample data \code{\link{speciesA}}.}
 \item{plot}{Plot the root-mean-square of displacements versus the mean displacements against their corresponding time periods. Default is TRUE.}
 
 \item{lm}{Calculate a linear regression to examine the relationship between the root-mean-square displacement values (target variable)
-and time (predictor variable) and add fit line to the plot (if plot=TRUE). The slope of this relationship (the scaline exponent) is the RMS
-statistic and it can be determined by typing 'RMSlinearModel$coefficients[2]'. Default is TRUE.}
+and time (predictor variable) and add fit line to the plot (if plot=TRUE). The slope of this relationship, which is also known as the Hurst or
+scaling exponent) is the RMS statistic and it can be determined by typing 'RMSlinearModel$coefficients[2]'. Default is TRUE.}
 }
 \value{
 The 'timeWindows' in log-sized bins along with their corresponding 'meanDisplacements', and root-mean-square displacement 'rmsDisplacements'
@@ -33,6 +33,6 @@ time period is created. If lm = TRUE, a linear regression is run, a fit line is 
 This function allows you to calculate root-mean-square displacements and plot them scaled with time
 }
 \examples{
-RMS(speciesA)
-RMS(speciesA, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE)
+RMS(tracks)
+RMS(tracks, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE)
 }

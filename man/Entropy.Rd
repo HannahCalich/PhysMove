@@ -11,22 +11,22 @@ Entropy(species_df, gridCell = 0.25, histPlot = TRUE)
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-See attached sample data \code{\link{speciesA}}.}
+See attached sample data \code{\link{tracks}}.}
 
 \item{gridCell}{Grid cell size in degrees. Default is 0.25.}
 
-\item{histPlot}{Plot a histogram of the normalized  entropy values. Default is TRUE.}
+\item{histPlot}{Plot a histogram of the normalised  entropy values. Default is TRUE.}
 }
 \value{
-Data frame of the normalized entropy values for each trajectory (main result) as well as the individual entropy
-values (not normalized) and the number of cells each trajectory visited. If histPlot=TRUE a histogram of the normalized entropy scores is created.
+Data frame of the normalised entropy values for each trajectory (main result) as well as the individual entropy
+values (not normalised) and the number of cells each trajectory visited. If histPlot=TRUE a histogram of the normalised entropy scores is created.
 }
 \description{
-This function allows you to calculate the normalized entropy of individual trajectories (individual entropy scores are
-normalized by the log number of cells each trajectory visited), which provides insight to how ordered or disordered the trajectories were.
+This function allows you to calculate the normalised entropy of individual trajectories (individual entropy scores are
+normalised by the log number of cells each trajectory visited), which provides insight to how ordered or disordered the trajectories were.
 Values close to 1 indicate high entropy (disordered trajectories) while values closer to 0 indicate low entropy (ordered trajectories).
 }
 \examples{
-Entropy(speciesA)
-Entropy(speciesA, gridCell=0.25, histPlot=TRUE)
+Entropy(tracks)
+Entropy(tracks, gridCell=0.25, histPlot=TRUE)
 }

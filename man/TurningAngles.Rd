@@ -18,7 +18,7 @@ TurningAngles(
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-See attached sample data \code{\link{speciesA}}.}
+See attached sample data \code{\link{tracks}}.}
 
 \item{min_hr}{Minimum number of hours to consider for calculations. Default is 24 hours (i.e., 1 day).}
 
@@ -41,9 +41,9 @@ List of turning angles for each time window, the name of each list element corre
 a histogram of results is created.
 }
 \description{
-This function allows you to calculate turning angles between sets of three consecutive location estimates separated by set time period(s).
+This function allows you to calculate turning angles between sets of three consecutive location estimates separated by set time window(s).
 }
 \examples{
-TurningAngles(speciesA)
-TurningAngles(speciesA, min_hr=24, max_hr=240, interval_hr=24,range_hr=6, histPlot=c(FALSE, "all"))
+TurningAngles(tracks)
+TurningAngles(tracks, min_hr=24, max_hr=240, interval_hr=24,range_hr=6, histPlot=c(FALSE, "all"))
 }

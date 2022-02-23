@@ -20,7 +20,7 @@ PlotRandomTracks(
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-See attached sample data \code{\link{speciesA}}.}
+See attached sample data \code{\link{tracks}}.}
 
 \item{ref}{Reference number of track from species_df to plot.}
 
@@ -48,6 +48,6 @@ from species_df).
 Plot locations from original and reshuffled tracks using RandomisedLat and RandomisedLong outputs from the \code{\link{Randomise}} function
 }
 \examples{
-PlotRandomTracks<-function(speciesA, ref=1)
-PlotRandomTracks<-(speciesA, ref=1, numPlot=1:5, colours=c("black","grey70"), tracks=TRUE, startCol="red", endCol="blue", legend=TRUE)
+PlotRandomTracks<-function(tracks, ref=1)
+PlotRandomTracks<-(tracks, ref=1, numPlot=1:5, colours=c("black","grey70"), tracks=TRUE, startCol="red", endCol="blue", legend=TRUE)
 }
