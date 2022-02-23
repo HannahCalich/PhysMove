@@ -1,26 +1,26 @@
 #' Predictability of trajectories
 #'
 #' This function allows you to calculate the limit of predictability for each trajectory based on each individual's entropy. This function requires
-#' 'indivEntropy', 'occurrences', and 'normEnt' from the \code{\link{Entropy}} function.
+#' 'indivEntropy', 'cellsVisited', and 'normalisedEntropy' from the \code{\link{Entropy}} function.
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-#' See attached sample data \code{\link{speciesA}}.
+#' See attached sample data \code{\link{tracks}}.
 #' @param entropyResults Data frame of results output from the \code{\link{Entropy}} function.
-#' @param startVal Starting value used to find a root for the limit of predictability equation. Function will loop through values
+#' @param startVal Starting value used to find a root value for the limit of predictability equation. Function will loop through values
 #' starting at startVal and decrease by 0.01 at each iteration until an acceptable root value is identified. Default is 0.99
 #' @param histPlot Plot a histogram of the limit of predictability scores. Default is TRUE.
 #' @return Limit of predictability values for each trajectory. If histPlot=TRUE a histogram of the limit of predictability scores is created.
 #' @examples
-#' Predictability(speciesA, entropyResults)
-#' Predictability(speciesA, entropyResults, startVal=0.99, histPlot=TRUE)
+#' Predictability(tracks, entropyResults)
+#' Predictability(tracks, entropyResults, startVal=0.99, histPlot=TRUE)
 #' @export
 
 Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRUE){
 
   if (nrow(entropyResults)!=length(unique(species_df$ref))){
-    stop("The number of individuals in the species_df does not match the number of normalized entropy values, check to ensure the right data has \n  been entered.")
+    stop("The number of individuals in the species_df does not match the number of normalised entropy values, check to ensure the right data has \n  been entered.")
   }
 
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
@@ -35,7 +35,7 @@ Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRU
     model <- function(x) c(F1 = x*log(x) + (1-x)*log(1-x) - (1-x)*log(entropyResults$cellsVisited[i]-1) + entropyResults$indivEntropy[i])
 
     if (startVal==0.99){
-      ss <- suppressWarnings(rootSolve::multiroot(f = model, start = (1.01-entropyResults$normalizedEntropy[i]))) # +0.01 added to deal with cases where NormEnt = 1
+      ss <- suppressWarnings(rootSolve::multiroot(f = model, start = (1.01-entropyResults$normalisedEntropy[i]))) # +0.01 added to deal with cases where NormEnt = 1
       if (ss$root > 0 & ss$root < 1){
         Pred[i] <- ss$root
     } else {

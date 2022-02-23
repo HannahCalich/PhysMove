@@ -5,12 +5,12 @@
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-#' See attached sample data \code{\link{speciesA}}.
+#' See attached sample data \code{\link{tracks}}.
 #' @param map Create a map illustrating the gyration radius of each trajectory. Default is TRUE.
 #' @param mapCol Colours for points and gyration radii on map, respectively. Default is c("Black","Red).
 #' @return Gyration radius values for each trajectory. If map=TRUE a map of the gyration radius results is created.
-#' GyrationRad(speciesA)
-#' GyrationRad(speciesA, map=TRUE, mapCol=c("Black","Red"))
+#' GyrationRad(tracks)
+#' GyrationRad(tracks, map=TRUE, mapCol=c("Black","Red"))
 #' @export
 
 GyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red")){

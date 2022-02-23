@@ -6,7 +6,7 @@
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-#' See attached sample data \code{\link{speciesA}}.
+#' See attached sample data \code{\link{tracks}}.
 #' @param gridCell Grid cell size in degrees. Default is 0.25.
 #' @param map Create a map illustrating where occupancy occurs. Default is TRUE.
 #' @param colGrad  Colour gradient for occupancy map that illustrates low, moderate, and high occupancy, respectively
@@ -14,8 +14,8 @@
 #' @return Occupancy values and corresponding locations (center value of each grid cell). If map=TRUE a map is created. The total
 #' number of cells used in analysis 'totalCells' is automatically assigned to the global environment because this information is
 #' required by the \code{\link{pdfPlot}} function.
-#' @examples Occupancy(speciesA)
-#' @examples Occupancy(speciesA, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"))
+#' @examples Occupancy(tracks)
+#' @examples Occupancy(tracks, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"))
 #' @export
 
 Occupancy<-function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red")){
@@ -81,5 +81,7 @@ Occupancy<-function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "ligh
     plot(z)
   }
   assign("totalCells", totalcells, envir = .GlobalEnv)
+  OccExp <- OccExp[,c(6,5,4,2,3)]
+  row.names(OccExp) <- 1:nrow(OccExp)
   return(OccExp)
 }

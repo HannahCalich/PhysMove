@@ -5,7 +5,7 @@
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-#' See attached sample data \code{\link{speciesA}}.
+#' See attached sample data \code{\link{tracks}}.
 #' @param ref Reference number of track from species_df to plot.
 #' @param numPlot Number of Randomised tracks to plot. The Randomised tracks were consecutively numbered from 1 to however many you set in the
 #' \code{\link{Randomise}} function. The input value can either be any of these individual numbers (e.g., 23), or a range of numbers (e.g., 1:10),
@@ -19,14 +19,14 @@
 #' @param legend legend Add legend with legend=TRUE (default).
 #' @return Plot showing the original and Randomised track locations and the Randomised tracks data used to create the map (original tracks are
 #' from species_df).
-#' @examples PlotRandomTracks<-function(speciesA, ref=1)
-#' @examples PlotRandomTracks<-(speciesA, ref=1, numPlot=1:5, colours=c("black","grey70"), tracks=TRUE, startCol="red", endCol="blue", legend=TRUE)
+#' @examples PlotRandomTracks<-function(tracks, ref=1)
+#' @examples PlotRandomTracks<-(tracks, ref=1, numPlot=1:5, colours=c("black","grey70"), tracks=TRUE, startCol="red", endCol="blue", legend=TRUE)
 #' @export
 
 PlotRandomTracks<-function(species_df, ref=NULL, numPlot=1:5, colours=c("black","grey70"),
                            tracks=TRUE, startCol="red", endCol="blue", legend=TRUE){
 
-  if ((exists("RandomisedLat")& exists("RandomisedLong")& exists("randTrack"))==FALSE){
+  if ((exists("RandomisedLat")& exists("RandomisedLong"))==FALSE){
     stop("Please create Randomised tracks using the Randomise function prior to executing PlotRandomTracks")
   }
 
@@ -34,7 +34,7 @@ PlotRandomTracks<-function(species_df, ref=NULL, numPlot=1:5, colours=c("black",
     stop("What track would you like to plot? Please update the 'ref' parameter to a valid reference number from your species_df")
   }
 
-  if (length(numPlot)>randTrack){
+  if (length(numPlot)>ncol(RandomisedLat)){
     stop("You cannot plot more random tracks than you created with the Randomise function. Please adjust the numPlot value or
          re-run Randomise to create more tracks")
   }
@@ -115,5 +115,7 @@ PlotRandomTracks<-function(species_df, ref=NULL, numPlot=1:5, colours=c("black",
     a <- a + ggplot2::theme(legend.position = "none")
   }
   plot(a)
+  plotpoints <- plotpoints[,2:4]
+  colnames(plotpoints)[1] <- c("randTrack")
   return(plotpoints)
 }

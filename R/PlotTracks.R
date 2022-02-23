@@ -5,7 +5,7 @@
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-#' See attached sample data \code{\link{speciesA}}.
+#' See attached sample data \code{\link{tracks}}.
 #' @param ref Reference number of track from species_df to plot, options include an individual number (ref=1) or a range of numbers (ref=1:10).
 #' By default all unique reference numbers are plotted. Defalt is NULL.
 #' @param colours Colour(s) for plot points. Valid input options include: base R (grDevices) color pallets (e.g., colours=rainbow), RColorBrewer
@@ -15,8 +15,8 @@
 #' @param tracks Add track lines to the plot. Default is TRUE.
 #' @return Plot showing the original and randomized track locations and the randomized tracks data used to create the map (original tracks are
 #' from species_df).
-#' @examples PlotRandomTracks<-function(speciesA, ref=1)
-#' @examples PlotRandomTracks<-(speciesA, ref=1, numPlot=1:5, colours=c("black","grey70"), tracks=TRUE, startCol="red", endCol="blue")
+#' @examples PlotRandomTracks<-function(tracks, ref=1)
+#' @examples PlotRandomTracks<-(tracks, ref=1, numPlot=1:5, colours=c("black","grey70"), tracks=TRUE, startCol="red", endCol="blue")
 #' @export
 
 PlotTracks<-function(species_df, ref=NULL, tracks=TRUE, colours=rainbow){

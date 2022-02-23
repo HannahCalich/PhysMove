@@ -104,6 +104,7 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
       a <- a + ggplot2::theme(legend.position = "none")
     }
     plot(a)
+    colnames(pdfPlotAll) <- c("pdf", "disp", "timeWindow")
     return(pdfPlotAll)
   }
   #####################################################################################
@@ -176,6 +177,7 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
       a <- a + ggplot2::theme(legend.position = "none")
     }
     plot(a)
+    colnames(pdfPlotAll) <- c("pdf", "disp", "timeWindow")
     return(pdfPlotAll)
   }
 }

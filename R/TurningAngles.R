@@ -1,11 +1,11 @@
 #' Calculate turning angles from trajectories
 #'
-#' This function allows you to calculate turning angles between sets of three consecutive location estimates separated by set time period(s).
+#' This function allows you to calculate turning angles between sets of three consecutive location estimates separated by set time window(s).
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-#' See attached sample data \code{\link{speciesA}}.
+#' See attached sample data \code{\link{tracks}}.
 #' @param min_hr Minimum number of hours to consider for calculations. Default is 24 hours (i.e., 1 day).
 #' @param max_hr Maximum number of hours to consider for calculations. Default is 240 hours (i.e., 10 days).
 #' @param interval_hr Time interval (in hours) used to set intervals between min_hr and max_hr. Default is 24 hours (i.e., 1 day).
@@ -19,8 +19,8 @@
 #' Default is histPlot=c(TRUE, "all").
 #' @return List of turning angles for each time window, the name of each list element corresponds with a time window in days. If histPlot = TRUE,
 #' a histogram of results is created.
-#' @examples TurningAngles(speciesA)
-#' @examples TurningAngles(speciesA, min_hr=24, max_hr=240, interval_hr=24,range_hr=6, histPlot=c(FALSE, "all"))
+#' @examples TurningAngles(tracks)
+#' @examples TurningAngles(tracks, min_hr=24, max_hr=240, interval_hr=24,range_hr=6, histPlot=c(FALSE, "all"))
 #' @export
 
 TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range_hr=6, histPlot=c(TRUE, "all")){
@@ -123,7 +123,7 @@ TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range
     }
     angleList[[d]] <- angleList[[d]][-1] # Remove dummy value from start of list for each individual
     angleList[[d]] <- angleList[[d]] / rad # Now transform all the angles from radians to degrees
-    print(paste0(length(angleList[[d]])," angles in ", MyTime[d]/(60*60), " ± ", range_hr/(60*60), " hour(s)"))
+    print(paste0(length(angleList[[d]])," angles in ", MyTime[d]/(60*60), " +/- ", range_hr/(60*60), " hour(s)"))
   }
   names(angleList) <- round(Days, 3)
 

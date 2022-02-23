@@ -1,20 +1,20 @@
 #' Entropy of trajectories
 #'
-#' This function allows you to calculate the normalized entropy of individual trajectories (individual entropy scores are
-#' normalized by the log number of cells each trajectory visited), which provides insight to how ordered or disordered the trajectories were.
+#' This function allows you to calculate the normalised entropy of individual trajectories (individual entropy scores are
+#' normalised by the log number of cells each trajectory visited), which provides insight to how ordered or disordered the trajectories were.
 #' Values close to 1 indicate high entropy (disordered trajectories) while values closer to 0 indicate low entropy (ordered trajectories).
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-#' See attached sample data \code{\link{speciesA}}.
+#' See attached sample data \code{\link{tracks}}.
 #' @param gridCell Grid cell size in degrees. Default is 0.25.
-#' @param histPlot Plot a histogram of the normalized  entropy values. Default is TRUE.
-#' @return Data frame of the normalized entropy values for each trajectory (main result) as well as the individual entropy
-#' values (not normalized) and the number of cells each trajectory visited. If histPlot=TRUE a histogram of the normalized entropy scores is created.
+#' @param histPlot Plot a histogram of the normalised  entropy values. Default is TRUE.
+#' @return Data frame of the normalised entropy values for each trajectory (main result) as well as the individual entropy
+#' values (not normalised) and the number of cells each trajectory visited. If histPlot=TRUE a histogram of the normalised entropy scores is created.
 #' @examples
-#' Entropy(speciesA)
-#' Entropy(speciesA, gridCell=0.25, histPlot=TRUE)
+#' Entropy(tracks)
+#' Entropy(tracks, gridCell=0.25, histPlot=TRUE)
 #' @export
 
 Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE){
@@ -42,7 +42,7 @@ Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE){
   }
 
   Entropy <- probOccur <- occurrences # List to store all probabilities in each cell (per individual)
-  CellsVisited <- indivEntropy <- normalizedEntropy <- c()
+  CellsVisited <- indivEntropy <- normalisedEntropy <- c()
 
   for (i in 1:length(species_index)){ # Loop through each position and store probability of the ind visiting each grid cell
     CellsVisited[i] <- length(which(occurrences[[i]]!=0))# Number of grid cells visited by individual i
@@ -51,18 +51,18 @@ Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE){
       Entropy[[i]][j] <- probOccur[[i]][j] * log(probOccur[[i]][j]) # Entropy calculation per cell (probability of occurrence in a cell * log of the probability of occurrence in that same cell)
     }
     indivEntropy[i] <- -1 * sum(na.omit(Entropy[[i]])) # Calculate entropy by individual by summing the calculated entropies per cell following the equation: S = -Sum(probij * log(probij))
-    normalizedEntropy[i] <- indivEntropy[i] / log(CellsVisited[i])  # Normalized to allow for direct comparison of the entropies of trajectories with different numbers of visited areas
+    normalisedEntropy[i] <- indivEntropy[i] / log(CellsVisited[i])  # Normalised to allow for direct comparison of the entropies of trajectories with different numbers of visited areas
     # and informs about the complexity of the visitation pattern ranging between 0 (one visited cell) and 1 (uniform, every cell is visited with the same probability).
     if (CellsVisited[i]==1){
-      warning(paste("Ref",unique(species_df$ref)[i],"only visited 1 cell so normalized entropy scores cannot be calculated and NaN is produced. NaN values will be excluded from histPlot"), immediate. = TRUE)
+      warning(paste("Ref",unique(species_df$ref)[i],"only visited 1 cell so normalised entropy scores cannot be calculated and NaN is produced. NaN values will be excluded from histPlot"), immediate. = TRUE)
     }
   }
-  entropyResults <- as.data.frame(cbind("ref"=unique(species_df$ref),"normalizedEntropy"=normalizedEntropy,"indivEntropy"=indivEntropy,"cellsVisited"=CellsVisited))
+  entropyResults <- as.data.frame(cbind("ref"=unique(species_df$ref),"normalisedEntropy"=normalisedEntropy,"indivEntropy"=indivEntropy,"cellsVisited"=CellsVisited))
 
   if (histPlot==TRUE){
-    entropyResults.plot <- entropyResults[!is.na(entropyResults$normalizedEntropy),]
-    h <- hist(entropyResults.plot$normalizedEntropy, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
-    hist_plot <- ggplot2::ggplot(entropyResults.plot, ggplot2::aes(normalizedEntropy))+
+    entropyResults.plot <- entropyResults[!is.na(entropyResults$normalisedEntropy),]
+    h <- hist(entropyResults.plot$normalisedEntropy, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
+    hist_plot <- ggplot2::ggplot(entropyResults.plot, ggplot2::aes(normalisedEntropy))+
       ggplot2::geom_histogram(breaks=h$breaks, color="black", fill="darkgrey")+
       ggplot2::scale_y_continuous(breaks=function(x) seq(ceiling(x[1]), floor(x[2]), by = 2))+
       ggplot2::scale_x_continuous("Normalised Entropy", breaks=seq(0,1,0.1), labels=c("0.0", "", "0.2", "", "0.4", "", "0.6", "", "0.8", "", "1.0"))+

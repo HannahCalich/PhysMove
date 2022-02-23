@@ -7,8 +7,8 @@
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-#' See attached sample data \code{\link{speciesA}}.
-#' @param randTrack Number of Randomised tracks per individual. Default is 500.
+#' See attached sample data \code{\link{tracks}}.
+#' @param randTrack Number of randomised tracks per individual. Default is 500.
 #' @param gridCell Grid cell size in degrees. Default is 0.25.
 #' @param plot Plot the number of cells visited in the original track versus the average number of cells visited in the
 #' reshuffled tracks. Default is TRUE.
@@ -21,10 +21,10 @@
 #' If lm = TRUE, a linear regression is run, a fit line and reference line are added to the plot (if plot = TRUE), and the results
 #' 'RandomiselinearModel' are automatically assigned to the global environment. Three additional variables are automatically assigned
 #' to the global environment as they are required to plot the reshuffled tracks with the \code{\link{PlotRandomTracks} function}
-#' ('RandomisedLat', 'RandomisedLong' and 'randTrack').
+#' ('RandomisedLat' and 'RandomisedLong').
 #' @examples
-#' Randomise(speciesA)
-#' Randomise(speciesA, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE)
+#' Randomise(tracks)
+#' Randomise(tracks, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE)
 #' @export
 
 Randomise<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE) {
@@ -43,10 +43,10 @@ Randomise<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE
   # Shuffle the differences per individual using sample without replacement
   ShuffledLong <- ShuffledLat <- ShuffledTime <- matrix(0, nrow = dim(species_df)[1], ncol = randTrack) # Create vector to store the shuffled differences per individual
 
-  message("Randomizing trajectories, step 1/3")
+  message("Randomizing tracks, step 1/3")
 
   for (i in 1:length(species_index)){
-    for(T in 1:randTrack){ # Number of Randomised trajectories per individual
+    for(T in 1:randTrack){ # Number of Randomised tracks per individual
     # Randomise the order of the positions for each individual (e.g., instead of 1,2,3, the order might be 13,43,5)
       NewPositions <- sample(seq(1:(tail(species_index[[i]],1) - species_index[[i]][1])), tail(species_index[[i]],1) - species_index[[i]][1], replace = FALSE)
       # For each reshuffling (T), reserve the original first location per individual (i).
@@ -55,13 +55,13 @@ Randomise<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE
       # ShuffledTime[species_index[[i]][1], T] <- species_df[species_index[[i]][1], 4]
       for(j in 1:length(NewPositions)){
         # Looping through new positions, length is 1 fewer than the number of locations per animal because first position is fixed
-        # Create random locations based on the sum of previous location and the distance traveled between a random location and the next point in the trajectory (MyDiff)
+        # Create random locations based on the sum of previous location and the distance traveled between a random location and the next point in the track (MyDiff)
         # If the first new position is 26, we want to add the difference between the previous location (the origin), and the myDiff[27],
-        # which is the distance from the 26th to 27th points, moving forwards towards the end of the trajectory.
+        # which is the distance from the 26th to 27th points, moving forwards towards the end of the track.
         # Since NewPositions is n-1, working backwards with the MyDiffs and adding 1 here makes sure the last MyDiff per species is included
         # (eg if an individual has 65 points, there are 64 new ones, but the code below will make sure the distance between the 65th and 64th point is included)
         # Since this loop is limited by length(NewPositions), we won't include the diffs calculated between individuals
-        # This way, the math results in the same final destination point for each trajectory
+        # This way, the math results in the same final destination point for each track
         # Double checked this part of the code with the raw data to confirm the origin and destination points match (2019-11-07)
         ShuffledLong[species_index[[i]][j+1], T] <- ShuffledLong[species_index[[i]][j], T] + MyDiffLong[species_index[[i]][NewPositions[j]+1]]
         ShuffledLat[species_index[[i]][j+1], T] <- ShuffledLat[species_index[[i]][j], T] + MyDiffLat[species_index[[i]][NewPositions[j]+1]]
@@ -72,11 +72,10 @@ Randomise<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE
 
   assign("RandomisedLong",ShuffledLong, envir = .GlobalEnv)
   assign("RandomisedLat",ShuffledLat, envir = .GlobalEnv)
-  assign("randTrack",randTrack, envir = .GlobalEnv)
 
-  message("Calculating average number of cells visited by Randomised trajectories, step 2/3")
+  message("Calculating average number of cells visited by randomised tracks, step 2/3")
 
-  # Compare the number of visited cells used in the original and reshuffled trajectories
+  # Compare the number of visited cells used in the original and reshuffled tracks
   grid <- 1/gridCell
   longmin <- -180 # min(species_df[species_index[[1]],2])
   latmin <- -90 # min(species_df[species_index[[1]],3])
@@ -91,10 +90,10 @@ Randomise<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE
 
   # Loop through each shuffled position and store counts when individuals occur in each cell
   for (i in 1:length(species_index)){ # For each individual
-    for(T in 1:randTrack){ # For each random trajectory, determine what cell each point falls in){
+    for(T in 1:randTrack){ # For each random track, determine what cell each point falls in){
       j <- 1 # Do not turn this line off (it marks the position for each index per individual)
       ShuffledPresence <- rep(0, totalcells)
-      for (j in 1:length(species_index[[i]])){ # For each point in a trajectory
+      for (j in 1:length(species_index[[i]])){ # For each point in a track
         coordlong <- floor(grid * (ShuffledLong[species_index[[i]][j], T] - longmin))
         coordlat <- floor(grid * (ShuffledLat[species_index[[i]][j], T] - latmin))
         cellnum <- coordlong + grid * (longmax - longmin) * coordlat
@@ -105,9 +104,9 @@ Randomise<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE
   AvgShuffledOccurrences[i] <- mean(SumShuffledOccurrences[i,])
   }
 
-  message("Calculating number of cells visited by original trajectories, step 3/3")
+  message("Calculating number of cells visited by original tracks, step 3/3")
 
-  for (i in 1:length(species_index)){ # For original trajectories
+  for (i in 1:length(species_index)){ # For original tracks
     j < -1 # Do not comment this. This is needed to restart j for each animal to find position in index.
     Presence <- rep(0, totalcells)
     for (j in 1:length(species_index[[i]])){
@@ -118,11 +117,11 @@ Randomise<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE
     }
     SumOriginalOccurrences[i] <- sum(Presence)
   }
-  plot.df <- cbind.data.frame(ref=unique(species_df$ref),CellsInOriginalTrajectory=SumOriginalOccurrences,
-                              AvgCellsInRandomisedTrajectories=AvgShuffledOccurrences)
+  plot.df <- cbind.data.frame(ref=unique(species_df$ref),CellsInOriginalTracks=SumOriginalOccurrences,
+                              AvgCellsInRandomisedTracks=AvgShuffledOccurrences)
 
   if (lm==TRUE){
-    fit <- lm(plot.df$AvgCellsInRandomisedTrajectories ~ plot.df$CellsInOriginalTrajectory, data=plot.df)
+    fit <- lm(plot.df$AvgCellsInRandomisedTracks ~ plot.df$CellsInOriginalTracks, data=plot.df)
     assign("RandomiselinearModel",fit, envir = .GlobalEnv)
   }
 
@@ -135,7 +134,7 @@ Randomise<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE
                                           axis.text.x=ggplot2::element_text(margin=ggplot2::margin(t=10), colour="black"),
                                           axis.text.y=ggplot2::element_text(margin=ggplot2::margin(r=10), colour="black"))+
       ggplot2::xlab("Sum of cells in original track")+
-      ggplot2::ylab(expression(atop("Average sum of cells", paste("in Randomised tracks")))) #("Average sum of cells \n in Randomised tracks")
+      ggplot2::ylab(expression(atop("Average sum of cells", paste("in randomised tracks")))) #("Average sum of cells \n in Randomised tracks")
     if (lm==TRUE){
       a <- a +
         ggplot2::geom_abline(slope=1, intercept=1, col="black", lwd=0.5, lty=2)+

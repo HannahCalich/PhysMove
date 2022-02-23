@@ -10,7 +10,7 @@
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-#' See attached sample data \code{\link{speciesA}}.
+#' See attached sample data \code{\link{tracks}}.
 #' @param gridCell Grid cell size in degrees. Default is 0.25.
 #' @param hours Identify locations separated by this number of hours for movement calculations. Default is 24.
 #' @param range_hr Range (in hours) converts the hours parameter into a time window (hours +/-  range_hr) so the
@@ -27,8 +27,8 @@
 #' to stay for longer periods of time). If tpm=TRUE the transition probability matrix used to create the 'infomap_object' is automatically assigned
 #' to the global environment.
 #' @examples
-#' InfomapCommunities(speciesA)
-#' InfomapCommunities(speciesA, gridCell=0.25, hours=24, range_hr=6, infomap=TRUE, tpm=FALSE)
+#' InfomapCommunities(tracks)
+#' InfomapCommunities(tracks, gridCell=0.25, hours=24, range_hr=6, infomap=TRUE, tpm=FALSE)
 #' @export
 #'
 

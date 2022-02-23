@@ -5,7 +5,7 @@
 #' "ref" is the unique id number for each individual (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-#' See attached sample data \code{\link{speciesA}}.
+#' See attached sample data \code{\link{tracks}}.
 #' @param min_hr Minimum number of hours to consider for calculations. Default is 24 hours.
 #' @param max_hr Maximum number of hours to consider for calculations. Default is 240 hours.
 #' @param interval_hr Time interval (in hours) used to set intervals between min_hr and max_hr. Default is 24 hours.
@@ -16,8 +16,8 @@
 #' locations spaced 18 to 32 hours apart. Default is 6.
 #' @return A list containing the displacements in km recorded for each time window. Each list element corresponds with the time
 #' windows set (i.e., the first list element is the first time window).
-#' @examples CalcDisp(speciesA)
-#' @examples CalcDisp(speciesA, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
+#' @examples CalcDisp(tracks)
+#' @examples CalcDisp(tracks, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
 #' @export
 
 CalcDisp<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6){
@@ -78,10 +78,10 @@ CalcDisp<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6){
     }
     if (is.null(MyDistance)){
       MyList[[d]] <- NULL
-      print(paste0("0 displacements in ", MyTime[d]/(60*60), " ± ", range_hr/(60*60), " hour(s)"))
+      print(paste0("0 displacements in ", MyTime[d]/(60*60), " +/- ", range_hr/(60*60), " hour(s)"))
     } else {
       MyList[[d]] <- MyDistance
-      print(paste0(length(MyList[[d]])," displacements in ", MyTime[d]/(60*60), " ± ", range_hr/(60*60), " hour(s)"))
+      print(paste0(length(MyList[[d]])," displacements in ", MyTime[d]/(60*60), " +/- ", range_hr/(60*60), " hour(s)"))
       }
   }
 

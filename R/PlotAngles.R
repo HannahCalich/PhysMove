@@ -16,7 +16,7 @@
 #' @examples PlotAngles(angleList, timePlot="all", colours=rainbow, legend=TRUE)
 #' @export
 
-PlotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=c(TRUE)){
+PlotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=TRUE){
 
   bins <- 360 / 45
   timeWindows <- as.numeric(names(angleList))
@@ -81,7 +81,8 @@ PlotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=c(TRUE))
       panel.border = ggplot2::element_blank(),
       panel.grid  = ggplot2::element_blank(),
       plot.margin = grid::unit(c(0,0,0,0), "cm"),
-      legend.box.margin=margin(0,0,0,-5))
+      legend.box.margin=grid::unit(c(0,0,0,0), "cm"))
   plot(circle.plot_plot)
+  colnames(circle.plot)[2] <- c("frequency")
   return(circle.plot)
 }
