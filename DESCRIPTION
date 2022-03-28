@@ -1,7 +1,7 @@
 Package: PhysMove
 Type: Package
 Title: Quantify Animal Movement Patterns Using Statistical Physics Methods
-Version: 0.0.0.9000
+Version: 1.0.0
 Date: 2021-06-30
 Authors@R: 
     c(person("Hannah", "Calich", email = "hannah.calich@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7541-9584")),
