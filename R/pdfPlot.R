@@ -68,7 +68,8 @@ pdfPlot<-function(result, desc=NULL, nBins){
       plot.df <- data.frame(xs, ys)
       names(plot.df) <- labels <- c('Occupancy(km^-2)',"pdf")
       xlabel <- expression('Occupancy (km'^'-2'*')')
-      plotLog<-"xy" # Restricted to occupancy because the plot is based on log-10 scales which is too large for the other data types
+      plotLog <-"xy" # Restricted to occupancy because the plot is based on log-10 scales which is too large for the other data types
+
     } else { # If description is not "Occupancy"
       if (all(result>=0 & result<=1)){ # If values range from 0-1 (e.g., entropy or predictability scores)
         if (missing(nBins)){
@@ -107,7 +108,7 @@ pdfPlot<-function(result, desc=NULL, nBins){
         }
       }
     plot.df <- data.frame(xs, freq)
-    plot.df <- plot.df[plot.df$freq !=0,] #If the bin didn't have data the freq will be 0
+    # plot.df <- plot.df[plot.df$freq !=0,] #If the bin didn't have data the freq will be 0
     plotLog <- ""
     }
 
@@ -128,13 +129,13 @@ pdfPlot<-function(result, desc=NULL, nBins){
       xlabel <- expression('x')
     }
     if (plotLog=="xy"){
-      if (max(log10(plot.df[,1]))-min(log10(plot.df[,1]))<1){ # if the x axis range is too narrow axis labels don't appear
-        maxround <- max(plot.df[,1])*1.5
-        minround <- min(plot.df[,1])*1.5
-      } else {
-        maxround <- max(plot.df[,1])*1.05 # 5% is ggplot standard
-        minround <- min(plot.df[,1])*1.05
-      }
+      # if (max(log10(plot.df[,1]))-min(log10(plot.df[,1]))<1){ # if the x axis range is too narrow axis labels don't appear
+      #   maxround <- max(plot.df[,1])*1.5
+      #   minround <- min(plot.df[,1])*1.5
+      # } else {
+      #   maxround <- max(plot.df[,1])*1.05 # 5% is ggplot standard
+      #   minround <- min(plot.df[,1])*1.05
+      # }
       a <- ggplot2::ggplot(plot.df, ggplot2::aes(plot.df[,1], plot.df[,2])) +
         ggplot2::geom_line()+
         ggplot2::geom_point()+
@@ -143,8 +144,8 @@ pdfPlot<-function(result, desc=NULL, nBins){
             brks <- scales::extended_breaks(Q = c(1, 5))(log10(x))
             10^(brks[brks %% 1 == 0])
           },
-          labels = scales::math_format(format = log10),
-          expand = c(minround, maxround)
+          labels = scales::math_format(format = log10)#,
+          # expand = c(minround, maxround)
         ) +
         ggplot2::scale_y_log10(
           breaks = function(x) {

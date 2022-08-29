@@ -76,9 +76,9 @@ PlotRandomTracks<-function(species_df, ref=NULL, numPlot=1:5, colours=c("black",
   colours <- c(colours, startCol, endCol)
 
   a <- ggplot2::ggplot(plot.df, ggplot2::aes(x=lon, y=lat, color=Track)) +
-    ggplot2::geom_point(ggplot2::aes(x=lon, y=lat, color=Track))+
-    ggplot2::geom_point(data=startPt, ggplot2::aes(x=lon, y=lat, group=Track, color="Start")) +
-    ggplot2::geom_point(data=endPt, ggplot2::aes(x=lon, y=lat, group=Track, color="End")) +
+    ggplot2::geom_point(ggplot2::aes(x=lon, y=lat, color=Track), size=1.5)+
+    ggplot2::geom_point(data=startPt, ggplot2::aes(x=lon, y=lat, group=Track, color="Start"), size=1.5) +
+    ggplot2::geom_point(data=endPt, ggplot2::aes(x=lon, y=lat, group=Track, color="End"), size=1.5) +
     ggplot2::theme_bw(base_size=18)+
     ggplot2::theme(axis.line=ggplot2::element_line(colour="black"),
                                         panel.grid.major=ggplot2::element_line(),
