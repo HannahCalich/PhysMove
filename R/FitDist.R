@@ -70,7 +70,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
           a <- 1+n*((sum(log(xi/xmin)))^-1) #estimate alpha using direct MLE
           fx <- 1-((xi/xmin)^(-a+1)) #construct CCDF for fitted data
           fx[xi<round(xmin)] <- 0
-          sx <- ((0:(n - 1))/n)[1:length(fx)] #CCDF for empirical data
+          sx <- ((0:(n - 1))/n)[1:length(fx)] #complementary empirical CDF
           dat[i] <- max(abs(fx-sx))
         }
         D <- min(dat[dat>0], na.rm=TRUE) #find smallest D value
@@ -127,7 +127,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
           xi <- x[(N-n+1):N] #identify truncated values to use with cdf. This includes xmin while earlier xi did not.
           fx <- 1-exp(-pars.list[i]*(xi-xmin))
           fx[xi<xmin] <- 0
-          sx <- ((0:(n - 1))/n)[1:length(fx)]
+          sx <- ((0:(n - 1))/n)[1:length(fx)] #complementary empirical CDF
           dat[i] <- max(abs(sx-fx), na.rm=TRUE) # max difference between fitted and empirical cdfs (KS test)
         }
         D <- min(dat[dat>0],na.rm=TRUE)
@@ -196,7 +196,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
           xi <- x[(N-n+1):N] #identify truncated values to use with cdf
           fx <- (plnorm(xi, pars.mat[i,1], pars.mat[i,2], lower.tail = TRUE)/plnorm(xmin, pars.mat[i,1], pars.mat[i,2], lower.tail = FALSE))-(1/plnorm(xmin, pars.mat[i,1], pars.mat[i,2], lower.tail = FALSE))+1
           fx[xi<xmin] = 0
-          sx <- ((0:(n - 1))/n)[1:length(fx)] #CDF for empirical data
+          sx <- ((0:(n - 1))/n)[1:length(fx)] #complementary empirical CDF
           dat[i] <- max(abs(sx-fx)) # max difference between fitted and empirical cdfs
         }
         D <- min(dat[dat>0], na.rm=TRUE) # find smallest D value
