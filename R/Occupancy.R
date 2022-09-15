@@ -31,7 +31,7 @@ Occupancy<-function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "ligh
   latcells <- grid * (latmax - latmin)
   totalcells <- longcells * latcells
 
-  #Loop through each location's coordinates and store counts when they occur in each cell (the cell numbers are exactly the same as python)
+  # Loop through each location's coordinates and store counts when they occur in each cell (the cell numbers are exactly the same as python)
   Presence <- rep(0, totalcells)
   for (i in 1:dim(species_df)[1]){
     coordlong <- floor(grid * (species_df[i,2] - longmin))
