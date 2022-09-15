@@ -86,7 +86,7 @@ pdfPlot<-function(result, desc=NULL, nBins){
           xs[i] <- i*bw
         }
         for (i in 1:length(freq)){
-          freq[i] <- freq[i]/(bw*len)
+          freq[i] <- freq[i]/(bw*len) # normalizing
         }
       } else { # If values fall outside the 0-1 range they need to be normalized (e.g., gyration radius scores)
         if (missing(nBins)){
