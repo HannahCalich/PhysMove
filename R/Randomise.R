@@ -38,7 +38,7 @@ Randomise<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE
     # if(species_df[i,1] == species_df[i-1,1]){ # no need for this as long as we don't read values calculated at the index for origin for each individuals
     MyDiffLong[i] <- species_df[i,2] - species_df[i-1,2]
     MyDiffLat[i] <- species_df[i,3] - species_df[i-1,3]
-    MyDiffTime[i] <- species_df[i,4] - species_df[i-1,4]
+    # MyDiffTime[i] <- as.numeric(difftime(species_df[i,4], species_df[i-1,4], units="hours")) #diff time in hours
   }
   # Shuffle the differences per individual using sample without replacement
   ShuffledLong <- ShuffledLat <- ShuffledTime <- matrix(0, nrow = dim(species_df)[1], ncol = randTrack) # Create vector to store the shuffled differences per individual
@@ -53,6 +53,8 @@ Randomise<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE
       ShuffledLong[species_index[[i]][1], T] <- species_df[species_index[[i]][1], 2] # first position for each individual is the origin
       ShuffledLat[species_index[[i]][1], T] <- species_df[species_index[[i]][1], 3]
       # ShuffledTime[species_index[[i]][1], T] <- species_df[species_index[[i]][1], 4]
+      # ShuffledTime[species_index[[i]][1], T] <- 0 #time at first location is 0
+      # ShuffledTime[species_index[[i]][1], T] <- as.character(species_df[species_index[[i]][1], 4]) # R wont store datetime objects in matrices, work around is to save as.character then convert to as.date for calculations
       for(j in 1:length(NewPositions)){
         # Looping through new positions, length is 1 fewer than the number of locations per animal because first position is fixed
         # Create random locations based on the sum of previous location and the distance traveled between a random location and the next point in the track (MyDiff)
@@ -66,12 +68,14 @@ Randomise<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE
         ShuffledLong[species_index[[i]][j+1], T] <- ShuffledLong[species_index[[i]][j], T] + MyDiffLong[species_index[[i]][NewPositions[j]+1]]
         ShuffledLat[species_index[[i]][j+1], T] <- ShuffledLat[species_index[[i]][j], T] + MyDiffLat[species_index[[i]][NewPositions[j]+1]]
         # ShuffledTime[species_index[[i]][j+1], T] <- ShuffledTime[species_index[[i]][j], T] + MyDiffTime[species_index[[i]][NewPositions[j]+1]]
+        # ShuffledTime[species_index[[i]][j+1], T] <- as.character(as.POSIXct(ShuffledTime[species_index[[i]][j], T]) + as.difftime(as.numeric(MyDiffTime[species_index[[i]][NewPositions[j]+1]]), units="hours"))
+        # ShuffledTime[species_index[[i]][j+1], T] <- as.numeric(MyDiffTime[species_index[[i]][NewPositions[j]+1]])
       }
     }
   }
 
-  assign("RandomisedLong",ShuffledLong, envir = .GlobalEnv)
-  assign("RandomisedLat",ShuffledLat, envir = .GlobalEnv)
+  assign("RandomisedLong", ShuffledLong, envir = .GlobalEnv)
+  assign("RandomisedLat", ShuffledLat, envir = .GlobalEnv)
 
   message("Calculating average number of cells visited by randomised tracks, step 2/3")
 
@@ -106,14 +110,25 @@ Randomise<-function(species_df, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE
 
   message("Calculating number of cells visited by original tracks, step 3/3")
 
+  # split time diff between each location
+  # CellTime <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
+  # for (i in 1:length(species_index)){ # For each individual
+    # CellTime[[i]][1] <- 0
+    # for (j in 2:length(species_index[[i]])){
+      # CellTime[[i]][j] <- as.numeric(difftime(species_df[species_index[[i]][j],4],species_df[species_index[[i]][j-1],4], units="hours"))/2 # time betwen point j and the previous point
+    # }
+  # }
+
   for (i in 1:length(species_index)){ # For original tracks
     j < -1 # Do not comment this. This is needed to restart j for each animal to find position in index.
     Presence <- rep(0, totalcells)
+    # tdiff <- rep(0,totalcells)
     for (j in 1:length(species_index[[i]])){
       coordlong <- floor(grid * (as.numeric(species_df[species_index[[i]][j],2]) - longmin))
       coordlat <- floor(grid * (as.numeric(species_df[species_index[[i]][j],3]) - latmin))
       cellnum <- coordlong + grid * (longmax - longmin) * coordlat
       Presence[cellnum] <- 1 # Record the number of unique cells visited (aka presence, not occupancy)
+      # tdiff[cellnum] <- tdiff[cellnum] + CellTime[[i]][j]
     }
     SumOriginalOccurrences[i] <- sum(Presence)
   }
