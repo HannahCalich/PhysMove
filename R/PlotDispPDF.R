@@ -99,7 +99,7 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
       ggplot2::annotation_logticks(short=grid::unit(-0.1, "cm"), mid=grid::unit(-0.1, "cm"), long=grid::unit(-0.3,"cm")) +
       ggplot2::coord_cartesian(clip="off")+
       ggplot2::xlab("Displacements (km)")+
-      ggplot2::ylab("PDF")
+      ggplot2::ylab("pdf")
     if(legend==FALSE){
       a <- a + ggplot2::theme(legend.position = "none")
     }
@@ -171,7 +171,7 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
         ggplot2::annotation_logticks(short=grid::unit(-0.1, "cm"), mid=grid::unit(-0.1, "cm"), long=grid::unit(-0.3,"cm")) +
         ggplot2::coord_cartesian(clip="off")+
         ggplot2::xlab("Normalised displacements")+
-        ggplot2::ylab("PDF")
+        ggplot2::ylab("pdf")
 
     if(legend==FALSE){
       a <- a + ggplot2::theme(legend.position = "none")

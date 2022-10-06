@@ -1,6 +1,6 @@
-#' Plot best-fit distributions to complementary cumulative distribution function (CCDF) of displacements
+#' Plot best-fit distributions to complementary cumulative distribution function (ccdf) of displacements
 #'
-#' This function allows you to plot a complementary cumulative distribution function (CCDF) of displacements with fit lines
+#' This function allows you to plot a complementary cumulative distribution function (ccdf) of displacements with fit lines
 #' based on the displacements output from the \code{\link{CalcDisp}} function and the distribution fits calculated with the
 #' \code{\link{FitDist}} function.
 #' @param displacements List of displacements output from the \code{\link{CalcDisp}} function.
@@ -12,7 +12,7 @@
 #' @param colours Colours for each fit line. The colours correspond to the drawing order: "pl", "exp", "lnorm" (when applicable).
 #' Valid input options include colour names or hex numbers. Default is colours=c("red","gold2","blue").
 #' @param legend Add legend with legend=TRUE. Default is TRUE.
-#' @return Complementary cumulative distribution function (CCDF) plot of displacements with fit lines (if fitLines=TRUE).
+#' @return Complementary cumulative distribution function (ccdf) plot of displacements with fit lines (if fitLines=TRUE).
 #' @examples PlotDist(displacements, distResults)
 #' @examples PlotDist(displacements, distResults, fitLines=TRUE, setDist=NULL, colours=c("red","gold2","blue"))
 #' @export
@@ -98,7 +98,7 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
     ggplot2::annotation_logticks(short=grid::unit(-0.1, "cm"), mid=grid::unit(-0.1, "cm"), long=grid::unit(-0.3,"cm")) +
     ggplot2::coord_cartesian(clip="off")+
     ggplot2::xlab(xlabel)+
-    ggplot2::ylab("CCDF")
+    ggplot2::ylab("ccdf")
 
   if (fitLines==TRUE){
     if ("lnorm" %in% setDist){
