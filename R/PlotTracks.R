@@ -55,7 +55,8 @@ PlotTracks<-function(species_df, ref=NULL, tracks=TRUE, colours=rainbow){
                                         legend.position = "none")+
     ggplot2::scale_colour_manual(values=c(unique(myColoursPal)))+
     ggplot2::xlab("Longitude")+
-    ggplot2::ylab("Latitude")
+    ggplot2::ylab("Latitude")+
+    ggplot2::coord_cartesian(xlim = c(min(plot.df$lon), max(plot.df$lon)), ylim = c(min(plot.df$lat), max(plot.df$lat)))
   tryCatch({
     a <- a +
       ggplot2::borders("world", colour ="gray50", fill ="gray50", xlim = c(min(plot.df$lon), max(plot.df$lon)),
