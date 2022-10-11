@@ -43,11 +43,11 @@ TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range
   Radius <- 6371 # Earth Radius in km (disp are in km)
   rad <- 3.141592653589793/180 # Python has more digits of pi than R, so value pasted here instead of "pi"
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
-  MyTime <- c(seq(min_hr,max_hr,interval_hr))
+  MyTime <- c(seq(min_hr,max_hr,interval_hr)) #Time in seconds
 
   angleList <- list()
   bins <- 360 / 45
-  Days <- MyTime/(24*60*60)
+  Days <- MyTime/(24*60*60) #Time from seconds to days
 
   for (d in 1:length(MyTime)){
     angleList[[d]] <- 0 # dummy value to initialize the list of angles for each time period
@@ -55,9 +55,9 @@ TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range
       for (j in 1:length((species_index[[i]]))){ # for each tracked location
         # Find locations separated by MyTime[d]
         Jumpj <-  which(species_df[species_index[[i]],4] >= species_df[species_index[[i]][j],4] + MyTime[d] - range_hr & species_df[species_index[[i]],4] <= species_df[species_index[[i]][j],4] + MyTime[d] + range_hr)
-        # If only one jump is found, calculate distance
+
         if(length(Jumpj) > 0 ){
-          if(length(Jumpj) == 1){
+          if(length(Jumpj) == 1){ # If only one jump is found, calculate distance
             J1 <- Jumpj
           } else {
             checkJump <- c()
@@ -96,27 +96,28 @@ TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range
             if(species_df[species_index[[i]][J2],3] - species_df[species_index[[i]][J1],3] < 0) { by = -by }
 
             # Now compute the scalar product and vector product, to get the angle
-            if((ax*bx + ay*by) == 0) { ### prevent the case where tangent is infinite (when cosinus is zero) i.e., the individual did not move in one of the components (J = J1 or J1 = J2)
-              if((ax*by - ay*bx) > 0){
-                angle <- pi/2
-                angleList[[d]] <- append(angleList[[d]], angle)
-              } else if ((ax*by - ay*bx) < 0){
-                angle <- -pi/2
-                angleList[[d]] <- append(angleList[[d]], angle)
-              }
-            } else {
-              angle <- atan((ax*by - ay*bx) / (ax*bx + ay*by)) ### in radians
-              if(angle > 0){
-                if((ax*bx + ay*by) < 0) {
-                  angle <- angle - pi
-                }
-              } else if(angle <= 0){
-                if((ax*bx + ay*by) < 0) {
-                  angle <- angle + pi
-                }
-              }
+            # if((ax*bx + ay*by) == 0) { ### prevent the case where tangent is infinite (when cosinus is zero) i.e., the individual did not move in one of the components (J = J1 or J1 = J2)
+            #   if((ax*by - ay*bx) > 0){
+            #     angle <- pi/2
+            #     angleList[[d]] <- append(angleList[[d]], angle)
+            #   } else if ((ax*by - ay*bx) < 0){
+            #     angle <- -pi/2
+            #     angleList[[d]] <- append(angleList[[d]], angle)
+            #   }
+            # } else {
+              # angle <- atan((ax*by - ay*bx) / (ax*bx + ay*by)) ### in radians
+              angle <- atan2((ax*by - ay*bx) , (ax*bx + ay*by)) ### in radians
+              # if(angle > 0){
+              #   if((ax*bx + ay*by) < 0) {
+              #     angle <- angle - pi
+              #   }
+              # } else if(angle <= 0){
+              #   if((ax*bx + ay*by) < 0) {
+              #     angle <- angle + pi
+              #   }
+              # }
               angleList[[d]] <- append(angleList[[d]], angle)
-            }
+            # }
           }
         }
       }
