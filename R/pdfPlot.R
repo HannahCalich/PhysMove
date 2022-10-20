@@ -49,14 +49,14 @@ pdfPlot<-function(result, desc=NULL, nBins){
       }
       freq <- rep(0, nBins+1)
       for(i in 1:length(result)){
-        b <- floor(log(result/Occmin)/log(bw) + 0.5)
-        freq[b] <- freq[b] + 1
+        if (result[i] > 0){
+          b <- floor(log(result[i]/Occmin)/log(bw) + 0.5)
+          freq[b+1] <- freq[b+1] + 1 # the b+1 is necessary due to scenarios where b=0 above
+        }
       }
       if (anyNA(freq)){
         stop ("Cell size too small to create pdf plot")
       }
-      sumFreq <- sum(freq)
-      freq <- c(totalCells-sumFreq, freq)
       norm <- sum(freq)
       freq <- freq[freq>0]
       xs <- ys <- rep(0, length(freq))
@@ -76,15 +76,16 @@ pdfPlot<-function(result, desc=NULL, nBins){
           nBins <- 40
         }
         bw <- 1/nBins
-        freq <- xs <- rep(0, nBins)
+        freq <- xs <- rep(0, nBins+1)
         len <- length(result)
         for(i in 1:len){
           b <- floor(result[i]/bw+0.5)
-          freq[b] <- freq[b] +1
+          freq[b+1] <- freq[b+1] +1 # the b+1 is necessary due to scenarios where b=0 above
         }
         for (i in 1:nBins){
-          xs[i] <- i*bw
+          xs[i+1] <- i*bw #the +1 ensures the 1st value is 0
         }
+
         for (i in 1:length(freq)){
           freq[i] <- freq[i]/(bw*len) # normalizing
         }
