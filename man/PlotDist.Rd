@@ -2,7 +2,7 @@
 % Please edit documentation in R/PlotDist.R
 \name{PlotDist}
 \alias{PlotDist}
-\title{Plot best-fit distributions to complementary cumulative distribution function (CCDF) of displacements}
+\title{Plot best-fit distributions to complementary cumulative distribution function (ccdf) of displacements}
 \usage{
 PlotDist(
   displacements,
@@ -30,10 +30,10 @@ Valid input options include colour names or hex numbers. Default is colours=c("r
 \item{legend}{Add legend with legend=TRUE. Default is TRUE.}
 }
 \value{
-Complementary cumulative distribution function (CCDF) plot of displacements with fit lines (if fitLines=TRUE).
+Complementary cumulative distribution function (ccdf) plot of displacements with fit lines (if fitLines=TRUE).
 }
 \description{
-This function allows you to plot a complementary cumulative distribution function (CCDF) of displacements with fit lines
+This function allows you to plot a complementary cumulative distribution function (ccdf) of displacements with fit lines
 based on the displacements output from the \code{\link{CalcDisp}} function and the distribution fits calculated with the
 \code{\link{FitDist}} function.
 }
