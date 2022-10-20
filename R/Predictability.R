@@ -35,7 +35,7 @@ Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRU
     model <- function(x) c(F1 = x*log(x) + (1-x)*log(1-x) - (1-x)*log(entropyResults$cellsVisited[i]-1) + entropyResults$indivEntropy[i])
 
     if (startVal==0.99){
-      ss <- suppressWarnings(rootSolve::multiroot(f = model, start = (1.01-entropyResults$normalisedEntropy[i]))) # +0.01 added to deal with cases where NormEnt = 1
+      ss <- suppressWarnings(rootSolve::multiroot(f = model, start = 0.99))#(1.01-entropyResults$normalisedEntropy[i]))) # +0.01 added to deal with cases where NormEnt = 1
       if (ss$root > 0 & ss$root < 1){
         Pred[i] <- ss$root
     } else {
