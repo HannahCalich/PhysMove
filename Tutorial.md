@@ -7,11 +7,11 @@ We demonstrate each function with a simulated telemetry dataset, called `tracks`
 ## Outine
   * [Install PhysMove and explore tracks dataset](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#install-physmove-and-input-data)
 
-_Movement patterns_
+<ins>_Movement patterns_</ins>
 
   * [Calculate displacements with `CalcDisp()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#calculate-displacements-with-calcdisp)
 
-  * [Scale of movement with `RMS()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#scale-of-movement-withrms)
+  * [Scale of movement with `RMS()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#scale-of-movement-with-rms)
   * [Influence of correlations on movement decisions with `Randomise()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#influence-of-correlations-on-movement-decisions-with-randomise)
   * [Turning angles with `TurningAngles()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#turning-angles-with-turningangles)
   * [Search patterns with `FitDist()`, `PlotDist()`, and `CompDist()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#search-patterns-with-fitdist-plotdist-and-compdist)
