@@ -7,7 +7,7 @@ We demonstrate each function with a simulated telemetry dataset, called `tracks`
 ## Outine
   * [Install PhysMove and explore tracks dataset](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#install-physmove-and-input-data)
 
-<ins>_Movement patterns_</ins>
+** <ins>_Movement patterns_</ins> **
 
   * [Calculate displacements with `CalcDisp()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#calculate-displacements-with-calcdisp)
 
