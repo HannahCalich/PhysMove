@@ -22,7 +22,7 @@ We demonstrate each function with a simulated telemetry dataset, called `tracks`
   * [Occupancy with `Occupancy()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#occupancy-with-occupancy)
   * [Infomap communities with `InfomapCommunities()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#community-wide-movements-with-infomapcommunities)
  
-**<ins>_Space-Use Patterns_</ins>**
+**<ins>_Intraspecific movement patterns_</ins>**
   * [Track gyration radius with `GyrationRad()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#dispersion-with-gyrationrad)
   * [Track entropy with `Entropy()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#entropy-with-entropy)
   * [Track predictability with `Predictability()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#predictability-with-predictability)
