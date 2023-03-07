@@ -5,10 +5,16 @@ This is a brief tutorial to accompany the PhysMove R package. Here, we demonstra
 We demonstrate each function with a simulated telemetry dataset, called `tracks`, that is automatically loaded with PhysMove. We provide sample code to replicate each of the results presented in the main text. 
 
 ## Outine
-[Install PhysMove and explore tracks dataset](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#install-physmove-and-input-data)
-_Movement patterns_
-[Calculate displacements with `CalcDisp()`]
+  * [Install PhysMove and explore tracks dataset](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#install-physmove-and-input-data)
 
+_Movement patterns_
+
+  * [Calculate displacements with `CalcDisp()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#calculate-displacements-with-calcdisp)
+
+  * [Scale of movement with `RMS()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#scale-of-movement-withrms)
+  * [Influence of correlations on movement decisions with `Randomise()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#influence-of-correlations-on-movement-decisions-with-randomise)
+  * [Turning angles with `TurningAngles()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#turning-angles-with-turningangles)
+  * [Search patterns with `FitDist()`, `PlotDist()`, and `CompDist()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#search-patterns-with-fitdist-plotdist-and-compdist)
 
 ## *Install PhysMove and input data*
 We recommend users install PhysMove through the devtools R package. The code below will install devtools and PhysMove (including the authentication token required to access PhysMove until the package is released to the public) and load the PhysMove package. 
