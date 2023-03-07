@@ -411,7 +411,7 @@ CommunityMap(infomap)
 
 Figure S 15 Map illustrating level 1 Infomap communities for the tracks dataset determined using `InfomapCommunities()` default parameters. Map created with `CommunityMap()` default parameters. 
 
-## *Intraspecific movements
+## *Intraspecific movements*
 ### Dispersion with `GyrationRad()`
 The `GyrationRad()` function calculates the dispersion (i.e., the gyration radius) of each track in a dataset (Figure S 16). Optional parameters allow you to
   * create a map (map=TRUE, by default) 
