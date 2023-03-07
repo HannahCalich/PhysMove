@@ -1,4 +1,4 @@
-# This file is a work in progress, please refer to manuscript SI for current tutorial
+# Dear reviewers, this file is a work in progress, please refer to manuscript SI for current tutorial
 
 # PhysMove Tutorial
 This is a brief tutorial to accompany the PhysMove R package. Here, we demonstrate how PhysMove can be used to calculate each of the methods discussed in the main text and review all relevant functions and parameters. 
@@ -15,6 +15,15 @@ We demonstrate each function with a simulated telemetry dataset, called `tracks`
   * [Influence of correlations on movement decisions with `Randomise()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#influence-of-correlations-on-movement-decisions-with-randomise)
   * [Turning angles with `TurningAngles()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#turning-angles-with-turningangles)
   * [Search patterns with `FitDist()`, `PlotDist()`, and `CompDist()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#search-patterns-with-fitdist-plotdist-and-compdist)
+
+**<ins>_Space-Use Patterns_</ins>**
+  * [Occupancy with `Occupancy()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#occupancy-with-occupancy)
+  * [Infomap communities with `InfomapCommunities()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#community-wide-movements-with-infomapcommunities)
+ 
+**<ins>_Space-Use Patterns_</ins>**
+  * [Track gyration radius with `GyrationRad()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#dispersion-with-gyrationrad)
+  * [Track entropy with `Entropy()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#entropy-with-entropy)
+  * [Track predictability with `Predictability()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#predictability-with-predictability)
 
 ## *Install PhysMove and input data*
 We recommend users install PhysMove through the devtools R package. The code below will install devtools and PhysMove (including the authentication token required to access PhysMove until the package is released to the public) and load the PhysMove package. 
