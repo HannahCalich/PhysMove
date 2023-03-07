@@ -6,14 +6,15 @@ We demonstrate each function with a simulated telemetry dataset, called `tracks`
 
 ## Outine
   * [Install PhysMove and explore tracks dataset](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#install-physmove-and-input-data)
-
+    * [Plot tracks with `PlotTracks()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#create-a-map-of-the-tracks-dataset-with-plottracks)
 **<ins>_Movement patterns_</ins>**
 
   * [Calculate displacements with `CalcDisp()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#calculate-displacements-with-calcdisp)
-
-  * [Scale of movement with `RMS()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#scale-of-movement-with-rms)
-  * [Influence of correlations on movement decisions with `Randomise()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#influence-of-correlations-on-movement-decisions-with-randomise)
-  * [Turning angles with `TurningAngles()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#turning-angles-with-turningangles)
+    * [Create a probability density function (pdf) plot with `PlotDispPDF()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#create-a-probability-density-function-pdf-plot-of-normalised-displacements-with-plotdisppdf)
+  * [Quantify the scale of movement with `RMS()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#scale-of-movement-with-rms)
+  * [Describe the influence of correlations on movement decisions with `Randomise()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#influence-of-correlations-on-movement-decisions-with-randomise)
+  * [Identify turning angle patterns with `TurningAngles()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#turning-angles-with-turningangles)
+    * [Plot angles with a circle plot with `PlotAngles()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#create-a-circle-plot-of-all-turning-angles-calculated-using-turningangles)
   * [Search patterns with `FitDist()`, `PlotDist()`, and `CompDist()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#search-patterns-with-fitdist-plotdist-and-compdist)
 
 **<ins>_Space-Use Patterns_</ins>**
@@ -243,6 +244,7 @@ After displacements are calculated you can identify the best-fit distribution of
   1. `FitDist()`
   2. `PlotDist()`, and 
   3. `CompDist()` 
+
 `FitDist()` fits cdfs of continuous power-law, exponential, and lognormal distributions over the full range of displacements (i.e., full distributions) or to displacements truncated by an x_min (i.e., truncated distributions). `PlotDist()` uses the results from `FitDist()` to plot ccdfs of the displacements with fit lines for each distribution. Lastly, `CompDist()` compares distribution fits from `FitDist()` and identifies the best-fit distribution for the displacements. See Figure S 9 for a methodological overview. 
 
 `FitDist()` requires you to consider four optional parameters, reviewed here:
