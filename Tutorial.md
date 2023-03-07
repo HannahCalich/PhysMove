@@ -4,6 +4,12 @@
 This is a brief tutorial to accompany the PhysMove R package. Here, we demonstrate how PhysMove can be used to calculate each of the methods discussed in the main text and review all relevant functions and parameters. 
 We demonstrate each function with a simulated telemetry dataset, called `tracks`, that is automatically loaded with PhysMove. We provide sample code to replicate each of the results presented in the main text. 
 
+## Outine
+[Install PhysMove and explore tracks dataset](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#install-physmove-and-input-data)
+_Movement patterns_
+[Calculate displacements with `CalcDisp()`]
+
+
 ## *Install PhysMove and input data*
 We recommend users install PhysMove through the devtools R package. The code below will install devtools and PhysMove (including the authentication token required to access PhysMove until the package is released to the public) and load the PhysMove package. 
 
