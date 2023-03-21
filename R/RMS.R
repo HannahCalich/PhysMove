@@ -6,7 +6,7 @@
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{tracks}}.
-#' @param wBins Bin width refers to the size of the time bins used to calculate how frequently displacements occurred. Default is 1.
+#' @param wBins Bin width refers to the size of the time bins used to calculate how frequently displacements occurred. Default is 1.1
 #' @param timeUnit Unit used to calculate time between locations (e.g., "secs", "mins", "hours", "days", "weeks"). Default is "days".
 #' @param plot Plot the root-mean-square of displacements versus the mean displacements against their corresponding time periods. Default is TRUE.
 #' @param lm Calculate a linear regression to examine the relationship between the root-mean-square displacement values (target variable)
@@ -54,7 +54,7 @@ RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
         myTime <- as.numeric(difftime(species_df[k,4],species_df[j,4],units=timeUnit))
         b <- floor(log(myTime/tmin)/log(wBins) + 0.5) #log scale time bin
         Timefreq[b] <- Timefreq[b] + 1 #Cumulative count of displacements between each location within each log time bin
-        Dist <- MydistHaversine(species_df[k,2], species_df[k,3], species_df[j,2], species_df[j,3]) #Calculates distance from point 1 to all sucessive points
+        Dist <- MydistHaversine(species_df[k,2], species_df[k,3], species_df[j,2], species_df[j,3]) #Calculates distance from point 1 to all successive points
         sumDist[b] <- sumDist[b] + Dist
         sumDist2[b] <- sumDist2[b] + Dist^2
       }
