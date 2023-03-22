@@ -40,7 +40,7 @@ PlotRandomTracks<-function(species_df, ref=NULL, numPlot=1:5, colours=c("black",
   }
 
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
-  Individual <- species_df[which(species_df$ref ==ref),]
+  Individual <- species_df[which(species_df$ref == ref),]
   a <-  as.character(unique(Individual$ref))
   plotpoints <- data.frame("lat"=integer(0),"lon"=integer(0)) # Format the df, the 0s are removed
 
