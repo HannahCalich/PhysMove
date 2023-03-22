@@ -55,9 +55,9 @@ InfomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, 
     totalcells <- (grid * (longmax - longmin)) * (grid * (latmax - latmin))
     DestinationCells <- list()
     DestinationCells[[totalcells + 1 ]] <- 0
-    for (i in 1:length(species_index)){
-      for(j in 1:length((species_index[[i]]))){
-        Jumpj<-which(species_df[species_index[[i]],4] >= species_df[species_index[[i]][j],4] + MyTime - range_hr & species_df[species_index[[i]],4] <= species_df[species_index[[i]][j],4] + MyTime + range_hr)
+    for (i in 1:length(species_index)){ # for each track
+      for(j in 1:length((species_index[[i]]))){ # for each location
+        Jumpj <- which(species_df[species_index[[i]],4] >= species_df[species_index[[i]][j],4] + MyTime - range_hr & species_df[species_index[[i]],4] <= species_df[species_index[[i]][j],4] + MyTime + range_hr)
           if(length(Jumpj) == 1){
             DestinationCells[[as.numeric(species_df[species_index[[i]][j],5])]] <- append(DestinationCells[[as.numeric(species_df[species_index[[i]][j],5])]], as.numeric(species_df[species_index[[i]][Jumpj],5]))
           } else if(length(Jumpj) > 1){
@@ -137,7 +137,7 @@ InfomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, 
     if (infomap==TRUE){
       monolayer_object <- infomapecology::create_monolayer_object(LinkList, directed = T, bipartite = F, node_metadata = nodenames)
       infomap_object <- suppressWarnings(infomapecology::run_infomap_monolayer(monolayer_object, infomap_executable='infomap', flow_model='directed',
-                                                                               silent=T, verbose=F, two_level=F, ...="-k"))
+                                                                               silent=T, verbose=F, two_level=F))#, ...="-k"))
       return(infomap_object)
     }
 
