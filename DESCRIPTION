@@ -20,6 +20,7 @@ Imports:
     sf (>= 1.0-3),
     stats4 (>= 4.0.5),
     stringr (>= 1.4.0),
+    rlang (>= 1.1.0),
     rootSolve (>= 1.8.2.1)
 Suggests:
     infomapecology (>= 1.0.1)
