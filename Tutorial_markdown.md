@@ -1,16 +1,16 @@
 PhysMove Tutorial
 ================
+Hannah Calich
+April 2023
 
 # Dear reviewers, this file is a work in progress, please refer to manuscript SI for current tutorial
-
-# PhysMove Tutorial
 
 This is a brief tutorial to accompany the PhysMove R package. Here, we
 demonstrate how PhysMove can be used to calculate each of the methods
 discussed in the main text and review all relevant functions and
 parameters. We demonstrate each function with a simulated telemetry
-dataset, called `tracks`, that is automatically loaded with PhysMove. We
-provide sample code to replicate each of the results presented in the
+dataset, called `tracks`, which is automatically loaded with PhysMove.
+We provide sample code to replicate each of the results presented in the
 main text.
 
 ## Outine
@@ -61,93 +61,14 @@ authentication token required to access PhysMove until the package is
 released to the public) and load the PhysMove package.
 
 ``` r
-devtools::install_github("HannahCalich/PhysMove",auth_token = "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")
-```
-
-    ## Downloading GitHub repo HannahCalich/PhysMove@HEAD
-
-    ## wk     (0.7.1 -> 0.7.2 ) [CRAN]
-    ## rlang  (1.0.6 -> 1.1.0 ) [CRAN]
-    ## cli    (3.6.0 -> 3.6.1 ) [CRAN]
-    ## vctrs  (0.5.2 -> 0.6.1 ) [CRAN]
-    ## pillar (1.8.1 -> 1.9.0 ) [CRAN]
-    ## gtable (0.3.1 -> 0.3.3 ) [CRAN]
-    ## tibble (3.1.8 -> 3.2.1 ) [CRAN]
-    ## sf     (1.0-9 -> 1.0-12) [CRAN]
-
-    ## Installing 8 packages: wk, rlang, cli, vctrs, pillar, gtable, tibble, sf
-
-    ## package 'wk' successfully unpacked and MD5 sums checked
-    ## package 'rlang' successfully unpacked and MD5 sums checked
-
-    ## Warning: cannot remove prior installation of package 'rlang'
-
-    ## Warning in file.copy(savedcopy, lib, recursive = TRUE): problem copying
-    ## C:\Users\U1133331\AppData\Local\Programs\R\R-4.2.2\library\00LOCK\rlang\libs\x64\rlang.dll
-    ## to
-    ## C:\Users\U1133331\AppData\Local\Programs\R\R-4.2.2\library\rlang\libs\x64\rlang.dll:
-    ## Permission denied
-
-    ## Warning: restored 'rlang'
-
-    ## package 'cli' successfully unpacked and MD5 sums checked
-
-    ## Warning: cannot remove prior installation of package 'cli'
-
-    ## Warning in file.copy(savedcopy, lib, recursive = TRUE): problem copying
-    ## C:\Users\U1133331\AppData\Local\Programs\R\R-4.2.2\library\00LOCK\cli\libs\x64\cli.dll
-    ## to
-    ## C:\Users\U1133331\AppData\Local\Programs\R\R-4.2.2\library\cli\libs\x64\cli.dll:
-    ## Permission denied
-
-    ## Warning: restored 'cli'
-
-    ## package 'vctrs' successfully unpacked and MD5 sums checked
-
-    ## Warning: cannot remove prior installation of package 'vctrs'
-
-    ## Warning in file.copy(savedcopy, lib, recursive = TRUE): problem copying
-    ## C:\Users\U1133331\AppData\Local\Programs\R\R-4.2.2\library\00LOCK\vctrs\libs\x64\vctrs.dll
-    ## to
-    ## C:\Users\U1133331\AppData\Local\Programs\R\R-4.2.2\library\vctrs\libs\x64\vctrs.dll:
-    ## Permission denied
-
-    ## Warning: restored 'vctrs'
-
-    ## package 'pillar' successfully unpacked and MD5 sums checked
-    ## package 'gtable' successfully unpacked and MD5 sums checked
-    ## package 'tibble' successfully unpacked and MD5 sums checked
-
-    ## Warning: cannot remove prior installation of package 'tibble'
-
-    ## Warning in file.copy(savedcopy, lib, recursive = TRUE): problem copying
-    ## C:\Users\U1133331\AppData\Local\Programs\R\R-4.2.2\library\00LOCK\tibble\libs\x64\tibble.dll
-    ## to
-    ## C:\Users\U1133331\AppData\Local\Programs\R\R-4.2.2\library\tibble\libs\x64\tibble.dll:
-    ## Permission denied
-
-    ## Warning: restored 'tibble'
-
-    ## package 'sf' successfully unpacked and MD5 sums checked
-    ## 
-    ## The downloaded binary packages are in
-    ##  C:\Users\U1133331\AppData\Local\Temp\Rtmp4IRP3y\downloaded_packages
-    ## ── R CMD build ─────────────────────────────────────────────────────────────────
-    ## * checking for file 'C:\Users\U1133331\AppData\Local\Temp\Rtmp4IRP3y\remotes2dc8588c7caa\HannahCalich-PhysMove-d2c639f1e1374ab6da71a9d19eab35e90561709e/DESCRIPTION' ... OK
-    ## * preparing 'PhysMove':
-    ## * checking DESCRIPTION meta-information ... OK
-    ## * checking for LF line-endings in source and make files and shell scripts
-    ## * checking for empty or unneeded directories
-    ## * building 'PhysMove_1.0.0.tar.gz'
-    ## 
-
-``` r
 # Install the devtools package from CRAN (if required)
 install.packages("devtools")
 
 # Download PhysMove 
 devtools::install_github("HannahCalich/PhysMove",auth_token = "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")
+```
 
+``` r
 # Load PhysMove
 library(PhysMove)
 ```
@@ -178,14 +99,24 @@ structure using `str()`.
 head(tracks)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223329374-d78716fd-f194-4f76-a182-c59240dbd4a8.png)
+    ##   ref       lon       lat                 day
+    ## 1   1 0.5310173 0.5310173 2017-10-13 15:00:00
+    ## 2   1 0.5156939 0.5500691 2017-10-14 15:00:00
+    ## 3   1 0.5052581 0.5158941 2017-10-15 15:00:00
+    ## 4   1 0.5247597 0.4555179 2017-10-16 15:00:00
+    ## 5   1 0.5491573 0.2831650 2017-10-17 15:00:00
+    ## 6   1 0.5670918 0.2875133 2017-10-18 15:00:00
 
 ``` r
 # Determine the structure of the tracks dataset
 str(tracks)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223329468-5bf9f80e-9890-4870-a781-06a3dc384172.png)
+    ## 'data.frame':    15623 obs. of  4 variables:
+    ##  $ ref: num  1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ lon: num  0.531 0.516 0.505 0.525 0.549 ...
+    ##  $ lat: num  0.531 0.55 0.516 0.456 0.283 ...
+    ##  $ day: POSIXct, format: "2017-10-13 15:00:00" "2017-10-14 15:00:00" ...
 
 #### Create a map of the tracks dataset with `PlotTracks()`
 
@@ -201,9 +132,9 @@ data-raw folder on GitHub as “CreateTracks.R”.
 PlotTracks(tracks)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223335151-1d62a8fa-c26f-4315-808f-a30b64f8ac38.png)
+![](Tutorial_markdown_files/figure-gfm/plot%20tracks-1.png)<!-- -->
 
-Figure S 1 Map of the simulated tracking data included in the tracks
+**Figure S1** Map of the simulated tracking data included in the tracks
 dataset, created with `PlotTracks()` default settings.
 
 ## *Movement patterns*
@@ -230,12 +161,26 @@ window and so on.
 ``` r
 # Calculate displacements from the tracks dataset with default parameters
 disp.all <- CalcDisp(tracks)
+```
 
+    ## [1] "15598 displacements in 24 +/- 6 hour(s)"
+    ## [1] "15573 displacements in 48 +/- 6 hour(s)"
+    ## [1] "15548 displacements in 72 +/- 6 hour(s)"
+    ## [1] "15523 displacements in 96 +/- 6 hour(s)"
+    ## [1] "15498 displacements in 120 +/- 6 hour(s)"
+    ## [1] "15473 displacements in 144 +/- 6 hour(s)"
+    ## [1] "15448 displacements in 168 +/- 6 hour(s)"
+    ## [1] "15423 displacements in 192 +/- 6 hour(s)"
+    ## [1] "15398 displacements in 216 +/- 6 hour(s)"
+    ## [1] "15373 displacements in 240 +/- 6 hour(s)"
+
+``` r
 # Summarise displacements calculated over the first time window (24 ± 6 hours)
 summary(unlist(disp.all[[1]]))
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223372948-7abeec1a-5aa0-4b87-bb93-b131c0ad2225.png)
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##  0.2605  2.7049  5.5149  8.2299 11.1227 76.8543
 
 #### Create a probability density function (pdf) plot of normalised displacements with `PlotDispPDF()`
 
@@ -255,12 +200,12 @@ pdf values (*pdf*), the displacements (*disp*), and the time windows
 are normalised values.
 
 ``` r
-PlotDispPDF(disp.all)
+plot.data.disp <- PlotDispPDF(disp.all)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223372999-d319c948-25e1-4200-a885-7d30d02e1017.png)
+![](Tutorial_markdown_files/figure-gfm/plot%20all%20normalised%20displacements-1.png)<!-- -->
 
-Figure S 2 Probability density function (pdf) plot of normalised
+**Figure S2** Probability density function (pdf) plot of normalised
 displacements from the tracks dataset calculated over 10 time windows,
 24-240 hours at 24 ± 6-hour time intervals with `CalcDisp()`. Plot
 created with `PlotDispPDF()` default parameters.
@@ -271,12 +216,12 @@ created with `PlotDispPDF()` default parameters.
 PlotDispPDF(disp.all, normalised=FALSE)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223373230-0585fad2-5c80-4b70-9e9a-4101decdc842.png)
+![](Tutorial_markdown_files/figure-gfm/plot%20all%20displacements%20\(not%20normalised\)-1.png)<!-- -->
 
-Figure S 3 Probability density function (pdf) plot of displacements from
-the tracks dataset calculated over 10 time windows, 24 to 240 hours at
-24 ± 6-hour time intervals with `CalcDisp()`. Plot created with
-`PlotDispPDF()` where `normalised=FALSE`. 
+**Figure S3** Probability density function (pdf) plot of displacements
+from the tracks dataset calculated over 10 time windows, 24 to 240 hours
+at 24 ± 6-hour time intervals with `CalcDisp()`. Plot created with
+`PlotDispPDF()` where `normalised=FALSE`.
 
 ## Scale of movement with `RMS()`
 
@@ -308,33 +253,67 @@ using timeUnit) that correspond with the *meanDisplacement* and
 rms.result <- RMS(tracks)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223377362-0241c7eb-4fcc-420a-bb22-d8a642310fb0.png)
+    ## 25% complete
 
-Figure S 4 Scatter plot of mean (grey points) and root-mean-square (RMS;
-black points) displacements (d) in kilometres (km) from tracks dataset
-over time (T) in days, fit to a linear model (red line with standard
-error shaded in grey). Plot created with `RMS()` default parameters.
+    ## 50% complete
+
+    ## 75% complete
+
+    ## Calculations complete
+
+![](Tutorial_markdown_files/figure-gfm/calcualte%20rms-1.png)<!-- -->
+
+**Figure S4** Scatter plot of mean (grey points) and root-mean-square
+(RMS; black points) displacements (d) in kilometres (km) from tracks
+dataset over time (T) in days, fit to a linear model (red line with
+standard error shaded in grey). Plot created with `RMS()` default
+parameters.
 
 ``` r
 # Summarise RMS results
 summary(rms.result)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223377656-a9c547a3-0bb2-4b24-b8af-ca375986ed86.png)
+    ##    timeWindow        meanDisplacements rmsDisplacements
+    ##  Min.   :   0.9755   Min.   :  8.23    Min.   : 11.41  
+    ##  1st Qu.:  16.2477   1st Qu.: 38.37    1st Qu.: 44.46  
+    ##  Median :  64.6389   Median : 78.68    Median : 90.40  
+    ##  Mean   : 190.3053   Mean   :111.46    Mean   :122.62  
+    ##  3rd Qu.: 257.7394   3rd Qu.:154.68    3rd Qu.:174.23  
+    ##  Max.   :1025.3728   Max.   :583.63    Max.   :584.91
 
 ``` r
 # Summarise the linear model results and identify the Hurst exponent 
 summary(RMSlinearModel)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223377697-55b74eb8-42f2-486a-9307-dc8dc0c1b815.png)
+    ## 
+    ## Call:
+    ## lm(formula = log(MyRMS$Sqrt_dRMS_per_count) ~ log(MyRMS$TimeWindows_log), 
+    ##     data = MyRMS)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -0.13391 -0.01351 -0.00140  0.01524  0.50575 
+    ## 
+    ## Coefficients:
+    ##                            Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)                2.417708   0.029750   81.27   <2e-16 ***
+    ## log(MyRMS$TimeWindows_log) 0.497345   0.006669   74.57   <2e-16 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.08833 on 57 degrees of freedom
+    ## Multiple R-squared:  0.9899, Adjusted R-squared:  0.9897 
+    ## F-statistic:  5561 on 1 and 57 DF,  p-value: < 2.2e-16
 
 ``` r
 # Determine the Hurst exponent without displaying the full linear model summary 
 RMSlinearModel$coefficients[2]
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223377755-1c79c442-46aa-42c2-859a-67376f0e2016.png)
+    ## log(MyRMS$TimeWindows_log) 
+    ##                  0.4973449
 
 ## Influence of correlations on movement decisions with `Randomise()`
 
@@ -360,17 +339,17 @@ function.
 
 ``` r
 # Setting a seed enables the replication of results because Randomise() involves random number selection
-set.seed(1) 
+set.seed(1)
 # Randomise tracks from the tracks dataset with default parameters 
 randomise.result <- Randomise(tracks)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223378574-1c9b5ccb-f804-4d2d-816f-2272bca2ac39.png)
+![](Tutorial_markdown_files/figure-gfm/randomise%20tracks-1.png)<!-- -->
 
-Figure S 5 Scatter plot illustrating the relationship between the number
-of grid cells visited by the original tracks and the average number of
-grid cells visited by the randomised tracks. The solid black line
-represents the linear model fit to this data, the grey shaded area
+**Figure S5** Scatter plot illustrating the relationship between the
+number of grid cells visited by the original tracks and the average
+number of grid cells visited by the randomised tracks. The solid black
+line represents the linear model fit to this data, the grey shaded area
 reflects the standard error of the fit, and the dashed black line
 represents a 1:1 relationship. Plot created with `Randomise()` default
 parameters.
@@ -380,21 +359,46 @@ parameters.
 summary(randomise.result)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223378690-a1badbd8-9435-4316-9c39-0941c9f21a90.png)
+    ##       ref     CellsInOriginalTracks AvgCellsInRandomisedTracks
+    ##  Min.   : 1   Min.   :27.00         Min.   : 25.21            
+    ##  1st Qu.: 7   1st Qu.:39.00         1st Qu.: 39.59            
+    ##  Median :13   Median :59.00         Median : 55.65            
+    ##  Mean   :13   Mean   :57.32         Mean   : 56.48            
+    ##  3rd Qu.:19   3rd Qu.:71.00         3rd Qu.: 70.81            
+    ##  Max.   :25   Max.   :94.00         Max.   :100.77
 
 ``` r
 # Determine the slope of the linear model 
 summary(RandomiselinearModel)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223378726-4df6b1b5-6b23-49f5-bba8-11ff21eb98d1.png)
+    ## 
+    ## Call:
+    ## lm(formula = plot.df$AvgCellsInRandomisedTracks ~ plot.df$CellsInOriginalTracks, 
+    ##     data = plot.df)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -16.5452  -7.3282  -0.9386   6.6480  26.6015 
+    ## 
+    ## Coefficients:
+    ##                               Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)                     5.7706     6.7382   0.856    0.401    
+    ## plot.df$CellsInOriginalTracks   0.8846     0.1113   7.947 4.81e-08 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 10.83 on 23 degrees of freedom
+    ## Multiple R-squared:  0.733,  Adjusted R-squared:  0.7214 
+    ## F-statistic: 63.15 on 1 and 23 DF,  p-value: 4.808e-08
 
 ``` r
 # Determine the slope without displaying the full linear model summary 
 RandomiselinearModel$coefficients[2]
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223378765-2b1d0efe-07fc-4595-b618-81996cb25518.png)
+    ## plot.df$CellsInOriginalTracks 
+    ##                     0.8846446
 
 The `PlotRandomTracks()` function plots the randomised tracks created
 with `Randomise()` (Figure S 6; Figure 1 in main text).
@@ -418,17 +422,23 @@ columns, *randTrack*, the id number of the random track, *lon* and
 
 ``` r
 # Plot random tracks for tracks dataset reference id 1
-PlotRandomTracks(tracks, ref=1)
+plot.data.random.tracks <-PlotRandomTracks(tracks, ref=1)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223382220-279cb160-5493-45d9-907a-a47b30642677.png)
+``` r
+# Plot random tracks for tracks dataset reference id 1
+invisible({capture.output({plot.data.random.tracks <-PlotRandomTracks(tracks, ref=1)
+})})
+```
 
-Figure S 6 Map illustrating the original track for reference id 1 from
-the tracks dataset (black points and line) and the first 5 randomised
-tracks for track reference id 1 calculated using `Randomise()` (grey
-points and lines). The starting and ending locations are in red and
-blue, respectively. Plot created with `PlotRandomTracks()` default
-parameters and `ref=1`.
+![](Tutorial_markdown_files/figure-gfm/plot%20random%20tracks-1.png)<!-- -->
+
+**Figure S6** Map illustrating the original track for reference id 1
+from the tracks dataset (black points and line) and the first 5
+randomised tracks for track reference id 1 calculated using
+`Randomise()` (grey points and lines). The starting and ending locations
+are in red and blue, respectively. Plot created with
+`PlotRandomTracks()` default parameters and `ref=1`.
 
 ## Turning angles with `TurningAngles()`
 
@@ -460,8 +470,18 @@ results.
 angle.results <- TurningAngles(tracks)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223382778-36e3df1c-ecfc-477b-976b-1213440349bb.png)
+    ## [1] "15573 angles in 24 +/- 6 hour(s)"
+    ## [1] "15523 angles in 48 +/- 6 hour(s)"
+    ## [1] "15473 angles in 72 +/- 6 hour(s)"
+    ## [1] "15423 angles in 96 +/- 6 hour(s)"
+    ## [1] "15373 angles in 120 +/- 6 hour(s)"
+    ## [1] "15323 angles in 144 +/- 6 hour(s)"
+    ## [1] "15273 angles in 168 +/- 6 hour(s)"
+    ## [1] "15223 angles in 192 +/- 6 hour(s)"
+    ## [1] "15173 angles in 216 +/- 6 hour(s)"
+    ## [1] "15123 angles in 240 +/- 6 hour(s)"
 
+![](Tutorial_markdown_files/figure-gfm/calcualte%20turning%20angles-1.png)<!-- -->
 Figure S 7 Histogram of turning angles recorded from the tracks dataset
 during ten time windows (24 to 240 hours over 24 ± 6 hour intervals).
 Plot created with `TurningAngles()` default parameters.
@@ -471,7 +491,8 @@ Plot created with `TurningAngles()` default parameters.
 summary(angle.results[[1]])
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223382894-abe09776-be65-45c7-90ac-3fecee9cea20.png)
+    ##       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. 
+    ## -179.97980  -93.41046    0.79527   -0.01537   92.75782  179.99861
 
 Results from `TurningAngles()` can be visualised with the `PlotAngles()`
 function, which creates a circle plot (also known as a spider or radar
@@ -489,12 +510,13 @@ including the time windows (*timeWindows*), angle frequency
 #### Create a circle plot of all turning angles calculated using `TurningAngles()`
 
 ``` r
-PlotAngles(angle.results)
+# Plot angles with a circle plot
+plot.data.angles <- PlotAngles(angle.results)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223383570-9581ba93-1d43-4375-89de-8fa6d050fd00.png)
+![](Tutorial_markdown_files/figure-gfm/plot%20angles%20with%20a%20circle%20plot-1.png)<!-- -->
 
-Figure S 8 Circle plot of turning angles recorded from the tracks
+**Figure S8** Circle plot of turning angles recorded from the tracks
 dataset during ten time windows (24 to 240 hours over 24 ± 6 hour
 intervals). Plot created with `PlotAngles()` default parameters.
 
@@ -569,29 +591,36 @@ distributions to full and truncated datasets to gain a comprehensive
 understanding of displacement patterns (see Figure S 9).
 
 ![image](https://user-images.githubusercontent.com/73092681/223385586-b06b3dd6-d86a-4eeb-ae26-54484e6a4c28.png)
+**Figure S9** Diagram outlining the procedure for identifying the
+best-fit distribution of displacements.
 
-Figure S 9 Diagram outlining the procedure for identifying the best-fit
-distribution of displacements.  We begin by calculating displacements
-over 24 ± 6 hours with `CalcDisp()` and plotting a pdf of the
-displacements with `PlotDispPDF()` (Figure S 10; Figure 1 in main text).
+We begin by calculating displacements over 24 ± 6 hours with
+`CalcDisp()` and plotting a pdf of the displacements with
+`PlotDispPDF()` (Figure S 10; Figure 1 in main text).
 
 ``` r
 # Calculate displacements over 24 ± 6 hours
 disp <- CalcDisp(tracks, max_hr=24)
+```
+
+    ## [1] "15598 displacements in 24 +/- 6 hour(s)"
+
+``` r
 # Summarise displacements
 summary(unlist(disp))
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223385728-89721570-b744-48a0-8231-1a647751c479.png)
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##  0.2605  2.7049  5.5149  8.2299 11.1227 76.8543
 
 ``` r
 # Plot displacements (as displacements were only calculated over one time window they do not need to be normalised)
-PlotDispPDF(disp, normalised=FALSE)
+plot.data.pdf <- PlotDispPDF(disp, normalised=FALSE)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223385758-585b580b-97b9-4362-a5a6-fec2f6bdb3db.png)
+![](Tutorial_markdown_files/figure-gfm/plot%2024%20hour%20displacements-1.png)<!-- -->
 
-Figure S 10 Probability density function (pdf) plot of displacements
+**Figure S10** Probability density function (pdf) plot of displacements
 calculated using `CalcDisp()` with max\_hr=24. Plot created with
 `PlotDispPDF()` and normalised=FALSE.
 
@@ -603,20 +632,31 @@ distributions (Figure S 11) and the fits are compared with `CompDist()`.
 ``` r
 # Fit all distributions to the full range of displacement data 
 distResults <- FitDist(disp, full=TRUE, normalise=FALSE) 
+```
+
+    ## Fitting a power law distribution
+
+    ## Fitting an exponential distribution
+
+    ## Fitting a log-normal distribution
+
+``` r
 distResults
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223387262-8051f6ff-16e6-49c8-aa54-891ff1649647.png)
+    ##   distribution      xmin parameter1 parameter2 nTail
+    ## 1           pl 0.2605242  1.3341746         NA 15598
+    ## 2          exp 0.2605242  0.1254743         NA 15598
+    ## 3        lnorm 0.2605242  1.6405463   1.044668 15598
 
 ``` r
-# Create a ccdf plot of displacements with fit lines illustrating distributions fit to the full 
-# range of displacements
-PlotDist(disp, distResults)
+# Create a ccdf plot of displacements with fit lines illustrating distributions fit to the full range of displacements
+plot.data.all.pdf <- PlotDist(disp, distResults)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223387655-73c52245-01d7-4691-b4ed-39dfaa439e85.png)
+![](Tutorial_markdown_files/figure-gfm/plot%20full%20distributions-1.png)<!-- -->
 
-Figure S 11 Complementary cumulative distribution function (ccdf) of
+**Figure S11** Complementary cumulative distribution function (ccdf) of
 displacements (calculated using `CalcDisp()` with `max_hr=24`). Plot
 includes fit lines for power-law (pl), exponential (exp), and lognormal
 (lnorm) distributions based on results from `FitDist()` with
@@ -628,35 +668,48 @@ compResults <- CompDist(disp, distResults)
 compResults
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223387796-4ebcd81d-4416-4975-809c-1f2afe00cfba.png)
+    ##   distribution      xmin parameter1 parameter2 nTail       AIC          wAIC
+    ## 1           pl 0.2605242  1.3341746         NA 15598 116783.60  0.000000e+00
+    ## 2          exp 0.2605242  0.1254743         NA 15598  95948.77  1.000000e+00
+    ## 3        lnorm 0.2605242  1.6405463   1.044668 15598  96664.80 3.274395e-156
 
 In comparison, the following example demonstrates the procedure for
 fitting truncated distributions to the same displacements calculated
 over the 24 ± 6 hour time window. `FitDist()` is used to identify the
-best-fit x\_min for each distribution (Figure S 12).
+best-fit d\_min for each distribution (Figure S 12).
 
 ``` r
-# Fit all distributions and identify the best-fit xmin for each distribution
+# Fit all distributions and identify the best-fit dmin for each distribution
 distResults.trunc <- FitDist(disp, full=FALSE, normalise=FALSE)
+```
+
+    ## Fitting a power law distribution
+
+    ## Fitting an exponential distribution
+
+    ## Fitting a log-normal distribution
+
+``` r
 distResults.trunc
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223387923-9eabe14d-c65c-4fcd-a369-5b0aa3350fba.png)
+    ##   distribution      xmin parameter1 parameter2 nTail
+    ## 1           pl 20.874018  4.8875856         NA  1364
+    ## 2          exp  5.459062  0.1221752         NA  7841
+    ## 3        lnorm  1.973229  1.9043304  0.8276543 12622
 
 ``` r
-# Create a ccdf plot of displacements with fit lines illustrating distributions fit to the 
-# best-fit xmin for each distribution 
-PlotDist(disp, distResults.trunc)
+# Create a ccdf plot of displacements with fit lines illustrating distributions fit to the best-fit xmin for each distribution 
+plot.data.all.trunc <- PlotDist(disp, distResults.trunc)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223387954-f5b0eab0-4379-4b4f-92f1-68f2ac71cb90.png)
-
-Figure S 12 Complementary cumulative distribution function (ccdf) of
+![](Tutorial_markdown_files/figure-gfm/plot%20trunc%20distributions-1.png)<!-- -->
+**Figure S12** Complementary cumulative distribution function (ccdf) of
 displacements calculated using `CalcDisp()` with `max_hr=24` including
 fit lines for power-law (pl), exponential (exp), and lognormal (lnorm)
 distributions based on the best-fit x\_min results from `FitDist()`
 (i.e., with `full=FALSE`). Plot created using `PlotDist()` default
-parameters. 
+parameters.
 
 Note that these results cannot be put straight into `CompDist()` because
 each distribution was fit to a different range of data (i.e., *nTail*
@@ -673,7 +726,10 @@ distResultsPl <- FitDist(disp, set_xmin=distResults.trunc$xmin[1], normalise=FAL
 distResultsPl
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223388279-a289219e-86a3-4a5d-9c81-f74dd6e05895.png)
+    ##   distribution     xmin parameter1 parameter2 nTail
+    ## 1           pl 20.87402  4.8875856         NA  1364
+    ## 2          exp 20.87402  0.1457233         NA  1364
+    ## 3        lnorm 20.87402  2.4000922  0.5294741  1364
 
 ``` r
 # Fit all distributions using the xmin value for the exponential distribution
@@ -681,7 +737,10 @@ distResultsExp <- FitDist(disp, set_xmin=distResults.trunc$xmin[2], normalise=FA
 distResultsExp
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223388388-4b0ac776-5070-4719-a4d6-5fc2770ccce1.png)
+    ##   distribution     xmin parameter1 parameter2 nTail
+    ## 1           pl 5.459062  2.2866946         NA  7841
+    ## 2          exp 5.459062  0.1221751         NA  7841
+    ## 3        lnorm 5.459062  2.2038304  0.6861026  7841
 
 ``` r
 # Fit all distributions using the xmin value for the lognormal distribution
@@ -689,12 +748,21 @@ distResultsLnorm <- FitDist(disp, set_xmin=distResults.trunc$xmin[3], normalise=
 distResultsLnorm
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223388454-1f22a419-5ae1-4e07-8a0e-8004ae285376.png)
+    ##   distribution     xmin parameter1 parameter2 nTail
+    ## 1           pl 1.973229  1.7444386         NA 12622
+    ## 2          exp 1.973229  0.1262535         NA 12622
+    ## 3        lnorm 1.973229  1.9043317  0.8276533 12622
 
-`R   # Compare distribution fits based on the best-fit xmin value for
-the power-law distribution compResultsPl <- CompDist(disp,
-distResultsPl) compResultsPl`
-![image](https://user-images.githubusercontent.com/73092681/223388553-5d74bbc2-8093-4ad7-a4a4-a57bec436aaf.png)
+``` r
+# Compare distribution fits based on the best-fit xmin value for the power-law distribution
+compResultsPl <- CompDist(disp, distResultsPl)
+compResultsPl
+```
+
+    ##   distribution     xmin parameter1 parameter2 nTail      AIC         wAIC
+    ## 1           pl 20.87402  4.8875856         NA  1364 8016.717 1.164441e-08
+    ## 2          exp 20.87402  0.1457233         NA  1364 7980.295 9.440862e-01
+    ## 3        lnorm 20.87402  2.4000922  0.5294741  1364 7985.948 5.591380e-02
 
 ``` r
 # Compare distribution fits based on the best-fit xmin value for the exponential distribution
@@ -702,7 +770,10 @@ compResultsExp <- CompDist(disp, distResultsExp)
 compResultsExp
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223388649-fbe84659-ecf7-4011-8237-498b9afa46c9.png)
+    ##   distribution     xmin parameter1 parameter2 nTail      AIC         wAIC
+    ## 1           pl 5.459062  2.2866946         NA  7841 50535.45 0.000000e+00
+    ## 2          exp 5.459062  0.1221751         NA  7841 48650.60 1.000000e+00
+    ## 3        lnorm 5.459062  2.2038304  0.6861026  7841 48765.99 8.813929e-26
 
 ``` r
 # Compare distribution fits based on the best-fit xmin value for the lognormal distribution 
@@ -710,7 +781,10 @@ compResultsLnorm <- CompDist(disp, distResultsLnorm)
 compResultsLnorm
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223388741-7e56c152-c456-4d36-9c8a-83a9acc0f3cc.png)
+    ##   distribution     xmin parameter1 parameter2 nTail      AIC         wAIC
+    ## 1           pl 1.973229  1.7444386         NA 12622 83763.88 0.000000e+00
+    ## 2          exp 1.973229  0.1262535         NA 12622 77486.07 1.000000e+00
+    ## 3        lnorm 1.973229  1.9043317  0.8276533 12622 77620.33 7.017338e-30
 
 Once all distributions are fit using each of the best-fit x\_min values,
 the distribution fits can be compared using CompDist(). An important
@@ -747,17 +821,17 @@ scale\_fill\_gradientn from the ggplot2 package (Wickham 2016)
 *Latitude* and *Longitude* for the centre of each grid cell, the *Area*
 of the grid cell, the number of location estimates recorded in the grid
 cell (*Counts*), and the *Occupancy* per grid cell. See Table 3 in the
-main text for suggestions on how to interpret results. 
+main text for suggestions on how to interpret results.
 
 ``` r
 # Create an occupancy map based on the tracks dataset
-Occ <- Occupancy(tracks)
+invisible({capture.output({Occ <- Occupancy(tracks)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223389282-3e1482d7-7032-4291-8bb0-01fa153c285b.png)
+![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
-Figure S 13 Map of occupancy (total count of location estimates in each
-grid cell per area) based on the tracks dataset. Map created with
+**Figure S13** Map of occupancy (total count of location estimates in
+each grid cell per area) based on the tracks dataset. Map created with
 `Occupancy()` default parameters.
 
 ``` r
@@ -765,21 +839,22 @@ grid cell per area) based on the tracks dataset. Map created with
 summary(Occ$Occupancy)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223389327-1d3d2126-29b5-4b69-af48-58a640212b7c.png)
+    ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+    ## 0.001294 0.010357 0.025906 0.040936 0.054041 0.288579
 
 A pdf of the results from `Occupancy()` can be plotted with the
 `pdfPlot()` function when the desc parameter is set to “Occupancy”
-(Figure S 14; Figure 1 in main text). 
+(Figure S 14; Figure 1 in main text).
 
 ``` r
 # Create a pdf plot of occupancy values
-pdfPlot(Occ$Occupancy, desc="Occupancy") 
+pdf.occ  <- pdfPlot(Occ$Occupancy, desc="Occupancy") 
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223389505-7ed85d05-471b-42df-96ba-99ae20cceb21.png)
+![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-Figure S 14 Probability density function (pdf) plot of occupancy per km2
-for tracks dataset determined with `Occupancy()` default parameters.
+**Figure S14** Probability density function (pdf) plot of occupancy per
+km2 for tracks dataset determined with `Occupancy()` default parameters.
 Plot created using `pdfPlot()` with desc set to “Occupancy”.
 
 ### Community-wide movements with `InfomapCommunities()`
@@ -823,17 +898,64 @@ al. 2021). See Farage et al. (2021) for tips on interpreting the Infomap
 monolayer object and Table 3 in the main text for suggestions on how to
 interpret results.
 
+\*\* Before running `InfomapCommunities()` make sure your working
+direction is set to the folder that contains the “Infomap.exe” file\*\*
+
 ``` r
 # Identify community-wide movements from the tracks dataset with InfomapCommunities, 
 # Note that the working directory must be set to the folder containing the Infomap file, 
 # for more information, please visit:
 # https://ecological-complexity-lab.github.io/infomap_ecology_package/installation
+setwd("~/2023/PhysMove") ### Update here
 infomap <- InfomapCommunities(tracks)
+```
+
+    ## Warning: package 'attempt' was built under R version 4.2.3
+
+    ## Warning: package 'ggalluvial' was built under R version 4.2.3
+
+    ## Warning: package 'rlang' was built under R version 4.2.3
+
+    ## Warning: package 'igraph' was built under R version 4.2.3
+
+    ## Warning: package 'vegan' was built under R version 4.2.3
+
+    ## Warning: package 'permute' was built under R version 4.2.3
+
+    ## [1] "Input: an unipartite edge list"
+
+``` r
 # Determine the structure of the Infomap monolayer object
 str(infomap)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223391651-ddd4959d-ec5f-489f-8169-c1c3f5e2c7c3.png)
+    ## List of 8
+    ##  $ call     : chr "./infomap infomap.txt . --tree --seed 123 -N 100 -f directed --silent"
+    ##  $ L        : num 2.3
+    ##  $ m        : num 4
+    ##  $ modules  : tibble [495 × 14] (S3: tbl_df/tbl/data.frame)
+    ##   ..$ node_id      : num [1:495] 1 2 3 4 5 6 7 8 9 10 ...
+    ##   ..$ node_name    : chr [1:495] "Node1" "Node2" "Node3" "Node4" ...
+    ##   ..$ flow         : num [1:495] 0.000439 0.00222 0.00276 0.000209 0.001588 ...
+    ##   ..$ levels       : num [1:495] 3 3 3 3 3 3 3 3 3 3 ...
+    ##   ..$ module_level1: num [1:495] 3 3 3 3 3 3 3 3 3 3 ...
+    ##   ..$ module_level2: num [1:495] 7 7 7 5 5 5 7 5 7 5 ...
+    ##   ..$ module_level3: num [1:495] 3 3 1 5 5 3 1 1 2 1 ...
+    ##   ..$ module_level4: num [1:495] 2 1 1 2 1 1 2 1 1 3 ...
+    ##   ..$ module_level5: num [1:495] NA NA NA NA NA NA NA NA NA NA ...
+    ##   ..$ module_level6: num [1:495] NA NA NA NA NA NA NA NA NA NA ...
+    ##   ..$ module_level7: num [1:495] NA NA NA NA NA NA NA NA NA NA ...
+    ##   ..$ cell         : num [1:495] 496083 497523 498963 497524 497525 ...
+    ##   ..$ long         : num [1:495] 0.625 0.625 0.625 0.875 1.125 ...
+    ##   ..$ lat          : num [1:495] -3.88 -3.62 -3.38 -3.62 -3.62 ...
+    ##  $ edge_list:'data.frame':   2298 obs. of  3 variables:
+    ##   ..$ from  : chr [1:2298] "Node2" "Node1" "Node2" "Node12" ...
+    ##   ..$ to    : chr [1:2298] "Node1" "Node2" "Node2" "Node2" ...
+    ##   ..$ weight: num [1:2298] 0.2 1 0.6 0.125 0.1 ...
+    ##  $ L_sim    : NULL
+    ##  $ m_sim    : NULL
+    ##  $ pvalue   : NULL
+    ##  - attr(*, "class")= chr "infomap_monolayer"
 
 The `CommunityMap()` function is used to visualise results from
 `InfomapCommunities()` by converting the Infomap monolayer object into a
@@ -849,18 +971,18 @@ used on the map can be changed with `colours= “Dark2”` (by default).
 CommunityMap(infomap)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223391708-063b4082-d4f3-44ac-804e-76f863ff6aaa.png)
+![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
-Figure S 15 Map illustrating level 1 Infomap communities for the tracks
-dataset determined using `InfomapCommunities()` default parameters. Map
-created with `CommunityMap()` default parameters.
+**Figure S15** Map illustrating level 1 Infomap communities for the
+tracks dataset determined using `InfomapCommunities()` default
+parameters. Map created with `CommunityMap()` default parameters.
 
 ## *Intraspecific movements*
 
 ### Dispersion with `GyrationRad()`
 
 The `GyrationRad()` function calculates the dispersion (i.e., the
-gyration radius) of each track in a dataset (Figure S 16). Optional
+gyration radius) of each track in a dataset (Figure S16). Optional
 parameters allow you to \* create a map (map=TRUE, by default) \*
 control the colour of the points, indicating average track locations,
 and circles, indicating how far each animal dispersed
@@ -870,16 +992,16 @@ and circles, indicating how far each animal dispersed
 the reference id for each track, *avg long* and *avg lat, the average
 longitude and latitude coordinates in degrees for each track, and *rG
 (km)\*, the gyration radius in kilometres for each track. See Table 3 in
-the main text for suggestions on how to interpret results. 
+the main text for suggestions on how to interpret results.
 
 ``` r
 # Calculate the dispersion of each track in the tracks dataset
 GR <- GyrationRad(tracks)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223392432-a0f058a4-6ae0-4911-bba5-fb29557d98d6.png)
+![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
-Figure S 16 Map illustrating dispersion patterns for tracks dataset
+**Figure S16** Map illustrating dispersion patterns for tracks dataset
 using `GyrationRad()` default parameters. Black points represent the
 mean location of each track and red circles represent how far each track
 dispersed (i.e., their gyration radius).
@@ -889,21 +1011,27 @@ dispersed (i.e., their gyration radius).
 head(GR)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223392466-c15c480d-a883-4a64-9ea1-8fd2ad27cca6.png)
+    ##      ref   avg long    avg lat   rG (km)
+    ## 1      1 -0.2276723 -1.1400612  92.80884
+    ## 413    2  0.5514736 -1.3451059 132.77994
+    ## 910    3  1.1250293 -0.3847730 108.45032
+    ## 1568   4  1.7190069 -0.1784736 104.12900
+    ## 2494   5  0.7674021 -0.1059346  68.01475
+    ## 2855   6  2.3357980  0.7186781  94.56956
 
 A pdf of the results from `GyrationRad()` can be plotted with the
 `pdfPlot()` function when the desc parameter is set to “GyrationRad”
-(Figure S 17; Figure 1 in main text). 
+(Figure S17; Figure 1 in main text).
 
 ``` r
 # Create a pdf plot of gyration radius values
-pdfPlot((GR$`rG (km)`), desc="GyrationRad")
+pdf.gr <- pdfPlot((GR$`rG (km)`), desc="GyrationRad")
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223392674-a36c07e4-ac37-4b0b-b15e-70608b3ea9b6.png)
+![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
-Figure S 17 Probability density function (pdf) plot of gyration radius
-values for tracks dataset determined with `GyrationRad()` default
+**Figure S17** Probability density function (pdf) plot of gyration
+radius values for tracks dataset determined with `GyrationRad()` default
 parameters. Plot created using `pdfPlot()` with desc set to
 “GyrationRad”.
 
@@ -920,15 +1048,14 @@ a histogram (`histPlot=TRUE`, by default).
 reference id for each track, the *normalisedEntropy* scores,
 *indivEntropy*, the individual entropy scores before they were
 normalised, and the number of *cellsVisited* by each track. See Table 3
-in the main text for suggestions on how to interpret results. 
+in the main text for suggestions on how to interpret results.
 
 ``` r
 # Calculate track entropy using default parameters
 Ent <- Entropy(tracks)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223393455-e7ed546a-c214-42d8-8006-9e1f868fbc50.png)
-
+![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 Figure S 18 Histogram of normalised entropy scores for tracks dataset
 created using `Entropy()` default parameters.
 
@@ -937,20 +1064,25 @@ created using `Entropy()` default parameters.
 head(Ent)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223393365-09581f97-5a86-4716-bea1-7162796448be.png)
+    ##   ref normalisedEntropy indivEntropy cellsVisited
+    ## 1   1         0.8744141     3.328600           45
+    ## 2   2         0.9255766     3.543701           46
+    ## 3   3         0.9033790     3.683562           59
+    ## 4   4         0.9050806     3.832208           69
+    ## 5   5         0.9144473     3.079215           29
+    ## 6   6         0.9121058     3.888015           71
 
 A pdf of the results from `Entropy()` can be plotted with the
 `pdfPlot()` function when the desc parameter is set to “Entropy” (Figure
-S 19; Figure 1 in main text). 
+S 19; Figure 1 in main text).
 
 ``` r
 # Create a pdf plot of the entropy scores
-pdfPlot(Ent$normalisedEntropy, "Entropy")
+pdf.ent <- pdfPlot(Ent$normalisedEntropy, "Entropy")
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223393736-01202f8a-b2c9-4bcb-89d4-39ab77c69f5a.png)
-
-Figure S 19 Probability density function (pdf) plot of normalised
+![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+**Figure S19** Probability density function (pdf) plot of normalised
 entropy scores for tracks dataset determined with `Entropy()` default
 parameters. Plot created using `pdfPlot()` with desc set to “Entropy”.
 
@@ -973,9 +1105,8 @@ interpret results.
 Pred <- Predictability(tracks, Ent)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223394163-dcbe9d0d-6e6c-4772-b576-df3a2be67e17.png)
-
-Figure S 20 Histogram of predictability scores for tracks dataset
+![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+**Figure S20** Histogram of predictability scores for tracks dataset
 determined using `Predictability()` default parameters and entropy
 scores from `Entropy()`.
 
@@ -984,7 +1115,13 @@ scores from `Entropy()`.
 head(Pred)
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223394222-f673e850-233a-45c8-852e-b76bcb4079d6.png)
+    ##   ref Predictability
+    ## 1   1      0.2761026
+    ## 2   2      0.2008385
+    ## 3   3      0.2237396
+    ## 4   4      0.2152093
+    ## 5   5      0.2419867
+    ## 6   6      0.2038908
 
 A pdf of the results from `Predictability()` can be plotted with the
 `pdfPlot()` function when the desc parameter is set to “Predictability”
@@ -992,39 +1129,41 @@ A pdf of the results from `Predictability()` can be plotted with the
 
 ``` r
 # Create a pdf plot of the predictability scores
-pdfPlot(Pred$Predictability, desc="Predictability") 
+pdf.pred <- pdfPlot(Pred$Predictability, desc="Predictability") 
 ```
 
-![image](https://user-images.githubusercontent.com/73092681/223394441-3c79b19a-abbc-492f-9478-01e291674cdd.png)
-
-Figure S 21 Probability density function (pdf) plot of predictability
+![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+**Figure S21** Probability density function (pdf) plot of predictability
 scores for tracks dataset determined with `Predictability()` default
 parameters and results from `Entropy()`. Plot created using `pdfPlot()`
 with desc set to “Predictability”.
 
+## Recommended resources
+
+Méndez, V., *et al*. (2013). Stochastic Foundations in Movement Ecology
+: Anomalous Diffusion, Front Propagation and Random Searches. Berlin,
+Heidelberg, Germanu, Springer Berlin / Heidelberg.
+
+Viswanathan, G. M., *et al*. (2011). The Physics of Foraging: An
+Introduction to Biological Encounters and Random Searches. Cambridge,
+Cambridge University Press.
+
 ## References
 
 Burnham, K.P. & Anderson, D.R. (2004) Multimodel Inference:Understanding
-AIC and BIC in Model Selection. Sociological Methods & Research, 33,
+AIC and BIC in Model Selection. *Sociological Methods & Research*, 33,
 261-304.
 
-Calich, H.J. et al. (2021) Comprehensive analytical approaches reveal
+Calich, H.J. *et al*. (2021) Comprehensive analytical approaches reveal
 species-specific search strategies in sympatric apex predatory sharks.
-Ecography, 44, 1544-1556.
+*Ecography*, 44, 1544-1556.
 
-Farage, C. et al. (2021) Identifying flow modules in ecological networks
-using Infomap. Methods in Ecology and Evolution, 12, 778–786.
+Farage, C. *et al*. (2021) Identifying flow modules in ecological
+networks using Infomap. *Methods in Ecology and Evolution*, 12, 778–786.
 
-Rodríguez, J.P. et al. (2017) Big data analyses reveal patterns and
-drivers of the movements of southern elephant seals. Scientific Reports,
-7, 1-10.
+Rodríguez, J.P. *et al*. (2017) Big data analyses reveal patterns and
+drivers of the movements of southern elephant seals. *Scientific
+Reports*, 7, 1-10.
 
 Wickham, H. (2016) ggplot2: Elegant Graphics for Data Analysis.
-Springer-Verlag, New York. \#\# Including Plots
-
-You can also embed plots, for example:
-
-![](Tutorial_markdown_files/figure-gfm/pressure-1.png)<!-- -->
-
-Note that the `echo = FALSE` parameter was added to the code chunk to
-prevent printing of the R code that generated the plot.
+Springer-Verlag, New York.
