@@ -6,29 +6,29 @@
 #' @param displacements List of displacements output from the \code{\link{CalcDisp}} function.
 #' @param dist Continuous distributions that will be fit to the displacements. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
 #' continuous distributions. Default is dist=c("pl","exp","lnorm").
-#' @param set_xmin To limit the fitted distribution to values above a specified value. Keep in mind that if your data were normalised
+#' @param set_dmin To limit the fitted distribution to values above a specified value. Keep in mind that if your data were normalised
 #' this value will have to be a normalised value as well. Default is NULL.
 #' @param full To fit the distributions to the full range of displacement data. Default is FALSE.
 #' @param normalise Normalises the displacement distances by dividing each displacement by the average displacement for that time window
 #' normalise=TRUE is required if working with displacements calculated over multiple time windows.
 #' @return A data frame that contains the summary statistics for each distribution fit including the distribution name,
-#' xmin (the x value used to fit the distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
-#' distributions respectively, and nTail (the number of data points greater than or equal to xmin). A vector stating if the data were normalised or not,
+#' dmin (the d value used to fit the distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
+#' distributions respectively, and nTail (the number of data points greater than or equal to dmin). A vector stating if the data were normalised or not,
 #' ('normalise') is automatically assigned to the global environment as this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}
 #'functions.
 #' @examples FitDist(displacements)
 #' @examples FitDist(displacements, dist=c("exp","lnorm"), full=TRUE)
-#' @examples FitDist(displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalise=TRUE)
+#' @examples FitDist(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE)
 #' @export
 
-FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalise=TRUE) {
+FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE) {
 
   if (class(displacements)!="list"){
    stop("Distributions can only be fit to the output from the CalcDisp function.")
   }
 
-  if ((!is.null(set_xmin)) & (full==TRUE)){
-    stop("To fit distributions to the full range of data use full=TRUE and leave set_xmin as default (NULL).")
+  if ((!is.null(set_dmin)) & (full==TRUE)){
+    stop("To fit distributions to the full range of data use full=TRUE and leave set_dmin as default (NULL).")
   }
 
   if ((length(displacements)>1) & (normalise==FALSE)){
@@ -54,7 +54,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
   dat <- numeric(length(xmins)) #blank vectors for D values
   x <- sort(x)
   N <- length(x)
-  distResults <- data.frame("distribution"=dist, "xmin"= c(NA), "parameter1"=c(NA), "parameter2"=c(NA), "nTail"= c(NA)) #make sure dist= is loaded
+  distResults <- data.frame("distribution"=dist, "dmin"= c(NA), "parameter1"=c(NA), "parameter2"=c(NA), "nTail"= c(NA)) #make sure dist= is loaded
 
   # assign("dist",dist, envir = .GlobalEnv)
   assign("normalise", normalise, envir = .GlobalEnv)
@@ -62,7 +62,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
   if ("pl" %in% dist){
     message("Fitting a power law distribution")
     if (full==FALSE){
-      if (is.null(set_xmin)){
+      if (is.null(set_dmin)){
         for (i in 1:length(xmins)){
           xmin <- xmins[i]
           xi <- x[x>=(xmin)]
@@ -76,8 +76,8 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
         D <- min(dat[dat>0], na.rm=TRUE) #find smallest D value
         PL_xmin <- xmins[which.max(dat==D)] #find corresponding xmin value such that PLxmin is the D value that minimizes the distance between sx and fx
       }
-      if (!is.null(set_xmin)){
-        PL_xmin <- set_xmin # If xmin is supplied, assign it as the PL_xmin
+      if (!is.null(set_dmin)){
+        PL_xmin <- set_dmin # If xmin is supplied, assign it as the PL_xmin
       }
     }
     if (full==TRUE){
@@ -86,7 +86,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
     xi <- x[x>=(PL_xmin)] # Use PL_xmin to calculate final datasets and parameters
     n <- length(xi)
     PL_alpha <- 1+n*((sum(log(xi/PL_xmin)))^-1) # calculate alpha using direct MLE based on PL_xmin
-    distResults[which(distResults$distribution =="pl"),which(names(distResults)=="xmin")] <- PL_xmin
+    distResults[which(distResults$distribution =="pl"),which(names(distResults)=="dmin")] <- PL_xmin
     distResults[which(distResults$distribution =="pl"),which(names(distResults)=="parameter1")] <- PL_alpha
     distResults[which(distResults$distribution =="pl"),which(names(distResults)=="nTail")] <- n
   }
@@ -106,7 +106,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
       }
     }
     if (full==FALSE){
-      if (is.null(set_xmin)){
+      if (is.null(set_dmin)){
         init <- c()
         xmin <- min(x)
         xi <- x[x>xmin] # truncate dataset at xmin
@@ -136,8 +136,8 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
         Exp_lambda <- pars.list[row]
         n <- length(x[x>=Exp_xmin]) #length of truncated dataset
       }
-      if (!is.null(set_xmin)){
-        xmin <- set_xmin
+      if (!is.null(set_dmin)){
+        xmin <- set_dmin
         xi <- x[x>xmin] # truncate dataset at xmin
         n <- length(x[x>=xmin]) #size of truncated data set
         my_nll <- create_nll(xi)
@@ -155,7 +155,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
       Exp_lambda <- as.numeric(mle@coef[1])
       Exp_xmin <- xmin
     }
-    distResults[which(distResults$distribution =="exp"),which(names(distResults)=="xmin")] <- Exp_xmin
+    distResults[which(distResults$distribution =="exp"),which(names(distResults)=="dmin")] <- Exp_xmin
     distResults[which(distResults$distribution =="exp"),which(names(distResults)=="parameter1")] <- Exp_lambda
     distResults[which(distResults$distribution =="exp"),which(names(distResults)=="nTail")] <- n
   }
@@ -175,7 +175,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
       }
     }
     if (full==FALSE){
-      if (is.null(set_xmin)){
+      if (is.null(set_dmin)){
         init <- matrix(ncol=2, nrow=1)# Initializing values with min of data
         xmin <- min(x)
         xi <- x[x>xmin] # truncate dataset at xmin
@@ -206,8 +206,8 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
         LN_sigma <- pars.mat[row,2]
         n <- length(x[x>=LN_xmin]) # truncate dataset at xmin
       }
-      if (!is.null(set_xmin)){
-        xmin <- set_xmin
+      if (!is.null(set_dmin)){
+        xmin <- set_dmin
         xi <- x[x>xmin] # truncate dataset at xmin
         n <- length(xi) #size of truncated data set
         pars <- c(mean(log(xi)), sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
@@ -231,7 +231,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_xmin=NULL, f
       LN_sigma <-as.numeric(mle@coef[2])
       n <- length(x[x>=LN_xmin]) # truncate dataset at xmin
     }
-    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="xmin")] <- LN_xmin
+    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="dmin")] <- LN_xmin
     distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="parameter1")] <- LN_mu
     distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="parameter2")] <- LN_sigma
     distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="nTail")] <- n

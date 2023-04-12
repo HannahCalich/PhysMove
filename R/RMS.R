@@ -66,16 +66,16 @@ RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
   for(b in 1: length(bins)){
     mybins[b] <- tmin*wBins^(b)
   }
-  MyRMS <- as.data.frame(cbind("TimeWindows_log"=mybins, "Count"=Timefreq, "MeanDisp"=sumDist, "dRMS"=sumDist2))
-  MyRMS <- MyRMS[(MyRMS[,1]!= 0) & (MyRMS[,3]!= 0) & (MyRMS[,4]!= 0),]
-  MyRMS$MeanDisp_per_count <- MyRMS[,3]/MyRMS[,2]
-  MyRMS$Sqrt_dRMS_per_count <- sqrt(MyRMS[,4]/MyRMS[,2])
-  plot.df <- cbind(MyRMS[,c(1,5,6)])
+  RMS_Result <- as.data.frame(cbind("timeBin_log"=mybins, "Count"=Timefreq, "MeanDisp"=sumDist, "dRMS"=sumDist2))
+  RMS_Result <- RMS_Result[(RMS_Result[,1]!= 0) & (RMS_Result[,3]!= 0) & (RMS_Result[,4]!= 0),]
+  RMS_Result$MeanDisp_per_tb <- RMS_Result[,3]/RMS_Result[,2]
+  RMS_Result$Sqrt_dRMS_per_tb <- sqrt(RMS_Result[,4]/RMS_Result[,2])
+  plot.df <- cbind(RMS_Result[,c(1,5,6)])
   names(plot.df) <- c("timeWindow", "meanDisplacements", "rmsDisplacements")
 
   if (lm==TRUE){
-    if (nrow(MyRMS)>1){
-      fit <- lm(log(MyRMS$Sqrt_dRMS_per_count) ~ log(MyRMS$TimeWindows_log), data = MyRMS)
+    if (nrow(RMS_Result)>1){
+      fit <- lm(log(RMS_Result$Sqrt_dRMS_per_tb) ~ log(RMS_Result$timeBin_log), data = RMS_Result)
       assign("RMSlinearModel",fit, envir = .GlobalEnv)
       rm(fit)
     } else {
@@ -85,7 +85,7 @@ RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
 
   if (plot==TRUE){ # Plot RMS of displacements, and mean displacements on log-log scale
     if (nrow(plot.df)>1){
-      ylabel <- expression('<'*d^2*'>'^(1/2)* (km)) #generic expression = ('<'*d^q*'>'^(1/q)* (km)), but we use a q of 2 here
+      ylabel <- expression('<'*d^q*'>'^(1/q)* (km)) #generic expression = ('<'*d^q*'>'^(1/q)* (km)), q=1 is mean disp, and q=2 is RMS
       xlabel <- paste('T(',timeUnit,')',sep="")
       a <- ggplot2::ggplot(plot.df, ggplot2::aes(plot.df[,1],plot.df[,3]))
       if (lm==TRUE){
