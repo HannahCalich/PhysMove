@@ -3,8 +3,6 @@ PhysMove Tutorial
 Hannah Calich
 April 2023
 
-# Dear reviewers, this file is a work in progress, please refer to manuscript SI for current tutorial
-
 This is a brief tutorial to accompany the PhysMove R package. Here, we
 demonstrate how PhysMove can be used to calculate each of the methods
 discussed in the main text and review all relevant functions and
