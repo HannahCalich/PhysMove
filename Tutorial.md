@@ -1,5 +1,3 @@
-# Dear reviewers, this file is a work in progress, please refer to manuscript SI for current tutorial
-
 # PhysMove Tutorial
 This is a brief tutorial to accompany the PhysMove R package. Here, we demonstrate how PhysMove can be used to calculate each of the methods discussed in the main text and review all relevant functions and parameters. 
 We demonstrate each function with a simulated telemetry dataset, called `tracks`, that is automatically loaded with PhysMove. We provide sample code to replicate each of the results presented in the main text. 
