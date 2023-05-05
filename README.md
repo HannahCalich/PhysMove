@@ -82,14 +82,14 @@ data frame must only contain 4 columns named *ref*, *lon*, *lat* and
     format,
 
   - *lon* and *lat*, the longitude and latitude in decimal degrees of
-    each position estimate, respectively in numeric format, and
+    each position estimate, respectively, in numeric format, and
 
   - *day*, the datetime stamp for each location estimate in POSIXct
     format following yyyy-mm-dd hh:mm:ss.
 
-To determine if the data frame is formatted correctly, the tracks
+To determine if the data frame is formatted correctly, the `tracks`
 dataset can be used for comparison. The code below demonstrates how to
-preview the tracks dataset using `head()` and confirm the dataset
+preview the `tracks` dataset using `head()` and confirm the dataset
 structure using `str()`.
 
 ``` r
@@ -119,11 +119,11 @@ str(tracks)
 #### Create a map of the tracks dataset with `PlotTracks()`
 
 A map of the data can be created using the `PlotTracks()` function from
-PhysMove (Figure S 1). PlotTracks has optional parameters that allow you
+PhysMove (Figure S 1). `PlotTracks()` has optional parameters that allow you
 to plot specific tracks based on their reference IDs (`ref=NULL`, by
 default), connect points with lines (`tracks=TRUE`, by default), and
 edit the colours used in the map (`colours=rainbow`, by default). The
-code used to make the tracks dataset is available in the PhysMove
+code used to make the `tracks` dataset is available in the PhysMove
 data-raw folder on GitHub as “CreateTracks.R”.
 
 ``` r
@@ -132,7 +132,7 @@ PlotTracks(tracks)
 
 ![](Tutorial_markdown_files/figure-gfm/plot%20tracks-1.png)<!-- -->
 
-**Figure S1** Map of the simulated tracking data included in the tracks
+**Figure** **S1** Map of the simulated tracking data included in the `tracks`
 dataset, created with `PlotTracks()` default settings.
 
 ## *Movement patterns*
@@ -203,8 +203,8 @@ plot.data.disp <- PlotDispPDF(disp.all)
 
 ![](Tutorial_markdown_files/figure-gfm/plot%20all%20normalised%20displacements-1.png)<!-- -->
 
-**Figure S2** Probability density function (pdf) plot of normalised
-displacements from the tracks dataset calculated over 10 time windows,
+**Figure** **S2** Probability density function (pdf) plot of normalised
+displacements from the `tracks` dataset calculated over 10 time windows,
 24-240 hours at 24 ± 6-hour time intervals with `CalcDisp()`. Plot
 created with `PlotDispPDF()` default parameters.
 
@@ -216,8 +216,8 @@ PlotDispPDF(disp.all, normalised=FALSE)
 
 ![](Tutorial_markdown_files/figure-gfm/plot%20all%20displacements%20\(not%20normalised\)-1.png)<!-- -->
 
-**Figure S3** Probability density function (pdf) plot of displacements
-from the tracks dataset calculated over 10 time windows, 24 to 240 hours
+**Figure** **S3** Probability density function (pdf) plot of displacements
+from the `tracks` dataset calculated over 10 time windows, 24 to 240 hours
 at 24 ± 6-hour time intervals with `CalcDisp()`. Plot created with
 `PlotDispPDF()` where `normalised=FALSE`.
 
@@ -261,8 +261,8 @@ rms.result <- RMS(tracks)
 
 ![](Tutorial_markdown_files/figure-gfm/calcualte%20rms-1.png)<!-- -->
 
-**Figure S4** Scatter plot of mean (grey points) and root-mean-square
-(RMS; black points) displacements (d) in kilometres (km) from tracks
+**Figure** **S4** Scatter plot of mean (grey points) and root-mean-square
+(RMS; black points) displacements (d) in kilometres (km) from `tracks`
 dataset over time (T) in days, fit to a linear model (red line with
 standard error shaded in grey). Plot created with `RMS()` default
 parameters.
@@ -344,8 +344,8 @@ randomise.result <- Randomise(tracks)
 
 ![](Tutorial_markdown_files/figure-gfm/randomise%20tracks-1.png)<!-- -->
 
-**Figure S5** Scatter plot illustrating the relationship between the
-number of grid cells visited by the original tracks and the average
+**Figure** **S5** Scatter plot illustrating the relationship between the
+number of grid cells visited by the original tracks from the `tracks` dataset and the average
 number of grid cells visited by the randomised tracks. The solid black
 line represents the linear model fit to this data, the grey shaded area
 reflects the standard error of the fit, and the dashed black line
@@ -431,8 +431,8 @@ invisible({capture.output({plot.data.random.tracks <-PlotRandomTracks(tracks, re
 
 ![](Tutorial_markdown_files/figure-gfm/plot%20random%20tracks-1.png)<!-- -->
 
-**Figure S6** Map illustrating the original track for reference id 1
-from the tracks dataset (black points and line) and the first 5
+**Figure** **S6** Map illustrating the original track for reference id 1
+from the `tracks` dataset (black points and line) and the first 5
 randomised tracks for track reference id 1 calculated using
 `Randomise()` (grey points and lines). The starting and ending locations
 are in red and blue, respectively. Plot created with
@@ -480,7 +480,7 @@ angle.results <- TurningAngles(tracks)
     ## [1] "15123 angles in 240 +/- 6 hour(s)"
 
 ![](Tutorial_markdown_files/figure-gfm/calcualte%20turning%20angles-1.png)<!-- -->
-Figure S 7 Histogram of turning angles recorded from the tracks dataset
+**Figure** **S7** Histogram of turning angles recorded from the `tracks` dataset
 during ten time windows (24 to 240 hours over 24 ± 6 hour intervals).
 Plot created with `TurningAngles()` default parameters.
 
@@ -514,7 +514,7 @@ plot.data.angles <- PlotAngles(angle.results)
 
 ![](Tutorial_markdown_files/figure-gfm/plot%20angles%20with%20a%20circle%20plot-1.png)<!-- -->
 
-**Figure S8** Circle plot of turning angles recorded from the tracks
+**Figure** **S8** Circle plot of turning angles recorded from the `tracks`
 dataset during ten time windows (24 to 240 hours over 24 ± 6 hour
 intervals). Plot created with `PlotAngles()` default parameters.
 
@@ -538,7 +538,7 @@ identifies the best-fit distribution for the displacements. See Figure S
 
 `FitDist()` requires you to consider four optional parameters, reviewed
 here: 1. What distributions (`dist`) should be fit to the displacement
-data? By default, FitDist fits continuous power-law (“pl”), exponential
+data? By default, `FitDist()` fits continuous power-law (“pl”), exponential
 (“exp”), and lognormal (“lnorm”) distributions
 (`dist=c("pl","exp","lnorm")`). 2. Should each distribution be fit over
 the full range of displacements data (`full=TRUE`), or to the
@@ -575,8 +575,8 @@ sample size of the displacements used to fit the model (i.e., *nTail*)
 divided by the number of parameters in the model is less than or equal
 to 40; else, weighed AIC scores are calculated, following Burnham and
 Anderson (2004). However, `CompDist()` can be forced to calculate an
-AICC using `force_AICc=TRUE` (default is FALSE). The highest WAIC or
-WAICC score from each comparison indicates the best-fit distribution.
+AICc using `force_AICc=TRUE` (default is FALSE). The highest wAIC or
+wAICc score from each comparison indicates the best-fit distribution.
 See Table 3 in the main text for suggestions on how to interpret
 results.
 
@@ -589,7 +589,7 @@ distributions to full and truncated datasets to gain a comprehensive
 understanding of displacement patterns (see Figure S 9).
 
 ![image](https://user-images.githubusercontent.com/73092681/223385586-b06b3dd6-d86a-4eeb-ae26-54484e6a4c28.png)
-**Figure S9** Diagram outlining the procedure for identifying the
+**Figure** **S9** Diagram outlining the procedure for identifying the
 best-fit distribution of displacements.
 
 We begin by calculating displacements over 24 ± 6 hours with
@@ -618,7 +618,7 @@ plot.data.pdf <- PlotDispPDF(disp, normalised=FALSE)
 
 ![](Tutorial_markdown_files/figure-gfm/plot%2024%20hour%20displacements-1.png)<!-- -->
 
-**Figure S10** Probability density function (pdf) plot of displacements
+**Figure** **S10** Probability density function (pdf) plot of displacements
 calculated using `CalcDisp()` with max\_hr=24. Plot created with
 `PlotDispPDF()` and normalised=FALSE.
 
@@ -654,7 +654,7 @@ plot.data.all.pdf <- PlotDist(disp, distResults)
 
 ![](Tutorial_markdown_files/figure-gfm/plot%20full%20distributions-1.png)<!-- -->
 
-**Figure S11** Complementary cumulative distribution function (ccdf) of
+**Figure** **S11** Complementary cumulative distribution function (ccdf) of
 displacements (calculated using `CalcDisp()` with `max_hr=24`). Plot
 includes fit lines for power-law (pl), exponential (exp), and lognormal
 (lnorm) distributions based on results from `FitDist()` with
@@ -702,7 +702,7 @@ plot.data.all.trunc <- PlotDist(disp, distResults.trunc)
 ```
 
 ![](Tutorial_markdown_files/figure-gfm/plot%20trunc%20distributions-1.png)<!-- -->
-**Figure S12** Complementary cumulative distribution function (ccdf) of
+**Figure** **S12** Complementary cumulative distribution function (ccdf) of
 displacements calculated using `CalcDisp()` with `max_hr=24` including
 fit lines for power-law (pl), exponential (exp), and lognormal (lnorm)
 distributions based on the best-fit x\_min results from `FitDist()`
@@ -711,11 +711,11 @@ parameters.
 
 Note that these results cannot be put straight into `CompDist()` because
 each distribution was fit to a different range of data (i.e., *nTail*
-values range from 1,364 to 12,622). Instead, we must reate pairwise
+values range from 1,364 to 12,622). Instead, we must make pairwise
 comparisons where `FitDist()` is re-run three time (once for each
 distribution) and the `set_xmin` parameter is set to each of the
 best-fit x\_min values in turn. Once distributions have been fit to the
-same range of displacements, the distributions fits can be compared with
+same range of displacements, the fits of the distributions can be compared with
 `CompDist()`.
 
 ``` r
@@ -785,20 +785,20 @@ compResultsLnorm
     ## 3        lnorm 1.973229  1.9043317  0.8276533 12622 77620.33 7.017338e-30
 
 Once all distributions are fit using each of the best-fit x\_min values,
-the distribution fits can be compared using CompDist(). An important
+the distribution fits can be compared using `CompDist()`. An important
 consideration for interpreting the `CompDist()` results from pairwise
 comparisons is that if an x\_min was set to favour a specific
-distribution, but the WAIC/ WAICC scores do not identify that
+distribution, but the wAIC/ wAICc scores do not identify that
 distribution as the best fit; the distribution corresponding to the
 x\_min value is not the best-fit distribution for the displacements. For
 example, in the first pairwise compassion the x\_min was set to the
-best-fit x\_min for a power-law (20.87); however, the WAIC scores
+best-fit x\_min for a power-law (20.87); however, the wAIC scores
 identified an exponential distribution as the best fit. Therefore, we
 conclude that a power-law is not the best-fit distribution for the data.
 As both full and truncated distribution analyses identified an
-exponential distribution as the best fit, we can report that between
-power-law, exponential and lognormal distributions, these displacements
-are best-fit to an exponential distribution.
+exponential distribution as the best fit, we can report that these displacements
+are best-fit to an exponential distribution compared with 
+power-law and lognormal distributions. 
 
 ## *Space-use patterns*
 
@@ -808,11 +808,11 @@ The `Occupancy()` function helps describe species’ space-use patterns by
 calculating the total number of location estimates within each grid cell
 and dividing this sum by the grid cell’s area, calculated using
 spherical coordinates (Figure S 13). Optional parameters allow you to:
-\* change the grid cell size in degrees (`gridCell=0.25`, by default),
-\* present results in a map (`map=TRUE`, by default, Figure 1 in main
-text), and \* edit the colours used in the map to indicate low,
+\* Change the grid cell size in degrees (`gridCell=0.25`, by default),
+\* Present results in a map (`map=TRUE`, by default, Figure 1 in main
+text), and \* Edit the colours used in the map to indicate low,
 moderate, and high occupancy, respectively, which are visualised using
-scale\_fill\_gradientn from the ggplot2 package (Wickham 2016)
+scale\_fill\_gradientn() from the ggplot2 package (Wickham 2016)
 (`colGrad=c(“blue”, “light blue”, “red”)`, by default).
 
 `Occupancy()` outputs all data used to create the map, including the
@@ -828,8 +828,8 @@ invisible({capture.output({Occ <- Occupancy(tracks)
 
 ![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
-**Figure S13** Map of occupancy (total count of location estimates in
-each grid cell per area) based on the tracks dataset. Map created with
+**Figure** **S13** Map of occupancy (total count of location estimates in
+each grid cell per area) based on the `tracks` dataset. Map created with
 `Occupancy()` default parameters.
 
 ``` r
@@ -851,7 +851,7 @@ pdf.occ  <- pdfPlot(Occ$Occupancy, desc="Occupancy")
 
 ![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-**Figure S14** Probability density function (pdf) plot of occupancy per
+**Figure** **S14** Probability density function (pdf) plot of occupancy per
 km2 for tracks dataset determined with `Occupancy()` default parameters.
 Plot created using `pdfPlot()` with desc set to “Occupancy”.
 
@@ -875,13 +875,13 @@ a predetermined time window. `InfomapCommunities()` saves these results
 as a transition probability matrix (which is also known as a “unipartite
 edge list”); this matrix can be saved to the local environment as
 *TransitionProbabilityMatrix* if `tpm,=TRUE` (`tpm=FALSE`, by default).
-Optional parameters allow you to change: \* the grid cell size in
-degrees (`gridCell=0.25`, by default) \* the number of hours between
-location estimates (`hours=24`, by default), and \* time range in hours
+Optional parameters allow you to change: \* The grid cell size in
+degrees (`gridCell=0.25`, by default) \* The number of hours between
+location estimates (`hours=24`, by default), and \* Time range in hours
 that will allow the algorithm to identify location estimates that are
 close to, but not exactly separated by the set number of hour
 (`range_hr=6`, by default). 2. If `infomap=TRUE`, `InfomapCommunities()`
-feeds the transition probability matrix into the infomapecology package
+feeds the transition probability matrix into the `infomapecology` package
 to create an *Infomap monolayer object* that identifies movement
 communities (`Infomap=TRUE`, by default). To ensure the algorithm
 calculates movement patterns consistent with telemetry data, we adapted
@@ -892,8 +892,8 @@ of multiple levels). Because we allowed hierarchical partitioning, the
 resulting communities are associated with different levels; level 1
 communities are the most inclusive and have been used to identify
 community-wide movements (following Rodríguez et al. 2017 and Calich et
-al. 2021). See Farage et al. (2021) for tips on interpreting the Infomap
-monolayer object and Table 3 in the main text for suggestions on how to
+al. 2021). See Farage et al. (2021) for tips on interpreting the *Infomap
+monolayer object* and Table 3 in the main text for suggestions on how to
 interpret results.
 
 \*\* Before running `InfomapCommunities()` make sure your working
@@ -971,8 +971,8 @@ CommunityMap(infomap)
 
 ![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
-**Figure S15** Map illustrating level 1 Infomap communities for the
-tracks dataset determined using `InfomapCommunities()` default
+**Figure** **S15** Map illustrating level 1 Infomap communities for the
+`tracks` dataset determined using `InfomapCommunities()` default
 parameters. Map created with `CommunityMap()` default parameters.
 
 ## *Intraspecific movements*
@@ -981,13 +981,13 @@ parameters. Map created with `CommunityMap()` default parameters.
 
 The `GyrationRad()` function calculates the dispersion (i.e., the
 gyration radius) of each track in a dataset (Figure S16). Optional
-parameters allow you to \* create a map (map=TRUE, by default) \*
-control the colour of the points, indicating average track locations,
+parameters allow you to \* Create a map (map=TRUE, by default) \*
+Control the colour of the points, indicating average track locations,
 and circles, indicating how far each animal dispersed
 (`mapCol=c(“Black”, “Red”)`, by default).
 
 `GyrationRad()` outputs the data used to make each map, including *ref*,
-the reference id for each track, *avg long* and *avg lat, the average
+the reference id for each track, *avg long* and *avg lat*, the average
 longitude and latitude coordinates in degrees for each track, and *rG
 (km)\*, the gyration radius in kilometres for each track. See Table 3 in
 the main text for suggestions on how to interpret results.
@@ -999,7 +999,7 @@ GR <- GyrationRad(tracks)
 
 ![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
-**Figure S16** Map illustrating dispersion patterns for tracks dataset
+**Figure** **S16** Map illustrating dispersion patterns for `tracks` dataset
 using `GyrationRad()` default parameters. Black points represent the
 mean location of each track and red circles represent how far each track
 dispersed (i.e., their gyration radius).
@@ -1028,8 +1028,8 @@ pdf.gr <- pdfPlot((GR$`rG (km)`), desc="GyrationRad")
 
 ![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
-**Figure S17** Probability density function (pdf) plot of gyration
-radius values for tracks dataset determined with `GyrationRad()` default
+**Figure** **S17** Probability density function (pdf) plot of gyration
+radius values for `tracks` dataset determined with `GyrationRad()` default
 parameters. Plot created using `pdfPlot()` with desc set to
 “GyrationRad”.
 
@@ -1054,7 +1054,7 @@ Ent <- Entropy(tracks)
 ```
 
 ![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
-Figure S 18 Histogram of normalised entropy scores for tracks dataset
+**Figure** **S18** Histogram of normalised entropy scores for `tracks` dataset
 created using `Entropy()` default parameters.
 
 ``` r
@@ -1080,17 +1080,17 @@ pdf.ent <- pdfPlot(Ent$normalisedEntropy, "Entropy")
 ```
 
 ![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
-**Figure S19** Probability density function (pdf) plot of normalised
-entropy scores for tracks dataset determined with `Entropy()` default
+**Figure** **S19** Probability density function (pdf) plot of normalised
+entropy scores for `tracks` dataset determined with `Entropy()` default
 parameters. Plot created using `pdfPlot()` with desc set to “Entropy”.
 
 ### Predictability with `Predictability()`
 
 The `Predictability()` function calculates the limit of predictability
 for each track based on their individual entropy scores (Figure S 20;
-Figure 1). Optional parameters allow you to: \* alter the starting value
+Figure 1). Optional parameters allow you to: \* Alter the starting value
 used to find a root value for the limit of predictability equation
-(startVal=0.99, by default) and \* output a histogram (`histPlot=TRUE`,
+(startVal=0.99, by default) and \* Output a histogram (`histPlot=TRUE`,
 by default).
 
 `Predictability()` outputs results in two columns, *ref*, the reference
@@ -1104,7 +1104,7 @@ Pred <- Predictability(tracks, Ent)
 ```
 
 ![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
-**Figure S20** Histogram of predictability scores for tracks dataset
+**Figure** **S20** Histogram of predictability scores for `tracks` dataset
 determined using `Predictability()` default parameters and entropy
 scores from `Entropy()`.
 
@@ -1131,8 +1131,8 @@ pdf.pred <- pdfPlot(Pred$Predictability, desc="Predictability")
 ```
 
 ![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
-**Figure S21** Probability density function (pdf) plot of predictability
-scores for tracks dataset determined with `Predictability()` default
+**Figure** **S21** Probability density function (pdf) plot of predictability
+scores for `tracks` dataset determined with `Predictability()` default
 parameters and results from `Entropy()`. Plot created using `pdfPlot()`
 with desc set to “Predictability”.
 
