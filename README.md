@@ -590,6 +590,7 @@ distributions to full and truncated datasets to gain a comprehensive
 understanding of displacement patterns (see Figure S 9).
 
 ![image](https://user-images.githubusercontent.com/73092681/223385586-b06b3dd6-d86a-4eeb-ae26-54484e6a4c28.png)
+
 **Figure** **S9** Diagram outlining the procedure for identifying the
 best-fit distribution of displacements.
 
@@ -703,6 +704,7 @@ plot.data.all.trunc <- PlotDist(disp, distResults.trunc)
 ```
 
 ![](Tutorial_markdown_files/figure-gfm/plot%20trunc%20distributions-1.png)<!-- -->
+
 **Figure** **S12** Complementary cumulative distribution function (ccdf) of
 displacements calculated using `CalcDisp()` with `max_hr=24` including
 fit lines for power-law (pl), exponential (exp), and lognormal (lnorm)
@@ -1105,6 +1107,7 @@ Pred <- Predictability(tracks, Ent)
 ```
 
 ![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
 **Figure** **S20** Histogram of predictability scores for `tracks` dataset
 determined using `Predictability()` default parameters and entropy
 scores from `Entropy()`.
@@ -1132,6 +1135,7 @@ pdf.pred <- pdfPlot(Pred$Predictability, desc="Predictability")
 ```
 
 ![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+
 **Figure** **S21** Probability density function (pdf) plot of predictability
 scores for `tracks` dataset determined with `Predictability()` default
 parameters and results from `Entropy()`. Plot created using `pdfPlot()`
