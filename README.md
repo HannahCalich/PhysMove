@@ -2,7 +2,7 @@ PhysMove Tutorial
 ================
 Hannah Calich
 April 2023
-hello world
+
 This is a brief tutorial to accompany the PhysMove R package. Here, we
 demonstrate how PhysMove can be used to calculate each of the methods
 discussed in the main text and review all relevant functions and
@@ -480,6 +480,7 @@ angle.results <- TurningAngles(tracks)
     ## [1] "15123 angles in 240 +/- 6 hour(s)"
 
 ![](Tutorial_markdown_files/figure-gfm/calcualte%20turning%20angles-1.png)<!-- -->
+
 **Figure** **S7** Histogram of turning angles recorded from the `tracks` dataset
 during ten time windows (24 to 240 hours over 24 ± 6 hour intervals).
 Plot created with `TurningAngles()` default parameters.
