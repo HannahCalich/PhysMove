@@ -47,7 +47,7 @@ CompDist <- function (displacements, distResults, force_AICc=FALSE){
       pl_PDF = ((parameters[1]-1)/parameters[2])*((displacements/parameters[2])^(-parameters[1]))
       return(pl_PDF)
     }
-    pl_xmin <- distResults[which(distResults$distribution=="pl"),"xmin"]
+    pl_xmin <- distResults[which(distResults$distribution=="pl"),"dmin"]
     pl_alpha <- distResults[which(distResults$distribution=="pl"),"parameter1"]
     n_all <- c(n_all,distResults[which(distResults$distribution=="pl"),"nTail"])
     pl_pdf <- MyPowerLaw(c(pl_alpha, pl_xmin), x)
@@ -61,7 +61,7 @@ CompDist <- function (displacements, distResults, force_AICc=FALSE){
         exp_PDF = parameters[1]*exp(-parameters[1]*(displacements-parameters[2]))
         return(exp_PDF)
     }
-    exp_xmin <- distResults[which(distResults$distribution=="exp"),"xmin"]
+    exp_xmin <- distResults[which(distResults$distribution=="exp"),"dmin"]
     exp_lambda <- distResults[which(distResults$distribution=="exp"),"parameter1"]
     n_all <- c(n_all,distResults[which(distResults$distribution=="exp"),"nTail"])
     exp_pdf <- MyexponentialTrunc(c(exp_lambda, exp_xmin), x)
@@ -75,7 +75,7 @@ CompDist <- function (displacements, distResults, force_AICc=FALSE){
       lnorm_PDF = exp(dlnorm(displacements, parameters[1], parameters[2], log = TRUE) - plnorm(parameters[3],parameters[1], parameters[2], lower.tail = FALSE, log.p = TRUE))
       return(lnorm_PDF)
     }
-    lnorm_xmin <- distResults[which(distResults$distribution=="lnorm"),"xmin"]
+    lnorm_xmin <- distResults[which(distResults$distribution=="lnorm"),"dmin"]
     lnorm_mu <- distResults[which(distResults$distribution=="lnorm"),"parameter1"]
     lnorm_sigma <- distResults[which(distResults$distribution=="lnorm"),"parameter2"]
     n_all <- c(n_all,distResults[which(distResults$distribution=="lnorm"),"nTail"])
@@ -87,7 +87,7 @@ CompDist <- function (displacements, distResults, force_AICc=FALSE){
   if (n_all[which.max(K_all)]/max(K_all)>40 & force_AICc==FALSE){ # use AIC according to Burnham and Anderson (2004)
     if (length(unique(n_all))!=1){
       stop("The n/K ratio is > 40 and AIC values can be calculated, however, AIC values can only be compared
-           over equal data ranges. Please re-run FitDist using the set_xmin parameter to fit each distribution to the same data range")
+           over equal data ranges. Please re-run FitDist using the set_dmin parameter to fit each distribution to the same data range")
     }
     AIC_Scores <- c()
     distResults <- cbind(distResults,"AIC"=c(NA), "wAIC"=c(NA))
