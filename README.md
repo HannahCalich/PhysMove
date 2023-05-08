@@ -1,8 +1,7 @@
-PhysMove Tutorial
+PhysMove Tutorial 
 ================
-Written by: Hannah Calich
-
-Last updated: May 2023
+Written by: Hannah Calich | Last updated: May 2023
+:- | -: |
 
 This is a brief tutorial to accompany the PhysMove R package. Here, we
 demonstrate how PhysMove can be used to calculate each of the methods
