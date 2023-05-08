@@ -1,29 +1,68 @@
-#' Fit distributions to displacements
+#' Check data format
 #'
-#' This function allows you to fit power law, exponential, or log-normal distributions to the displacements calculated with
-#' the \code{\link{CalcDisp}} function. If displacements were calculated over multiple time windows this function will normalise the
-#' displacements by dividing each displacement by the mean displacement of the corresponding time window
-#' @param displacements List of displacements output from the \code{\link{CalcDisp}} function.
-#' @param dist Continuous distributions that will be fit to the displacements. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
-#' continuous distributions. Default is dist=c("pl","exp","lnorm").
-#' @param set_dmin To limit the fitted distribution to values above a specified value. Keep in mind that if your data were normalised
-#' this value will have to be a normalised value as well. Default is NULL.
-#' @param full To fit the distributions to the full range of displacement data. Default is FALSE.
-#' @param normalise Normalises the displacement distances by dividing each displacement by the average displacement for that time window
-#' normalise=TRUE is required if working with displacements calculated over multiple time windows.
-#' @return A data frame that contains the summary statistics for each distribution fit including the distribution name,
-#' dmin (the d value used to fit the distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
-#' distributions respectively, and nTail (the number of data points greater than or equal to dmin). A vector stating if the data were normalised or not,
-#' ('normalise') is automatically assigned to the global environment as this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}
-#'functions.
-#' @examples FitDist(displacements)
-#' @examples FitDist(displacements, dist=c("exp","lnorm"), full=TRUE)
-#' @examples FitDist(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE)
+#' This function is used to check the format of your telemetry data prior to running PhysMove metrics
+#'
+#' @param species_df A data frame containing location data in rows. Columns must have the following headers: "ref", "lon", "lat", "day".
+#' "ref" is the unique id number for each individual in numeric, integer, or character format (e.g., each track's unique satellite tag ID number),
+#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
+#' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+#'
+#' @return If data are formatted correctly the function will output "Your data are formatted correctly", else you will receive an error message describing the problem
+#' @examples FitDist(species_df)
 #' @export
 
-check_track <- function (
-  
-  displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE) {
+check_track <- function (species_df) {
 
-  head(tracks)
-  
+  error_count <- 0
+  if (!(is(species_df, "data.frame"))) {
+    warning("Input data must be a data frame")
+    error_count <- error_count+1
+  }
+
+  if (any(colnames(species_df)!=c("ref","lon","lat","day"))) {
+    warning("Collumn names are either incorrect or in the wrong order. Column names must be: ",
+            "ref, ", "lon, ", "lat, " ,"day", " (in that order)")
+    error_count <- error_count+1
+  }
+
+  if (is(species_df$ref, "character") | is(species_df$ref, "integer") | is(species_df$ref, "numeric")) {
+
+  } else {
+    warning("ref column must be character or integer format")
+    error_count <- error_count+1
+  }
+
+  if (!(is(species_df$lon, "numeric"))) {
+    warning("lon column must be numeric format")
+    error_count <- error_count+1
+  }
+
+  if (!(is(species_df$lat, "numeric"))) {
+    warning("lat column must be numeric format")
+    error_count <- error_count+1
+  }
+
+  if (!(is(species_df$day,"POSIXct"))) {
+    warning("day column must be POSIXct format")
+    error_count <- error_count+1
+  }
+
+  out <- tryCatch({
+      test <- as.POSIXct(species_df$day, format='%Y-%m-%m %h:%m:s')
+    },
+    error=function(cond) {
+      warning("day column is not formatted correctly, format must = '%Y-%m-%m %h:%m:s' ")
+    })
+
+  if (all(test != species_df$day)) {
+      return(out)
+      error_count <- error_count+1
+    }
+
+  if (error_count == 0)
+    message("Your data are formatted correctly")
+
+  if (error_count > 0){
+    message(paste0("Please review formatting requirements: "))
+  }
+}
