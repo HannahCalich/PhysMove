@@ -11,7 +11,7 @@
 #' @examples FitDist(species_df)
 #' @export
 
-check_track <- function (species_df) {
+CheckTracks <- function (species_df) {
 
   error_count <- 0
   if (!(is(species_df, "data.frame"))) {
