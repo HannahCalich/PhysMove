@@ -13,7 +13,7 @@ main text.
 
 ## Outine
 
-  - [Install PhysMove and tracks dataset](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#install-physmove-and-input-data)
+  - [Install PhysMove](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#install-physmove
   - [Data formatting](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#data-formatting)
   - [Explore `tracks` dataset](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#explore-tracks-dataset)
   - [Plot tracks with `PlotTracks()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#create-a-map-of-the-tracks-dataset-with-plottracks)
@@ -51,7 +51,7 @@ main text.
   - [Track predictability with
     `Predictability()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#predictability-with-predictability)
 
-## *Install PhysMove and input data*
+## *Install PhysMove*
 
 We recommend users install PhysMove through the devtools R package. The
 code below will install devtools and PhysMove (including the
