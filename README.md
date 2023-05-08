@@ -75,7 +75,7 @@ library(PhysMove)
 PhysMove was designed to be user-friendly, and most functions only
 require you to input a data frame containing telemetry data. 
 
-    **Please** **note:** The input data frame must only contain 4 columns with the following column names and in the following order: *ref*, *lon*, *lat*, and *day*. 
+  **Please** **note:** The input data frame must only contain 4 columns with the following column names and in the following order: *ref*, *lon*, *lat*, and *day*. 
 
 Columns must be formatted as follows:
 
