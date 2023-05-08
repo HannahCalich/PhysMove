@@ -522,19 +522,13 @@ intervals). Plot created with `PlotAngles()` default parameters.
 After displacements are calculated you can identify the best-fit
 distribution of displacements, which can provide insights into the
 search pattern(s) a species may use to locate resources. Determining the
-best-fit distribution for the displacements involves three functions
+best-fit distribution for the displacements involves 3 functions
 (Figure 1 in main text, Figure S9 for a methodological overview): 
 
 1. `FitDist()`: fits cdfs of continuous power-law, exponential, and
 lognormal distributions over the full range of displacements (i.e., full
 distributions) or to displacements truncated by an x_min (i.e.,
 truncated distributions)
-
-2. `PlotDist()`: uses the results from `FitDist()`
-to plot ccdfs of the displacements with fit lines for each distribution.
-
-3. `CompDist()`: compares distribution fits from `FitDist()` and
-identifies the best-fit distribution for the displacements. 
 
 `FitDist()` requires you to consider 4 optional parameters:
 - `dist`: distributions (`dist`) you want to fit to the displacement
@@ -554,7 +548,9 @@ Outputs from `FitDist()` include: the *distribution* (pl, exp, or lnorm),
 (i.e., α, λ, or μ for pl, exp, and lnorm, respectively), *parameter 2*,
 the second distribution parameter (i.e., σ, only applicable to lnorm),
 and *nTail*, the number of values greater than or equal to x_min.
-`fitLines`. 
+
+2. `PlotDist()`: uses the results from `FitDist()`
+to plot ccdfs of the displacements with fit lines for each distribution.
 
 Results from `FitDist()` can be plotted with the `PlotDist()` function
 (Figure S11; Figure 1 in main text). `PlotDist()` includes 4 optional
@@ -564,11 +560,16 @@ parameters:
 - `colours`: change the colours of the fit lines (`colours=c("red","gold2","blue")`, by default), and
 - `legend`: add a legend (`legend=TRUE`, by default).
 
+3. `CompDist()`: compares distribution fits from `FitDist()` and
+identifies the best-fit distribution for the displacements. 
+
 Lastly, `CompDist()` is used to compare distributions fits and identify
 the best-fit distribution(s) for the displacements. Note that
 `CompDist()` can only be used when all distributions are fit to the same
 range of data (e.g., when `full=TRUE` or if `set_xmin≠NULL`), see Figure
-S 9. By default, `CompDist()` compares distribution fits using weighted
+S9. `CompDist()` includes 
+
+By default, `CompDist()` compares distribution fits using weighted
 AICc scores (AIC scores corrected for small sample sizes) when the
 sample size of the displacements used to fit the model (i.e., *nTail*)
 divided by the number of parameters in the model is less than or equal
@@ -583,9 +584,9 @@ In the examples below we begin by calculating displacements over 24 ± 6
 hours (to reduce processing times), identifying the best-fit
 distribution for the full range of displacements; then, demonstrating
 how to identify the best-fit distribution when displacement datasets are
-truncated by a best-fit x\_min. In general, we recommend fitting
+truncated by a best-fit x_min. In general, we recommend fitting
 distributions to full and truncated datasets to gain a comprehensive
-understanding of displacement patterns (see Figure S 9).
+understanding of displacement patterns (see Figure S9).
 
 ![image](https://user-images.githubusercontent.com/73092681/223385586-b06b3dd6-d86a-4eeb-ae26-54484e6a4c28.png)
 
