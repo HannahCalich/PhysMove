@@ -13,7 +13,7 @@ main text.
 
 ## Outine
 
-  - [Install PhysMove](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#install-physmove
+  - [Install PhysMove](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#install-physmove)
   - [Data formatting](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#data-formatting)
   - [Explore `tracks` dataset](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#explore-tracks-dataset)
   - [Plot tracks with `PlotTracks()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#create-a-map-of-the-tracks-dataset-with-plottracks)
