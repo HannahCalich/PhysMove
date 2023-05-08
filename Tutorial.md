@@ -13,6 +13,7 @@ main text.
 
 ## Outine
 
+**<ins>*Download PhysMove & review input data*</ins>**
   - [Install PhysMove](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#install-physmove)
   - [Data formatting](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#data-formatting)
   - [Explore `tracks` dataset](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#explore-tracks-dataset)
