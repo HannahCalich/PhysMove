@@ -530,46 +530,46 @@ After displacements are calculated you can identify the best-fit
 distribution of displacements, which can provide insights into the
 search pattern(s) a species may use to locate resources. Determining the
 best-fit distribution for the displacements involves three functions
-(Figure 1 in main text): 1. `FitDist()` 2. `PlotDist()`, and 3.
-`CompDist()`
+(Figure 1 in main text, Figure S9 for a methodological overview): 
 
-`FitDist()` fits cdfs of continuous power-law, exponential, and
+1. `FitDist()`: fits cdfs of continuous power-law, exponential, and
 lognormal distributions over the full range of displacements (i.e., full
-distributions) or to displacements truncated by an x\_min (i.e.,
-truncated distributions). `PlotDist()` uses the results from `FitDist()`
+distributions) or to displacements truncated by an x_min (i.e.,
+truncated distributions)
+
+2. `PlotDist()`: uses the results from `FitDist()`
 to plot ccdfs of the displacements with fit lines for each distribution.
-Lastly, `CompDist()` compares distribution fits from `FitDist()` and
-identifies the best-fit distribution for the displacements. See Figure S
-9 for a methodological overview.
 
-`FitDist()` requires you to consider four optional parameters, reviewed
-here: 1. What distributions (`dist`) should be fit to the displacement
-data? By default, `FitDist()` fits continuous power-law (“pl”), exponential
+3. `CompDist()`: compares distribution fits from `FitDist()` and
+identifies the best-fit distribution for the displacements. 
+
+`FitDist()` requires you to consider 4 optional parameters:
+- `dist`: distributions (`dist`) you want to fit to the displacement
+data. By default, `FitDist()` fits continuous power-law (“pl”), exponential
 (“exp”), and lognormal (“lnorm”) distributions
-(`dist=c("pl","exp","lnorm")`). 2. Should each distribution be fit over
+(`dist=c("pl","exp","lnorm")`). 
+- `full`: set if the distributions should be fit over
 the full range of displacements data (`full=TRUE`), or to the
-displacements truncated by a x\_min (`full=FALSE`, by default)? 3. If
-the distributions are fit to a truncated dataset (i.e., `full=FALSE`),
-should the algorithm automatically identify the best-fit x\_min for each
-distribution (`set_xmin=NULL`, by default), or do you want to manually
-assign the x\_min value? 4. Should the displacements be normalised
-before fitting distributions (`normalise=TRUE`, by default)? Note that
-displacements should be normalised if they were calculated over multiple
-temporal periods.
+displacements truncated by a x_min (`full=FALSE`, by default) 
+- `set_dmin`: two possible applications 1) can be used to force the algorhithm to automatically identify the best-fit x_min for each
+distribution (`set_dmin=NULL`, by default), or 2) can be used to manually assign a minimum displacement value that will be used to fit each distribution (e.g., `set_dmin=1`). Note that set_dmin can only be applied if `full` = FALSE)
+- `normalise`: normalise displacements before fitting distributions (`normalise=TRUE`, by default). Note that
+displacements should be normalised if they were calculated over multiple temporal periods.
 
-Outputs from `FitDist()` include the *distribution* (pl, exp, or lnorm),
+Outputs from `FitDist()` include: the *distribution* (pl, exp, or lnorm),
 *xmin* value, *parameter 1*, the first parameter for each distribution
 (i.e., α, λ, or μ for pl, exp, and lnorm, respectively), *parameter 2*,
 the second distribution parameter (i.e., σ, only applicable to lnorm),
-and *nTail*, the number of values greater than or equal to x\_min.
+and *nTail*, the number of values greater than or equal to x_min.
+`fitLines`. 
 
 Results from `FitDist()` can be plotted with the `PlotDist()` function
-(Figure S 11; Figure 1 in main text). Within `PlotDist()`, optional
-parameters allow you to add fit lines for each distribution
-(`fitLines=TRUE`, by default), plot only specific distributions
-(`setDist=NULL`, by default), change the colours of the fit lines
-(`colours=c("red","gold2","blue")`, by default), and add a legend
-(`legend=TRUE`, by default).
+(Figure S11; Figure 1 in main text). `PlotDist()` includes 4 optional
+parameters:
+- `fitLines`: add fit lines for each distribution (`fitLines=TRUE`, by default), 
+- `setDist`: plot only specific distributions (`setDist=NULL`, by default), 
+- `colours`: change the colours of the fit lines (`colours=c("red","gold2","blue")`, by default), and
+- `legend`: add a legend (`legend=TRUE`, by default).
 
 Lastly, `CompDist()` is used to compare distributions fits and identify
 the best-fit distribution(s) for the displacements. Note that
