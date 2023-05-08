@@ -63,7 +63,7 @@ released to the public) and load the PhysMove package.
 install.packages("devtools")
 
 # Download PhysMove 
-devtools::install_github("HannahCalich/PhysMove",auth_token = "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")
+devtools::install_github("HannahCalich/PhysMove", auth_token = "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")
 ```
 
 ``` r
