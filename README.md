@@ -1,7 +1,7 @@
 PhysMove Tutorial
 ================
 Hannah Calich
-April 2023
+May 2023
 
 This is a brief tutorial to accompany the PhysMove R package. Here, we
 demonstrate how PhysMove can be used to calculate each of the methods
@@ -13,8 +13,8 @@ main text.
 
 ## Outine
 
-  - [Install PhysMove and explore tracks
-    dataset](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#install-physmove-and-input-data)
+  - [Install PhysMove and tracks dataset](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#install-physmove-and-input-data)
+  - [Data formatting](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#data-formatting)
       - [Plot tracks with
         `PlotTracks()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#create-a-map-of-the-tracks-dataset-with-plottracks)
 
@@ -70,27 +70,34 @@ devtools::install_github("HannahCalich/PhysMove",auth_token = "ghp_6UF7PMT6Fg8w2
 # Load PhysMove
 library(PhysMove)
 ```
-
-#### Explore `tracks` dataset
+#### Data formatting
 
 PhysMove was designed to be user-friendly, and most functions only
-require you to input a data frame containing telemetry data. The input
-data frame must only contain 4 columns named *ref*, *lon*, *lat* and
-*day* that are formatted as follows:
+require you to input a data frame containing telemetry data. 
 
-  - *ref*, the unique telemetry tag ID number for each animal in numeric
-    format,
+**Please** **note:** The input data frame must only contain 4 columns with the following column names and in the following order: 
+*ref*, *lon*, *lat*, and *day*. 
 
-  - *lon* and *lat*, the longitude and latitude in decimal degrees of
+Columns must be formatted as follows:
+
+  - *ref*: the unique telemetry tag ID number for each animal in numeric, integer,
+  or character format,
+
+  - *lon* and *lat*: the longitude and latitude in decimal degrees of
     each position estimate, respectively, in numeric format, and
 
-  - *day*, the datetime stamp for each location estimate in POSIXct
+  - *day*: the datetime stamp for each location estimate in POSIXct
     format following yyyy-mm-dd hh:mm:ss.
 
-To determine if the data frame is formatted correctly, the `tracks`
-dataset can be used for comparison. The code below demonstrates how to
-preview the `tracks` dataset using `head()` and confirm the dataset
-structure using `str()`.
+The ```CheckTracks``` function can be used to confirm your input data are formatted correctly. 
+
+``` r
+# Check your data are formatted correctly
+CheckTracks(data) # replace "data" with your dataframe
+```
+You can also compare your dataframe to the `tracks` dataset to ensure your data are formatted correctly
+
+#### Explore `tracks` dataset
 
 ``` r
 # Preview the first 6 rows of the tracks dataset
@@ -119,12 +126,12 @@ str(tracks)
 #### Create a map of the tracks dataset with `PlotTracks()`
 
 A map of the data can be created using the `PlotTracks()` function from
-PhysMove (Figure S 1). `PlotTracks()` has optional parameters that allow you
-to plot specific tracks based on their reference IDs (`ref=NULL`, by
-default), connect points with lines (`tracks=TRUE`, by default), and
-edit the colours used in the map (`colours=rainbow`, by default). The
-code used to make the `tracks` dataset is available in the PhysMove
-data-raw folder on GitHub as “CreateTracks.R”.
+PhysMove (Figure S 1). `PlotTracks()` has 3 optional parameters:
+- `ref`: plot specific tracks based on their reference IDs (`ref=NULL`, by default), 
+- `tracks`: connect points with lines (`tracks=TRUE`, by default), and
+- `colours`: edit the colours used in the map (`colours=rainbow`, by default). 
+
+The code used to make the `tracks` dataset is available in the PhysMove data-raw folder on GitHub as “CreateTracks.R”.
 
 ``` r
 PlotTracks(tracks)
@@ -132,8 +139,7 @@ PlotTracks(tracks)
 
 ![](Tutorial_markdown_files/figure-gfm/plot%20tracks-1.png)<!-- -->
 
-**Figure** **S1** Map of the simulated tracking data included in the `tracks`
-dataset, created with `PlotTracks()` default settings.
+**Figure** **S1** Map of the simulated tracking data included in the `tracks` dataset, created with `PlotTracks()` default settings.
 
 ## *Movement patterns*
 
@@ -141,14 +147,16 @@ dataset, created with `PlotTracks()` default settings.
 
 The `CalcDisp()` function calculates displacements travelled in
 kilometres over set time windows. `CalcDisp()` has four optional
-parameters that allow you to change different aspects of the set time
-windows, including setting the minimum and maximum times between
+parameters that allow you to change different aspects of the time
+windows:
+- `min_hr` and `max_hr`: set the minimum and maximum times between
 location estimates in hours (`min_hr=24` and `max_hr=240`, by default),
-the time interval in hours, which creates a sequence of time windows
-between the minimum and maximum times over a set time interval
-(`interval_hr=24`, by default), and the range (`range_hr=6`, by
-default), which allows the code to identify location estimates that are
-close to, but not exactly separated by the `interval_hr` input value.
+- `interval_hr`: set the the time interval in hours, which creates a sequence of time windows
+between the minimum and maximum times over a set time interval (`interval_hr=24`, by default), and 
+- `range_hr`: set the range in hours, which allows the code to identify location estimates that are
+close to, but not exactly separated by the `interval_hr` input value (`range_hr=6`, by
+default).
+
 For example, by default, `CalcDisp()` calculates displacements between
 location estimates separated by 10 time windows, 24 ± 6 hours, 48 ± 6
 hours, etc., until 240 ± 6 hours. `CalcDisp()` outputs a list where each
@@ -173,7 +181,7 @@ disp.all <- CalcDisp(tracks)
     ## [1] "15373 displacements in 240 +/- 6 hour(s)"
 
 ``` r
-# Summarise displacements calculated over the first time window (24 ± 6 hours)
+# Summarise displacements calculated over the first time window (24 ± 6 hours if default parameters were used)
 summary(unlist(disp.all[[1]]))
 ```
 
@@ -184,14 +192,13 @@ summary(unlist(disp.all[[1]]))
 
 The `PlotDispPDF()` function calcualtes a probability density function
 (pdf) of the displacements (Figure S 2 - Figure S 3; Figure 1 in main
-text). The normalised parameter allows the data to be normalised before
-plotting, which divides all displacements in a time window by the mean
-displacement for that time window (`normalised=TRUE`, by default). If
-displacements have been calculated over multiple time windows, we
-recommend normalising them so you can compare results from different
-time windows. We have also included optional parameters that allow
-changes to the colours of the points (`colours=rainbow`, by default) and
-the ability to add or remove a legend (`legend=TRUE`, by default).
+text). `PlotDispPDF()` includes 3 optional parameters:
+- `normalised`: normalise the data before plotting, which divides all displacements in a time window by the mean
+displacement for that time window (`normalised=TRUE`, by default). 
+- `colours`: change the point colours (`colours=rainbow`, by default) and
+- `legend`: add or remove a legend (`legend=TRUE`, by default).
+
+
 `PlotDispPDF()` outputs all data used to create the plot, including the
 pdf values (*pdf*), the displacements (*disp*), and the time windows
 (*timeWindow*); note that if `normalised=TRUE`, the output displacements
@@ -225,12 +232,13 @@ at 24 ± 6-hour time intervals with `CalcDisp()`. Plot created with
 
 The `RMS()` function provides insights into the scale of movement by
 calculating the mean and root-mean-square (RMS) displacements and
-plotting them over time (Figure S 4). `RMS()` has optional parameters
-that allow you to change the time unit used to calculate the time
-between locations (`timeUnit= “days”`, by default), the width of the
-time bins used to calculate how frequently displacements occurred
-(`wBins=1.1`, by default), if a scatterplot is created (`plot=TRUE`, by
-default), and if a linear model is fit to the data to examine the
+plotting them over time (Figure S 4). `RMS()` includes ## optional parameters:
+- `timeUnit`: change the time unit used to calculate the time
+between locations (`timeUnit= “days”`, by default), 
+- `wBins`: change the width of the time bins used to calculate how frequently displacements occurred
+(`wBins=1.1`, by default), 
+- `plot`: create a scatter plot (`plot=TRUE`, by default), and 
+- `lm`: fit a linear model to examine the
 relationship between the root-mean-square displacement values and time
 (`lm=TRUE`, by default). When `lm=TRUE`, a linear model object
 *RMSlinearModel* is automatically exported to the local environment. The
@@ -238,13 +246,15 @@ slope of the linear model is used to make conclusions about the scale of
 movement (see Table 3 in the main text for suggestions on interpreting
 your results).
 
-Note that because `RMS()` calculates all displacements in each track,
-this function may take 10-20+ minutes, depending on your computer;
-progress updates will appear when the calculations are 25%, 50%, 75%,
-and 100% complete. `RMS()` outputs data in three columns, *timeWindow*,
+`RMS()` outputs data in three columns, *timeWindow*,
 including the binned time windows in days (or whatever unit was set
 using timeUnit) that correspond with the *meanDisplacement* and
 *rmsDisplacement* values in kilometres (km).  
+
+Note that because `RMS()` calculates all displacements in each track,
+this function may take 10-20+ minutes, depending on your computer;
+progress updates will appear when the calculations are 25%, 50%, 75%,
+and 100% complete.
 
 ``` r
 # Calculate RMS values with default parameters
@@ -317,16 +327,18 @@ RMSlinearModel$coefficients[2]
 
 The `Randomise()` function can be used to gain insights into how
 correlations influenced the movements and space-use of a species.
-Optional parameters allow you to change the number of randomised tracks
-created (`randTrack=500`, by default) and the grid cell size in degrees
-(`gridCell=0.25`, by default). Results from `Randomise()` can be
-visualised with a scatter plot (`plot=TRUE`, by default), and a linear
-model can be fit to the average number of grid cells visited by the
+`Randomise()` includes 4 optional parameters:
+- `randTrack`: change the number of randomised tracks created (`randTrack=500`, by default),
+- `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default), 
+- `plot`: create a scatter plot of the results (`plot=TRUE`, by default), and 
+- `lm`: fit a linear model to the average number of grid cells visited by the
 randomised tracks and the number of grid cells visited by the original
 tracks (`lm=TRUE`, by default). The slope of this model is used to make
 conclusions about how correlations influence movement (see Table 3 in
 the main text for suggestions on how to interpret results).
-`Randomise()` outputs data in three columns, *ref* the reference id
+
+
+`Randomise()` outputs a data frame with three columns: *ref* the reference id
 numbers for each track, *CellsInOriginalTracks* the number of grid cells
 visited by the original tracks, and *AvgCellsInRandomisedTracks* the
 average number of grid cells visited by the randomised tracks. The
@@ -403,19 +415,16 @@ with `Randomise()` (Figure S 6; Figure 1 in main text).
 `PlotRandomTracks()` requires you to input a reference id of the track
 to be mapped in the ref parameter and will automatically call on the
 *RandomisedLat* and *RandomisedLong* objects previously exported from
-`Randomise()`. Optional parameters allow you to change the number of
-randomised tracks that are plotted (`numPlot=1:5`, by default numPlot
-plots the first 5 randomised versions of each track). You can also
-change how the map is visualized by: \* changing the colours of the
-original and randomised location estimates (`colours=c(“black”,
-“grey70”)`, respectively, by default), \* adding or removing lines
-connecting the location estimates (`tracks=TRUE`, by default), \*
-changing the colours of the starting and ending points of each track
+`Randomise()`. `PlotRandomTracks()` includes 6 optional parameters:
+- `numPlot`: change the number of randomised tracks that are plotted (`numPlot=1:5`, by default, which will plot the first 5 randomised versions of each track). You can - - `colours`: change the colours of the original and randomised location estimates (`colours=c(“black”,
+“grey70”)`, respectively, by default),
+- `tracks`: connect points with lines (`tracks=TRUE`, by default), 
+- `startCol` and `endCol`: change the colours of the starting and ending points of each track
 (`startCol=“red”` and `endCol = “blue”`, respectively, by default), and
-\* adding a legend (`legend=TRUE`, by default).
+- `legend`: add a legend (`legend=TRUE`, by default).
 
 `PlotRandomTracks()` outputs the data used to create the map in three
-columns, *randTrack*, the id number of the random track, *lon* and
+columns: *randTrack*, the id number of the random track, *lon* and
 *lat*, the longitude and latitude coordinates of the randomised tracks.
 
 ``` r
@@ -443,22 +452,18 @@ are in red and blue, respectively. Plot created with
 The `TurningAngles()` function calculates turning angles between a set
 of three consecutive location estimates separated by set time windows to
 describe how species explore their habitats (Figure S 7). Similarly to
-`CalcDisp()`, four optional parameters allow you to change to the time
-windows, including setting the minimum and maximum times between
+`CalcDisp()`, `TurningAngles()` has 5 optional parameters:
+- `min_hr` and `max_hr`: set the minimum and maximum times between
 location estimates in hours (`min_hr=24` and `max_hr=240`, by default),
-the time interval in hours, which creates a sequence of time windows
-between the minimum and maximum times over a set time interval
-(`interval_hr=24`, by default), and the range `(range_hr=6`, by
-default), which allows the code to identify location estimates that are
-close to, but not exactly separated by the `interval_hr` input value.
-For example, `TurningAngles()` calculates turning angles between sets of
-three location estimates where the time window between each pair of
-location estimates is defined using the optional time window parameters.
-The `histPlot` parameter determines if a histogram is output (Figure S
-7) and controls if “all” time windows are plotted or if only the first,
-or second, or third etc. time window is plotted (`histPlot=c(TRUE,
-“all”)`, by default). Results are output in a list where each list
-element contains the angles calculated over a time window, such that the
+- `interval_hr`: set the the time interval in hours, which creates a sequence of time windows
+between the minimum and maximum times over a set time interval (`interval_hr=24`, by default),  
+- `range_hr`: set the range in hours, which allows the code to identify location estimates that are
+close to, but not exactly separated by the `interval_hr` input value (`range_hr=6`, by
+default), and
+- `histPlot`: output a histogram and control if “all” time windows are plotted or if only the first, second, or third etc. time window is plotted (`histPlot=c(TRUE,
+“all”)`, by default). 
+
+Results are output in a list where each list element contains the angles calculated over a time window, such that the
 first list element contains data from the first time window and so on.
 See Table 3 in the main text for suggestions on how to interpret
 results.
