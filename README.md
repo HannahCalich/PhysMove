@@ -1,7 +1,8 @@
 PhysMove Tutorial
 ================
-Hannah Calich
-May 2023
+Written by: Hannah Calich
+
+Last updated: May 2023
 
 This is a brief tutorial to accompany the PhysMove R package. Here, we
 demonstrate how PhysMove can be used to calculate each of the methods
@@ -527,34 +528,31 @@ best-fit distribution for the displacements involves 3 functions
 
 1. `FitDist()`: fits cdfs of continuous power-law, exponential, and
 lognormal distributions over the full range of displacements (i.e., full
-distributions) or to displacements truncated by an x_min (i.e.,
+distributions) or to displacements truncated by a minimum displacement value, d_min (i.e.,
 truncated distributions)
 
 `FitDist()` requires you to consider 4 optional parameters:
-- `dist`: distributions (`dist`) you want to fit to the displacement
+- `dist`: distributions you want to fit to the displacement
 data. By default, `FitDist()` fits continuous power-law (“pl”), exponential
 (“exp”), and lognormal (“lnorm”) distributions
-(`dist=c("pl","exp","lnorm")`). 
+(`dist=c("pl","exp","lnorm")`, by default). 
 - `full`: set if the distributions should be fit over
 the full range of displacements data (`full=TRUE`), or to the
-displacements truncated by a x_min (`full=FALSE`, by default) 
-- `set_dmin`: two possible applications 1) can be used to force the algorhithm to automatically identify the best-fit x_min for each
-distribution (`set_dmin=NULL`, by default), or 2) can be used to manually assign a minimum displacement value that will be used to fit each distribution (e.g., `set_dmin=1`). Note that set_dmin can only be applied if `full` = FALSE)
+displacements truncated by a d_min (`full=FALSE`, by default) 
+- `set_dmin`: used to either force the algorhithm to automatically identify the best-fit d_min for each
+distribution (`set_dmin=NULL`, by default), or to manually assign a minimum displacement value that will be used to fit each distribution (e.g., `set_dmin=1`). Note that set_dmin can only be applied if `full` = FALSE)
 - `normalise`: normalise displacements before fitting distributions (`normalise=TRUE`, by default). Note that
 displacements should be normalised if they were calculated over multiple temporal periods.
 
-Outputs from `FitDist()` include: the *distribution* (pl, exp, or lnorm),
-*xmin* value, *parameter 1*, the first parameter for each distribution
+Outputs from `FitDist()` include: the *distribution* name (pl, exp, or lnorm),
+*dmin* value, *parameter 1*, the first parameter for each distribution
 (i.e., α, λ, or μ for pl, exp, and lnorm, respectively), *parameter 2*,
 the second distribution parameter (i.e., σ, only applicable to lnorm),
-and *nTail*, the number of values greater than or equal to x_min.
+and *nTail*, the number of values greater than or equal to d_min.
 
-2. `PlotDist()`: uses the results from `FitDist()`
-to plot ccdfs of the displacements with fit lines for each distribution.
+2. `PlotDist()`: uses the results from `FitDist()` to plot ccdfs of the displacements with fit lines for each distribution (e.g., Figure S11).
 
-Results from `FitDist()` can be plotted with the `PlotDist()` function
-(Figure S11; Figure 1 in main text). `PlotDist()` includes 4 optional
-parameters:
+`PlotDist()` includes 4 optional parameters:
 - `fitLines`: add fit lines for each distribution (`fitLines=TRUE`, by default), 
 - `setDist`: plot only specific distributions (`setDist=NULL`, by default), 
 - `colours`: change the colours of the fit lines (`colours=c("red","gold2","blue")`, by default), and
@@ -563,28 +561,27 @@ parameters:
 3. `CompDist()`: compares distribution fits from `FitDist()` and
 identifies the best-fit distribution for the displacements. 
 
-Lastly, `CompDist()` is used to compare distributions fits and identify
+Lastly, `CompDist()` is used to compare distribution fits and identify
 the best-fit distribution(s) for the displacements. Note that
 `CompDist()` can only be used when all distributions are fit to the same
-range of data (e.g., when `full=TRUE` or if `set_xmin≠NULL`), see Figure
-S9. `CompDist()` includes 
-
+range of data (e.g., when `full=TRUE` or if `set_dmin≠NULL`), see Figure
+S9. `CompDist()` includes one optional parameter: 
+- `force_AICc`: force `CompDist()` to calculate an AICc (`force_AICc=FALSE, by default).
 By default, `CompDist()` compares distribution fits using weighted
 AICc scores (AIC scores corrected for small sample sizes) when the
 sample size of the displacements used to fit the model (i.e., *nTail*)
 divided by the number of parameters in the model is less than or equal
 to 40; else, weighed AIC scores are calculated, following Burnham and
-Anderson (2004). However, `CompDist()` can be forced to calculate an
-AICc using `force_AICc=TRUE` (default is FALSE). The highest wAIC or
-wAICc score from each comparison indicates the best-fit distribution.
-See Table 3 in the main text for suggestions on how to interpret
-results.
+Anderson (2004). `force_AICc` is used to calcualte an AICc instead of an AIC score
+(if `force_AICc` = TRUE). The highest wAIC or wAICc score from each comparison
+indicates the best-fit distribution. See Table 3 in the main text for 
+suggestions on how to interpret results.
 
-In the examples below we begin by calculating displacements over 24 ± 6
-hours (to reduce processing times), identifying the best-fit
-distribution for the full range of displacements; then, demonstrating
+In the example below we calculate displacements over 24 ± 6
+hours (to reduce processing times), identify the best-fit
+distribution for the full range of displacements; then, demonstrate
 how to identify the best-fit distribution when displacement datasets are
-truncated by a best-fit x_min. In general, we recommend fitting
+truncated by a best-fit d_min. In general, we recommend fitting
 distributions to full and truncated datasets to gain a comprehensive
 understanding of displacement patterns (see Figure S9).
 
@@ -595,7 +592,7 @@ best-fit distribution of displacements.
 
 We begin by calculating displacements over 24 ± 6 hours with
 `CalcDisp()` and plotting a pdf of the displacements with
-`PlotDispPDF()` (Figure S 10; Figure 1 in main text).
+`PlotDispPDF()` (Figure S10).
 
 ``` r
 # Calculate displacements over 24 ± 6 hours
@@ -625,7 +622,7 @@ calculated using `CalcDisp()` with max\_hr=24. Plot created with
 
 `FitDist()` is then used to fit the full range of distributions
 calculated over 24 ± 6 hours to power-law, exponential, and lognormal
-distributions (Figure S 11) and the fits are compared with `CompDist()`.
+distributions (Figure S11) and the fits are compared with `CompDist()`.
  
 
 ``` r
@@ -643,7 +640,7 @@ distResults <- FitDist(disp, full=TRUE, normalise=FALSE)
 distResults
 ```
 
-    ##   distribution      xmin parameter1 parameter2 nTail
+    ##   distribution      dmin parameter1 parameter2 nTail
     ## 1           pl 0.2605242  1.3341746         NA 15598
     ## 2          exp 0.2605242  0.1254743         NA 15598
     ## 3        lnorm 0.2605242  1.6405463   1.044668 15598
@@ -667,7 +664,7 @@ compResults <- CompDist(disp, distResults)
 compResults
 ```
 
-    ##   distribution      xmin parameter1 parameter2 nTail       AIC          wAIC
+    ##   distribution      dmin parameter1 parameter2 nTail       AIC          wAIC
     ## 1           pl 0.2605242  1.3341746         NA 15598 116783.60  0.000000e+00
     ## 2          exp 0.2605242  0.1254743         NA 15598  95948.77  1.000000e+00
     ## 3        lnorm 0.2605242  1.6405463   1.044668 15598  96664.80 3.274395e-156
@@ -675,7 +672,7 @@ compResults
 In comparison, the following example demonstrates the procedure for
 fitting truncated distributions to the same displacements calculated
 over the 24 ± 6 hour time window. `FitDist()` is used to identify the
-best-fit d\_min for each distribution (Figure S 12).
+best-fit d_min for each distribution (Figure S12).
 
 ``` r
 # Fit all distributions and identify the best-fit dmin for each distribution
@@ -692,7 +689,7 @@ distResults.trunc <- FitDist(disp, full=FALSE, normalise=FALSE)
 distResults.trunc
 ```
 
-    ##   distribution      xmin parameter1 parameter2 nTail
+    ##   distribution      dmin parameter1 parameter2 nTail
     ## 1           pl 20.874018  4.8875856         NA  1364
     ## 2          exp  5.459062  0.1221752         NA  7841
     ## 3        lnorm  1.973229  1.9043304  0.8276543 12622
@@ -707,7 +704,7 @@ plot.data.all.trunc <- PlotDist(disp, distResults.trunc)
 **Figure** **S12** Complementary cumulative distribution function (ccdf) of
 displacements calculated using `CalcDisp()` with `max_hr=24` including
 fit lines for power-law (pl), exponential (exp), and lognormal (lnorm)
-distributions based on the best-fit x\_min results from `FitDist()`
+distributions based on the best-fit d_min results from `FitDist()`
 (i.e., with `full=FALSE`). Plot created using `PlotDist()` default
 parameters.
 
@@ -715,86 +712,86 @@ Note that these results cannot be put straight into `CompDist()` because
 each distribution was fit to a different range of data (i.e., *nTail*
 values range from 1,364 to 12,622). Instead, we must make pairwise
 comparisons where `FitDist()` is re-run three time (once for each
-distribution) and the `set_xmin` parameter is set to each of the
-best-fit x\_min values in turn. Once distributions have been fit to the
+distribution) and the `set_dmin` parameter is set to each of the
+best-fit d_min values in turn. Once distributions have been fit to the
 same range of displacements, the fits of the distributions can be compared with
 `CompDist()`.
 
 ``` r
-# Fit all distributions using the xmin value for the power-law distribution
-distResultsPl <- FitDist(disp, set_xmin=distResults.trunc$xmin[1], normalise=FALSE) 
+# Fit all distributions using the d_min value for the power-law distribution
+distResultsPl <- FitDist(disp, set_dmin=distResults.trunc$dmin[1], normalise=FALSE) 
 distResultsPl
 ```
 
-    ##   distribution     xmin parameter1 parameter2 nTail
+    ##   distribution     dmin parameter1 parameter2 nTail
     ## 1           pl 20.87402  4.8875856         NA  1364
     ## 2          exp 20.87402  0.1457233         NA  1364
     ## 3        lnorm 20.87402  2.4000922  0.5294741  1364
 
 ``` r
-# Fit all distributions using the xmin value for the exponential distribution
-distResultsExp <- FitDist(disp, set_xmin=distResults.trunc$xmin[2], normalise=FALSE) 
+# Fit all distributions using the d_min value for the exponential distribution
+distResultsExp <- FitDist(disp, set_dmin=distResults.trunc$dmin[2], normalise=FALSE) 
 distResultsExp
 ```
 
-    ##   distribution     xmin parameter1 parameter2 nTail
+    ##   distribution     dmin parameter1 parameter2 nTail
     ## 1           pl 5.459062  2.2866946         NA  7841
     ## 2          exp 5.459062  0.1221751         NA  7841
     ## 3        lnorm 5.459062  2.2038304  0.6861026  7841
 
 ``` r
-# Fit all distributions using the xmin value for the lognormal distribution
-distResultsLnorm <- FitDist(disp, set_xmin=distResults.trunc$xmin[3], normalise=FALSE)
+# Fit all distributions using the d_min value for the lognormal distribution
+distResultsLnorm <- FitDist(disp, set_dmin=distResults.trunc$dmin[3], normalise=FALSE)
 distResultsLnorm
 ```
 
-    ##   distribution     xmin parameter1 parameter2 nTail
+    ##   distribution     dmin parameter1 parameter2 nTail
     ## 1           pl 1.973229  1.7444386         NA 12622
     ## 2          exp 1.973229  0.1262535         NA 12622
     ## 3        lnorm 1.973229  1.9043317  0.8276533 12622
 
 ``` r
-# Compare distribution fits based on the best-fit xmin value for the power-law distribution
+# Compare distribution fits based on the best-fit d_min value for the power-law distribution
 compResultsPl <- CompDist(disp, distResultsPl)
 compResultsPl
 ```
 
-    ##   distribution     xmin parameter1 parameter2 nTail      AIC         wAIC
+    ##   distribution     dmin parameter1 parameter2 nTail      AIC         wAIC
     ## 1           pl 20.87402  4.8875856         NA  1364 8016.717 1.164441e-08
     ## 2          exp 20.87402  0.1457233         NA  1364 7980.295 9.440862e-01
     ## 3        lnorm 20.87402  2.4000922  0.5294741  1364 7985.948 5.591380e-02
 
 ``` r
-# Compare distribution fits based on the best-fit xmin value for the exponential distribution
+# Compare distribution fits based on the best-fit d_min value for the exponential distribution
 compResultsExp <- CompDist(disp, distResultsExp)
 compResultsExp
 ```
 
-    ##   distribution     xmin parameter1 parameter2 nTail      AIC         wAIC
+    ##   distribution     dmin parameter1 parameter2 nTail      AIC         wAIC
     ## 1           pl 5.459062  2.2866946         NA  7841 50535.45 0.000000e+00
     ## 2          exp 5.459062  0.1221751         NA  7841 48650.60 1.000000e+00
     ## 3        lnorm 5.459062  2.2038304  0.6861026  7841 48765.99 8.813929e-26
 
 ``` r
-# Compare distribution fits based on the best-fit xmin value for the lognormal distribution 
+# Compare distribution fits based on the best-fit d_min value for the lognormal distribution 
 compResultsLnorm <- CompDist(disp, distResultsLnorm)
 compResultsLnorm
 ```
 
-    ##   distribution     xmin parameter1 parameter2 nTail      AIC         wAIC
+    ##   distribution     d_min parameter1 parameter2 nTail      AIC         wAIC
     ## 1           pl 1.973229  1.7444386         NA 12622 83763.88 0.000000e+00
     ## 2          exp 1.973229  0.1262535         NA 12622 77486.07 1.000000e+00
     ## 3        lnorm 1.973229  1.9043317  0.8276533 12622 77620.33 7.017338e-30
 
-Once all distributions are fit using each of the best-fit x\_min values,
+Once all distributions are fit using each of the best-fit d_min values,
 the distribution fits can be compared using `CompDist()`. An important
 consideration for interpreting the `CompDist()` results from pairwise
-comparisons is that if an x\_min was set to favour a specific
+comparisons is that if an d_min was set to favour a specific
 distribution, but the wAIC/ wAICc scores do not identify that
 distribution as the best fit; the distribution corresponding to the
-x\_min value is not the best-fit distribution for the displacements. For
-example, in the first pairwise compassion the x\_min was set to the
-best-fit x\_min for a power-law (20.87); however, the wAIC scores
+d_min value is not the best-fit distribution for the displacements. For
+example, in the first pairwise compassion the d_min was set to the
+best-fit d_min for a power-law (20.87); however, the wAIC scores
 identified an exponential distribution as the best fit. Therefore, we
 conclude that a power-law is not the best-fit distribution for the data.
 As both full and truncated distribution analyses identified an
@@ -809,12 +806,13 @@ power-law and lognormal distributions.
 The `Occupancy()` function helps describe species’ space-use patterns by
 calculating the total number of location estimates within each grid cell
 and dividing this sum by the grid cell’s area, calculated using
-spherical coordinates (Figure S 13). Optional parameters allow you to:
-\* Change the grid cell size in degrees (`gridCell=0.25`, by default),
-\* Present results in a map (`map=TRUE`, by default, Figure 1 in main
-text), and \* Edit the colours used in the map to indicate low,
+spherical coordinates (Figure S13). `Occupancy()` includes
+3 optional parameters:
+- `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default),
+- `map`: present results in a map (`map=TRUE`, by default)
+- `colGrad`: edit the colours used in the map to indicate low,
 moderate, and high occupancy, respectively, which are visualised using
-scale\_fill\_gradientn() from the ggplot2 package (Wickham 2016)
+scale_fill_gradientn() from the ggplot2 package (Wickham 2016)
 (`colGrad=c(“blue”, “light blue”, “red”)`, by default).
 
 `Occupancy()` outputs all data used to create the map, including the
@@ -844,7 +842,7 @@ summary(Occ$Occupancy)
 
 A pdf of the results from `Occupancy()` can be plotted with the
 `pdfPlot()` function when the desc parameter is set to “Occupancy”
-(Figure S 14; Figure 1 in main text).
+(Figure S14).
 
 ``` r
 # Create a pdf plot of occupancy values
@@ -860,46 +858,48 @@ Plot created using `pdfPlot()` with desc set to “Occupancy”.
 ### Community-wide movements with `InfomapCommunities()`
 
 To identify Infomap communities, PhysMove requires the [`infomapecology`
-R
-package](https://github.com/Ecological-Complexity-Lab/infomap_ecology_package)
-and a stand-alone [Infomap
-file](https://ecological-complexity-lab.github.io/infomap_ecology_package/installation)
-that must be downloaded separately following:
-<https://ecological-complexity-lab.github.io/infomap_ecology_package/installation>
+R package](https://github.com/Ecological-Complexity-Lab/infomap_ecology_package)
+and a stand-alone [Infomap file](https://ecological-complexity-lab.github.io/infomap_ecology_package/installation)
+that must be downloaded separately following: <https://ecological-complexity-lab.github.io/infomap_ecology_package/installation>
 (Farage et al. 2021). The following instructions assume both the
 `infomapecology` R package and the stand-alone Infomap file have been
 installed.
 
 The `InfomapCommunities()` function identifies community-wide movements
-in two steps. 1. `InfomapCommunities()` calculates the probability of
+in two steps, and includes 5 optional parameters:
+
+1. `InfomapCommunities()` calculates the probability of
 individuals moving between specific grid cells along their track within
-a predetermined time window. `InfomapCommunities()` saves these results
-as a transition probability matrix (which is also known as a “unipartite
-edge list”); this matrix can be saved to the local environment as
-*TransitionProbabilityMatrix* if `tpm,=TRUE` (`tpm=FALSE`, by default).
-Optional parameters allow you to change: \* The grid cell size in
-degrees (`gridCell=0.25`, by default) \* The number of hours between
-location estimates (`hours=24`, by default), and \* Time range in hours
-that will allow the algorithm to identify location estimates that are
-close to, but not exactly separated by the set number of hour
-(`range_hr=6`, by default). 2. If `infomap=TRUE`, `InfomapCommunities()`
-feeds the transition probability matrix into the `infomapecology` package
+a predetermined time window. The result of this step is referred to as 
+either a transition probability matrix (in PhysMove), or a 
+“unipartite edge list” (in Infomap).
+- `tpm`: save the tramsition probability matric to the local environment as
+*TransitionProbabilityMatrix* (`tpm=FALSE`, by default).
+- `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default)
+- `hours`: number of hours between location estimates (`hours=24`, by default)
+-  `range_hr`: time range in hours (`range_hr=6`, by default). This parameter
+allows you to identify location estimates that are
+close to, but not exactly separated by the set number of `hours`
+ 
+2.`InfomapCommunities()` feeds the transition probability matrix into the `infomapecology` package
 to create an *Infomap monolayer object* that identifies movement
-communities (`Infomap=TRUE`, by default). To ensure the algorithm
-calculates movement patterns consistent with telemetry data, we adapted
-the infomapecology functions to allow for directed movement, self-links
-(i.e., individuals can remain in the same grid cell over time), and
+communities 
+- `Infomap`: create an infomap monolater object, i.e., run infomap(`Infomap=TRUE`, by default). 
+
+To ensure the `infomapecology` algorithm calculates movement patterns consistent 
+with telemetry data, we adapted the infomapecology functions to allow for directed 
+movement, self-links (i.e., individuals can remain in the same grid cell over time), and
 hierarchical partitioning (i.e., the resulting communities are composed
 of multiple levels). Because we allowed hierarchical partitioning, the
 resulting communities are associated with different levels; level 1
 communities are the most inclusive and have been used to identify
-community-wide movements (following Rodríguez et al. 2017 and Calich et
-al. 2021). See Farage et al. (2021) for tips on interpreting the *Infomap
+community-wide movements (following Rodríguez *et* *al*. 2017 and Calich *et*
+*al*. 2021). See Farage *et* *al*. (2021) for tips on interpreting the *Infomap
 monolayer object* and Table 3 in the main text for suggestions on how to
 interpret results.
 
-\*\* Before running `InfomapCommunities()` make sure your working
-direction is set to the folder that contains the “Infomap.exe” file\*\*
+**Important**: Before running `InfomapCommunities()` you must set your working
+directory to the folder that contains stand-alone Infomap file (*Infomap.exe*).
 
 ``` r
 # Identify community-wide movements from the tracks dataset with InfomapCommunities, 
@@ -959,12 +959,10 @@ str(infomap)
 
 The `CommunityMap()` function is used to visualise results from
 `InfomapCommunities()` by converting the Infomap monolayer object into a
-map (Figure S 15; Figure 1 in main text). The optional
-subset\_communities parameter allows you to indicate if you only want to
-map specific communities. For example, `subset_communities = c(1,2,3)`
-would plot communities 1, 2, and 3, but if subset\_communities is left
-blank (default), all level 1 communities will be plotted. The colours
-used on the map can be changed with `colours= “Dark2”` (by default).
+map (Figure S15). `CommunityMap()` includes 2 optional parameters:
+- `subset_communities`: to only map specific communities (all level 1 communities are be plotted by default). 
+For example, `subset_communities = c(1,2,3)` would plot communities 1, 2, and 3.
+- `colours`: change community colours (`colours= “Dark2”`, by default).
 
 ``` r
 # Create a map of the Infomap communities 
@@ -982,16 +980,17 @@ parameters. Map created with `CommunityMap()` default parameters.
 ### Dispersion with `GyrationRad()`
 
 The `GyrationRad()` function calculates the dispersion (i.e., the
-gyration radius) of each track in a dataset (Figure S16). Optional
-parameters allow you to \* Create a map (map=TRUE, by default) \*
-Control the colour of the points, indicating average track locations,
-and circles, indicating how far each animal dispersed
+gyration radius) of each track in a dataset (Figure S16). `GyrationRad()`
+includes ## optional parameters:
+- `map`: create a map (map=TRUE, by default)
+-  `mapCol`: change the colour of the points, which indicate average track location,
+and circles, which indicate how far each animal dispersed
 (`mapCol=c(“Black”, “Red”)`, by default).
 
-`GyrationRad()` outputs the data used to make each map, including *ref*,
+`GyrationRad()` outputs the data used to make each map, including: *ref*,
 the reference id for each track, *avg long* and *avg lat*, the average
 longitude and latitude coordinates in degrees for each track, and *rG
-(km)\*, the gyration radius in kilometres for each track. See Table 3 in
+(km)*, the gyration radius in kilometres for each track. See Table 3 in
 the main text for suggestions on how to interpret results.
 
 ``` r
@@ -1038,13 +1037,13 @@ parameters. Plot created using `pdfPlot()` with desc set to
 ### Entropy with `Entropy()`
 
 The `Entropy()` function calculates track randomness by documenting the
-fraction of data points from each track within each grid cell (Figure S
-18). The resulting entropy scores are then normalised so results can be
-compared between individuals. Optional parameters allow you to change:
-\* grid cell size in degrees (`gridCell=0.25`, by default) and \* output
-a histogram (`histPlot=TRUE`, by default).
+fraction of data points from each track within each grid cell (Figure S18). 
+The resulting entropy scores are then normalised so results can be
+compared between individuals. `Entropy()` incldues 2 optional parameters:
+- `gridCell`: change grid cell size in degrees (`gridCell=0.25`, by default) 
+- `histPlot`: output a histogram (`histPlot=TRUE`, by default).
 
-`Entropy()` outputs results in four columns, including *ref*, the
+`Entropy()` outputs results in four columns, including: *ref*, the
 reference id for each track, the *normalisedEntropy* scores,
 *indivEntropy*, the individual entropy scores before they were
 normalised, and the number of *cellsVisited* by each track. See Table 3
@@ -1056,6 +1055,7 @@ Ent <- Entropy(tracks)
 ```
 
 ![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
 **Figure** **S18** Histogram of normalised entropy scores for `tracks` dataset
 created using `Entropy()` default parameters.
 
@@ -1082,6 +1082,7 @@ pdf.ent <- pdfPlot(Ent$normalisedEntropy, "Entropy")
 ```
 
 ![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
 **Figure** **S19** Probability density function (pdf) plot of normalised
 entropy scores for `tracks` dataset determined with `Entropy()` default
 parameters. Plot created using `pdfPlot()` with desc set to “Entropy”.
@@ -1089,13 +1090,14 @@ parameters. Plot created using `pdfPlot()` with desc set to “Entropy”.
 ### Predictability with `Predictability()`
 
 The `Predictability()` function calculates the limit of predictability
-for each track based on their individual entropy scores (Figure S 20;
-Figure 1). Optional parameters allow you to: \* Alter the starting value
-used to find a root value for the limit of predictability equation
-(startVal=0.99, by default) and \* Output a histogram (`histPlot=TRUE`,
-by default).
+for each track based on their individual entropy scores (Figure S20;
+Figure 1). `Predictability()` incldues 2 optional parameters:
+- `startVal`: alter the starting value used to find a root value for the limit of predictability equation
+(`startVal=0.99`, by default)
+- `histPlot`: output a histogram (`histPlot=TRUE`, by default).
 
-`Predictability()` outputs results in two columns, *ref*, the reference
+
+`Predictability()` outputs results in two columns: *ref*, the reference
 id for each track, and *Predictability*, the predictability scores for
 each track. See Table 3 in the main text for suggestions on how to
 interpret results.
@@ -1126,7 +1128,7 @@ head(Pred)
 
 A pdf of the results from `Predictability()` can be plotted with the
 `pdfPlot()` function when the desc parameter is set to “Predictability”
-(Figure S 21; Figure 1 in main text).
+(Figure S21; Figure 1 in main text).
 
 ``` r
 # Create a pdf plot of the predictability scores
@@ -1142,8 +1144,8 @@ with desc set to “Predictability”.
 
 ## Recommended resources
 
-Méndez, V., *et al*. (2013). Stochastic Foundations in Movement Ecology
-: Anomalous Diffusion, Front Propagation and Random Searches. Berlin,
+Méndez, V., *et al*. (2013). Stochastic Foundations in Movement Ecology: 
+Anomalous Diffusion, Front Propagation and Random Searches. Berlin,
 Heidelberg, Germanu, Springer Berlin / Heidelberg.
 
 Viswanathan, G. M., *et al*. (2011). The Physics of Foraging: An
