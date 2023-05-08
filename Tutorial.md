@@ -99,8 +99,8 @@ You can also compare your dataframe to the `tracks` dataset to ensure your data 
 #### Explore `tracks` dataset
 
 We created the `tracks` dataset to help demonstrate the PhysMove functions and a full description of the dataset can be found in the main manuscript. Briefly, `tracks` consists of 25 unique tracks simulated using a defined set of movement parameters, including: 
-- steps were created based on a biased, uncorrelated random walk model with variable step lengths drawn from an exponential distribution with λ = 0.125;
-- turning angles were defined such that 30% indicate directed forward movement (movements with angles <30° or >330°), 30% indicated directed return movement (angles between 150-210°), and 40% were randomly alocated between 0-360°;
+- steps created based on a biased, uncorrelated random walk model with variable step lengths drawn from an exponential distribution with λ = 0.125;
+- turning angles defined such that 30% indicate directed forward movement (movements with angles <30° or >330°), 30% indicated directed return movement (angles between 150-210°), and 40% were randomly alocated between 0-360°;
 - each track randomly begins in a 2-degree square area between coordinates (0,0) and (2,2) and starting dates were arbitrarily assigned across a five year period (from the 6th February 2015 to 4th December 2019) to mimic a scenario where a researcher may undergo multiple tagging trips within the same area of interest;
 - each track has between 249 and 993 position estimates to mimic inconsistencies in tag reporting rates; and finaly,
 - each track only has one location per day for to minimize processing time and mimic scenarios where tracks are standardized to only include 1 location per day.
