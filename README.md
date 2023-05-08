@@ -15,8 +15,8 @@ main text.
 
   - [Install PhysMove and tracks dataset](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#install-physmove-and-input-data)
   - [Data formatting](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#data-formatting)
-      - [Plot tracks with
-        `PlotTracks()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#create-a-map-of-the-tracks-dataset-with-plottracks)
+  - [Explore `tracks` dataset](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#explore-tracks-dataset)
+  - [Plot tracks with `PlotTracks()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#create-a-map-of-the-tracks-dataset-with-plottracks)
 
 **<ins>*Movement patterns*</ins>**
 
@@ -75,8 +75,7 @@ library(PhysMove)
 PhysMove was designed to be user-friendly, and most functions only
 require you to input a data frame containing telemetry data. 
 
-**Please** **note:** The input data frame must only contain 4 columns with the following column names and in the following order: 
-*ref*, *lon*, *lat*, and *day*. 
+    **Please** **note:** The input data frame must only contain 4 columns with the following column names and in the following order: *ref*, *lon*, *lat*, and *day*. 
 
 Columns must be formatted as follows:
 
@@ -126,7 +125,7 @@ str(tracks)
 #### Create a map of the tracks dataset with `PlotTracks()`
 
 A map of the data can be created using the `PlotTracks()` function from
-PhysMove (Figure S 1). `PlotTracks()` has 3 optional parameters:
+PhysMove (Figure S1). `PlotTracks()` has 3 optional parameters:
 - `ref`: plot specific tracks based on their reference IDs (`ref=NULL`, by default), 
 - `tracks`: connect points with lines (`tracks=TRUE`, by default), and
 - `colours`: edit the colours used in the map (`colours=rainbow`, by default). 
@@ -181,7 +180,7 @@ disp.all <- CalcDisp(tracks)
     ## [1] "15373 displacements in 240 +/- 6 hour(s)"
 
 ``` r
-# Summarise displacements calculated over the first time window (24 ± 6 hours if default parameters were used)
+# Summarise displacements calculated over the first time window (24 ± 6 hours, if default parameters were used)
 summary(unlist(disp.all[[1]]))
 ```
 
@@ -191,7 +190,7 @@ summary(unlist(disp.all[[1]]))
 #### Create a probability density function (pdf) plot of normalised displacements with `PlotDispPDF()`
 
 The `PlotDispPDF()` function calcualtes a probability density function
-(pdf) of the displacements (Figure S 2 - Figure S 3; Figure 1 in main
+(pdf) of the displacements (Figure S2 - Figure S3; Figure 1 in main
 text). `PlotDispPDF()` includes 3 optional parameters:
 - `normalised`: normalise the data before plotting, which divides all displacements in a time window by the mean
 displacement for that time window (`normalised=TRUE`, by default). 
@@ -232,7 +231,7 @@ at 24 ± 6-hour time intervals with `CalcDisp()`. Plot created with
 
 The `RMS()` function provides insights into the scale of movement by
 calculating the mean and root-mean-square (RMS) displacements and
-plotting them over time (Figure S 4). `RMS()` includes ## optional parameters:
+plotting them over time (Figure S4). `RMS()` includes 4 optional parameters:
 - `timeUnit`: change the time unit used to calculate the time
 between locations (`timeUnit= “days”`, by default), 
 - `wBins`: change the width of the time bins used to calculate how frequently displacements occurred
@@ -246,7 +245,7 @@ slope of the linear model is used to make conclusions about the scale of
 movement (see Table 3 in the main text for suggestions on interpreting
 your results).
 
-`RMS()` outputs data in three columns, *timeWindow*,
+`RMS()` outputs data in three columns: *timeWindow*,
 including the binned time windows in days (or whatever unit was set
 using timeUnit) that correspond with the *meanDisplacement* and
 *rmsDisplacement* values in kilometres (km).  
@@ -326,7 +325,7 @@ RMSlinearModel$coefficients[2]
 ## Influence of correlations on movement decisions with `Randomise()`
 
 The `Randomise()` function can be used to gain insights into how
-correlations influenced the movements and space-use of a species.
+correlations influenced the movements and space-use of a species (Figure S5).
 `Randomise()` includes 4 optional parameters:
 - `randTrack`: change the number of randomised tracks created (`randTrack=500`, by default),
 - `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default), 
@@ -411,12 +410,13 @@ RandomiselinearModel$coefficients[2]
     ##                     0.8846446
 
 The `PlotRandomTracks()` function plots the randomised tracks created
-with `Randomise()` (Figure S 6; Figure 1 in main text).
+with `Randomise()` (Figure S6; Figure 1 in main text).
 `PlotRandomTracks()` requires you to input a reference id of the track
 to be mapped in the ref parameter and will automatically call on the
 *RandomisedLat* and *RandomisedLong* objects previously exported from
 `Randomise()`. `PlotRandomTracks()` includes 6 optional parameters:
-- `numPlot`: change the number of randomised tracks that are plotted (`numPlot=1:5`, by default, which will plot the first 5 randomised versions of each track). You can - - `colours`: change the colours of the original and randomised location estimates (`colours=c(“black”,
+- `numPlot`: change the number of randomised tracks that are plotted (`numPlot=1:5`, by default, which will plot the first 5 randomised versions of each track), 
+- `colours`: change the colours of the original and randomised location estimates (`colours=c(“black”,
 “grey70”)`, respectively, by default),
 - `tracks`: connect points with lines (`tracks=TRUE`, by default), 
 - `startCol` and `endCol`: change the colours of the starting and ending points of each track
@@ -451,7 +451,7 @@ are in red and blue, respectively. Plot created with
 
 The `TurningAngles()` function calculates turning angles between a set
 of three consecutive location estimates separated by set time windows to
-describe how species explore their habitats (Figure S 7). Similarly to
+describe how species explore their habitats (Figure S7). Similarly to
 `CalcDisp()`, `TurningAngles()` has 5 optional parameters:
 - `min_hr` and `max_hr`: set the minimum and maximum times between
 location estimates in hours (`min_hr=24` and `max_hr=240`, by default),
@@ -491,7 +491,7 @@ during ten time windows (24 to 240 hours over 24 ± 6 hour intervals).
 Plot created with `TurningAngles()` default parameters.
 
 ``` r
-# Summarise turning angles calculated over the first time window (24 ± 6 hours)
+# Summarise turning angles calculated over the first time window (24 ± 6 hours, assuming default parameters were used)
 summary(angle.results[[1]])
 ```
 
@@ -501,14 +501,14 @@ summary(angle.results[[1]])
 Results from `TurningAngles()` can be visualised with the `PlotAngles()`
 function, which creates a circle plot (also known as a spider or radar
 plot) showing the frequency of turning angles over each time window
-(Figure S 8; Figure 1 in main text). Optional parameters allow you to:
-\* Control if “all” time windows or only specific windows are plotted
-(`timePlot=“all”`, by default), \* Change line colours
-(`colours=rainbow`, by default), and \* Determine if a legend is
-included (`legend=TRUE`, by default).
+(Figure S8; Figure 1 in main text). `PlotAngles()` includes 3 optional parameters:
+- `timePlot`: control if “all” time windows or only specific windows are plotted
+(`timePlot=“all”`, by default), 
+- `colours`: change line colours (`colours=rainbow`, by default), and 
+- `legend`: add a legend (`legend=TRUE`, by default).
 
 `PlotAngles()` outputs all data used to create the circle plot,
-including the time windows (*timeWindows*), angle frequency
+including: the time windows (*timeWindows*), angle frequency
 (*frequency*), and corresponding angles (*angle*).
 
 #### Create a circle plot of all turning angles calculated using `TurningAngles()`
