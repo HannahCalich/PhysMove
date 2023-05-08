@@ -74,8 +74,7 @@ library(PhysMove)
 
 PhysMove was designed to be user-friendly, and most functions only
 require you to input a data frame containing telemetry data. 
-
-|  **Please** **note:** The input data frame must only contain 4 columns with the following column names and in the following order: *ref*, *lon*, *lat*, and *day*. 
+- **Please** **note:** The input data frame must only contain 4 columns with the following column names and in the following order: *ref*, *lon*, *lat*, and *day*. 
 
 Columns must be formatted as follows:
 
@@ -247,7 +246,7 @@ your results).
 
 `RMS()` outputs data in three columns: *timeWindow*,
 including the binned time windows in days (or whatever unit was set
-using timeUnit) that correspond with the *meanDisplacement* and
+using `timeUnit`) that correspond with the *meanDisplacement* and
 *rmsDisplacement* values in kilometres (km).  
 
 Note that because `RMS()` calculates all displacements in each track,
@@ -430,12 +429,6 @@ columns: *randTrack*, the id number of the random track, *lon* and
 ``` r
 # Plot random tracks for tracks dataset reference id 1
 plot.data.random.tracks <-PlotRandomTracks(tracks, ref=1)
-```
-
-``` r
-# Plot random tracks for tracks dataset reference id 1
-invisible({capture.output({plot.data.random.tracks <-PlotRandomTracks(tracks, ref=1)
-})})
 ```
 
 ![](Tutorial_markdown_files/figure-gfm/plot%20random%20tracks-1.png)<!-- -->
@@ -831,7 +824,7 @@ main text for suggestions on how to interpret results.
 
 ``` r
 # Create an occupancy map based on the tracks dataset
-invisible({capture.output({Occ <- Occupancy(tracks)
+Occ <- Occupancy(tracks)
 ```
 
 ![](Tutorial_markdown_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
