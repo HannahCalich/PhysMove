@@ -23,8 +23,7 @@ main text.
 
   - [Calculate displacements with
     `CalcDisp()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#calculate-displacements-with-calcdisp)
-      - [Create a probability density function (pdf) plot with
-        `PlotDispPDF()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#create-a-probability-density-function-pdf-plot-of-normalised-displacements-with-  plotdisppdf)
+      - [Create a probability density function (pdf) plot with `PlotDispPDF()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#create-a-probability-density-function-pdf-plot-of-normalised-displacements-with-  plotdisppdf)
   - [Quantify the scale of movement with
     `RMS()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#scale-of-movement-with-rms)
   - [Describe the influence of correlations on movement decisions with
