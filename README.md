@@ -87,7 +87,7 @@ Columns must be formatted as follows:
     
 **Please** **note:** The input data frame must only contain these 4 columns in the following order: *ref*, *lon*, *lat*, and *day*. 
 
-The ```CheckTracks``` function can be used to confirm your input data are formatted as described above. This function checks that column names are in order, and that each column is in the correct foramt as described above (i.e., this function does not evaluate data quality or quantity). 
+The ```CheckTracks``` function can be used to confirm your input data are formatted as described above. This function checks that column names are in order, and that each column is in the correct format as described above (i.e., this function does not evaluate data quality or quantity). 
 
 ``` r
 # Check your data are formatted correctly
