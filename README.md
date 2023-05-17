@@ -20,12 +20,12 @@ main text.
 
 **<ins>*Movement patterns*</ins>**
 
-  - [Calculate displacements with
-    `CalcDisp()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#calculate-displacements-with-calcdisp)
-      - [Create a probability density function (pdf) plot with
-        `PlotDispPDF()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#create-a-probability-density-function-pdf-plot-of-normalised-displacements-with-plotdisppdf)
   - [Quantify the scale of movement with
     `RMS()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#scale-of-movement-with-rms)
+  - [Calculate displacements across temporal scales with
+    `CalcDisp()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#calculate-displacements-with-calcdisp)
+    - [Create a probability density function (pdf) plot with
+        `PlotDispPDF()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#create-a-probability-density-function-pdf-plot-of-normalised-displacements-with-plotdisppdf)
   - [Describe the influence of correlations on movement decisions with
     `Randomise()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#influence-of-correlations-on-movement-decisions-with-randomise)
   - [Identify turning angle patterns with
@@ -74,20 +74,20 @@ library(PhysMove)
 
 PhysMove was designed to be user-friendly, and most functions only
 require you to input a data frame containing telemetry data. 
-- **Please** **note:** The input data frame must only contain 4 columns with the following column names and in the following order: *ref*, *lon*, *lat*, and *day*. 
 
 Columns must be formatted as follows:
 
-  - *ref*: the unique telemetry tag ID number for each animal in numeric, integer,
-  or character format,
+  - *ref*: the unique telemetry tag ID number for each animal in numeric format (note that characters are not accepted because they can be slower to process than integers, so please convert all reference IDs to integers before proceeding)
 
-  - *lon* and *lat*: the longitude and latitude in decimal degrees of
+  - *lon* and *lat*: the longitude (-180 to + 180) and latitude (-90 to + 90) in decimal degrees of
     each position estimate, respectively, in numeric format, and
 
   - *day*: the datetime stamp for each location estimate in POSIXct
     format following yyyy-mm-dd hh:mm:ss.
+    
+**Please** **note:** The input data frame must only contain these 4 columns in the following order: *ref*, *lon*, *lat*, and *day*. 
 
-The ```CheckTracks``` function can be used to confirm your input data are formatted correctly. 
+The ```CheckTracks``` function can be used to confirm your input data are formatted as described above. This function checks that column names are in order, and that each column is in the correct foramt as described above (i.e., this function does not evaluate data quality or quantity). 
 
 ``` r
 # Check your data are formatted correctly
