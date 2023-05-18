@@ -26,14 +26,15 @@ main text.
     `CalcDisp()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#calculate-displacements-with-calcdisp)
     - [Create a probability density function (pdf) plot with
         `PlotDispPDF()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#create-a-probability-density-function-pdf-plot-of-normalised-displacements-with-plotdisppdf)
+  - [Search patterns with `FitDist()`, `PlotDist()`, and
+    `CompDist()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#search-patterns-with-fitdist-plotdist-and-compdist)
   - [Describe the influence of correlations on movement decisions with
     `Randomise()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#influence-of-correlations-on-movement-decisions-with-randomise)
   - [Identify turning angle patterns with
     `TurningAngles()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#turning-angles-with-turningangles)
       - [Plot angles with a circle plot with
         `PlotAngles()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#create-a-circle-plot-of-all-turning-angles-calculated-using-turningangles)
-  - [Search patterns with `FitDist()`, `PlotDist()`, and
-    `CompDist()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#search-patterns-with-fitdist-plotdist-and-compdist)
+
 
 **<ins>*Space-Use Patterns*</ins>**
 
@@ -141,91 +142,6 @@ PlotTracks(tracks)
 
 ## *Movement patterns*
 
-### Calculate displacements with `CalcDisp()`
-
-The `CalcDisp()` function calculates displacements travelled in
-kilometres over set time windows. `CalcDisp()` has four optional
-parameters that allow you to change different aspects of the time
-windows:
-- `min_hr` and `max_hr`: set the minimum and maximum times between
-location estimates in hours (`min_hr=24` and `max_hr=240`, by default),
-- `interval_hr`: set the the time interval in hours, which creates a sequence of time windows
-between the minimum and maximum times over a set time interval (`interval_hr=24`, by default), and 
-- `range_hr`: set the range in hours, which allows the code to identify location estimates that are
-close to, but not exactly separated by the `interval_hr` input value (`range_hr=6`, by
-default).
-
-For example, by default, `CalcDisp()` calculates displacements between
-location estimates separated by 10 time windows, 24 ± 6 hours, 48 ± 6
-hours, etc., until 240 ± 6 hours. `CalcDisp()` outputs a list where each
-list element contains the displacements calculated over a time window,
-such that the first list element contains data from the first time
-window and so on.
-
-``` r
-# Calculate displacements from the tracks dataset with default parameters
-disp.all <- CalcDisp(tracks)
-```
-
-    ## [1] "15598 displacements in 24 +/- 6 hour(s)"
-    ## [1] "15573 displacements in 48 +/- 6 hour(s)"
-    ## [1] "15548 displacements in 72 +/- 6 hour(s)"
-    ## [1] "15523 displacements in 96 +/- 6 hour(s)"
-    ## [1] "15498 displacements in 120 +/- 6 hour(s)"
-    ## [1] "15473 displacements in 144 +/- 6 hour(s)"
-    ## [1] "15448 displacements in 168 +/- 6 hour(s)"
-    ## [1] "15423 displacements in 192 +/- 6 hour(s)"
-    ## [1] "15398 displacements in 216 +/- 6 hour(s)"
-    ## [1] "15373 displacements in 240 +/- 6 hour(s)"
-
-``` r
-# Summarise displacements calculated over the first time window (24 ± 6 hours, if default parameters were used)
-summary(unlist(disp.all[[1]]))
-```
-
-    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##  0.2605  2.7049  5.5149  8.2299 11.1227 76.8543
-
-#### Create a probability density function (pdf) plot of normalised displacements with `PlotDispPDF()`
-
-The `PlotDispPDF()` function calcualtes a probability density function
-(pdf) of the displacements (Figure S2 - Figure S3; Figure 1 in main
-text). `PlotDispPDF()` includes 3 optional parameters:
-- `normalised`: normalise the data before plotting, which divides all displacements in a time window by the mean
-displacement for that time window (`normalised=TRUE`, by default). 
-- `colours`: change the point colours (`colours=rainbow`, by default) and
-- `legend`: add or remove a legend (`legend=TRUE`, by default).
-
-
-`PlotDispPDF()` outputs all data used to create the plot, including the
-pdf values (*pdf*), the displacements (*disp*), and the time windows
-(*timeWindow*); note that if `normalised=TRUE`, the output displacements
-are normalised values.
-
-``` r
-plot.data.disp <- PlotDispPDF(disp.all)
-```
-
-![](Tutorial_markdown_files/figure-gfm/plot%20all%20normalised%20displacements-1.png)<!-- -->
-
-**Figure** **S2** Probability density function (pdf) plot of normalised
-displacements from the `tracks` dataset calculated over 10 time windows,
-24-240 hours at 24 ± 6-hour time intervals with `CalcDisp()`. Plot
-created with `PlotDispPDF()` default parameters.
-
-#### Create a probability density function (pdf) plot of displacements without normalizing with `PlotDispPDF()`
-
-``` r
-PlotDispPDF(disp.all, normalised=FALSE)
-```
-
-![](Tutorial_markdown_files/figure-gfm/plot%20all%20displacements%20\(not%20normalised\)-1.png)<!-- -->
-
-**Figure** **S3** Probability density function (pdf) plot of displacements
-from the `tracks` dataset calculated over 10 time windows, 24 to 240 hours
-at 24 ± 6-hour time intervals with `CalcDisp()`. Plot created with
-`PlotDispPDF()` where `normalised=FALSE`.
-
 ## Scale of movement with `RMS()`
 
 The `RMS()` function provides insights into the scale of movement by
@@ -321,201 +237,90 @@ RMSlinearModel$coefficients[2]
     ## log(MyRMS$TimeWindows_log) 
     ##                  0.4973449
 
-## Influence of correlations on movement decisions with `Randomise()`
+### Calculate displacements with `CalcDisp()`
 
-The `Randomise()` function can be used to gain insights into how
-correlations influenced the movements and space-use of a species (Figure S5).
-`Randomise()` includes 4 optional parameters:
-- `randTrack`: change the number of randomised tracks created (`randTrack=500`, by default),
-- `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default), 
-- `plot`: create a scatter plot of the results (`plot=TRUE`, by default), and 
-- `lm`: fit a linear model to the average number of grid cells visited by the
-randomised tracks and the number of grid cells visited by the original
-tracks (`lm=TRUE`, by default). The slope of this model is used to make
-conclusions about how correlations influence movement (see Table 3 in
-the main text for suggestions on how to interpret results).
-
-
-`Randomise()` outputs a data frame with three columns: *ref* the reference id
-numbers for each track, *CellsInOriginalTracks* the number of grid cells
-visited by the original tracks, and *AvgCellsInRandomisedTracks* the
-average number of grid cells visited by the randomised tracks. The
-coordinates for the randomised tracks, *RandomisedLong* and
-*RandomisedLat*, are automatically saved to the local environment
-because this information is needed for the `PlotRandomTracks()`
-function.
-
-``` r
-# Setting a seed enables the replication of results because Randomise() involves random number selection
-set.seed(1)
-# Randomise tracks from the tracks dataset with default parameters 
-randomise.result <- Randomise(tracks)
-```
-
-![](Tutorial_markdown_files/figure-gfm/randomise%20tracks-1.png)<!-- -->
-
-**Figure** **S5** Scatter plot illustrating the relationship between the
-number of grid cells visited by the original tracks from the `tracks` dataset and the average
-number of grid cells visited by the randomised tracks. The solid black
-line represents the linear model fit to this data, the grey shaded area
-reflects the standard error of the fit, and the dashed black line
-represents a 1:1 relationship. Plot created with `Randomise()` default
-parameters.
-
-``` r
-# Summarise RMS results
-summary(randomise.result)
-```
-
-    ##       ref     CellsInOriginalTracks AvgCellsInRandomisedTracks
-    ##  Min.   : 1   Min.   :27.00         Min.   : 25.21            
-    ##  1st Qu.: 7   1st Qu.:39.00         1st Qu.: 39.59            
-    ##  Median :13   Median :59.00         Median : 55.65            
-    ##  Mean   :13   Mean   :57.32         Mean   : 56.48            
-    ##  3rd Qu.:19   3rd Qu.:71.00         3rd Qu.: 70.81            
-    ##  Max.   :25   Max.   :94.00         Max.   :100.77
-
-``` r
-# Determine the slope of the linear model 
-summary(RandomiselinearModel)
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = plot.df$AvgCellsInRandomisedTracks ~ plot.df$CellsInOriginalTracks, 
-    ##     data = plot.df)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -16.5452  -7.3282  -0.9386   6.6480  26.6015 
-    ## 
-    ## Coefficients:
-    ##                               Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)                     5.7706     6.7382   0.856    0.401    
-    ## plot.df$CellsInOriginalTracks   0.8846     0.1113   7.947 4.81e-08 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 10.83 on 23 degrees of freedom
-    ## Multiple R-squared:  0.733,  Adjusted R-squared:  0.7214 
-    ## F-statistic: 63.15 on 1 and 23 DF,  p-value: 4.808e-08
-
-``` r
-# Determine the slope without displaying the full linear model summary 
-RandomiselinearModel$coefficients[2]
-```
-
-    ## plot.df$CellsInOriginalTracks 
-    ##                     0.8846446
-
-The `PlotRandomTracks()` function plots the randomised tracks created
-with `Randomise()` (Figure S6; Figure 1 in main text).
-`PlotRandomTracks()` requires you to input a reference id of the track
-to be mapped in the ref parameter and will automatically call on the
-*RandomisedLat* and *RandomisedLong* objects previously exported from
-`Randomise()`. `PlotRandomTracks()` includes 6 optional parameters:
-- `numPlot`: change the number of randomised tracks that are plotted (`numPlot=1:5`, by default, which will plot the first 5 randomised versions of each track), 
-- `colours`: change the colours of the original and randomised location estimates (`colours=c(“black”,
-“grey70”)`, respectively, by default),
-- `tracks`: connect points with lines (`tracks=TRUE`, by default), 
-- `startCol` and `endCol`: change the colours of the starting and ending points of each track
-(`startCol=“red”` and `endCol = “blue”`, respectively, by default), and
-- `legend`: add a legend (`legend=TRUE`, by default).
-
-`PlotRandomTracks()` outputs the data used to create the map in three
-columns: *randTrack*, the id number of the random track, *lon* and
-*lat*, the longitude and latitude coordinates of the randomised tracks.
-
-``` r
-# Plot random tracks for tracks dataset reference id 1
-plot.data.random.tracks <-PlotRandomTracks(tracks, ref=1)
-```
-
-![](Tutorial_markdown_files/figure-gfm/plot%20random%20tracks-1.png)<!-- -->
-
-**Figure** **S6** Map illustrating the original track for reference id 1
-from the `tracks` dataset (black points and line) and the first 5
-randomised tracks for track reference id 1 calculated using
-`Randomise()` (grey points and lines). The starting and ending locations
-are in red and blue, respectively. Plot created with
-`PlotRandomTracks()` default parameters and `ref=1`.
-
-## Turning angles with `TurningAngles()`
-
-The `TurningAngles()` function calculates turning angles between a set
-of three consecutive location estimates separated by set time windows to
-describe how species explore their habitats (Figure S7). Similarly to
-`CalcDisp()`, `TurningAngles()` has 5 optional parameters:
+The `CalcDisp()` function calculates displacements travelled in
+kilometres over set time windows. `CalcDisp()` has four optional
+parameters that allow you to change different aspects of the time
+windows:
 - `min_hr` and `max_hr`: set the minimum and maximum times between
 location estimates in hours (`min_hr=24` and `max_hr=240`, by default),
 - `interval_hr`: set the the time interval in hours, which creates a sequence of time windows
-between the minimum and maximum times over a set time interval (`interval_hr=24`, by default),  
+between the minimum and maximum times over a set time interval (`interval_hr=24`, by default), and 
 - `range_hr`: set the range in hours, which allows the code to identify location estimates that are
 close to, but not exactly separated by the `interval_hr` input value (`range_hr=6`, by
-default), and
-- `histPlot`: output a histogram and control if “all” time windows are plotted or if only the first, second, or third etc. time window is plotted (`histPlot=c(TRUE,
-“all”)`, by default). 
+default).
 
-Results are output in a list where each list element contains the angles calculated over a time window, such that the
-first list element contains data from the first time window and so on.
-See Table 3 in the main text for suggestions on how to interpret
-results.
-
-``` r
-# Calculate turning angles in the tracks dataset using default parameters
-angle.results <- TurningAngles(tracks)
-```
-
-    ## [1] "15573 angles in 24 +/- 6 hour(s)"
-    ## [1] "15523 angles in 48 +/- 6 hour(s)"
-    ## [1] "15473 angles in 72 +/- 6 hour(s)"
-    ## [1] "15423 angles in 96 +/- 6 hour(s)"
-    ## [1] "15373 angles in 120 +/- 6 hour(s)"
-    ## [1] "15323 angles in 144 +/- 6 hour(s)"
-    ## [1] "15273 angles in 168 +/- 6 hour(s)"
-    ## [1] "15223 angles in 192 +/- 6 hour(s)"
-    ## [1] "15173 angles in 216 +/- 6 hour(s)"
-    ## [1] "15123 angles in 240 +/- 6 hour(s)"
-
-![](Tutorial_markdown_files/figure-gfm/calcualte%20turning%20angles-1.png)<!-- -->
-
-**Figure** **S7** Histogram of turning angles recorded from the `tracks` dataset
-during ten time windows (24 to 240 hours over 24 ± 6 hour intervals).
-Plot created with `TurningAngles()` default parameters.
+For example, by default, `CalcDisp()` calculates displacements between
+location estimates separated by 10 time windows, 24 ± 6 hours, 48 ± 6
+hours, etc., until 240 ± 6 hours. `CalcDisp()` outputs a list where each
+list element contains the displacements calculated over a time window,
+such that the first list element contains data from the first time
+window and so on.
 
 ``` r
-# Summarise turning angles calculated over the first time window (24 ± 6 hours, assuming default parameters were used)
-summary(angle.results[[1]])
+# Calculate displacements from the tracks dataset with default parameters
+disp.all <- CalcDisp(tracks)
 ```
 
-    ##       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. 
-    ## -179.97980  -93.41046    0.79527   -0.01537   92.75782  179.99861
-
-Results from `TurningAngles()` can be visualised with the `PlotAngles()`
-function, which creates a circle plot (also known as a spider or radar
-plot) showing the frequency of turning angles over each time window
-(Figure S8; Figure 1 in main text). `PlotAngles()` includes 3 optional parameters:
-- `timePlot`: control if “all” time windows or only specific windows are plotted
-(`timePlot=“all”`, by default), 
-- `colours`: change line colours (`colours=rainbow`, by default), and 
-- `legend`: add a legend (`legend=TRUE`, by default).
-
-`PlotAngles()` outputs all data used to create the circle plot,
-including: the time windows (*timeWindows*), angle frequency
-(*frequency*), and corresponding angles (*angle*).
-
-#### Create a circle plot of all turning angles calculated using `TurningAngles()`
+    ## [1] "15598 displacements in 24 +/- 6 hour(s)"
+    ## [1] "15573 displacements in 48 +/- 6 hour(s)"
+    ## [1] "15548 displacements in 72 +/- 6 hour(s)"
+    ## [1] "15523 displacements in 96 +/- 6 hour(s)"
+    ## [1] "15498 displacements in 120 +/- 6 hour(s)"
+    ## [1] "15473 displacements in 144 +/- 6 hour(s)"
+    ## [1] "15448 displacements in 168 +/- 6 hour(s)"
+    ## [1] "15423 displacements in 192 +/- 6 hour(s)"
+    ## [1] "15398 displacements in 216 +/- 6 hour(s)"
+    ## [1] "15373 displacements in 240 +/- 6 hour(s)"
 
 ``` r
-# Plot angles with a circle plot
-plot.data.angles <- PlotAngles(angle.results)
+# Summarise displacements calculated over the first time window (24 ± 6 hours, if default parameters were used)
+summary(unlist(disp.all[[1]]))
 ```
 
-![](Tutorial_markdown_files/figure-gfm/plot%20angles%20with%20a%20circle%20plot-1.png)<!-- -->
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##  0.2605  2.7049  5.5149  8.2299 11.1227 76.8543
 
-**Figure** **S8** Circle plot of turning angles recorded from the `tracks`
-dataset during ten time windows (24 to 240 hours over 24 ± 6 hour
-intervals). Plot created with `PlotAngles()` default parameters.
+#### Create a probability density function (pdf) plot of normalised displacements with `PlotDispPDF()`
+
+The `PlotDispPDF()` function calcualtes a probability density function
+(pdf) of the displacements (Figure S2 - Figure S3; Figure 1 in main
+text). `PlotDispPDF()` includes 3 optional parameters:
+- `normalised`: normalise the data before plotting, which divides all displacements in a time window by the mean
+displacement for that time window (`normalised=TRUE`, by default). 
+- `colours`: change the point colours (`colours=rainbow`, by default) and
+- `legend`: add or remove a legend (`legend=TRUE`, by default).
+
+
+`PlotDispPDF()` outputs all data used to create the plot, including the
+pdf values (*pdf*), the displacements (*disp*), and the time windows
+(*timeWindow*); note that if `normalised=TRUE`, the output displacements
+are normalised values.
+
+``` r
+plot.data.disp <- PlotDispPDF(disp.all)
+```
+
+![](Tutorial_markdown_files/figure-gfm/plot%20all%20normalised%20displacements-1.png)<!-- -->
+
+**Figure** **S2** Probability density function (pdf) plot of normalised
+displacements from the `tracks` dataset calculated over 10 time windows,
+24-240 hours at 24 ± 6-hour time intervals with `CalcDisp()`. Plot
+created with `PlotDispPDF()` default parameters.
+
+#### Create a probability density function (pdf) plot of displacements without normalizing with `PlotDispPDF()`
+
+``` r
+PlotDispPDF(disp.all, normalised=FALSE)
+```
+
+![](Tutorial_markdown_files/figure-gfm/plot%20all%20displacements%20\(not%20normalised\)-1.png)<!-- -->
+
+**Figure** **S3** Probability density function (pdf) plot of displacements
+from the `tracks` dataset calculated over 10 time windows, 24 to 240 hours
+at 24 ± 6-hour time intervals with `CalcDisp()`. Plot created with
+`PlotDispPDF()` where `normalised=FALSE`.
 
 ## Search patterns with `FitDist()`, `PlotDist()`, and `CompDist()`
 
@@ -797,6 +602,202 @@ As both full and truncated distribution analyses identified an
 exponential distribution as the best fit, we can report that these displacements
 are best-fit to an exponential distribution compared with 
 power-law and lognormal distributions. 
+
+## Influence of correlations on movement decisions with `Randomise()`
+
+The `Randomise()` function can be used to gain insights into how
+correlations influenced the movements and space-use of a species (Figure S5).
+`Randomise()` includes 4 optional parameters:
+- `randTrack`: change the number of randomised tracks created (`randTrack=500`, by default),
+- `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default), 
+- `plot`: create a scatter plot of the results (`plot=TRUE`, by default), and 
+- `lm`: fit a linear model to the average number of grid cells visited by the
+randomised tracks and the number of grid cells visited by the original
+tracks (`lm=TRUE`, by default). The slope of this model is used to make
+conclusions about how correlations influence movement (see Table 3 in
+the main text for suggestions on how to interpret results).
+
+
+`Randomise()` outputs a data frame with three columns: *ref* the reference id
+numbers for each track, *CellsInOriginalTracks* the number of grid cells
+visited by the original tracks, and *AvgCellsInRandomisedTracks* the
+average number of grid cells visited by the randomised tracks. The
+coordinates for the randomised tracks, *RandomisedLong* and
+*RandomisedLat*, are automatically saved to the local environment
+because this information is needed for the `PlotRandomTracks()`
+function.
+
+``` r
+# Setting a seed enables the replication of results because Randomise() involves random number selection
+set.seed(1)
+# Randomise tracks from the tracks dataset with default parameters 
+randomise.result <- Randomise(tracks)
+```
+
+![](Tutorial_markdown_files/figure-gfm/randomise%20tracks-1.png)<!-- -->
+
+**Figure** **S5** Scatter plot illustrating the relationship between the
+number of grid cells visited by the original tracks from the `tracks` dataset and the average
+number of grid cells visited by the randomised tracks. The solid black
+line represents the linear model fit to this data, the grey shaded area
+reflects the standard error of the fit, and the dashed black line
+represents a 1:1 relationship. Plot created with `Randomise()` default
+parameters.
+
+``` r
+# Summarise RMS results
+summary(randomise.result)
+```
+
+    ##       ref     CellsInOriginalTracks AvgCellsInRandomisedTracks
+    ##  Min.   : 1   Min.   :27.00         Min.   : 25.21            
+    ##  1st Qu.: 7   1st Qu.:39.00         1st Qu.: 39.59            
+    ##  Median :13   Median :59.00         Median : 55.65            
+    ##  Mean   :13   Mean   :57.32         Mean   : 56.48            
+    ##  3rd Qu.:19   3rd Qu.:71.00         3rd Qu.: 70.81            
+    ##  Max.   :25   Max.   :94.00         Max.   :100.77
+
+``` r
+# Determine the slope of the linear model 
+summary(RandomiselinearModel)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = plot.df$AvgCellsInRandomisedTracks ~ plot.df$CellsInOriginalTracks, 
+    ##     data = plot.df)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -16.5452  -7.3282  -0.9386   6.6480  26.6015 
+    ## 
+    ## Coefficients:
+    ##                               Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)                     5.7706     6.7382   0.856    0.401    
+    ## plot.df$CellsInOriginalTracks   0.8846     0.1113   7.947 4.81e-08 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 10.83 on 23 degrees of freedom
+    ## Multiple R-squared:  0.733,  Adjusted R-squared:  0.7214 
+    ## F-statistic: 63.15 on 1 and 23 DF,  p-value: 4.808e-08
+
+``` r
+# Determine the slope without displaying the full linear model summary 
+RandomiselinearModel$coefficients[2]
+```
+
+    ## plot.df$CellsInOriginalTracks 
+    ##                     0.8846446
+
+The `PlotRandomTracks()` function plots the randomised tracks created
+with `Randomise()` (Figure S6; Figure 1 in main text).
+`PlotRandomTracks()` requires you to input a reference id of the track
+to be mapped in the ref parameter and will automatically call on the
+*RandomisedLat* and *RandomisedLong* objects previously exported from
+`Randomise()`. `PlotRandomTracks()` includes 6 optional parameters:
+- `numPlot`: change the number of randomised tracks that are plotted (`numPlot=1:5`, by default, which will plot the first 5 randomised versions of each track), 
+- `colours`: change the colours of the original and randomised location estimates (`colours=c(“black”,
+“grey70”)`, respectively, by default),
+- `tracks`: connect points with lines (`tracks=TRUE`, by default), 
+- `startCol` and `endCol`: change the colours of the starting and ending points of each track
+(`startCol=“red”` and `endCol = “blue”`, respectively, by default), and
+- `legend`: add a legend (`legend=TRUE`, by default).
+
+`PlotRandomTracks()` outputs the data used to create the map in three
+columns: *randTrack*, the id number of the random track, *lon* and
+*lat*, the longitude and latitude coordinates of the randomised tracks.
+
+``` r
+# Plot random tracks for tracks dataset reference id 1
+plot.data.random.tracks <-PlotRandomTracks(tracks, ref=1)
+```
+
+![](Tutorial_markdown_files/figure-gfm/plot%20random%20tracks-1.png)<!-- -->
+
+**Figure** **S6** Map illustrating the original track for reference id 1
+from the `tracks` dataset (black points and line) and the first 5
+randomised tracks for track reference id 1 calculated using
+`Randomise()` (grey points and lines). The starting and ending locations
+are in red and blue, respectively. Plot created with
+`PlotRandomTracks()` default parameters and `ref=1`.
+
+## Turning angles with `TurningAngles()`
+
+The `TurningAngles()` function calculates turning angles between a set
+of three consecutive location estimates separated by set time windows to
+describe how species explore their habitats (Figure S7). Similarly to
+`CalcDisp()`, `TurningAngles()` has 5 optional parameters:
+- `min_hr` and `max_hr`: set the minimum and maximum times between
+location estimates in hours (`min_hr=24` and `max_hr=240`, by default),
+- `interval_hr`: set the the time interval in hours, which creates a sequence of time windows
+between the minimum and maximum times over a set time interval (`interval_hr=24`, by default),  
+- `range_hr`: set the range in hours, which allows the code to identify location estimates that are
+close to, but not exactly separated by the `interval_hr` input value (`range_hr=6`, by
+default), and
+- `histPlot`: output a histogram and control if “all” time windows are plotted or if only the first, second, or third etc. time window is plotted (`histPlot=c(TRUE,
+“all”)`, by default). 
+
+Results are output in a list where each list element contains the angles calculated over a time window, such that the
+first list element contains data from the first time window and so on.
+See Table 3 in the main text for suggestions on how to interpret
+results.
+
+``` r
+# Calculate turning angles in the tracks dataset using default parameters
+angle.results <- TurningAngles(tracks)
+```
+
+    ## [1] "15573 angles in 24 +/- 6 hour(s)"
+    ## [1] "15523 angles in 48 +/- 6 hour(s)"
+    ## [1] "15473 angles in 72 +/- 6 hour(s)"
+    ## [1] "15423 angles in 96 +/- 6 hour(s)"
+    ## [1] "15373 angles in 120 +/- 6 hour(s)"
+    ## [1] "15323 angles in 144 +/- 6 hour(s)"
+    ## [1] "15273 angles in 168 +/- 6 hour(s)"
+    ## [1] "15223 angles in 192 +/- 6 hour(s)"
+    ## [1] "15173 angles in 216 +/- 6 hour(s)"
+    ## [1] "15123 angles in 240 +/- 6 hour(s)"
+
+![](Tutorial_markdown_files/figure-gfm/calcualte%20turning%20angles-1.png)<!-- -->
+
+**Figure** **S7** Histogram of turning angles recorded from the `tracks` dataset
+during ten time windows (24 to 240 hours over 24 ± 6 hour intervals).
+Plot created with `TurningAngles()` default parameters.
+
+``` r
+# Summarise turning angles calculated over the first time window (24 ± 6 hours, assuming default parameters were used)
+summary(angle.results[[1]])
+```
+
+    ##       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. 
+    ## -179.97980  -93.41046    0.79527   -0.01537   92.75782  179.99861
+
+Results from `TurningAngles()` can be visualised with the `PlotAngles()`
+function, which creates a circle plot (also known as a spider or radar
+plot) showing the frequency of turning angles over each time window
+(Figure S8; Figure 1 in main text). `PlotAngles()` includes 3 optional parameters:
+- `timePlot`: control if “all” time windows or only specific windows are plotted
+(`timePlot=“all”`, by default), 
+- `colours`: change line colours (`colours=rainbow`, by default), and 
+- `legend`: add a legend (`legend=TRUE`, by default).
+
+`PlotAngles()` outputs all data used to create the circle plot,
+including: the time windows (*timeWindows*), angle frequency
+(*frequency*), and corresponding angles (*angle*).
+
+#### Create a circle plot of all turning angles calculated using `TurningAngles()`
+
+``` r
+# Plot angles with a circle plot
+plot.data.angles <- PlotAngles(angle.results)
+```
+
+![](Tutorial_markdown_files/figure-gfm/plot%20angles%20with%20a%20circle%20plot-1.png)<!-- -->
+
+**Figure** **S8** Circle plot of turning angles recorded from the `tracks`
+dataset during ten time windows (24 to 240 hours over 24 ± 6 hour
+intervals). Plot created with `PlotAngles()` default parameters.
 
 ## *Space-use patterns*
 
