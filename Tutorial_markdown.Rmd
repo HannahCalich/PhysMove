@@ -10,13 +10,7 @@ knitr::opts_chunk$set(dpi=300) # set all figures to 300 dpi to avoid pixelated i
 knitr::opts_chunk$set(fig.align='left')
 ```
 
-<script>
-   $(document).ready(function() {
-     $head = $('#header');
-     $head.prepend('<img src=\"PhysMoveHex.png\" style=\"float: right;width: 150px;\"/>')
-   });
-</script>
-
+<img src="PhysMoveHex.png" align="right" width="150" />
 
 PhysMove Tutorial 
 =================
