@@ -64,7 +64,7 @@ CalcDisp<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6){
             checkJump[r] <- abs(as.numeric(species_df[species_index[[i]][j],4]) - (as.numeric(species_df[species_index[[i]][Jumpj[r]],4]) - MyTime[d])) #What is the time period between location j and the jumpJ locations
           }
           mymin <- which(checkJump == min(checkJump))
-          if (length(mymin)>1){ #If two points were separated by the exact same time, randomly pick one to calcualte the distances as they are both valid displacements
+          if (length(mymin)>1){ #If two points were separated by the exact same time, randomly pick one to calculate the distances as they are both valid displacements
             mymin<-sample(mymin,1)
           }
           dist <- MydistHaversine(as.numeric(species_df[species_index[[i]][j],2]),as.numeric(species_df[species_index[[i]][j],3]),
