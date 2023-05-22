@@ -3,7 +3,7 @@
 #' This function is used to check the format of your telemetry data prior to running PhysMove metrics
 #'
 #' @param species_df A data frame containing location data in rows. Columns must have the following headers: "ref", "lon", "lat", "day".
-#' "ref" is the unique id number for each individual in numeric, integer, or character format (e.g., each track's unique satellite tag ID number),
+#' "ref" is the unique id number for each individual in numeric format (e.g., each track's unique satellite tag ID number),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #'
@@ -25,10 +25,8 @@ CheckTracks <- function (species_df) {
     error_count <- error_count+1
   }
 
-  if (is(species_df$ref, "character") | is(species_df$ref, "integer") | is(species_df$ref, "numeric")) {
-
-  } else {
-    warning("ref column must be character or integer format")
+  if (!(is(species_df$ref, "numeric"))) {
+    warning("ref column must be numeric format")
     error_count <- error_count+1
   }
 
@@ -37,8 +35,28 @@ CheckTracks <- function (species_df) {
     error_count <- error_count+1
   }
 
+  if (max(species_df$lon)>180) {
+    warning("longitude value greater than 180")
+    error_count <- error_count+1
+  }
+
+  if (min(species_df$lon)< -180) {
+    warning("longitude value less than -180")
+    error_count <- error_count+1
+  }
+
   if (!(is(species_df$lat, "numeric"))) {
     warning("lat column must be numeric format")
+    error_count <- error_count+1
+  }
+
+  if (max(species_df$lat)>90) {
+    warning("latutide value greater than 90")
+    error_count <- error_count+1
+  }
+
+  if (min(species_df$lat)< -90) {
+    warning("latutide value less than -90")
     error_count <- error_count+1
   }
 
