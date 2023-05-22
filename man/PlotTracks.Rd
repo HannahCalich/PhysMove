@@ -31,6 +31,6 @@ from species_df).
 Plot species' location estimates and tracks .
 }
 \examples{
-PlotRandomTracks<-function(tracks, ref=1)
-PlotRandomTracks<-(tracks, ref=1, numPlot=1:5, colours=c("black","grey70"), tracks=TRUE, startCol="red", endCol="blue")
+PlotTracks(species_df, ref=1)
+PlotTracks(species_df, ref=NULL, tracks=TRUE, colours=rainbow)
 }

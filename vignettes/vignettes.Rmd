@@ -1,0 +1,134 @@
+---
+title: "PhysMove"
+author: "Hannah Calich"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{PhysMove}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<script> -->
+    $(document).ready(function() { -->
+      $head = $('#header'); -->
+     $head.prepend('<img src=\"/vignettes/PhysMoveHex.png\" style=\"float: right;width: 150px;\"/>') -->
+    }); -->
+</script> -->
+
+
+![hexname]("C:/Users/U1133331/Documents/2023/PhysMove/PhysMove_Git/PhysMove/vignettes/PhysMoveHex.jpg")
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(dpi=150) # set all figures to 300 dpi to avoid pixelated images
+knitr::opts_chunk$set(fig.align='left')
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>")
+```
+
+This is a brief tutorial to accompany the PhysMove R package. Here, we demonstrate how PhysMove can be used to calculate each of the methods discussed in the main text and review all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove.
+We provide sample code to replicate each of the results presented in the main text.
+
+## Outine
+
+  - [Install PhysMove and tracks dataset](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#install-physmove-and-input-data)
+  - [Data formatting](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#data-formatting)
+  - [Explore `tracks` dataset](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#explore-tracks-dataset)
+  - [Plot tracks with `PlotTracks()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#create-a-map-of-the-tracks-dataset-with-plottracks)
+
+
+**<ins>*Movement patterns*</ins>**
+
+  - [Quantify the scale of movement with `RMS()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#scale-of-movement-with-rms)
+  - [Calculate displacements across temporal scales with `CalcDisp()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#calculate-displacements-with-calcdisp)
+    - [Create a probability density function (pdf) plot with `PlotDispPDF()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#create-a-probability-density-function-pdf-plot-of-normalised-displacements-with-plotdisppdf)
+  - [Search patterns with `FitDist()`, `PlotDist()`, and  `CompDist()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#search-patterns-with-fitdist-plotdist-and-compdist)
+  - [Describe the influence of correlations on movement decisions with     `Randomise()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#influence-of-correlations-on-movement-decisions-with-randomise)
+  - [Identify turning angle patterns with `TurningAngles()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#turning-angles-with-turningangles)
+      - [Plot angles with a circle plot with       `PlotAngles()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#create-a-circle-plot-of-all-turning-angles-calculated-using-turningangles)
+	
+**<ins>*Space-Use Patterns*</ins>**
+
+  - [Occupancy with `Occupancy()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#occupancy-with-occupancy)
+  - [Infomap communities with `InfomapCommunities()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#community-wide-movements-with-infomapcommunities)
+
+**<ins>*Intraspecific movement patterns*</ins>**
+
+  - [Track gyration radius with `GyrationRad()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#dispersion-with-gyrationrad)
+  - [Track entropy with `Entropy()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#entropy-with-entropy)
+  - [Track predictability with `Predictability()`](https://github.com/HannahCalich/PhysMove/blob/master/Tutorial.md#predictability-with-predictability)
+
+## *Install PhysMove and input data*
+
+We recommend users install PhysMove through the devtools R package. The
+code below will install devtools and PhysMove (including the
+authentication token required to access PhysMove until the package is
+released to the public) and load the PhysMove package.
+
+```r
+# Install the devtools package from CRAN (if required)
+install.packages("devtools")
+```
+
+```r
+# Download PhysMove 
+devtools::install_github("HannahCalich/PhysMove", auth_token = "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")
+```
+
+```{r load physmove, echo=TRUE}
+# Load PhysMove
+library(PhysMove)
+```
+
+#### Data formatting
+
+PhysMove was designed to be user-friendly, and most functions only require you to input a data frame containing telemetry data. 
+
+Columns must be formatted as follows:
+
+  * *ref*: the unique telemetry tag ID number for each animal in numeric format (note that characters are not accepted because they can be slower to process than integers, so please convert all reference IDs to integers before proceeding)
+  * *lon* and *lat*: the longitude (-180 to + 180) and latitude (-90 to +90) in decimal degrees of
+    each position estimate, respectively, in numeric format, and
+  * *day*: the datetime stamp for each location estimate in POSIXct
+    format following yyyy-mm-dd hh:mm:ss.
+    
+**Please** **note:** The input data frame must only contain these 4 columns in the following order: *ref*, *lon*, *lat*, and *day*. 
+
+The ```CheckTracks``` function can be used to confirm your input data are formatted as described above. This function checks that column names are in order and that each column is in the correct format as described above. This function does not evaluate data quality or quantity. 
+
+``` r
+# Check your data are formatted correctly
+CheckTracks(data) # replace "data" with your dataframe
+```
+You can also compare your dataframe to the `tracks` dataset to ensure your data are formatted correctly
+
+#### Explore `tracks` dataset
+
+```{r preview tracks, echo=TRUE}
+# Preview the first 6 rows of the tracks dataset
+head(tracks)
+```
+
+```{r tracks structure, echo=TRUE}
+# Determine the structure of the tracks dataset
+str(tracks)
+```
+
+#### Create a map of the tracks dataset with `PlotTracks()`
+
+A map of the data can be created using the `PlotTracks()` function from PhysMove (Figure S1). 
+`PlotTracks()` has 3 optional parameters:
+
+  * `ref`: plot specific tracks based on their reference IDs (`ref=NULL`, by default), 
+  * `tracks`: connect points with lines (`tracks=TRUE`, by default), and
+  * `colours`: edit the colours used in the map (`colours=rainbow`, by default). 
+
+The code used to make the `tracks` dataset is available in the PhysMove data-raw folder on GitHub as “CreateTracks.R”.
+
+```{r plot tracks, echo=TRUE, error=FALSE, warning=FALSE, message=FALSE, out.width="60%"}
+PlotTracks(tracks)
+```
+
+**Figure S1** Map of the simulated tracking data included in the `tracks` dataset, created with `PlotTracks()` default settings.

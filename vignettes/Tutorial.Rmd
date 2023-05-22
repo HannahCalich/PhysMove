@@ -2,6 +2,7 @@
 title: "PhysMove Tutorial" 
 author: Hannah Calich
 #date: `r format(Sys.time(), '%B, %Y')`
+date: May 2023
 output: github_document
 ---
 
@@ -208,7 +209,7 @@ window and so on.
 disp.all <- CalcDisp(tracks,max_hr=24)
 ```
 
-```{r summarise displacements from 1st time window, echo=TRUE}
+```{r sum disp from 1st time window, echo=TRUE}
 # Summarise displacements calculated over the first time window (24 ± 6 hours)
 summary(unlist(disp.all[[1]]))
 ```
@@ -224,7 +225,7 @@ The `PlotDispPDF()` function calculates a probability density function (pdf) of 
 
 `PlotDispPDF()` outputs all data used to create the plot, including the pdf values (*pdf*), the displacements (*disp*), and the time windows (*timeWindow*); note that if `normalised=TRUE`, the output displacements are normalised values.
 
-```{r plot all normalised displacements, echo=TRUE, error=FALSE, message=FALSE, out.width="50%"}
+```{r plot all norm disp, echo=TRUE, error=FALSE, message=FALSE, out.width="50%"}
 plot.data <- PlotDispPDF(disp.all)
 ```
 
@@ -232,7 +233,7 @@ plot.data <- PlotDispPDF(disp.all)
 
 #### Create a probability density function (pdf) plot of displacements without normalizing with `PlotDispPDF()`
 
-```{r plot all displacements (not normalised), echo=TRUE, error=FALSE, message=FALSE, out.width="50%"}
+```{r plot all disp (not norm), echo=TRUE, error=FALSE, message=FALSE, out.width="50%"}
 plot.data.norm <- PlotDispPDF(disp.all, normalised=FALSE)
 ```
 
@@ -303,14 +304,14 @@ In the example below we calculate displacements over 24 ± 6 hours (to reduce pr
 
 We begin by calculating displacements over 24 ± 6 hours with `CalcDisp()` and plotting a pdf of the displacements with `PlotDispPDF()` (Figure S6; Figure 1 in main text). 
 
-```{r calcualte and summarise displacements over 24 hours, echo=TRUE}
+```{r calc disp over 24 hours, echo=TRUE}
 # Calculate displacements over 24 ± 6 hours
 disp <- CalcDisp(tracks, max_hr=24)
 # Summarise displacements
 summary(unlist(disp))
 ```
 
-```{r plot 24 hour displacements, echo=TRUE, error=FALSE, message=FALSE, out.width="50%"}
+```{r plot 24 hr disp, echo=TRUE, error=FALSE, message=FALSE, out.width="50%"}
 # Plot displacements (as displacements were only calculated over one time window they do not need to be normalised)
 plot.data.pdf <- PlotDispPDF(disp, normalised=FALSE)
 ```
@@ -319,20 +320,20 @@ plot.data.pdf <- PlotDispPDF(disp, normalised=FALSE)
 
 `FitDist()` is then used to fit the full range of distributions calculated over 24 ± 6 hours to power-law, exponential, and lognormal distributions (Figure S7) and the fits are compared with `CompDist()`.
 
-```{r fit full distributions, echo=TRUE}
+```{r fit full dist, echo=TRUE}
 # Fit all distributions to the full range of displacement data 
 distResults <- FitDist(disp, full=TRUE, normalise=FALSE) 
 distResults
 ```
 
-```{r plot full distributions, echo=TRUE, error=FALSE, message=FALSE, out.width="50%"}
+```{r plot full dist, echo=TRUE, error=FALSE, message=FALSE, out.width="50%"}
 # Create a ccdf plot of displacements with fit lines illustrating distributions fit to the full range of displacements
 plot.data.all.pdf <- PlotDist(disp, distResults)
 ```
 
 **Figure S7** Complementary cumulative distribution function (ccdf) of displacements (calculated using `CalcDisp()` with `max_hr=24`). Plot includes fit lines for power-law (pl), exponential (exp), and lognormal (lnorm) distributions based on results from `FitDist()` with `full=TRUE`. Plot created using `PlotDist()` default parameters. 
 
-```{r compare distribution fits, echo=TRUE}
+```{r comp dist fits, echo=TRUE}
 # Identify the best-fit distribution for the full range of displacement data
 compResults <- CompDist(disp, distResults)
 compResults
@@ -341,13 +342,13 @@ compResults
 In comparison, the following example demonstrates the procedure for fitting truncated distributions to the same displacements calculated over the 24 ± 6 hour time window. 
 `FitDist()` is used to identify the best-fit d_min for each distribution (Figure S8). 
 
-```{r find best-fit d_min for each distribution , echo=TRUE}
+```{r find best-fit d_min for each dist , echo=TRUE}
 # Fit all distributions and identify the best-fit dmin for each distribution
 distResults.trunc <- FitDist(disp, full=FALSE, normalise=FALSE)
 distResults.trunc
 ```
 
-```{r plot trunc distributions, echo=TRUE, message=FALSE, out.width="50%"}
+```{r plot trunc dist, echo=TRUE, message=FALSE, out.width="50%"}
 # Create a ccdf plot of displacements with fit lines illustrating distributions fit to the best-fit xmin for each distribution 
 plot.data.all.trunc <- PlotDist(disp, distResults.trunc)
 ```
@@ -386,19 +387,19 @@ distResultsLnorm <- FitDist(disp, set_dmin=distResults.trunc$dmin[3], normalise=
 distResultsLnorm
 ```
 
-```{r, echo=TRUE, message=FALSE}
+```{r compdist pl, echo=TRUE, message=FALSE}
 # Compare distribution fits based on the best-fit d_min value for the power-law distribution
 compResultsPl <- CompDist(disp, distResultsPl)
 compResultsPl
 ```
 
-```{r, echo=TRUE, message=FALSE}
+```{r compdist exp, echo=TRUE, message=FALSE}
 # Compare distribution fits based on the best-fit d_min value for the exponential distribution
 compResultsExp <- CompDist(disp, distResultsExp)
 compResultsExp
 ``` 
 
-```{r, echo=TRUE, message=FALSE}
+```{r compdist lnorm, echo=TRUE, message=FALSE}
 # Compare distribution fits based on the best-fit d_min value for the lognormal distribution 
 compResultsLnorm <- CompDist(disp, distResultsLnorm)
 compResultsLnorm
@@ -439,12 +440,12 @@ randomise.result <- Randomise(tracks)
 
 **Figure** **S9** Scatter plot illustrating the relationship between the number of grid cells visited by the original tracks from the `tracks` dataset and the average number of grid cells visited by the randomised tracks. The solid black line represents the linear model fit to this data, the grey shaded area reflects the standard error of the fit, and the dashed black line represents a 1:1 relationship. Plot created with `Randomise()` default parameters.
 
-```{r view randomised results, echo=TRUE}
+```{r view random results, echo=TRUE}
 # Summarise RMS results
 summary(randomise.result)
 ```
 
-```{r linear model of randomised results, echo=TRUE}
+```{r lm of randomised results, echo=TRUE}
 # Determine the slope of the linear model 
 summary(RandomiselinearModel)
 ```
@@ -500,7 +501,7 @@ Results are output in a list where each list element contains the angles calcula
 first list element contains data from the first time window and so on.
 See Table 3 in the main text for suggestions on how to interpret results.
 
-```{r calcualte turning angles, echo=TRUE, out.width="40%"}
+```{r calc turn angles, echo=TRUE, out.width="40%"}
 # Calculate turning angles in the tracks dataset using default parameters
 angle.results <- TurningAngles(tracks)
 ```

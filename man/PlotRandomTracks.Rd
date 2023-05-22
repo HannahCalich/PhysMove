@@ -48,6 +48,6 @@ from species_df).
 Plot locations from original and reshuffled tracks using RandomisedLat and RandomisedLong outputs from the \code{\link{Randomise}} function
 }
 \examples{
-PlotRandomTracks<-function(tracks, ref=1)
-PlotRandomTracks<-(tracks, ref=1, numPlot=1:5, colours=c("black","grey70"), tracks=TRUE, startCol="red", endCol="blue", legend=TRUE)
+PlotRandomTracks(tracks, ref=1)
+PlotRandomTracks(tracks, ref=1, numPlot=1:5, legend=TRUE)
 }

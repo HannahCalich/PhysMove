@@ -24,10 +24,12 @@ directedbackward <- 0.3 # percent of angles showing backward directed movement
 random <- 0.4 # percent of angles showing random movement
 
 # Tagging location
-set.seed(1)
-startLatRange <- runif(n.tracks,0,2) # random tagging location between 0-2 deg latitude
-set.seed(1)
-startLonRange <- runif(n.tracks,0,2) # random tagging location between 0-2 deg longitude
+# set.seed(1)
+# startLatRange <- runif(n.tracks,0,0.1) # random tagging location between 0-2 deg latitude
+# set.seed(2) # stop lat and long from having identical values
+# startLonRange <- runif(n.tracks,0,0.1) # random tagging location between 0-2 deg longitude
+
+startLonRange <- startLatRange <- rep (0, n.tracks)
 
 # Tagging dates
 set.seed(1)
@@ -52,7 +54,8 @@ i=1
 for (i in 1:n.tracks){ # for each track
   set.seed(1)
   r <- runif(samplesize[i]-1,0,1) # create i displacements based on a uniform distribution between 0-1
-  exp_x <- distmin-(1/lambda)*log(1-r) # convert displacements to an exponential distribution with an xmin
+  # exp_x <- distmin-(1/lambda)*log(1-r) # convert displacements to an exponential distribution with an xmin
+  exp_x <- r
   # calculate angles
   set.seed(1)
   directedForwardAngle1 <- round(runif((ceiling((directedforward/2)*samplesize[i])),330,360),2)

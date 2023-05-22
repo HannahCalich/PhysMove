@@ -8,15 +8,15 @@
 #' See attached sample data \code{\link{tracks}}.
 #' @param ref Reference number of track from species_df to plot, options include an individual number (ref=1) or a range of numbers (ref=1:10).
 #' By default all unique reference numbers are plotted. Defalt is NULL.
+#' @param tracks Add track lines to the plot. Default is TRUE.
 #' @param colours Colour(s) for plot points. Valid input options include: base R (grDevices) color pallets (e.g., colours=rainbow), RColorBrewer
 #' palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that grDevies color
 #' pallets do not use quotations. If the palette does not have enough distinct colours to match the communities being plotted the function will automatically
 #' create a continuous pallet with the colours provided. Default is "Dark2".
-#' @param tracks Add track lines to the plot. Default is TRUE.
 #' @return Plot showing the original and randomized track locations and the randomized tracks data used to create the map (original tracks are
 #' from species_df).
-#' @examples PlotRandomTracks<-function(tracks, ref=1)
-#' @examples PlotRandomTracks<-(tracks, ref=1, numPlot=1:5, colours=c("black","grey70"), tracks=TRUE, startCol="red", endCol="blue")
+#' @examples PlotTracks(species_df, ref=1)
+#' @examples PlotTracks(species_df, ref=NULL, tracks=TRUE, colours=rainbow)
 #' @export
 
 PlotTracks<-function(species_df, ref=NULL, tracks=TRUE, colours=rainbow){

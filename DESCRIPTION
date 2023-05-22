@@ -14,17 +14,18 @@ Depends: R (>= 4.0)
 Imports:
     ggplot2 (>= 3.3.5),
     grid (>= 4.0.5),
-    gridExtra (>= 2.3),
-    maps (>= 3.3.0),
     RColorBrewer (>= 1.1),
-    sf (>= 1.0-3),
+    scales (>= 1.2.1),
     stats4 (>= 4.0.5),
-    stringr (>= 1.4.0),
-    rlang (>= 1.1.0),
-    rootSolve (>= 1.8.2.1)
+    rootSolve (>= 1.8.2.1),
+    rlang (>= 0.4.11)
 Suggests:
-    infomapecology (>= 1.0.1)
-License: GPL-3 
+    infomapecology (>= 1.0.1),
+    roxygen2 (>= 7.2.3),
+    knitr (>= 1.42), 
+    rmarkdown (>= 2.2.0)
+VignetteBuilder: knitr
+License: GPL-3 + file LICENSE
 URL: https://github.com/HannahCalich/PhysMove
 BugReports: https://github.com/HannahCalich/PhysMove/issues
 LazyData: true
