@@ -5,6 +5,8 @@ title: "PhysMove Tutorial"
 output: github_document
 ---
 
+<img src="PhysMoveHex.png" align="right" width="150" />
+
 ```{r include=FALSE}
 knitr::opts_chunk$set(dpi=300) # set all figures to 300 dpi to avoid pixelated images
 knitr::opts_chunk$set(fig.align='left')
