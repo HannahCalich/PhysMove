@@ -15,7 +15,7 @@ See attached sample data \code{\link{tracks}}.}
 
 \item{timeUnit}{Unit used to calculate time between locations (e.g., "secs", "mins", "hours", "days", "weeks"). Default is "days".}
 
-\item{wBins}{Bin width refers to the size of the time bins used to calculate how frequently displacements occurred. Default is 1.}
+\item{wBins}{Bin width refers to the size of the time bins used to calculate how frequently displacements occurred. Default is 1.1}
 
 \item{plot}{Plot the root-mean-square of displacements versus the mean displacements against their corresponding time periods. Default is TRUE.}
 

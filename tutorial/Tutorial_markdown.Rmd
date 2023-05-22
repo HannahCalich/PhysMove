@@ -1,23 +1,21 @@
 ---
-title: "PhysMove Tutorial"
-#author: Hannah Calich
-#date: May 2023
+title: "PhysMove Tutorial" 
+author: Hannah Calich
+#date: `r format(Sys.time(), '%B, %Y')`
 output: github_document
 ---
 
-<img src="PhysMoveHex.png" align="right" width="150" />
+<script>
+   $(document).ready(function() {
+     $head = $('#header');
+     $head.prepend('<img src=\"PhysMoveHex.jpg\" style=\"float: right;width: 150px;\"/>')
+   });
+</script>
 
 ```{r include=FALSE}
 knitr::opts_chunk$set(dpi=300) # set all figures to 300 dpi to avoid pixelated images
 knitr::opts_chunk$set(fig.align='left')
 ```
-
-<img src="PhysMoveHex.png" align="right" width="150" />
-
-PhysMove Tutorial 
-=================
-Written by: Hannah Calich | Last updated: "`r format(Sys.time(), '%B, %Y')`"
-:- | -: |
 
 This is a brief tutorial to accompany the PhysMove R package. Here, we
 demonstrate how PhysMove can be used to calculate each of the methods
@@ -26,7 +24,6 @@ parameters. We demonstrate each function with a simulated telemetry
 dataset, called `tracks`, which is automatically loaded with PhysMove.
 We provide sample code to replicate each of the results presented in the
 main text.
-
 
 ## Outine
 
@@ -69,7 +66,7 @@ released to the public) and load the PhysMove package.
 install.packages("devtools")
 ```
 
-```{r download physmove, echo=TRUE, message=FALSE, warning=FALSE}
+```r
 # Download PhysMove 
 devtools::install_github("HannahCalich/PhysMove", auth_token = "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")
 ```
@@ -86,10 +83,8 @@ PhysMove was designed to be user-friendly, and most functions only require you t
 Columns must be formatted as follows:
 
   * *ref*: the unique telemetry tag ID number for each animal in numeric format (note that characters are not accepted because they can be slower to process than integers, so please convert all reference IDs to integers before proceeding)
-
   * *lon* and *lat*: the longitude (-180 to + 180) and latitude (-90 to +90) in decimal degrees of
     each position estimate, respectively, in numeric format, and
-
   * *day*: the datetime stamp for each location estimate in POSIXct
     format following yyyy-mm-dd hh:mm:ss.
     
@@ -121,9 +116,7 @@ A map of the data can be created using the `PlotTracks()` function from PhysMove
 `PlotTracks()` has 3 optional parameters:
 
   * `ref`: plot specific tracks based on their reference IDs (`ref=NULL`, by default), 
-  
   * `tracks`: connect points with lines (`tracks=TRUE`, by default), and
-  
   * `colours`: edit the colours used in the map (`colours=rainbow`, by default). 
 
 The code used to make the `tracks` dataset is available in the PhysMove data-raw folder on GitHub as “CreateTracks.R”.
@@ -144,12 +137,9 @@ plotting them over time (Figure S2). `RMS()` includes 4 optional parameters:
 
   * `timeUnit`: change the time unit used to calculate the time
 between locations (`timeUnit= “days”`, by default), 
-
   * `wBins`: change the width of the time bins used to calculate how frequently displacements occurred
 (`wBins=1.1`, by default), 
-
   * `plot`: create a scatter plot (`plot=TRUE`, by default), and 
-  
   * `lm`: fit a linear model to examine the
 relationship between the root-mean-square displacement values and time
 (`lm=TRUE`, by default). When `lm=TRUE`, a linear model object
@@ -200,10 +190,8 @@ windows:
 
 * `min_hr` and `max_hr`: set the minimum and maximum times between
 location estimates in hours (`min_hr=24` and `max_hr=240`, by default),
-
 * `interval_hr`: set the the time interval in hours, which creates a sequence of time windows
 between the minimum and maximum times over a set time interval (`interval_hr=24`, by default), and 
-
 * `range_hr`: set the range in hours, which allows the code to identify location estimates that are
 close to, but not exactly separated by the `interval_hr` input value (`range_hr=6`, by
 default).
@@ -240,7 +228,7 @@ The `PlotDispPDF()` function calculates a probability density function (pdf) of 
 plot.data <- PlotDispPDF(disp.all)
 ```
 
-**Figure S3** Probability density function (pdf) plot of normalised displacements from the tracks dataset calculated over 10 time windows, 24-240 hours at 24 ± 6-hour time intervals with `CalcDisp()`. Plot created with `PlotDispPDF()` default parameters. 
+**Figure S3** Probability density function (pdf) plot of normalised displacements from the tracks dataset calculated over 10 time windows, 24 to 240 hours at 24 ± 6-hour time intervals with `CalcDisp()`. Plot created with `PlotDispPDF()` default parameters. 
 
 #### Create a probability density function (pdf) plot of displacements without normalizing with `PlotDispPDF()`
 
@@ -269,14 +257,11 @@ truncated distributions)
 data. By default, `FitDist()` fits continuous power-law (“pl”), exponential
 (“exp”), and lognormal (“lnorm”) distributions
 (`dist=c("pl","exp","lnorm")`, by default). 
-
 * `full`: set if the distributions should be fit over
 the full range of displacements data (`full=TRUE`), or to the
 displacements truncated by a d_min (`full=FALSE`, by default) 
-
 * `set_dmin`: used to either force the algorhithm to automatically identify the best-fit d_min for each
 distribution (`set_dmin=NULL`, by default), or to manually assign a minimum displacement value that will be used to fit each distribution (e.g., `set_dmin=1`). Note that set_dmin can only be applied if `full` = FALSE)
-
 * `normalise`: normalise displacements before fitting distributions (`normalise=TRUE`, by default). Note that
 displacements should be normalised if they were calculated over multiple temporal periods.
 
@@ -291,11 +276,8 @@ and *nTail*, the number of values greater than or equal to d_min.
 `PlotDist()` includes 4 optional parameters:
 
 * `fitLines`: add fit lines for each distribution (`fitLines=TRUE`, by default), 
-
 * `setDist`: plot only specific distributions (`setDist=NULL`, by default), 
-
 * `colours`: change the colours of the fit lines (`colours=c("red","gold2","blue")`, by default), and
-
 * `legend`: add a legend (`legend=TRUE`, by default).
 
 3. `CompDist()`: compares distribution fits from `FitDist()` and
@@ -315,7 +297,7 @@ suggestions on how to interpret results.
 
 In the example below we calculate displacements over 24 ± 6 hours (to reduce processing times), identify the best-fit distribution for the full range of displacements; then, demonstrate how to identify the best-fit distribution when displacement datasets are truncated by a best-fit d_min. In general, we recommend fitting distributions to full and truncated datasets to gain a comprehensive understanding of displacement patterns (see Figure S5).
 
-![image](https://user-images.githubusercontent.com/73092681/223385586-b06b3dd6-d86a-4eeb-ae26-54484e6a4c28.png)
+![image](https://user-images.githubusercontent.com/73092681/223385586-b06b3dd6-d86a-4eeb-ae26-54484e6a4c28.png){width=50%}
 
 **Figure S5** Diagram outlining the procedure for identifying the best-fit distribution of displacements.
 
@@ -431,17 +413,13 @@ correlations influenced the movements and space-use of a species (Figure S9).
 `Randomise()` includes 4 optional parameters:
 
 * `randTrack`: change the number of randomised tracks created (`randTrack=500`, by default),
-
 * `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default), 
-
 * `plot`: create a scatter plot of the results (`plot=TRUE`, by default), and 
-
 * `lm`: fit a linear model to the average number of grid cells visited by the
 randomised tracks and the number of grid cells visited by the original
 tracks (`lm=TRUE`, by default). The slope of this model is used to make
 conclusions about how correlations influence movement (see Table 3 in
 the main text for suggestions on how to interpret results).
-
 
 `Randomise()` outputs a data frame with three columns: *ref* the reference id
 numbers for each track, *CellsInOriginalTracks* the number of grid cells
@@ -484,15 +462,11 @@ to be mapped in the ref parameter and will automatically call on the
 `Randomise()`. `PlotRandomTracks()` includes 6 optional parameters:
 
 * `numPlot`: change the number of randomised tracks that are plotted (`numPlot=1:5`, by default, which will plot the first 5 randomised versions of each track), 
-
 * `colours`: change the colours of the original and randomised location estimates (`colours=c(“black”,
 “grey70”)`, respectively, by default),
-
 * `tracks`: connect points with lines (`tracks=TRUE`, by default), 
-
 * `startCol` and `endCol`: change the colours of the starting and ending points of each track
 (`startCol=“red”` and `endCol = “blue”`, respectively, by default), and
-
 * `legend`: add a legend (`legend=TRUE`, by default).
 
 `PlotRandomTracks()` outputs the data used to create the map in three
@@ -515,21 +489,18 @@ describe how species explore their habitats (Figure S11). Similarly to
 
 * `min_hr` and `max_hr`: set the minimum and maximum times between
 location estimates in hours (`min_hr=24` and `max_hr=240`, by default),
-
 * `interval_hr`: set the the time interval in hours, which creates a sequence of time windows
 between the minimum and maximum times over a set time interval (`interval_hr=24`, by default),  
-
 * `range_hr`: set the range in hours, which allows the code to identify location estimates that are
 close to, but not exactly separated by the `interval_hr` input value (`range_hr=6`, by
 default), and
-
 * `histPlot`: output a histogram and control if “all” time windows are plotted or if only the first, second, or third etc. time window is plotted (`histPlot=c(TRUE,“all”)`, by default). 
 
 Results are output in a list where each list element contains the angles calculated over a time window, such that the
 first list element contains data from the first time window and so on.
 See Table 3 in the main text for suggestions on how to interpret results.
 
-```{r calcualte turning angles, echo=TRUE, out.width="50%"}
+```{r calcualte turning angles, echo=TRUE, out.width="40%"}
 # Calculate turning angles in the tracks dataset using default parameters
 angle.results <- TurningAngles(tracks)
 ```
@@ -552,9 +523,7 @@ plot) showing the frequency of turning angles over each time window
 
 * `timePlot`: control if “all” time windows or only specific windows are plotted
 (`timePlot=“all”`, by default), 
-
 * `colours`: change line colours (`colours=rainbow`, by default), and 
-
 * `legend`: add a legend (`legend=TRUE`, by default).
 
 `PlotAngles()` outputs all data used to create the circle plot,
@@ -582,9 +551,7 @@ spherical coordinates (Figure S13). `Occupancy()` includes
 3 optional parameters:
 
 * `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default),
-
 * `map`: present results in a map (`map=TRUE`, by default) and, 
-
 * `colGrad`: edit the colours used in the map to indicate low,
 moderate, and high occupancy, respectively, which are visualised using
 scale_fill_gradientn() from the ggplot2 package (Wickham 2016)
@@ -643,11 +610,8 @@ either a transition probability matrix (in PhysMove), or a
 
 * `tpm`: save the tramsition probability matric to the local environment as
 *TransitionProbabilityMatrix* (`tpm=FALSE`, by default),
-
 * `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default),
-
 * `hours`: number of hours between location estimates (`hours=24`, by default), and
-
 *  `range_hr`: time range in hours (`range_hr=6`, by default). This parameter
 allows you to identify location estimates that are close to, but not exactly separated by the set number of `hours`
  
@@ -672,7 +636,7 @@ interpret results.
 **Important**: Before running `InfomapCommunities()` you must set your working
 directory to the folder that contains the stand-alone Infomap file (*Infomap.exe*).
 
-```{r, echo=TRUE, message=FALSE}
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 # Identify community-wide movements from the tracks dataset with InfomapCommunities, 
 # Note that the working directory must be set to the folder containing the Infomap file, 
 # for more information, please visit:
@@ -689,7 +653,6 @@ map (Figure S15). `CommunityMap()` includes 2 optional parameters:
 
 * `subset_communities`: to only map specific communities (all level 1 communities are be plotted by default). 
 For example, `subset_communities = c(1,2,3)` would plot communities 1, 2, and 3.
-
 * `colours`: change community colours (`colours= “Dark2”`, by default).
 
 ```{r, echo=TRUE, message=FALSE, out.width="50%"}
@@ -710,7 +673,6 @@ gyration radius) of each track in a dataset (Figure S16). `GyrationRad()`
 includes 2 optional parameters:
 
 * `map`: create a map (map=TRUE, by default), and 
-
 * `mapCol`: change the colour of the points, which indicate average track location,
 and circles, which indicate how far each animal dispersed (`mapCol=c(“Black”, “Red”)`, by default).
 
@@ -756,7 +718,6 @@ The resulting entropy scores are then normalised so results can be
 compared between individuals. `Entropy()` incldues 2 optional parameters:
 
 * `gridCell`: change grid cell size in degrees (`gridCell=0.25`, by default), and
-
 * `histPlot`: output a histogram (`histPlot=TRUE`, by default).
 
 `Entropy()` outputs results in four columns, including: *ref*, the
@@ -765,7 +726,7 @@ reference id for each track, the *normalisedEntropy* scores,
 normalised, and the number of *cellsVisited* by each track. See Table 3
 in the main text for suggestions on how to interpret results.
 
-```{r, echo=TRUE}
+```{r, echo=TRUE, out.width="50%"}
 # Calculate track entropy using default parameters
 Ent <- Entropy(tracks)
 ```
@@ -799,7 +760,6 @@ Figure 1). `Predictability()` includes 2 optional parameters:
 
 * `startVal`: alter the starting value used to find a root value for the limit of predictability equation
 (`startVal=0.99`, by default), and
-
 * `histPlot`: output a histogram (`histPlot=TRUE`, by default).
 
 `Predictability()` outputs results in two columns: *ref*, the reference
@@ -807,7 +767,7 @@ id for each track, and *Predictability*, the predictability scores for
 each track. See Table 3 in the main text for suggestions on how to
 interpret results.
 
-```{r, echo=TRUE}
+```{r, echo=TRUE, out.width="50%"}
 # Track predictability using Predictability() default parameters and the output from Entropy() 
 Pred <- Predictability(tracks, Ent)
 ```
@@ -825,10 +785,11 @@ A pdf of the results from `Predictability()` can be plotted with the
 `pdfPlot()` function when the `desc` parameter is set to “Predictability”
 (Figure S21; Figure 1 in main text).
 
-```{r, echo=TRUE}
+```{r, echo=TRUE, out.width="50%"}
 # Create a pdf plot of the predictability scores
 pdf.pred <- pdfPlot(Pred$Predictability, desc="Predictability") 
 ```
+
 **Figure** **S21** Probability density function (pdf) plot of predictability
 scores for `tracks` dataset determined with `Predictability()` default
 parameters and results from `Entropy()`. Plot created using `pdfPlot()`
