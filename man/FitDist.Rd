@@ -27,7 +27,8 @@ this value will have to be a normalised value as well. Default is NULL.}
 normalise=TRUE is required if working with displacements calculated over multiple time windows.}
 }
 \value{
-A data frame that contains the summary statistics for each distribution fit including the distribution name,
+A list including a data frame that contains the summary statistics for each distribution fit (1st list element) and a logical argument indicating if
+data were normalised. Results dataframe includes the distribution name,
 dmin (the d value used to fit the distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
 distributions respectively, and nTail (the number of data points greater than or equal to dmin). A vector stating if the data were normalised or not,
 ('normalise') is automatically assigned to the global environment as this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}

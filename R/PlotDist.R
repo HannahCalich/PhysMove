@@ -4,7 +4,7 @@
 #' based on the displacements output from the \code{\link{CalcDisp}} function and the distribution fits calculated with the
 #' \code{\link{FitDist}} function.
 #' @param displacements List of displacements output from the \code{\link{CalcDisp}} function.
-#' @param distResults Data frame of results output from the \code{\link{FitDist}} function.
+#' @param distResults List output from the \code{\link{FitDist}} function containing a dataframe of fit results (element 1) and a normalisation record (element 2)
 #' @param fitLines Add fit lines based on the parameters calculated with the \code{\link{FitDist}} function. Default is TRUE.
 #' @param setDist Plot a subset of lines for each distribution fit calculated with the \code{\link{FitDist}} function (e.g., setDist=c("pl","exp"))
 #' Options include "pl", "exp", and "lnorm". The lines will be drawn in order from "pl", then "exp", then "lnrom" (when applicable).
@@ -13,6 +13,7 @@
 #' Valid input options include colour names or hex numbers. Default is colours=c("red","gold2","blue").
 #' @param legend Add legend with legend=TRUE. Default is TRUE.
 #' @return Complementary cumulative distribution function (ccdf) plot of displacements with fit lines (if fitLines=TRUE).
+#' @importFrom stats plnorm pexp
 #' @examples PlotDist(displacements, distResults)
 #' @examples PlotDist(displacements, distResults, fitLines=TRUE, setDist=NULL, colours=c("red","gold2","blue"))
 #' @export
@@ -26,6 +27,9 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
   if (exists("distResults")==FALSE){
     stop("Please fit distributions using the FitDist function prior to executing PlotDist")
   }
+
+  normalise <- distResults[[2]]
+  distResults <- distResults[[1]]
 
   if (is.null(setDist)){
     setDist <- distResults$distribution # Use all distributions used in FitDist
@@ -103,7 +107,7 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
   if (fitLines==TRUE){
     if ("lnorm" %in% setDist){
       MyLogNormalPDF <- function(parameters, displacements){ # 1=mu, 2= sigma
-        LN_PDF = exp((plnorm(displacements, parameters[1], parameters[2], lower.tail=FALSE, log = TRUE)) -
+        LN_PDF = exp((plnorm(displacements, parameters[1], parameters[2], lower.tail=FALSE, log.p = TRUE)) -
                        (plnorm(parameters[3],parameters[1], parameters[2], lower.tail = FALSE, log.p = TRUE)))
         return(LN_PDF)
       }
@@ -185,7 +189,7 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
       a <- a +
         ggplot2::geom_line(data=plLine, ggplot2::aes(x=xval,y=yval, colour=plotCol[1]),lwd=1)
     }
-    a <- a + ggplot2:: scale_color_identity(breaks=na.omit(plotCol), labels=setDist, guide="legend")
+    a <- a + ggplot2:: scale_color_identity(breaks=stats::na.omit(plotCol), labels=setDist, guide="legend")
     if(legend==FALSE){
       a <- a + ggplot2::theme(legend.position = "none")
     }

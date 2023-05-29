@@ -11,14 +11,15 @@
 #' pallets do not use quotations. If the palette does not have enough distinct colours to match the communities being plotted the function will automatically
 #' create a continuous pallet with the colours provided. Default is "Dark2".
 #' @return A map illustrating level 1 Infomap communities.
-#' @examples
-#' CommunityMap(infomap_object)
-#' CommunityMap(infomap_object, subset_communities=c(1,2,3), colours="Dark2")
+#' @importFrom rlang .data
+#' @examples CommunityMap(infomapResult)
+#' @examples CommunityMap(infomapResult, subset_communities=c(1,2,3), colours="Dark2")
 #' @export
 
 CommunityMap <- function(infomap_object, subset_communities, colours="Dark2"){
 
-  if (class(infomap_object)!="infomap_monolayer"){
+
+  if (!("infomap_monolayer" %in% is(infomap_object))){
     stop("This function requires the Infomap monolayer object that is output from the InfomapCommunities function. \n  Please run the InfomapCommunities function prior to executing CommunityMap.")
   }
 
@@ -29,18 +30,18 @@ CommunityMap <- function(infomap_object, subset_communities, colours="Dark2"){
     infomap_modules<-infomap_modules[which(infomap_modules$module_level1 %in% subset_communities),]
   }
 
-  if (class(colours)=="function"){ # If a grDevices colour pallet is used
+  if ("function" %in% is(colours)){ # If a grDevices colour pallet is used
     myColoursPal <- colours(length(unique(infomap_modules$module_level1)))
   } else if (colours[1] %in% rownames(RColorBrewer::brewer.pal.info)){ # If a RColourBrewer pallet is used
-    myColoursPal <- colorRampPalette(RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[colours,1], colours))(length(unique(infomap_modules$module_level1))) # Use the submitted colour palette and extend if to the number of colours needed
+    myColoursPal <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[colours,1], colours))(length(unique(infomap_modules$module_level1))) # Use the submitted colour palette and extend if to the number of colours needed
   } else {
-    myPal <- colorRampPalette(colours) # If hex codes or colour names are used
+    myPal <- grDevices::colorRampPalette(colours) # If hex codes or colour names are used
     myColoursPal <- myPal(length(unique(infomap_modules$module_level1)))
   }
 
   xyz <- infomap_modules[,c("module_level1", "long", "lat")]
   z <- ggplot2::ggplot() +
-    ggplot2::geom_tile(data=xyz, ggplot2::aes(x=long, y=lat, fill=as.factor(module_level1)))+
+    ggplot2::geom_tile(data=xyz, ggplot2::aes(x=.data$long, y=.data$lat, fill=as.factor(.data$module_level1)))+
     ggplot2::labs(x = "Longitude",y = "Latitude", fill = "Community")+
     ggplot2::coord_sf(xlim = c(min(xyz$long), max(xyz$long)), ylim = c(min(xyz$lat), max(xyz$lat)))+
     ggplot2::theme_minimal(base_size = 18)+

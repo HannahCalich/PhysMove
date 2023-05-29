@@ -11,14 +11,15 @@
 #' @param map Create a map illustrating where occupancy occurs. Default is TRUE.
 #' @param colGrad  Colour gradient for occupancy map that illustrates low, moderate, and high occupancy, respectively
 #' (applied to ggplot2::scale_fill_gradientn). Default is colGrad=c("blue", "light blue","red").
-#' @return Occupancy values and corresponding locations (center value of each grid cell). If map=TRUE a map is created. The total
-#' number of cells used in analysis 'totalCells' is automatically assigned to the global environment because this information is
-#' required by the \code{\link{pdfPlot}} function.
+#' @return A list containing occupancy results (first list object) and the total number of grid cells analyzed (second list object -
+#' required by the \code{\link{pdfPlot}} function). Occupancy results include a data frame with occupancy values and corresponding
+#' locations (provided as center value of each grid cell). If map=TRUE a map is created.
+#' @importFrom rlang .data
 #' @examples Occupancy(tracks)
 #' @examples Occupancy(tracks, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"))
 #' @export
 
-Occupancy<-function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red")){
+Occupancy <- function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red")){
 
   grid <- 1/gridCell
   Radius <- 6371 #Earth Radius in km (disp are in km)
@@ -67,7 +68,7 @@ Occupancy<-function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "ligh
   if (map==TRUE){
     xyz <- OccExp[,c(5,6,3)]
     z <- ggplot2::ggplot() +
-      ggplot2::geom_tile(data = xyz, ggplot2::aes(x = Longitude, y = Latitude, fill =  Occupancy))+
+      ggplot2::geom_tile(data = xyz, ggplot2::aes(x = .data$Longitude, y = .data$Latitude, fill = .data$Occupancy))+
       ggplot2::labs(x = "Longitude", y = "Latitude", fill = expression(atop("",atop(textstyle("Occupancy"),
                                                                                     atop(textstyle("(counts"%*%"area"^-1*")"))))))+
       ggplot2::coord_sf(xlim = c(min(xyz$Longitude)- 0.5*gridCell, max(xyz$Longitude)+ 0.5*gridCell),
@@ -80,8 +81,9 @@ Occupancy<-function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "ligh
       }, error = function(e){message('Note: World polygon does not overlap with occupancy data')})
     plot(z)
   }
-  assign("totalCells", totalcells, envir = .GlobalEnv)
+
   OccExp <- OccExp[,c(6,5,4,2,3)]
   row.names(OccExp) <- 1:nrow(OccExp)
-  return(OccExp)
+  out <- list(OccExp, totalcells)
+  return(out)
 }

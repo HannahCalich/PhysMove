@@ -9,7 +9,7 @@ CompDist(displacements, distResults, force_AICc = FALSE)
 \arguments{
 \item{displacements}{List of displacements output from the \code{\link{CalcDisp}} function.}
 
-\item{distResults}{Data frame of results output from the \code{\link{FitDist}} function.}
+\item{distResults}{List output from the \code{\link{FitDist}} function containing a dataframe of fit results (element 1) and a normalisation record (element 2)}
 
 \item{force_AICc}{Force function to calculate AICc scores instead of AIC scores when n/K is > 40. Default is FALSE.}
 }
@@ -26,6 +26,5 @@ K = number of parameters in the model (see Burnham and Anderson (2004) for furth
 if force_AICc = TRUE AICc scores will be calculated regardless of n/K.
 }
 \examples{
-CompDist(displacements)
-CompDist(displacements, force_AICc=FALSE)
+CompDist(displacements, distResultsExp, force_AICc=FALSE)
 }

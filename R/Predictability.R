@@ -61,7 +61,7 @@ Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRU
 
   if (histPlot==TRUE){
     Predictability.plot <- as.data.frame(predictabilityResults[!is.na(predictabilityResults$Predictability),])
-    h <- hist(Predictability.plot$Predictability, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
+    h <- graphics::hist(Predictability.plot$Predictability, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
     xlab <- c(0,"",0.2,"",0.4,"",0.6,"",0.8,"",1)
     hist_plot <- ggplot2::ggplot(Predictability.plot, ggplot2::aes(Predictability))+
       ggplot2::geom_histogram(breaks=h$breaks, color="black", fill="darkgrey")+

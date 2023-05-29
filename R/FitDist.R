@@ -11,11 +11,13 @@
 #' @param full To fit the distributions to the full range of displacement data. Default is FALSE.
 #' @param normalise Normalises the displacement distances by dividing each displacement by the average displacement for that time window
 #' normalise=TRUE is required if working with displacements calculated over multiple time windows.
-#' @return A data frame that contains the summary statistics for each distribution fit including the distribution name,
+#' @return A list including a data frame that contains the summary statistics for each distribution fit (1st list element) and a logical argument indicating if
+#' data were normalised. Results dataframe includes the distribution name,
 #' dmin (the d value used to fit the distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
 #' distributions respectively, and nTail (the number of data points greater than or equal to dmin). A vector stating if the data were normalised or not,
 #' ('normalise') is automatically assigned to the global environment as this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}
 #'functions.
+#' @importFrom stats dlnorm plnorm dexp pexp
 #' @examples FitDist(displacements)
 #' @examples FitDist(displacements, dist=c("exp","lnorm"), full=TRUE)
 #' @examples FitDist(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE)
@@ -23,8 +25,8 @@
 
 FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE) {
 
-  if (class(displacements)!="list"){
-   stop("Distributions can only be fit to the output from the CalcDisp function.")
+  if (!("list" %in% is(displacements))){
+   stop("Distributions can only be fit to the output from the CalcDisp function in list format.")
   }
 
   if ((!is.null(set_dmin)) & (full==TRUE)){
@@ -55,9 +57,6 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
   x <- sort(x)
   N <- length(x)
   distResults <- data.frame("distribution"=dist, "dmin"= c(NA), "parameter1"=c(NA), "parameter2"=c(NA), "nTail"= c(NA)) #make sure dist= is loaded
-
-  # assign("dist",dist, envir = .GlobalEnv)
-  assign("normalise", normalise, envir = .GlobalEnv)
 
   if ("pl" %in% dist){
     message("Fitting a power law distribution")
@@ -167,7 +166,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
       xi <- x[x>xmin]
       n <- length(xi)
       function(mu, sigma) {
-        nll <- -(sum(dlnorm(xi, mean=mu, sd=sigma, log=TRUE)) - n*plnorm(xmin, mean=mu, sd=sigma, log.p=TRUE, lower.tail=FALSE))
+        nll <- -(sum(dlnorm(xi, meanlog=mu, sdlog=sigma, log=TRUE)) - n*plnorm(xmin, meanlog=mu, sdlog=sigma, log.p=TRUE, lower.tail=FALSE))
         if (!is.finite(nll)){
           nll <- 1e+12
         }
@@ -180,7 +179,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
         xmin <- min(x)
         xi <- x[x>xmin] # truncate dataset at xmin
         n <- length(xi) #size of truncated data set
-        pars <- c(mean(log(xi)), sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
+        pars <- c(mean(log(xi)), stats::sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
         my_nll <- create_nll(xi) # Calculate negative log likelihood
         mle <- stats4::mle(minuslogl = my_nll, start=list(mu=pars[1],sigma=pars[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
         init <- c(as.numeric(mle@coef[1]), as.numeric(mle@coef[2])) # Records parameters of fit
@@ -210,7 +209,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
         xmin <- set_dmin
         xi <- x[x>xmin] # truncate dataset at xmin
         n <- length(xi) #size of truncated data set
-        pars <- c(mean(log(xi)), sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
+        pars <- c(mean(log(xi)), stats::sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
         my_nll <- create_nll(xi) # Calculate negative log likelihood
         mle <- stats4::mle(minuslogl = my_nll, start=list(mu=pars[1],sigma=pars[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
         LN_xmin <- xmin
@@ -223,7 +222,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
       xmin <- min(x)
       xi <- x[x>xmin] # truncate dataset at xmin
       n <- length(xi) #size of truncated data set
-      pars <- c(mean(log(xi)), sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
+      pars <- c(mean(log(xi)), stats::sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
       my_nll <- create_nll(xi) # Calculate negative log likelihood
       mle <- stats4::mle(minuslogl = my_nll, start=list(mu=pars[1],sigma=pars[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
       LN_xmin <- xmin
@@ -236,5 +235,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
     distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="parameter2")] <- LN_sigma
     distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="nTail")] <- n
   }
+  distResults <- list(distResults, normalise)
+  names(distResults) <- c("distResults", "normalise")
   return(distResults)
 }

@@ -7,15 +7,15 @@
 #' K = number of parameters in the model (see Burnham and Anderson (2004) for further details, DOI: 10.1177/0049124104268644). However,
 #' if force_AICc = TRUE AICc scores will be calculated regardless of n/K.
 #' @param displacements List of displacements output from the \code{\link{CalcDisp}} function.
-#' @param distResults Data frame of results output from the \code{\link{FitDist}} function.
+#' @param distResults List output from the \code{\link{FitDist}} function containing a dataframe of fit results (element 1) and a normalisation record (element 2)
 #' @param force_AICc Force function to calculate AICc scores instead of AIC scores when n/K is > 40. Default is FALSE.
 #' @return A data frame with that contains the summary statistics for each distribution fit (from the \code{\link{FitDist}} function) as well as
 #' the AICc/AIC scores and weighted AICc/AIC scores (wAICc/wAIC) for each distribution fit.
-#' @examples CompDist(displacements)
-#' @examples CompDist(displacements, force_AICc=FALSE)
+#' @importFrom stats dlnorm plnorm
+#' @examples CompDist(displacements, distResultsExp, force_AICc=FALSE)
 #' @export
 
-CompDist <- function (displacements, distResults, force_AICc=FALSE){
+CompDist<-function(displacements, distResults, force_AICc=FALSE){
 
   if (exists("displacements")==FALSE){
     stop("Please calculate displacements using the CalcDisp function and fit distriubtions using the FitDisp function prior to executing CompDist")
@@ -25,6 +25,7 @@ CompDist <- function (displacements, distResults, force_AICc=FALSE){
     stop("Please fit distributions using the FitDist function prior to executing CompDist")
   }
 
+  normalise <- distResults[[2]]
   if (normalise){
     x <- list()
     for (d in 1:length(displacements)){
@@ -36,6 +37,7 @@ CompDist <- function (displacements, distResults, force_AICc=FALSE){
   x <- unlist(displacements)
   }
 
+  distResults <- distResults[[1]]
   dist <- distResults$distribution
   xmins <- sort(unique(x))
   x <- sort(x)

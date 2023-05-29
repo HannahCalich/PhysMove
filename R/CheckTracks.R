@@ -6,15 +6,16 @@
 #' "ref" is the unique id number for each individual in numeric format (e.g., each track's unique satellite tag ID number),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
-#'
 #' @return If data are formatted correctly the function will output "Your data are formatted correctly", else you will receive an error message describing the problem
-#' @examples FitDist(species_df)
+#' @importFrom methods is
+#' @examples CheckTracks(tracks)
 #' @export
 
-CheckTracks <- function (species_df) {
+CheckTracks <- function(species_df){
 
   error_count <- 0
-  if (!(is(species_df, "data.frame"))) {
+
+  if (!(methods::is(species_df, "data.frame"))) {
     warning("Input data must be a data frame")
     error_count <- error_count+1
   }
@@ -69,7 +70,7 @@ CheckTracks <- function (species_df) {
       test <- as.POSIXct(species_df$day, format='%Y-%m-%m %h:%m:s')
     },
     error=function(cond) {
-      warning("day column is not formatted correctly, format must = '%Y-%m-%m %h:%m:s' ")
+      warning("day column is not formatted correctly, format must = '%Y-%m-%m %h:%m:s'")
     })
 
   if (all(test != species_df$day)) {

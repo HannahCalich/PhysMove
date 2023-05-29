@@ -4,7 +4,7 @@
 \alias{Randomise}
 \title{Randomise tracks}
 \usage{
-Randomise(species_df, randTrack = 500, gridCell = 0.25, plot = TRUE, lm = TRUE)
+Randomise(species_df, randTrack = 100, gridCell = 0.25, plot = TRUE, lm = TRUE)
 }
 \arguments{
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
@@ -13,7 +13,7 @@ Randomise(species_df, randTrack = 500, gridCell = 0.25, plot = TRUE, lm = TRUE)
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 See attached sample data \code{\link{tracks}}.}
 
-\item{randTrack}{Number of randomised tracks per individual. Default is 500.}
+\item{randTrack}{Number of randomised tracks per individual. Default is 100.}
 
 \item{gridCell}{Grid cell size in degrees. Default is 0.25.}
 
@@ -26,12 +26,11 @@ adds a solid black fit line to the data points and a black dashed line, which re
 be determined by typing 'RandomiselinearModel$coefficients[2]'. Default is TRUE.}
 }
 \value{
-The number of cells visited by each original track and the average number of cells visited by the Randomised tracks, for each
-ref. If plot = TRUE, a plot illustrating the number of cells visited by the original and Randomised tracks is created.
-If lm = TRUE, a linear regression is run, a fit line and reference line are added to the plot (if plot = TRUE), and the results
-'RandomiselinearModel' are automatically assigned to the global environment. Three additional variables are automatically assigned
-to the global environment as they are required to plot the reshuffled tracks with the \code{\link{PlotRandomTracks} function}
-('RandomisedLat' and 'RandomisedLong').
+List containing a dataframe of results (list element 1), the randomised longitude and latitude values (list elements 2 and 3, respectively),
+which are needed for the \code{\link{PlotRandomTracks}} function, and if lm = TRUE, the results of the linear model are output (list element 4).
+The dataframe of results includes columns for the number of cells visited by each original track and the average number of cells visited by the
+Randomised tracks for each ref. Lastly, if plot = TRUE, a plot illustrating the number of cells visited by the original and randomised tracks is created,
+and if lm = TRUE, a fit line and reference line are added to the plot.
 }
 \description{
 This function allows you to investigate the influence spatial and/or temporal correlations may have on an indiivudals' space use patterns.

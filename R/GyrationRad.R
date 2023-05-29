@@ -9,8 +9,9 @@
 #' @param map Create a map illustrating the gyration radius of each trajectory. Default is TRUE.
 #' @param mapCol Colours for points and gyration radii on map, respectively. Default is c("Black","Red).
 #' @return Gyration radius values for each trajectory. If map=TRUE a map of the gyration radius results is created.
-#' GyrationRad(tracks)
-#' GyrationRad(tracks, map=TRUE, mapCol=c("Black","Red"))
+#' @importFrom rlang .data
+#' @examples GyrationRad(tracks)
+#' @examples GyrationRad(tracks, map=TRUE, mapCol=c("Black","Red"))
 #' @export
 
 GyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red")){
@@ -79,10 +80,10 @@ GyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red")){
     }
     xyz <- MyrG[,c(3,2,4)]
     z <- ggplot2::ggplot() +
-      ggplot2::geom_point(data = xyz, ggplot2::aes(lon.avg.deg, lat.avg.deg), size=2, color = mapCol[1])+
+      ggplot2::geom_point(data = xyz, ggplot2::aes(.data$lon.avg.deg, .data$lat.avg.deg), size=2, color = mapCol[1])+
       ggplot2::coord_sf(xlim = c(min(circles$long), max(circles$long)), ylim = c(min(circles$lat), max(circles$lat)))+
       ggplot2::theme_minimal(base_size = 18)+
-      ggplot2::geom_polygon(data = circles, ggplot2::aes(long, lat, group = Ref), color = mapCol[2], alpha=0)+
+      ggplot2::geom_polygon(data = circles, ggplot2::aes(.data$long, .data$lat, group = .data$Ref), color = mapCol[2], alpha=0)+
       ggplot2::labs(x="Longitude", y="Latitude")
 
     tryCatch({ # This prevents the plot from crashing if the mapped area does not overlap with the world polygon (e.g., for pelagic species)

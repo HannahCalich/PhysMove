@@ -19,6 +19,7 @@
 #' Default is histPlot=c(TRUE, "all").
 #' @return List of turning angles for each time window, the name of each list element corresponds with a time window in days. If histPlot = TRUE,
 #' a histogram of results is created.
+#' @importFrom rlang .data
 #' @examples TurningAngles(tracks)
 #' @examples TurningAngles(tracks, min_hr=24, max_hr=240, interval_hr=24,range_hr=6, histPlot=c(FALSE, "all"))
 #' @export
@@ -137,14 +138,14 @@ TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range
     if (histPlot[2]=="all"){
       angles.df <- as.data.frame(unlist(angleList))
       names(angles.df) <- "Angles"
-      h <- hist(angles.df$Angles, plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angels for all time periods from all individuals
+      h <- graphics::hist(angles.df$Angles, plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angels for all time periods from all individuals
     } else {
       angles.df <- as.data.frame(unlist(angleList[[histPlot[2]]]))
       names(angles.df) <- "Angles"
-      h <- hist(angles.df$Angles, plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angels for selected time periods from all individuals
+      h <-graphics:: hist(angles.df$Angles, plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angels for selected time periods from all individuals
     }
     xlabels <- c("-180", "", "-120",  "",  "-60",  "",  "0", "",  "60", "", "120",  "",  "180")
-    hist_plot <- ggplot2::ggplot(angles.df, ggplot2::aes(Angles))+
+    hist_plot <- ggplot2::ggplot(angles.df, ggplot2::aes(.data$Angles))+
       ggplot2::geom_histogram(breaks=h$breaks, color="black", fill="darkgrey")+
       ggplot2::scale_x_continuous("Turning Angles", breaks=seq(-180,180,30), labels=xlabels)+
       ggplot2::labs(y="Frequency")+

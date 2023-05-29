@@ -19,5 +19,5 @@ If data are formatted correctly the function will output "Your data are formatte
 This function is used to check the format of your telemetry data prior to running PhysMove metrics
 }
 \examples{
-FitDist(species_df)
+CheckTracks(tracks)
 }

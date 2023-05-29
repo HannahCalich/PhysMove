@@ -19,9 +19,11 @@ See attached sample data \code{\link{tracks}}.}
 }
 \value{
 Gyration radius values for each trajectory. If map=TRUE a map of the gyration radius results is created.
-GyrationRad(tracks)
-GyrationRad(tracks, map=TRUE, mapCol=c("Black","Red"))
 }
 \description{
 This function allows you to calculate the gyration radius of individual trajectories.
+}
+\examples{
+GyrationRad(tracks)
+GyrationRad(tracks, map=TRUE, mapCol=c("Black","Red"))
 }

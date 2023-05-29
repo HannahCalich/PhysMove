@@ -7,6 +7,7 @@
 PlotRandomTracks(
   species_df,
   ref = NULL,
+  randomResults,
   numPlot = 1:5,
   colours = c("black", "grey70"),
   tracks = TRUE,
@@ -23,6 +24,8 @@ PlotRandomTracks(
 See attached sample data \code{\link{tracks}}.}
 
 \item{ref}{Reference number of track from species_df to plot.}
+
+\item{randomResults}{Result from \code{\link{Randomise}} function.}
 
 \item{numPlot}{Number of Randomised tracks to plot. The Randomised tracks were consecutively numbered from 1 to however many you set in the
 \code{\link{Randomise}} function. The input value can either be any of these individual numbers (e.g., 23), or a range of numbers (e.g., 1:10),

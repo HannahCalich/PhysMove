@@ -24,10 +24,10 @@ and time (predictor variable) and add fit line to the plot (if plot=TRUE). The s
 scaling exponent) is the RMS statistic and it can be determined by typing 'RMSlinearModel$coefficients[2]'. Default is TRUE.}
 }
 \value{
-The 'timeWindows' in log-sized bins along with their corresponding 'meanDisplacements', and root-mean-square displacement 'rmsDisplacements'
-values. If plot = TRUE, a plot of the mean displacement values and the root-mean-square displacement values against their corresponding
-time period is created. If lm = TRUE, a linear regression is run, a fit line is added to the plot (if plot = TRUE), and the results
-'RMSlinearModel' are automatically assigned to the global environment.
+List containing a dataframe of results (list element 1) and if lm = TRUE, the results of the linear model are also output (list element 2).
+The results dataframe includes the 'timeWindows' in log-sized bins along with their corresponding 'meanDisplacements', and root-mean-square
+displacement 'rmsDisplacements' values. If plot = TRUE, a plot of the mean displacement values and the root-mean-square displacement values
+against their corresponding time period is created, and if lm = TRUE, a fit line and reference line are added to the plot.
 }
 \description{
 This function allows you to calculate root-mean-square displacements and plot them scaled with time

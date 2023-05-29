@@ -7,6 +7,7 @@
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{tracks}}.
 #' @param ref Reference number of track from species_df to plot.
+#' @param randomResults Result from \code{\link{Randomise}} function.
 #' @param numPlot Number of Randomised tracks to plot. The Randomised tracks were consecutively numbered from 1 to however many you set in the
 #' \code{\link{Randomise}} function. The input value can either be any of these individual numbers (e.g., 23), or a range of numbers (e.g., 1:10),
 #' which will plot all of the random tracks created within the range. Default is 1:5.
@@ -19,16 +20,16 @@
 #' @param legend legend Add legend with legend=TRUE (default).
 #' @return Plot showing the original and Randomised track locations and the Randomised tracks data used to create the map (original tracks are
 #' from species_df).
+#' @importFrom rlang .data
 #' @examples PlotRandomTracks(tracks, ref=1)
 #' @examples PlotRandomTracks(tracks, ref=1, numPlot=1:5, legend=TRUE)
 #' @export
 
-PlotRandomTracks<-function(species_df, ref=NULL, numPlot=1:5, colours=c("black","grey70"),
+PlotRandomTracks<-function(species_df, ref=NULL, randomResults, numPlot=1:5, colours=c("black","grey70"),
                            tracks=TRUE, startCol="red", endCol="blue", legend=TRUE){
 
-  if ((exists("RandomisedLat")& exists("RandomisedLong"))==FALSE){
-    stop("Please create Randomised tracks using the Randomise function prior to executing PlotRandomTracks")
-  }
+  RandomisedLong <- randomResults[[2]]
+  RandomisedLat <- randomResults[[3]]
 
   if(is.null(ref)==TRUE || !(ref %in% species_df$ref)){
     stop("What track would you like to plot? Please update the 'ref' parameter to a valid reference number from your species_df")
@@ -75,10 +76,10 @@ PlotRandomTracks<-function(species_df, ref=NULL, numPlot=1:5, colours=c("black",
   plot.df$Track <- factor(plot.df$Track, levels = c("Original", "Randomised", "Start","End"))
   colours <- c(colours, startCol, endCol)
 
-  a <- ggplot2::ggplot(plot.df, ggplot2::aes(x=lon, y=lat, color=Track)) +
-    ggplot2::geom_point(ggplot2::aes(x=lon, y=lat, color=Track), size=1.5)+
-    ggplot2::geom_point(data=startPt, ggplot2::aes(x=lon, y=lat, group=Track, color="Start"), size=1.5) +
-    ggplot2::geom_point(data=endPt, ggplot2::aes(x=lon, y=lat, group=Track, color="End"), size=1.5) +
+  a <- ggplot2::ggplot(plot.df, ggplot2::aes(x=.data$lon, y=.data$lat, color=.data$Track)) +
+    ggplot2::geom_point(ggplot2::aes(x=.data$lon, y=.data$lat, color=.data$Track), size=1.5)+
+    ggplot2::geom_point(data=startPt, ggplot2::aes(x=.data$lon, y=.data$lat, group=.data$Track, color="Start"), size=1.5) +
+    ggplot2::geom_point(data=endPt, ggplot2::aes(x=.data$lon, y=.data$lat, group=.data$Track, color="End"), size=1.5) +
     ggplot2::theme_bw(base_size=18)+
     ggplot2::theme(axis.line=ggplot2::element_line(colour="black"),
                                         panel.grid.major=ggplot2::element_line(),
@@ -91,11 +92,11 @@ PlotRandomTracks<-function(species_df, ref=NULL, numPlot=1:5, colours=c("black",
 
   if (tracks==TRUE){
     a <- a +
-      ggplot2::geom_path(data=subset(plot.df, Track=='Randomised'))+
-      ggplot2::geom_path(data=subset(plot.df, Track=='Original'))+
-      ggplot2::geom_point(data=subset(plot.df, Track=='Original'))+
-      ggplot2::geom_point(data=startPt, ggplot2::aes(x=lon, y=lat, group=Track, color="Start")) +
-      ggplot2::geom_point(data=endPt, ggplot2::aes(x=lon, y=lat, group=Track, color="End"))
+      ggplot2::geom_path(data=subset(plot.df, .data$Track=='Randomised'))+
+      ggplot2::geom_path(data=subset(plot.df, .data$Track=='Original'))+
+      ggplot2::geom_point(data=subset(plot.df, .data$Track=='Original'))+
+      ggplot2::geom_point(data=startPt, ggplot2::aes(x=.data$lon, y=.data$lat, group=.data$Track, color="Start")) +
+      ggplot2::geom_point(data=endPt, ggplot2::aes(x=.data$lon, y=.data$lat, group=.data$Track, color="End"))
   }
 
   if (startCol==colours[1] & endCol==colours[1]){ #If start and end colours were not provided or match the original track colour

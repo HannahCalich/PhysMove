@@ -1,11 +1,14 @@
 #' Identify Infomap communities and create a transition probability matrix
 #'
 #' This function uses the network community detection Infomap to identify Infomap communities based on a transition probability matrix (tmp), which summarizes
-#' the probability of individuals moving from one grid cell to another. This function assumes directed movement, allows for self-links (where an individual
-#' stays in the same cell over time), and uses a tpm in link list format to create an Infomap 'monolayer_object'.
+#' the probability of individuals moving from one grid cell to another over a set time window. This function assumes directed movement, allows for self-links
+#' (where an individual stays in the same cell over time), and uses a tpm in link list format to create an Infomap 'monolayer_object'. Note that if warnings
+#' appear about columns or rows summing to 0 this simply means an individual moved into a cell and did not leave, which is a valid movement and not cause for alarm.
+#'
 #' Please note: to run this function you must first download the infomapecology package from gitub and install the infomap.exe.
 #' For details please see: https://ecological-complexity-lab.github.io/infomap_ecology_package/installation
 #' To learn more about Infomap please visit: https://www.mapequation.org/
+
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
@@ -18,24 +21,22 @@
 #' If multiple location estimates fall within this time window the location estimate closest to the set hours input value
 #' will be used for calculations. For example, if hours = 24 and range = 6, the algorithm will search for
 #' locations spaced 18 to 32 hours apart. Default is 6.
-#' @param infomap Identify Infomap communities. If infomap=TRUE, default messages from the infomapecology package will appear as various
-#' functions are run. Note that if warnings arise about columns or rows summing to 0 this means an individual moved into a cell and did not leave, which is
-#' a valid movement and not cause for alarm. Default is TRUE.
 #' @param tpm Export the transition probability matrix in link list format. If tpm=TRUE, a 'TransitionProbabilityMatrix' data frame will be automatically
 #' assigned to the global environment. Default is FALSE.
-#' @return An 'infomap_object' that summarizes the hierarchical structure of the Infomap communities (regions where individuals are likely
-#' to stay for longer periods of time). If tpm=TRUE the transition probability matrix used to create the 'infomap_object' is automatically assigned
-#' to the global environment.
+#' @return A list that includes the Infomap results and the transition probability matrix (tpm), if tpm=TRUE. List element 1 is
+#' the 'infomap_object' result that summarizes the hierarchical structure of the Infomap communities (regions where individuals are likely to
+#' stay for longer periods of time). If tpm=TRUE the transition probability matrix used to create the 'infomap_object' is assigned
+#' as list element 2.
 #' @examples
 #' InfomapCommunities(tracks)
-#' InfomapCommunities(tracks, gridCell=0.25, hours=24, range_hr=6, infomap=TRUE, tpm=FALSE)
+#' InfomapCommunities(tracks, gridCell=0.25, hours=24, range_hr=6, tpm=FALSE)
 #' @export
-#'
 
-InfomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, infomap=TRUE, tpm=FALSE){
+InfomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, tpm=FALSE){
 
     if (infomap==TRUE){ # If you want to calculate Infomap communities
-      library(infomapecology) # This was added as the package::function method does not seem to work with the infomapecology package yet so we are using library() then detach() to reduce impacts on global functions
+      requireNamespace("infomapecology", quietly=TRUE)
+
       if(infomapecology::check_infomap()!=TRUE){ # If the infomap.exe file has not been installed or cannot be found in working directory stop and send warning
         stop ('Cannot find infomap.exe, please set working directory to folder containing infomap.exe file. \n  For information on installing infomap.exe visit https://ecological-complexity-lab.github.io/infomap_ecology_package/installation')
       }
@@ -129,18 +130,17 @@ InfomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, 
     names(nodenames) <- c("node_name","cell", "long", "lat")
     nodenames$node_name <- sub("^","Node",nodenames$node_name)
 
+    monolayer_object <- infomapecology::create_monolayer_object(LinkList, directed = T, bipartite = F, node_metadata = nodenames)
+    infomap_object <- suppressWarnings(infomapecology::run_infomap_monolayer(monolayer_object, infomap_executable='infomap', flow_model='directed',
+                                                                               silent=T, verbose=F, two_level=F))#, ...="-k"))
+    infomap_object <- list(infomap_object)
+    names(infomap_object) <- "infomap_object"
+
     if (tpm==TRUE){
       names(order.df) <- c("OriginNode", "OriginCell", "OriginLong", "OriginLat","DestinationNode", "DestinationCell", "DestinationLong", "DestinationLat","Probability")
-      assign("TransitionProbabilityMatrix", order.df, envir = .GlobalEnv)
+      infomap_object <- append(infomap_object, list(order.df))
+      names(infomap_object[[2]]) <- "tpm"
     }
 
-    if (infomap==TRUE){
-      monolayer_object <- infomapecology::create_monolayer_object(LinkList, directed = T, bipartite = F, node_metadata = nodenames)
-      infomap_object <- suppressWarnings(infomapecology::run_infomap_monolayer(monolayer_object, infomap_executable='infomap', flow_model='directed',
-                                                                               silent=T, verbose=F, two_level=F))#, ...="-k"))
-      return(infomap_object)
-    }
-
-
-    detach("package:infomapecology", unload = TRUE) # This was added as the package::function method does not seem to work with the infomapecology package yet so I am using library() then detach() to reduce impacts on global functions
+    return(infomap_object)
 }

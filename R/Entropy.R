@@ -50,7 +50,7 @@ Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE){
       probOccur[[i]][j] <- occurrences[[i]][j] / length(species_index[[i]]) # Number of occurrences from individual i in each grid cell of the world / number of points per individual i
       Entropy[[i]][j] <- probOccur[[i]][j] * log(probOccur[[i]][j]) # Entropy calculation per cell (probability of occurrence in a cell * log of the probability of occurrence in that same cell)
     }
-    indivEntropy[i] <- -1 * sum(na.omit(Entropy[[i]])) # Calculate entropy by individual by summing the calculated entropies per cell following the equation: S = -Sum(probij * log(probij))
+    indivEntropy[i] <- -1 * sum(stats::na.omit(Entropy[[i]])) # Calculate entropy by individual by summing the calculated entropies per cell following the equation: S = -Sum(probij * log(probij))
     normalisedEntropy[i] <- indivEntropy[i] / log(CellsVisited[i])  # Normalised to allow for direct comparison of the entropies of trajectories with different numbers of visited areas
     # and informs about the complexity of the visitation pattern ranging between 0 (one visited cell) and 1 (uniform, every cell is visited with the same probability).
     if (CellsVisited[i]==1){
@@ -61,7 +61,7 @@ Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE){
 
   if (histPlot==TRUE){
     entropyResults.plot <- entropyResults[!is.na(entropyResults$normalisedEntropy),]
-    h <- hist(entropyResults.plot$normalisedEntropy, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
+    h <- graphics::hist(entropyResults.plot$normalisedEntropy, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
     hist_plot <- ggplot2::ggplot(entropyResults.plot, ggplot2::aes(normalisedEntropy))+
       ggplot2::geom_histogram(breaks=h$breaks, color="black", fill="darkgrey")+
       ggplot2::scale_y_continuous(breaks=function(x) seq(ceiling(x[1]), floor(x[2]), by = 2))+

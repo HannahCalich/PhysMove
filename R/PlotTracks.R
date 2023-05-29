@@ -15,8 +15,10 @@
 #' create a continuous pallet with the colours provided. Default is "Dark2".
 #' @return Plot showing the original and randomized track locations and the randomized tracks data used to create the map (original tracks are
 #' from species_df).
-#' @examples PlotTracks(species_df, ref=1)
-#' @examples PlotTracks(species_df, ref=NULL, tracks=TRUE, colours=rainbow)
+#' @importFrom grDevices rainbow
+#' @importFrom rlang .data
+#' @examples PlotTracks(tracks, ref=1)
+#' @examples PlotTracks(tracks, ref=NULL, tracks=TRUE, colours=rainbow)
 #' @export
 
 PlotTracks<-function(species_df, ref=NULL, tracks=TRUE, colours=rainbow){
@@ -33,16 +35,16 @@ PlotTracks<-function(species_df, ref=NULL, tracks=TRUE, colours=rainbow){
     plot.df <- species_df
   }
 
-  if (class(colours)=="function"){ # If a grDevices colour pallet is used
+  if ("function" %in% is(colours)){ # If a grDevices colour pallet is used
     myColoursPal <- colours(length(unique(plot.df$ref)))
   } else if (colours[1] %in% rownames(RColorBrewer::brewer.pal.info)){ # If a RColourBrewer pallet is used
-    myColoursPal <- colorRampPalette(RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[colours,1], colours))(length(unique(plot.df$ref))) # Use the submitted colour palette and extend if to the number of colours needed
+    myColoursPal <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[colours,1], colours))(length(unique(plot.df$ref))) # Use the submitted colour palette and extend if to the number of colours needed
   } else {
-    myPal <- colorRampPalette(colours) # If hex codes or colour names are used
+    myPal <- grDevices::colorRampPalette(colours) # If hex codes or colour names are used
     myColoursPal <- myPal(length(unique(plot.df$ref)))
   }
 
-  a <- ggplot2::ggplot(plot.df, ggplot2::aes(x=lon, y=lat))+#, color=as.factor(ref))) +
+  a <- ggplot2::ggplot(plot.df, ggplot2::aes(x=.data$lon, y=.data$lat))+#, color=as.factor(ref))) +
     ggplot2::geom_point(ggplot2::aes(fill=as.factor(ref)),pch=21,size=1.8,colour="grey20",stroke=0.5)+
     # ggplot2::geom_point(size=1)+
     # ggplot2::geom_point(size=2, colour="black")+

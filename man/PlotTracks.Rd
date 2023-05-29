@@ -31,6 +31,6 @@ from species_df).
 Plot species' location estimates and tracks .
 }
 \examples{
-PlotTracks(species_df, ref=1)
-PlotTracks(species_df, ref=NULL, tracks=TRUE, colours=rainbow)
+PlotTracks(tracks, ref=1)
+PlotTracks(tracks, ref=NULL, tracks=TRUE, colours=rainbow)
 }

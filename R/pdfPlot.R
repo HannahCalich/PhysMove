@@ -13,13 +13,13 @@
 #' predictability results) the code will automatically use 40 bins, and if the input results fall outside the 0 to 1 range (e.g., gyration radius results) the
 #' code will automatically use 15 bins.
 #' @return A pdf plot of the results and the data used to create the plot.
-#' @examples pdfPlot(result)
-#' @examples pdfPlot(result, desc="Occupancy", nbins=NULL)
+#' @importFrom rlang .data
+#' @examples pdfPlot(occupancyDF$Occupancy, desc="Occupancy")
 #' @export
 
-pdfPlot<-function(result, desc=NULL, nBins){
+pdfPlot <- function(result, desc=NULL, nBins){
 
-  if (class(result)=="data.frame"){
+  if ("data.frame" %in% is(result)){
     stop ("A data frame has been entered. Please re-run this function and identify the column of data you want to plot following a dataframe$column structure
   or input the data as a vector")
   }
@@ -38,7 +38,7 @@ pdfPlot<-function(result, desc=NULL, nBins){
       if (bw<1.2){
         break_start <- 20
         repeat {
-          h <- hist(log(result), breaks=break_start, plot=FALSE)
+          h <- graphics::hist(log(result), breaks=break_start, plot=FALSE)
           bw <- exp(h$breaks[2]-h$breaks[1])
           if (bw>=1.2){
             break
@@ -109,7 +109,6 @@ pdfPlot<-function(result, desc=NULL, nBins){
         }
       }
     plot.df <- data.frame(xs, freq)
-    # plot.df <- plot.df[plot.df$freq !=0,] #If the bin didn't have data the freq will be 0
     plotLog <- ""
     }
 
@@ -130,14 +129,7 @@ pdfPlot<-function(result, desc=NULL, nBins){
       xlabel <- expression('x')
     }
     if (plotLog=="xy"){
-      # if (max(log10(plot.df[,1]))-min(log10(plot.df[,1]))<1){ # if the x axis range is too narrow axis labels don't appear
-      #   maxround <- max(plot.df[,1])*1.5
-      #   minround <- min(plot.df[,1])*1.5
-      # } else {
-      #   maxround <- max(plot.df[,1])*1.05 # 5% is ggplot standard
-      #   minround <- min(plot.df[,1])*1.05
-      # }
-      a <- ggplot2::ggplot(plot.df, ggplot2::aes(plot.df[,1], plot.df[,2])) +
+      a <- ggplot2::ggplot(data=plot.df, ggplot2::aes(plot.df[,1], plot.df[,2])) +
         ggplot2::geom_line()+
         ggplot2::geom_point()+
         ggplot2::scale_x_log10(
@@ -145,8 +137,7 @@ pdfPlot<-function(result, desc=NULL, nBins){
             brks <- scales::extended_breaks(Q = c(1, 5))(log10(x))
             10^(brks[brks %% 1 == 0])
           },
-          labels = scales::math_format(format = log10)#,
-          # expand = c(minround, maxround)
+          labels = scales::math_format(format = log10)
         ) +
         ggplot2::scale_y_log10(
           breaks = function(x) {
@@ -166,7 +157,7 @@ pdfPlot<-function(result, desc=NULL, nBins){
         ggplot2::ylab("pdf")
       plot(a)
     } else {
-      b <- ggplot2::ggplot(plot.df, ggplot2::aes(plot.df[,1], plot.df[,2])) +
+      b <- ggplot2::ggplot(data=plot.df, ggplot2::aes(plot.df[,1], plot.df[,2])) +
         ggplot2::geom_line()+
         ggplot2::geom_point()+
         ggplot2::theme_bw(base_size=18)+

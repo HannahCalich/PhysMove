@@ -1,6 +1,7 @@
 #' Calculate displacements
 #'
 #' This function allows you to calculate the displacement distances traveled by individuals over set time windows.
+#'
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each individual (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,

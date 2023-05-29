@@ -12,6 +12,7 @@
 #' automatically create a continuous pallet with the colours provided. Default is rainbow.
 #' @param legend Add a legend to the circle plot. Default is TRUE.
 #' @return Circle plot of the angles calculated with the \code{\link{TurningAngles}} function and the data used to create the circle plot.
+#' @importFrom rlang .data
 #' @examples PlotAngles(angleList)
 #' @examples PlotAngles(angleList, timePlot="all", colours=rainbow, legend=TRUE)
 #' @export
@@ -21,7 +22,7 @@ PlotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=TRUE){
   bins <- 360 / 45
   timeWindows <- as.numeric(names(angleList))
   for (d in 1:length(angleList)){
-    h <- hist(unlist(angleList[[d]]), plot = FALSE, breaks = seq(-180, 180, bins)) # angleList is all angels for a time period from all individuals
+    h <- graphics::hist(unlist(angleList[[d]]), plot = FALSE, breaks = seq(-180, 180, bins)) # angleList is all angels for a time period from all individuals
     probability <- h$counts/length(unlist(angleList[[d]]))
     probability <- c(probability[1:23],probability[23],probability[24:45]) # Duplicated angle at 0 since 360=0 and 360 is needed for plot
     Cols <- h$mids
@@ -40,16 +41,16 @@ PlotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=TRUE){
     circle.plot <- circle.plot[which(circle.plot$timeWindows==timePlot),]
   }
 
-  circle.plot <- circle.plot[complete.cases(circle.plot), ] #remove rows with no data
+  circle.plot <- circle.plot[stats::complete.cases(circle.plot), ] #remove rows with no data
   circle.plot$timeWindows <- round(circle.plot$timeWindows,3)
   circle.plot <- circle.plot[,c(3,2,1)]
 
-  if (class(colours)=="function"){ # If a grDevices colour pallet is used
+  if ("function" %in% is(colours)){ # If a grDevices colour pallet is used
     myColoursPal <- colours(length(unique(circle.plot$timeWindows)))
   } else if (colours[1] %in% rownames(RColorBrewer::brewer.pal.info)){ # If a RColourBrewer pallet is used
-    myColoursPal <- colorRampPalette(RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[colours,1], colours))(length(unique(circle.plot$timeWindows))) # Use the submitted colour palette and extend if to the number of colours needed
+    myColoursPal <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[colours,1], colours))(length(unique(circle.plot$timeWindows))) # Use the submitted colour palette and extend if to the number of colours needed
   } else {
-    myPal <- colorRampPalette(colours) # If hex codes or colour names are used
+    myPal <- grDevices::colorRampPalette(colours) # If hex codes or colour names are used
     myColoursPal <- myPal(length(unique(circle.plot$timeWindows)))
   }
 
@@ -61,7 +62,7 @@ PlotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=TRUE){
     legendPos <- "ggplot2::element_blank()"
   }
 
-  circle.plot_plot <- ggplot2::ggplot(circle.plot, ggplot2::aes(x = angles, y = probability, group=as.factor(timeWindows),colour=as.factor(timeWindows)))+
+  circle.plot_plot <- ggplot2::ggplot(circle.plot, ggplot2::aes(x = .data$angles, y = .data$probability, group=as.factor(timeWindows),colour=as.factor(timeWindows)))+
     ggplot2::coord_polar(clip="off")+
     ggplot2::geom_hline(yintercept = c(0, max(circle.plot$probability)+0.01), colour = "black", size = 0.25) +
     ggplot2::geom_vline(xintercept = seq(0, 360, by = 90), colour = "black", size = 0.25) +

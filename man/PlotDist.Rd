@@ -16,7 +16,7 @@ PlotDist(
 \arguments{
 \item{displacements}{List of displacements output from the \code{\link{CalcDisp}} function.}
 
-\item{distResults}{Data frame of results output from the \code{\link{FitDist}} function.}
+\item{distResults}{List output from the \code{\link{FitDist}} function containing a dataframe of fit results (element 1) and a normalisation record (element 2)}
 
 \item{fitLines}{Add fit lines based on the parameters calculated with the \code{\link{FitDist}} function. Default is TRUE.}
 

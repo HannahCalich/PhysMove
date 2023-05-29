@@ -12,10 +12,10 @@
 #' @param lm Calculate a linear regression to examine the relationship between the root-mean-square displacement values (target variable)
 #' and time (predictor variable) and add fit line to the plot (if plot=TRUE). The slope of this relationship, which is also known as the Hurst or
 #' scaling exponent) is the RMS statistic and it can be determined by typing 'RMSlinearModel$coefficients[2]'. Default is TRUE.
-#' @return The 'timeWindows' in log-sized bins along with their corresponding 'meanDisplacements', and root-mean-square displacement 'rmsDisplacements'
-#' values. If plot = TRUE, a plot of the mean displacement values and the root-mean-square displacement values against their corresponding
-#' time period is created. If lm = TRUE, a linear regression is run, a fit line is added to the plot (if plot = TRUE), and the results
-#' 'RMSlinearModel' are automatically assigned to the global environment.
+#' @return List containing a dataframe of results (list element 1) and if lm = TRUE, the results of the linear model are also output (list element 2).
+#' The results dataframe includes the 'timeWindows' in log-sized bins along with their corresponding 'meanDisplacements', and root-mean-square
+#' displacement 'rmsDisplacements' values. If plot = TRUE, a plot of the mean displacement values and the root-mean-square displacement values
+#' against their corresponding time period is created, and if lm = TRUE, a fit line and reference line are added to the plot.
 #' @examples
 #' RMS(tracks)
 #' RMS(tracks, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE)
@@ -37,7 +37,7 @@ RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
   Radius <- 6371 #Earth Radius in km (disp are in km)
   rad <- 3.141592653589793/180 #Python has more digits of pi than R, so value pasted here instead of "pi"
   bins <- seq(1,400,1) #400 time windows
-  tmin <- 1.0/(60*60*24) # 1 second is min time
+  tmin <- 1/(60*60*24) # 1 second is min time
   sumDist2 <- sumDist <- Timefreq <- rep(0, length(bins))
   statusMessages <- c("25% complete", "50% complete", "75% complete")
   percent <- c(round(dim(species_df)[1]*0.25),round(dim(species_df)[1]*0.5),round(dim(species_df)[1]*0.75))
@@ -72,16 +72,6 @@ RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
   RMS_Result$Sqrt_dRMS_per_tb <- sqrt(RMS_Result[,4]/RMS_Result[,2])
   plot.df <- cbind(RMS_Result[,c(1,5,6)])
   names(plot.df) <- c("timeWindow", "meanDisplacements", "rmsDisplacements")
-
-  if (lm==TRUE){
-    if (nrow(RMS_Result)>1){
-      fit <- lm(log(RMS_Result$Sqrt_dRMS_per_tb) ~ log(RMS_Result$timeBin_log), data = RMS_Result)
-      assign("RMSlinearModel",fit, envir = .GlobalEnv)
-      rm(fit)
-    } else {
-      warning("Not enough data fit linear model")
-    }
-  }
 
   if (plot==TRUE){ # Plot RMS of displacements, and mean displacements on log-log scale
     if (nrow(plot.df)>1){
@@ -126,5 +116,20 @@ RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
       warning("Not enough data to create plot")
     }
   }
+
+  plot.df <- list(plot.df)
+  names(plot.df) <- "rmsResults"
+
+  if (lm==TRUE){
+    if (nrow(RMS_Result)>1){
+      fit <- lm(log(RMS_Result$Sqrt_dRMS_per_tb) ~ log(RMS_Result$timeBin_log), data = RMS_Result)
+      plot.df <- append(plot.df, list(fit))
+      names(plot.df[[2]]) <- "lm"
+      rm(fit)
+    } else {
+      warning("Not enough data fit linear model")
+    }
+  }
+
   return(plot.df)
 }

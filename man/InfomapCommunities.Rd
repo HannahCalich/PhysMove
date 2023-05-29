@@ -9,7 +9,6 @@ InfomapCommunities(
   gridCell = 0.25,
   hours = 24,
   range_hr = 6,
-  infomap = TRUE,
   tpm = FALSE
 )
 }
@@ -30,27 +29,27 @@ If multiple location estimates fall within this time window the location estimat
 will be used for calculations. For example, if hours = 24 and range = 6, the algorithm will search for
 locations spaced 18 to 32 hours apart. Default is 6.}
 
-\item{infomap}{Identify Infomap communities. If infomap=TRUE, default messages from the infomapecology package will appear as various
-functions are run. Note that if warnings arise about columns or rows summing to 0 this means an individual moved into a cell and did not leave, which is
-a valid movement and not cause for alarm. Default is TRUE.}
-
 \item{tpm}{Export the transition probability matrix in link list format. If tpm=TRUE, a 'TransitionProbabilityMatrix' data frame will be automatically
 assigned to the global environment. Default is FALSE.}
 }
 \value{
-An 'infomap_object' that summarizes the hierarchical structure of the Infomap communities (regions where individuals are likely
-to stay for longer periods of time). If tpm=TRUE the transition probability matrix used to create the 'infomap_object' is automatically assigned
-to the global environment.
+A list that includes the Infomap results and the transition probability matrix (tpm), if tpm=TRUE. List element 1 is
+the 'infomap_object' result that summarizes the hierarchical structure of the Infomap communities (regions where individuals are likely to
+stay for longer periods of time). If tpm=TRUE the transition probability matrix used to create the 'infomap_object' is assigned
+as list element 2.
 }
 \description{
 This function uses the network community detection Infomap to identify Infomap communities based on a transition probability matrix (tmp), which summarizes
-the probability of individuals moving from one grid cell to another. This function assumes directed movement, allows for self-links (where an individual
-stays in the same cell over time), and uses a tpm in link list format to create an Infomap 'monolayer_object'.
+the probability of individuals moving from one grid cell to another over a set time window. This function assumes directed movement, allows for self-links
+(where an individual stays in the same cell over time), and uses a tpm in link list format to create an Infomap 'monolayer_object'. Note that if warnings
+appear about columns or rows summing to 0 this simply means an individual moved into a cell and did not leave, which is a valid movement and not cause for alarm.
+}
+\details{
 Please note: to run this function you must first download the infomapecology package from gitub and install the infomap.exe.
 For details please see: https://ecological-complexity-lab.github.io/infomap_ecology_package/installation
 To learn more about Infomap please visit: https://www.mapequation.org/
 }
 \examples{
 InfomapCommunities(tracks)
-InfomapCommunities(tracks, gridCell=0.25, hours=24, range_hr=6, infomap=TRUE, tpm=FALSE)
+InfomapCommunities(tracks, gridCell=0.25, hours=24, range_hr=6, tpm=FALSE)
 }

@@ -11,18 +11,19 @@
 #' create a continuous pallet with the colours provided. Default is "Dark2".
 #' @param legend Add legend with legend=TRUE. Default is TRUE.
 #' @return Probability density function (PDF) plots of binned raw or normalised (if normalised=TRUE) displacements.
+#' @importFrom rlang .data
 #' @examples DispPDFplot(displacements)
 #' @examples DispPDFplot(displacements, normalised=TRUE, colours=rainbow)
 #' @export
 
 PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=TRUE){
 
-  if (class(colours)=="function"){ # If a grDevices colour pallet is used
+  if ("function" %in% is(colours)){ # If a grDevices colour pallet is used
     myColoursPal <- colours(length(displacements))
   } else if (colours[1] %in% rownames(RColorBrewer::brewer.pal.info)){ # If a RColourBrewer pallet is used
-    myColoursPal <- colorRampPalette(RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[colours,1], colours))(length(displacements)) # Use the submitted colour palette and extend if to the number of colours needed
+    myColoursPal <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[colours,1], colours))(length(displacements)) # Use the submitted colour palette and extend if to the number of colours needed
   } else {
-    myPal <- colorRampPalette(colours) # If hex codes or colour names are used
+    myPal <- grDevices::colorRampPalette(colours) # If hex codes or colour names are used
     myColoursPal <- myPal(length(displacements))
   }
 
@@ -67,13 +68,13 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
       pdfPlot <- as.data.frame(pdfPlot)
       names(pdfPlot) <- c("y","x")
       pdfPlot[pdfPlot==0] <- NA
-      pdfPlot <- pdfPlot[complete.cases(pdfPlot),]
+      pdfPlot <- pdfPlot[stats::complete.cases(pdfPlot),]
       pdfPlot$timeWindow <- rep(d,nrow(pdfPlot))
       pdfPlotAll <- rbind(pdfPlotAll, pdfPlot) # Add data to df
     }
     pdfPlotAll <- pdfPlotAll[-1,] # Remove initializing row
 
-    a <- ggplot2::ggplot(data=pdfPlotAll, ggplot2::aes(x=x, y=y, colour=as.factor(timeWindow))) +
+    a <- ggplot2::ggplot(data=pdfPlotAll, ggplot2::aes(x=.data$x, y=.data$y, colour=as.factor(.data$timeWindow))) +
       ggplot2::geom_point() +
       ggplot2::scale_colour_manual(name="Time Window",values=unique(myColoursPal)) +
       ggplot2::scale_x_log10(
@@ -139,13 +140,13 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
       pdfPlot <- as.data.frame(pdfPlot)
       names(pdfPlot) <- c("y","x")
       pdfPlot[pdfPlot==0] <- NA
-      pdfPlot <- pdfPlot[complete.cases(pdfPlot),]
+      pdfPlot <- pdfPlot[stats::complete.cases(pdfPlot),]
       pdfPlot$timeWindow <- rep(d,nrow(pdfPlot))
       pdfPlotAll <- rbind(pdfPlotAll, pdfPlot) # Add data to df
     }
     pdfPlotAll <- pdfPlotAll[-1,] # Remove initializing row
 
-    a <- ggplot2::ggplot(data=pdfPlotAll, ggplot2::aes(x=x, y=y, colour=as.factor(timeWindow))) +
+    a <- ggplot2::ggplot(data=pdfPlotAll, ggplot2::aes(x=.data$x, y=.data$y, colour=as.factor(.data$timeWindow))) +
         ggplot2::geom_point() +
         ggplot2::scale_colour_manual(name="Time Window",values=unique(myColoursPal)) +
         ggplot2::scale_x_log10(
