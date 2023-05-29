@@ -11,6 +11,7 @@ Authors@R:
 Description: The PhysMove package aims to help users quantify movement patterns of satellite tagged animals using methods derrived from statistical physics.
 Depends: R (>= 4.0) 
 Imports:
+    broom (>= 1.0.3),
     ggplot2 (>= 3.3.5),
     grid (>= 4.0.5),
     methods (>= 4.2.2),

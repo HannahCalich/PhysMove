@@ -155,8 +155,9 @@ Randomise<-function(species_df, randTrack=100, gridCell=0.25, plot=TRUE, lm=TRUE
 
   if (lm==TRUE){
     fit <- lm(plot.df$AvgCellsInRandomisedTracks ~ plot.df$CellsInOriginalTracks, data=plot.df)
-    randomResults <- append(randomResults, list(fit))
-    names(randomResults[4]) <- "lm"
+    randomResults[[4]] <- as.data.frame(broom::tidy(fit))
+    names(randomResults) <- c("resultsDF", "RandomisedLong", "RandomisedLat", "lm")
+    rm(fit)
   }
 
   return(randomResults)

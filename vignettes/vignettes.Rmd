@@ -27,11 +27,12 @@ knitr::opts_chunk$set(
 ```
 
 ```{r, echo=FALSE}
-htmltools::img(src = knitr::image_uri("../vignettes/PhysMoveHex.PNG"))#, 
-               # alt = 'logo',  
-               # style = 'position:absolute; top:0; right:0; padding:10px; border:0',
-               # width = '200px', height = '200px',
-               # dpi=300)
+#htmltools::img(src = knitr::image_uri("../vignettes/PhysMoveHex.PNG"), 
+htmltools::img(src = knitr::image_uri("vignettes/PhysMoveHex.PNG"), 
+              alt = 'logo',  
+              style = 'position:absolute; top:0; right:0; padding:10px; border:0',
+              width = '200px', height = '200px',
+              dpi=300)
 ```
 
 This is a brief tutorial to accompany the PhysMove R package. Here, we demonstrate how PhysMove can be used to calculate each of the methods discussed in the main text and review all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove.
@@ -155,17 +156,17 @@ rms.result <- RMS(tracks)
 
 ```{r summarise rms results, echo=TRUE}
 # Summarise RMS results
-# summary(rms.result[[1]])
+summary(rms.result[[1]])
 ```
 
 ```{r calculate hurst exponent, echo=TRUE}
 # Summarise the linear model results and identify the Hurst exponent 
-# summary(RMSlinearModel)
+RMSlinearModel <- summary(rms.result[[2]])
 ```
 
 ```{r view hurst exp, echo=TRUE}
 # Determine the Hurst exponent without displaying the full linear model summary 
-# RMSlinearModel$coefficients[2]
+RMSlinearModel$estimate[2]
 ``` 
 
 ## Calculate displacements
@@ -429,17 +430,17 @@ randomise.result <- Randomise(tracks)
 
 ```{r view random results, echo=TRUE}
 # Summarise RMS results
-summary(randomise.result)
+summary(randomise.result[[1]])
 ```
 
 ```{r lm of randomised results, echo=TRUE}
 # Determine the slope of the linear model
-summary(RandomiselinearModel)
+RandomiselinearModel <- summary(randomise.result[[4]])
 ```
 
 ```{r slope of randomised results, echo=TRUE}
 # Determine the slope without displaying the full linear model summary
-RandomiselinearModel$coefficients[2]
+RandomiselinearModel$estimate[2]
 ```
 
 The `PlotRandomTracks()` function plots the randomised tracks created
