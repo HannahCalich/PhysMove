@@ -84,6 +84,8 @@ Occupancy <- function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "li
 
   OccExp <- OccExp[,c(6,5,4,2,3)]
   row.names(OccExp) <- 1:nrow(OccExp)
-  out <- list(OccExp, totalcells)
-  return(out)
+  # out <- list(OccExp, totalcells)
+  # names(out) <- c("occResults", "totalcells")
+  # return(out)
+  return(OccExp)
 }

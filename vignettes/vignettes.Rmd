@@ -29,9 +29,9 @@ knitr::opts_chunk$set(
 ```{r, echo=FALSE}
 #htmltools::img(src = knitr::image_uri("../vignettes/PhysMoveHex.PNG"), 
 htmltools::img(src = knitr::image_uri("vignettes/PhysMoveHex.PNG"), 
-              alt = 'logo',  
-              style = 'position:absolute; top:0; right:0; padding:10px; border:0',
-              width = '200px', height = '200px',
+              #alt = 'logo',  
+              style = 'position:absolute; top:0; right:50; padding:10px; border:0',
+              width = '300px', height = '300px',
               dpi=300)
 ```
 
@@ -51,7 +51,7 @@ released to the public) and load the PhysMove package.
 install.packages("devtools")
 ```
 
-```r
+```{r install physmove, echo=TRUE, message=FALSE, highlight=TRUE, clipboard=TRUE}
 # Download PhysMove 
 devtools::install_github("HannahCalich/PhysMove", auth_token = "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")
 ```
@@ -313,7 +313,7 @@ plot.data.pdf <- PlotDispPDF(disp, normalised=FALSE)
 ```{r fit full dist, echo=TRUE}
 # Fit all distributions to the full range of displacement data 
 distResults <- FitDist(disp, full=TRUE, normalise=FALSE) 
-distResults
+distResults[["distResults"]]
 ```
 
 ```{r plot full dist, echo=TRUE, error=FALSE, message=FALSE, fig.width = 7, fig.height = 5, out.width="60%"}
@@ -335,7 +335,7 @@ In comparison, the following example demonstrates the procedure for fitting trun
 ```{r find best-fit d_min for each dist , echo=TRUE}
 # Fit all distributions and identify the best-fit dmin for each distribution
 distResults.trunc <- FitDist(disp, full=FALSE, normalise=FALSE)
-distResults.trunc
+print(distResults.trunc[["distResults"]])
 ```
 
 ```{r plot trunc dist, echo=TRUE, message=FALSE, out.width="60%"}
@@ -361,38 +361,41 @@ same range of displacements, the fits of the distributions can be compared with
 
 ```{r fit dist with pl, echo=TRUE, message=FALSE}
 # Fit all distributions using the d_min value for the power-law distribution
-#distResultsPl <- FitDist(disp, set_dmin=distResults.trunc$dmin[1], normalise=FALSE)
-#distResultsPl
+dmin <- distResults.trunc[["distResults"]][1,2]
+distResultsPl <- FitDist(disp, set_dmin=dmin, normalise=FALSE)
+print(distResultsPl)
 ```
 
 ```{r fit dist with exp, echo=TRUE, message=FALSE}
 # Fit all distributions using the d_min value for the exponential distribution
-#distResultsExp <- FitDist(disp, set_dmin=distResults.trunc$dmin[2], normalise=FALSE)
-#distResultsExp
+dmin <- distResults.trunc[["distResults"]][2,2]
+distResultsExp <- FitDist(disp, set_dmin=dmin, normalise=FALSE)
+print(distResultsExp[["distResults"]])
 ```
 
 ```{r fit dist with lnorm, echo=TRUE, message=FALSE}
 # Fit all distributions using the d_min value for the lognormal distribution
-#distResultsLnorm <- FitDist(disp, set_dmin=distResults.trunc$dmin[3], normalise=FALSE)
-#distResultsLnorm
+dmin <- distResults.trunc[["distResults"]][3,2]
+distResultsLnorm <- FitDist(disp, set_dmin=dmin, normalise=FALSE)
+print(distResultsLnorm[["distResults"]])
 ```
 
 ```{r compdist pl, echo=TRUE, message=FALSE}
 # Compare distribution fits based on the best-fit d_min value for the power-law distribution
-#compResultsPl <- CompDist(disp, distResultsPl)
-#compResultsPl
+compResultsPl <- CompDist(disp, distResultsPl)
+compResultsPl
 ```
 
 ```{r compdist exp, echo=TRUE, message=FALSE}
 # Compare distribution fits based on the best-fit d_min value for the exponential distribution
-#compResultsExp <- CompDist(disp, distResultsExp)
-#compResultsExp
+compResultsExp <- CompDist(disp, distResultsExp)
+compResultsExp
 ```
 
 ```{r compdist lnorm, echo=TRUE, message=FALSE}
 # Compare distribution fits based on the best-fit d_min value for the lognormal distribution
-#compResultsLnorm <- CompDist(disp, distResultsLnorm)
-#compResultsLnorm
+compResultsLnorm <- CompDist(disp, distResultsLnorm)
+compResultsLnorm
 ```
 
 Once all distributions are fit using each of the best-fit d_min values, the distribution fits can be compared using `CompDist()`. An important consideration for interpreting the `CompDist()` results from pairwise comparisons is that if a d_min was set to favour a specific distribution, but the wAIC/wAICc scores do not identify that distribution as the best fit; the distribution corresponding to the d_min value is not the best-fit distribution for the displacements. For example, in the first pairwise compassion the d_min was set to the best-fit d_min for a power-law (20.87); however, the wAIC scores identified an exponential distribution as the best fit. Therefore, we conclude that a power-law is not the best-fit distribution for the data. As both full and truncated distribution analyses identified an exponential distribution as the best fit, we can report that these displacements are best-fit to an exponential distribution compared with power-law and lognormal distributions.
@@ -559,26 +562,21 @@ cell (*Counts*), and the *Occupancy* per grid cell. See Table 3 in the
 main text for suggestions on how to interpret results.
 
 
-```{r, echo=TRUE, message=FALSE, out.width="60%"}
+```{r calc occ, echo=TRUE, message=FALSE, out.width="60%"}
 # Create an occupancy map based on the tracks dataset
 Occ <- Occupancy(tracks)
-Occ <- Occ[[1]] # Select dataframe of occupancy results
+summary(Occ) # Select dataframe of occupancy results
 ```
 
 **Figure** **S13** Map of occupancy (total count of location estimates in
 each grid cell per area) based on the `tracks` dataset. Map created with
 `Occupancy()` default parameters.
 
-```{r, echo=TRUE}
-# Summarise occupancy patterns
-summary(Occ$Occupancy)
-```
-
 A pdf of the results from `Occupancy()` can be plotted with the
 `pdfPlot()` function when the `desc` parameter is set to “Occupancy”
 (Figure S14).`
 
-```{r, echo=TRUE, out.width="60%"}
+```{r pdf occ, echo=TRUE, out.width="60%"}
 # Create a pdf plot of occupancy values
 pdf.occ  <- pdfPlot(Occ$Occupancy, desc="Occupancy")
 ```
@@ -632,12 +630,15 @@ interpret results.
 **Important**: Before running `InfomapCommunities()` you must set your working
 directory to the folder that contains the stand-alone Infomap file (*Infomap.exe*).
 
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
+```{r load infomap, echo=TRUE, message=FALSE, warning=FALSE}
 # Identify community-wide movements from the tracks dataset with InfomapCommunities,
 # Note that the working directory must be set to the folder containing the Infomap file,
 # for more information, please visit:
 # https://ecological-complexity-lab.github.io/infomap_ecology_package/installation
+
 setwd("~/2023/PhysMove") ### Update here
+library(infomapecology)
+
 infomap <- InfomapCommunities(tracks)
 # Determine the structure of the Infomap monolayer object
 str(infomap)
@@ -653,7 +654,7 @@ For example, `subset_communities = c(1,2,3)` would plot communities 1, 2, and 3.
 
 ```{r, echo=TRUE, message=FALSE, out.width="60%"}
 # Create a map of the Infomap communities
-CommunityMap(infomap)
+CommunityMap(infomap[["infomap_object"]])
 ```
 
 **Figure** **S15** Map illustrating level 1 Infomap communities for the
