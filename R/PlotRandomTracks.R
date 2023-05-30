@@ -21,8 +21,8 @@
 #' @return Plot showing the original and Randomised track locations and the Randomised tracks data used to create the map (original tracks are
 #' from species_df).
 #' @importFrom rlang .data
-#' @examples PlotRandomTracks(tracks, ref=1)
-#' @examples PlotRandomTracks(tracks, ref=1, numPlot=1:5, legend=TRUE)
+#' @examples PlotRandomTracks(tracks, ref=1, randomResults)
+#' @examples PlotRandomTracks(tracks, ref=1, randomResults, numPlot=1:5, legend=TRUE)
 #' @export
 
 PlotRandomTracks<-function(species_df, ref=NULL, randomResults, numPlot=1:5, colours=c("black","grey70"),
@@ -92,9 +92,9 @@ PlotRandomTracks<-function(species_df, ref=NULL, randomResults, numPlot=1:5, col
 
   if (tracks==TRUE){
     a <- a +
-      ggplot2::geom_path(data=subset(plot.df, .data$Track=='Randomised'))+
-      ggplot2::geom_path(data=subset(plot.df, .data$Track=='Original'))+
-      ggplot2::geom_point(data=subset(plot.df, .data$Track=='Original'))+
+      ggplot2::geom_path(data=subset(plot.df, Track=='Randomised'))+
+      ggplot2::geom_path(data=subset(plot.df, Track=='Original'))+
+      ggplot2::geom_point(data=subset(plot.df, Track=='Original'))+
       ggplot2::geom_point(data=startPt, ggplot2::aes(x=.data$lon, y=.data$lat, group=.data$Track, color="Start")) +
       ggplot2::geom_point(data=endPt, ggplot2::aes(x=.data$lon, y=.data$lat, group=.data$Track, color="End"))
   }

@@ -156,12 +156,14 @@ rms.result <- RMS(tracks)
 
 ```{r summarise rms results, echo=TRUE}
 # Summarise RMS results
-summary(rms.result[[1]])
+summary(rms.result[["rmsResults"]])
 ```
+print(rms.result)
 
 ```{r calculate hurst exponent, echo=TRUE}
 # Summarise the linear model results and identify the Hurst exponent 
-RMSlinearModel <- summary(rms.result[[2]])
+RMSlinearModel <- rms.result[["lm"]]
+print(RMSlinearModel)
 ```
 
 ```{r view hurst exp, echo=TRUE}
@@ -430,12 +432,13 @@ randomise.result <- Randomise(tracks)
 
 ```{r view random results, echo=TRUE}
 # Summarise RMS results
-summary(randomise.result[[1]])
+summary(randomise.result[["resultsDF"]])
 ```
 
 ```{r lm of randomised results, echo=TRUE}
 # Determine the slope of the linear model
-RandomiselinearModel <- summary(randomise.result[[4]])
+RandomiselinearModel <- randomise.result[["lm"]]
+print(RandomiselinearModel)
 ```
 
 ```{r slope of randomised results, echo=TRUE}
@@ -464,7 +467,7 @@ columns: *randTrack*, the id number of the random track, *lon* and
 
 ```{r plot random tracks, echo=TRUE, error=FALSE, message=FALSE, out.width="60%"}
 # Plot random tracks for tracks dataset reference id 1
-plot.data.random.tracks <- PlotRandomTracks(tracks, ref=1)
+plot.data.random.tracks <- PlotRandomTracks(tracks, ref=1, randomResults)
 ```
 
 **Figure S10** Map illustrating the original track for reference id 1 from the tracks dataset (black points and line) and the first 5 randomised tracks for track reference id 1 calculated using `Randomise()` (grey points and lines). The starting and ending locations are in red and blue, respectively. Plot created with `PlotRandomTracks()` default parameters and `ref=1`.
