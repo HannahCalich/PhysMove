@@ -30,7 +30,7 @@ knitr::opts_chunk$set(
 #htmltools::img(src = knitr::image_uri("../vignettes/PhysMoveHex.PNG"), 
 htmltools::img(src = knitr::image_uri("vignettes/PhysMoveHex.PNG"), 
               #alt = 'logo',  
-              style = 'position:absolute; top:0; right:50; padding:10px; border:0',
+              style = 'position:absolute; top:0; right:25; padding:10px; border:0',
               width = '300px', height = '300px',
               dpi=300)
 ```
@@ -158,7 +158,6 @@ rms.result <- RMS(tracks)
 # Summarise RMS results
 summary(rms.result[["rmsResults"]])
 ```
-print(rms.result)
 
 ```{r calculate hurst exponent, echo=TRUE}
 # Summarise the linear model results and identify the Hurst exponent 
@@ -251,8 +250,8 @@ data. By default, `FitDist()` fits continuous power-law (“pl”), exponential
 * `full`: set if the distributions should be fit over
 the full range of displacements data (`full=TRUE`), or to the
 displacements truncated by a d_min (`full=FALSE`, by default) 
-* `set_dmin`: used to either force the algorhithm to automatically identify the best-fit d_min for each
-distribution (`set_dmin=NULL`, by default), or to manually assign a minimum displacement value that will be used to fit each distribution (e.g., `set_dmin=1`). Note that set_dmin can only be applied if `full` = FALSE)
+* `set_dmin`: used to either force the algorithm to automatically identify the best-fit d_min for each
+distribution (`set_dmin=NULL`, by default), or to manually assign a minimum displacement value that will be used to fit each distribution (e.g., `set_dmin=1`). Note that set_dmin can only be applied if `full = FALSE')
 * `normalise`: normalise displacements before fitting distributions (`normalise=TRUE`, by default). Note that
 displacements should be normalised if they were calculated over multiple temporal periods.
 
@@ -260,7 +259,7 @@ Outputs from `FitDist()` include: the *distribution* name (pl, exp, or lnorm),
 *dmin* value, *parameter 1*, the first parameter for each distribution
 (i.e., α, λ, or μ for pl, exp, and lnorm, respectively), *parameter 2*,
 the second distribution parameter (i.e., σ, only applicable to lnorm),
-and *nTail*, the number of values greater than or equal to d_min.
+and *nTail*, the number of values greater than or equal to dmin.
 
 2. `PlotDist()`: uses the results from `FitDist()` to plot ccdfs of the displacements with fit lines for each distribution (e.g., Figure S6).
 
@@ -272,15 +271,12 @@ and *nTail*, the number of values greater than or equal to d_min.
 * `legend`: add a legend (`legend=TRUE`, by default).
 
 3. `CompDist()`: compares distribution fits from `FitDist()` and
-identifies the best-fit distribution for the displacements. 
-
-Lastly, `CompDist()` is used to compare distribution fits and identify
-the best-fit distribution(s) for the displacements. Note that
+identifies the best-fit distribution for the displacements. Note that
 `CompDist()` can only be used when all distributions are fit to the same
 range of data (e.g., when `full=TRUE` or if `set_dmin≠NULL`), see Figure
 S9. `CompDist()` includes one optional parameter: 
 
-* `force_AICc`: force `CompDist()` to calculate an AICc (`force_AICc=FALSE`, by default). By default, `CompDist()` compares distribution fits using weighted AICc scores (AIC scores corrected for small sample sizes) when the sample size of the displacements used to fit the model (i.e., *nTail*) divided by the number of parameters in the model is less than or equal to 40; else, weighed AIC scores are calculated, following Burnham and Anderson (2004).`force_AICc` is used to calcualte an AICc instead of an AIC score (if `force_AICc` = TRUE). The highest wAIC or wAICc score from each comparison indicates the best-fit distribution. See Table 3 in the main text for suggestions on how to interpret results
+* `force_AICc`: force `CompDist()` to calculate an AICc (`force_AICc=FALSE`, by default). By default, `CompDist()` compares distribution fits using weighted AICc scores (AIC scores corrected for small sample sizes) when the sample size of the displacements used to fit the model (i.e., *nTail*) divided by the number of parameters in the model is less than or equal to 40; else, weighed AIC scores are calculated, following Burnham and Anderson (2004). `force_AICc` is used to calculate an AICc instead of an AIC score (if `force_AICc` = TRUE). The highest wAIC or wAICc score from each comparison indicates the best-fit distribution. See Table 3 in the main text for suggestions on how to interpret results
 
 The highest wAIC or wAICc score from each comparison
 indicates the best-fit distribution. See Table 3 in the main text for 
