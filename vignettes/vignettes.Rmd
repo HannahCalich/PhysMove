@@ -28,10 +28,10 @@ knitr::opts_chunk$set(
 
 ```{r, echo=FALSE}
 #htmltools::img(src = knitr::image_uri("../vignettes/PhysMoveHex.PNG"), 
-htmltools::img(src = knitr::image_uri("vignettes/PhysMoveHex.PNG"), 
+htmltools::img(src = knitr::image_uri("../vignettes/PhysMoveHex.PNG"), 
               #alt = 'logo',  
               style = 'position:absolute; top:0; right:25; padding:10px; border:0',
-              width = '300px', height = '300px',
+              width = '250px', height = '250px',
               dpi=300)
 ```
 
@@ -64,16 +64,17 @@ library(PhysMove)
 ## Data formatting
 
 PhysMove was designed to be user-friendly, and most functions only require you to input a data frame containing telemetry data. 
+The input data frame must only contain these four columns in the following order: *ref*, *lon*, *lat*, and *day*. 
 
 Columns must be formatted as follows:
 
-  * *ref*: the unique telemetry tag ID number for each animal in numeric format (note that characters are not accepted because they can be slower to process than integers, so please convert all reference IDs to integers before proceeding)
+  * *ref*: the unique telemetry tag ID number for each animal in numeric format (note that characters are not accepted because 
+  they can be slower to process than integers, so please convert all reference IDs to integers before proceeding)
   * *lon* and *lat*: the longitude (-180 to + 180) and latitude (-90 to +90) in decimal degrees of
     each position estimate, respectively, in numeric format, and
   * *day*: the datetime stamp for each location estimate in POSIXct
     format following yyyy-mm-dd hh:mm:ss.
-    
-**Please** **note:** The input data frame must only contain these 4 columns in the following order: *ref*, *lon*, *lat*, and *day*. 
+
 
 The ```CheckTracks``` function can be used to confirm your input data are formatted as described above. This function checks that column names are in order and that each column is in the correct format as described above. This function does not evaluate data quality or quantity. 
 
@@ -81,9 +82,10 @@ The ```CheckTracks``` function can be used to confirm your input data are format
 # Check your data are formatted correctly
 CheckTracks(data) # replace "data" with your dataframe
 ```
-You can also compare your dataframe to the `tracks` dataset to ensure your data are formatted correctly
 
-## Explore `tracks` dataset
+In addition to `CheckTracks()`, you can also compare your dataframe to the `tracks` dataset to ensure your data are formatted correctly.
+
+### Explore `tracks` dataset
 
 ```{r preview tracks, echo=TRUE}
 # Preview the first 6 rows of the tracks dataset
@@ -98,13 +100,13 @@ str(tracks)
 ### Create a map of the tracks dataset
 
 A map of the data can be created using the `PlotTracks()` function from PhysMove (Figure S1). 
-`PlotTracks()` has 3 optional parameters:
+`PlotTracks()` has three optional parameters:
 
   * `ref`: plot specific tracks based on their reference IDs (`ref=NULL`, by default), 
   * `tracks`: connect points with lines (`tracks=TRUE`, by default), and
   * `colours`: edit the colours used in the map (`colours=rainbow`, by default). 
 
-The code used to make the `tracks` dataset is available in the PhysMove data folder on GitHub as “CreateTracks.R”.
+The code used to make the `tracks` dataset is available in the PhysMove doc folder on GitHub as “CreateTracks.R”.
 
 ```{r plot tracks, out.width="60%"}
 PlotTracks(tracks)
@@ -121,7 +123,7 @@ $~$
 
 The `RMS()` function provides insights into the scale of movement by
 calculating the mean and root-mean-square (RMS) displacements and
-plotting them over time (Figure S2). `RMS()` includes 4 optional parameters:
+plotting them over time (Figure S2). `RMS()` includes four optional parameters:
 
   * `timeUnit`: change the time unit used to calculate the time
 between locations (`timeUnit= “days”`, by default), 
@@ -136,16 +138,16 @@ slope of the linear model is used to make conclusions about the scale of
 movement (see Table 3 in the main text for suggestions on interpreting
 your results).
 
-`RMS()` outputs data in three columns: *timeWindow*,
-including the binned time windows in days (or whatever unit was set
-using `timeUnit`) that correspond with the *meanDisplacement* and
-*rmsDisplacement* values in kilometers (km).
+`RMS()` outputs a list object in three columns: 
+  * *timeWindow*: binned time windows in days (or whatever unit was set
+using `timeUnit`) 
+* *meanDisplacement*: mean displacement values in km that correspond with *timeWindow*
+* *rmsDisplacement*: root-mean-square displacement values that correspond with *timeWindow*
 
 Note that because `RMS()` calculates all displacements in each track,
 this function may take 10-20+ minutes, depending on your computer;
 progress updates will appear when the calculations are 25%, 50%, 75%,
 and 100% complete.
-
 
 ```{r calcualte rms, echo=TRUE, message=FALSE, out.width="60%"}
 # Calculate RMS values with default parameters
@@ -335,7 +337,8 @@ print(distResults.trunc[["distResults"]])
 ```
 
 ```{r plot trunc dist, echo=TRUE, message=FALSE, out.width="60%"}
-# Create a ccdf plot of displacements with fit lines illustrating distributions fit to the best-fit xmin for each distribution
+# Create a ccdf plot of displacements with fit lines illustrating distributions
+# fit to the best-fit xmin for each distribution
 plot.data.all.trunc <- PlotDist(disp, distResults.trunc)
 ```
 
@@ -501,7 +504,7 @@ during ten time windows (24 to 240 hours over 24 ± 6 hour intervals).
 Plot created with `TurningAngles()` default parameters.
 
 ```{r summarise turning angles, echo=TRUE}
-# Summarise turning angles calculated over the first time window (24 ± 6 hours, assuming default parameters were used)
+# Summarise turning angles calculated over the first time window 
 summary(angle.results[[1]])
 ```
 
@@ -634,7 +637,9 @@ directory to the folder that contains the stand-alone Infomap file (*Infomap.exe
 
 setwd("~/2023/PhysMove") ### Update here
 library(infomapecology)
+```
 
+```{r run infomap communities}
 infomap <- InfomapCommunities(tracks)
 # Determine the structure of the Infomap monolayer object
 str(infomap)
@@ -642,7 +647,7 @@ str(infomap)
 
 The `CommunityMap()` function is used to visualise results from
 `InfomapCommunities()` by converting the Infomap monolayer object into a
-map (Figure S15). `CommunityMap()` includes 2 optional parameters:
+map (Figure S15). `CommunityMap()` includes two optional parameters:
 
 * `subset_communities`: to only map specific communities (all level 1 communities are be plotted by default).
 For example, `subset_communities = c(1,2,3)` would plot communities 1, 2, and 3.
@@ -666,9 +671,9 @@ $~$
 
 The `GyrationRad()` function calculates the dispersion (i.e., the
 gyration radius) of each track in a dataset (Figure S16). `GyrationRad()`
-includes 2 optional parameters:
+includes two optional parameters:
 
-* `map`: create a map (map=TRUE, by default), and
+* `map`: create a map (`map=TRUE`, by default), and
 * `mapCol`: change the colour of the points, which indicate average track location,
 and circles, which indicate how far each animal dispersed (`mapCol=c(“Black”, “Red”)`, by default).
 
@@ -711,7 +716,7 @@ parameters. Plot created using `pdfPlot()` with `desc=“GyrationRad”`.
 The `Entropy()` function calculates track randomness by documenting the
 fraction of data points from each track within each grid cell (Figure S18).
 The resulting entropy scores are then normalised so results can be
-compared between individuals. `Entropy()` incldues 2 optional parameters:
+compared between individuals. `Entropy()` incldues two optional parameters:
 
 * `gridCell`: change grid cell size in degrees (`gridCell=0.25`, by default), and
 * `histPlot`: output a histogram (`histPlot=TRUE`, by default).
@@ -752,7 +757,7 @@ parameters. Plot created using `pdfPlot()` with `desc=“Entropy”`.
 
 The `Predictability()` function calculates the limit of predictability
 for each track based on their individual entropy scores (Figure S20;
-Figure 1). `Predictability()` includes 2 optional parameters:
+Figure 1). `Predictability()` includes two optional parameters:
 
 * `startVal`: alter the starting value used to find a root value for the limit of predictability equation
 (`startVal=0.99`, by default), and
