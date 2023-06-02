@@ -66,7 +66,7 @@ RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
   for(b in 1: length(bins)){
     mybins[b] <- tmin*wBins^(b)
   }
-  RMS_Result <- as.data.frame(cbind("timeBin_log"=mybins, "Count"=Timefreq, "MeanDisp"=sumDist, "dRMS"=sumDist2))
+  RMS_Result <- as.data.frame(cbind("timeBin_log"=mybins, "Count"=Timefreq, "sumDist"=sumDist, "sumDist2"=sumDist2))
   RMS_Result <- RMS_Result[(RMS_Result[,1]!= 0) & (RMS_Result[,3]!= 0) & (RMS_Result[,4]!= 0),]
   RMS_Result$MeanDisp_per_tb <- RMS_Result[,3]/RMS_Result[,2]
   RMS_Result$Sqrt_dRMS_per_tb <- sqrt(RMS_Result[,4]/RMS_Result[,2])

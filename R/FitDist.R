@@ -3,6 +3,11 @@
 #' This function allows you to fit power law, exponential, or log-normal distributions to the displacements calculated with
 #' the \code{\link{CalcDisp}} function. If displacements were calculated over multiple time windows this function will normalise the
 #' displacements by dividing each displacement by the mean displacement of the corresponding time window
+#'
+#' Examples:
+#' FitDist(displacements)
+#' FitDist(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE)
+#'
 #' @param displacements List of displacements output from the \code{\link{CalcDisp}} function.
 #' @param dist Continuous distributions that will be fit to the displacements. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
 #' continuous distributions. Default is dist=c("pl","exp","lnorm").
@@ -18,9 +23,6 @@
 #' ('normalise') is automatically assigned to the global environment as this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}
 #'functions.
 #' @importFrom stats dlnorm plnorm dexp pexp
-#' @examples FitDist(displacements)
-#' @examples FitDist(displacements, dist=c("exp","lnorm"), full=TRUE)
-#' @examples FitDist(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE)
 #' @export
 
 FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE) {

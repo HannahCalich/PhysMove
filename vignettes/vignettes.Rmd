@@ -637,9 +637,7 @@ directory to the folder that contains the stand-alone Infomap file (*Infomap.exe
 
 setwd("~/2023/PhysMove") ### Update here
 library(infomapecology)
-```
 
-```{r run infomap communities}
 infomap <- InfomapCommunities(tracks)
 # Determine the structure of the Infomap monolayer object
 str(infomap)

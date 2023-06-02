@@ -92,9 +92,9 @@ PlotRandomTracks<-function(species_df, ref=NULL, randomResults, numPlot=1:5, col
 
   if (tracks==TRUE){
     a <- a +
-      ggplot2::geom_path(data=subset(plot.df, Track=='Randomised'))+
-      ggplot2::geom_path(data=subset(plot.df, Track=='Original'))+
-      ggplot2::geom_point(data=subset(plot.df, Track=='Original'))+
+      ggplot2::geom_path(data=plot.df[plot.df$Track %in% c('Randomised'),])+
+      ggplot2::geom_path(data=plot.df[plot.df$Track %in% c('Original'),])+
+      ggplot2::geom_point(data=plot.df[plot.df$Track %in% c('Original'),])+
       ggplot2::geom_point(data=startPt, ggplot2::aes(x=.data$lon, y=.data$lat, group=.data$Track, color="Start")) +
       ggplot2::geom_point(data=endPt, ggplot2::aes(x=.data$lon, y=.data$lat, group=.data$Track, color="End"))
   }

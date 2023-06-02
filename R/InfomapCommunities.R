@@ -8,6 +8,11 @@
 #' Please note: to run this function you must first download the infomapecology package from gitub and install the infomap.exe.
 #' For details please see: https://ecological-complexity-lab.github.io/infomap_ecology_package/installation
 #' To learn more about Infomap please visit: https://www.mapequation.org/
+#'
+#' Examples:
+#' library (infomapecology)
+#' InfomapCommunities(tracks)
+#' InfomapCommunities(tracks, gridCell=0.25, hours=24, range_hr=6, tpm=FALSE)
 
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
@@ -27,9 +32,6 @@
 #' the 'infomap_object' result that summarizes the hierarchical structure of the Infomap communities (regions where individuals are likely to
 #' stay for longer periods of time). If tpm=TRUE the transition probability matrix used to create the 'infomap_object' is assigned
 #' as list element 2.
-#' @examples
-#' InfomapCommunities(tracks)
-#' InfomapCommunities(tracks, gridCell=0.25, hours=24, range_hr=6, tpm=FALSE)
 #' @export
 
 InfomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, tpm=FALSE){

@@ -21,6 +21,7 @@ Imports:
     rootSolve (>= 1.8.2.1),
     rlang (>= 0.4.11)
 Suggests:
+    devtools (>= 2.4.5),
     htmltools (>= 0.5.4),
     infomapecology (>= 1.0.1),
     roxygen2 (>= 7.2.3),
