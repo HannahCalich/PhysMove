@@ -27,6 +27,6 @@ list format where each list element corresponds to displacements calculated over
 format from the \code{\link{CalcDisp}} function.
 }
 \examples{
-DispPDFplot(displacements)
-DispPDFplot(displacements, normalised=TRUE, colours=rainbow)
+PlotDispPDF(displacements)
+PlotDispPDF(displacements, normalised=TRUE, colours=rainbow)
 }

@@ -26,13 +26,12 @@ See attached sample data \code{\link{tracks}}.}
 (applied to ggplot2::scale_fill_gradientn). Default is colGrad=c("blue", "light blue","red").}
 }
 \value{
-A list containing occupancy results (first list object) and the total number of grid cells analyzed (second list object -
-required by the \code{\link{pdfPlot}} function). Occupancy results include a data frame with occupancy values and corresponding
-locations (provided as center value of each grid cell). If map=TRUE a map is created.
+A dataframe including occupancy values and corresponding
+locations (provided as centres value of each grid cell). If map=TRUE a map is created.
 }
 \description{
 This function allows you to calculate the occupancy patterns of location estimates and create a map.
-A pdf plot of the occupancy values can be created with the \code{\link{pdfPlot}} function.
+A pdf plot of the occupancy values can be created with the \code{\link{PlotPDF}} function.
 }
 \examples{
 Occupancy(tracks)

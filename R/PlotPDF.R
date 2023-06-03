@@ -14,10 +14,10 @@
 #' code will automatically use 15 bins.
 #' @return A pdf plot of the results and the data used to create the plot.
 #' @importFrom rlang .data
-#' @examples pdfPlot(occupancyDF$Occupancy, desc="Occupancy")
+#' @examples PlotPDF(occupancyDF$Occupancy, desc="Occupancy")
 #' @export
 
-pdfPlot <- function(result, desc=NULL, nBins){
+PlotPDF <- function(result, desc=NULL, nBins){
 
   if ("data.frame" %in% is(result)){
     stop ("A data frame has been entered. Please re-run this function and identify the column of data you want to plot following a dataframe$column structure

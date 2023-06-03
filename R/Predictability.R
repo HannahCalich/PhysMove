@@ -2,6 +2,7 @@
 #'
 #' This function allows you to calculate the limit of predictability for each trajectory based on each individual's entropy. This function requires
 #' 'indivEntropy', 'cellsVisited', and 'normalisedEntropy' from the \code{\link{Entropy}} function.
+#' A pdf plot of the predictability values can be created with the \code{\link{PlotPDF}} function.
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),

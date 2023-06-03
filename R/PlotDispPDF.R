@@ -12,8 +12,8 @@
 #' @param legend Add legend with legend=TRUE. Default is TRUE.
 #' @return Probability density function (PDF) plots of binned raw or normalised (if normalised=TRUE) displacements.
 #' @importFrom rlang .data
-#' @examples DispPDFplot(displacements)
-#' @examples DispPDFplot(displacements, normalised=TRUE, colours=rainbow)
+#' @examples PlotDispPDF(displacements)
+#' @examples PlotDispPDF(displacements, normalised=TRUE, colours=rainbow)
 #' @export
 
 PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=TRUE){

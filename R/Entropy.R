@@ -3,6 +3,7 @@
 #' This function allows you to calculate the normalised entropy of individual trajectories (individual entropy scores are
 #' normalised by the log number of cells each trajectory visited), which provides insight to how ordered or disordered the trajectories were.
 #' Values close to 1 indicate high entropy (disordered trajectories) while values closer to 0 indicate low entropy (ordered trajectories).
+#' A pdf plot of the normalized entropy values can be created with the \code{\link{PlotPDF}} function.
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),

@@ -35,16 +35,12 @@ htmltools::img(src = knitr::image_uri("../vignettes/PhysMoveHex.PNG"),
               dpi=300)
 ```
 
-This is a brief tutorial to accompany the PhysMove R package. Here, we demonstrate how PhysMove can be used to calculate each of the methods discussed in the main text and review all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove.
-We provide sample code to replicate each of the results presented in the main text.
-
+This is a brief vignette to accompany the PhysMove R package. Here, we demonstrate how PhysMove can be used to calculate each of the methods discussed in the main text and review all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove.This vignette also includes all of the codes required to replicate each of the results presented in the main text.
 
 # Install
 
 We recommend users install PhysMove through the devtools R package. The
-code below will install devtools and PhysMove (including the
-authentication token required to access PhysMove until the package is
-released to the public) and load the PhysMove package.
+code below will install devtools and PhysMove and load the PhysMove R package.
 
 ```r
 # Install the devtools package from CRAN (if required)
@@ -53,6 +49,8 @@ install.packages("devtools")
 
 ```{r install physmove, echo=TRUE, message=FALSE, highlight=TRUE, clipboard=TRUE}
 # Download PhysMove 
+# Note that this authentication token will only be required while the manuscript is under review, PhysMove will be open access once the
+# manuscript is accepted for publication
 devtools::install_github("HannahCalich/PhysMove", auth_token = "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")
 ```
 
@@ -63,7 +61,7 @@ library(PhysMove)
 
 ## Data formatting
 
-PhysMove was designed to be user-friendly, and most functions only require you to input a data frame containing telemetry data. 
+PhysMove was designed to be user-friendly, and most functions only require you to input a data frame containing standard telemetry data. 
 The input data frame must only contain these four columns in the following order: *ref*, *lon*, *lat*, and *day*. 
 
 Columns must be formatted as follows:
@@ -75,17 +73,19 @@ Columns must be formatted as follows:
   * *day*: the datetime stamp for each location estimate in POSIXct
     format following yyyy-mm-dd hh:mm:ss.
 
-
-The ```CheckTracks``` function can be used to confirm your input data are formatted as described above. This function checks that column names are in order and that each column is in the correct format as described above. This function does not evaluate data quality or quantity. 
+The ```CheckTracks``` function can be used to confirm your input data are formatted as described above. This function checks that column names are in order and that each column is in the correct format as described above. Note that this function does not evaluate data quality or quantity. 
 
 ``` r
 # Check your data are formatted correctly
 CheckTracks(data) # replace "data" with your dataframe
 ```
 
-In addition to `CheckTracks()`, you can also compare your dataframe to the `tracks` dataset to ensure your data are formatted correctly.
+In addition to `CheckTracks()`, you can also compare your dataframe to our sample dataset `tracks` to ensure your data are formatted correctly.
 
 ### Explore `tracks` dataset
+
+As described in the main text, `tracks` is a simulated telemetry dataset containing 25 unique tracks with a defined set of movement parameters.
+`Tracks` was created using a biased, uncorrelated random walk model with variable step lengths drawn from an exponential distribution with λ = 0.125. We defined the turning angles such that 30% indicated directed forward movement (movements with angles <30° or >330°), and 30% indicated directed return movement (angles between 150-210°), allowing the remainder (40%) to be randomly between 0-360°.These metrics were chosen because they are broadly consistent with literature interpretations of animals moving through a resource-rich habitat. See main text for further details. The code used to make the `tracks` dataset is available in the PhysMove `doc` folder on GitHub as “CreateTracks.R”.
 
 ```{r preview tracks, echo=TRUE}
 # Preview the first 6 rows of the tracks dataset
@@ -99,20 +99,18 @@ str(tracks)
 
 ### Create a map of the tracks dataset
 
-A map of the data can be created using the `PlotTracks()` function from PhysMove (Figure S1). 
+A map of telemetry data can be created using our `PlotTracks()` function (Figure V1). 
 `PlotTracks()` has three optional parameters:
 
   * `ref`: plot specific tracks based on their reference IDs (`ref=NULL`, by default), 
   * `tracks`: connect points with lines (`tracks=TRUE`, by default), and
   * `colours`: edit the colours used in the map (`colours=rainbow`, by default). 
 
-The code used to make the `tracks` dataset is available in the PhysMove doc folder on GitHub as “CreateTracks.R”.
-
-```{r plot tracks, out.width="60%"}
+```{r plot tracks, echo=TRUE, out.width="60%"}
 PlotTracks(tracks)
 ```
 
-**Figure S1** Map of the simulated tracking data included in the `tracks` dataset, created with `PlotTracks()` default settings.
+**Figure V1** Map of the simulated tracking data included in the `tracks` dataset, created with `PlotTracks()` default settings.
 
 $~$
 $~$
@@ -122,27 +120,28 @@ $~$
 ## Scale of movement 
 
 The `RMS()` function provides insights into the scale of movement by
-calculating the mean and root-mean-square (RMS) displacements and
-plotting them over time (Figure S2). `RMS()` includes four optional parameters:
+calculating mean and root-mean-square (RMS) displacements and
+plotting them over time (Figure V2). 
+
+`RMS()` includes four optional parameters:
 
   * `timeUnit`: change the time unit used to calculate the time
 between locations (`timeUnit= “days”`, by default), 
   * `wBins`: change the width of the time bins used to calculate how frequently displacements occurred
 (`wBins=1.1`, by default), 
   * `plot`: create a scatter plot (`plot=TRUE`, by default), and 
-  * `lm`: fit a linear model to examine the
-relationship between the root-mean-square displacement values and time
-(`lm=TRUE`, by default). When `lm=TRUE`, a linear model object
-*RMSlinearModel* is automatically exported to the local environment. The
-slope of the linear model is used to make conclusions about the scale of
-movement (see Table 3 in the main text for suggestions on interpreting
-your results).
+  * `lm`: fit a linear model to examine the relationship between the root-mean-square 
+  displacement values and time (`lm=TRUE`, by default). 
 
-`RMS()` outputs a list object in three columns: 
+`RMS()` results are output as a list. The first list element is a dataframe of results with three columns: 
   * *timeWindow*: binned time windows in days (or whatever unit was set
 using `timeUnit`) 
-* *meanDisplacement*: mean displacement values in km that correspond with *timeWindow*
-* *rmsDisplacement*: root-mean-square displacement values that correspond with *timeWindow*
+  * *meanDisplacement*: mean displacement values in km that correspond with *timeWindow*
+  * *rmsDisplacement*: root-mean-square displacement values that correspond with *timeWindow*
+
+The second list element is a dataframe of results from
+the linear model and is only exported when `lm=TRUE`. The slope of the linear model is used to describe the scale of
+movement (see Table 3 in the main text for suggestions on interpreting your results).
 
 Note that because `RMS()` calculates all displacements in each track,
 this function may take 10-20+ minutes, depending on your computer;
@@ -154,7 +153,7 @@ and 100% complete.
 rms.result <- RMS(tracks)
 ```
 
-**Figure S2** Scatter plot of mean (grey points; q=1) and root-mean-square (RMS; black points; q=2) displacements (d) in kilometers (km) from tracks dataset over time (T) in days, fit to a linear model (red line with standard error shaded in grey). Plot created with `RMS()` default parameters. 
+**Figure V2** Scatter plot of mean (grey points; q=1) and root-mean-square (RMS; black points; q=2) displacements (d) in kilometers (km) from tracks dataset over time (T) in days, fit to a linear model (red line with standard error shaded in grey). Plot created with `RMS()` default parameters. 
 
 ```{r summarise rms results, echo=TRUE}
 # Summarise RMS results
@@ -162,15 +161,12 @@ summary(rms.result[["rmsResults"]])
 ```
 
 ```{r calculate hurst exponent, echo=TRUE}
-# Summarise the linear model results and identify the Hurst exponent 
+# Summarise linear model results and identify the Hurst exponent 
 RMSlinearModel <- rms.result[["lm"]]
 print(RMSlinearModel)
-```
-
-```{r view hurst exp, echo=TRUE}
-# Determine the Hurst exponent without displaying the full linear model summary 
+# Determine the Hurst exponent 
 RMSlinearModel$estimate[2]
-``` 
+```
 
 ## Calculate displacements
 
@@ -179,20 +175,21 @@ kilometres over set time windows. `CalcDisp()` has four optional
 parameters that allow you to change different aspects of the time
 windows:
 
-* `min_hr` and `max_hr`: set the minimum and maximum times between
-location estimates in hours (`min_hr=24` and `max_hr=240`, by default),
-* `interval_hr`: set the the time interval in hours, which creates a sequence of time windows
-between the minimum and maximum times over a set time interval (`interval_hr=24`, by default), and 
-* `range_hr`: set the range in hours, which allows the code to identify location estimates that are
-close to, but not exactly separated by the `interval_hr` input value (`range_hr=6`, by
-default).
+  * `min_hr` and `max_hr`: set the minimum and maximum times between
+  location estimates in hours (`min_hr=24` and `max_hr=240`, by default),
+  * `interval_hr`: set the the time interval in hours. This parameter creates a sequence of time windows
+  between the minimum and maximum times over the set time interval (`interval_hr=24`, by default), and 
+  * `range_hr`: set the range in hours. This parameter allows the code to identify location estimates that are
+  close to, but not exactly separated by the `interval_hr` input value (`range_hr=6`, by
+  default).
 
 For example, by default, `CalcDisp()` calculates displacements between
-location estimates separated by 10 time windows, 24 ± 6 hours, 48 ± 6
-hours, etc., until 240 ± 6 hours. `CalcDisp()` outputs a list where each
-list element contains the displacements calculated over a time window,
+location estimates separated by 10 time windows: 24 ± 6 hours, 48 ± 6 hours, 72 ± 6 hours, etc., until 240 ± 6 hours. 
+
+`CalcDisp()` outputs a list where each list element contains the displacements calculated over a time window,
 such that the first list element contains data from the first time
-window and so on.
+window and so on. For example, by default, the first list element would include displacements calculated over 24 ± 6 hours, and the 10th list element
+would contain displacements calculated over 240 ± 6 hours.
 
 ```{r calc disp, echo=TRUE}
 # Calculate displacements from the tracks dataset with default parameters
@@ -204,73 +201,87 @@ disp.all <- CalcDisp(tracks)
 summary(unlist(disp.all[[1]]))
 ```
 
-### Probability density functions (pdf) 
+### Probability density functions (pdf) of displacements
 
-Probability density functions (pdf) can be created....####
-Create a probability density function (pdf) plot of normalised displacements with `PlotDispPDF()`
-The `PlotDispPDF()` function calculates a probability density function (pdf) of the displacements (Figure S3 - Figure S4; Figure 1 in main text). `PlotDispPDF()` includes 3 optional parameters:
+Probability density functions (pdf) of displacements describe the probability distribution 
+of the displacements and can be used to calculate the probability of displacements occurring
+(Figure V3 - Figure V4; Figure 1 in main text). See main text for further information.
 
-* `normalised`: normalise the data before plotting, which divides all displacements in a time window by the mean displacement for that time window (`normalised=TRUE`, by default).
-* `colours`: change the point colours (`colours=rainbow`, by default) and
-* `legend`: add or remove a legend (`legend=TRUE`, by default).
+The `PlotDispPDF()` function calculates pdfs of displacements using 3 optional parameters:
 
-`PlotDispPDF()` outputs all data used to create the plot, including the pdf values (*pdf*), the displacements (*disp*), and the time windows (*timeWindow*); note that if `normalised=TRUE`, the output displacements are normalised values.
-
-```{r plot all norm disp, echo=TRUE, error=FALSE, message=FALSE, fig.width = 7, fig.height = 5, out.width="60%"}
-plot.data <- PlotDispPDF(disp.all)
-```
-
-**Figure S3** Probability density function (pdf) plot of normalised displacements from the tracks dataset calculated over 10 time windows, 24 to 240 hours at 24 ± 6-hour time intervals with `CalcDisp()`. Plot created with `PlotDispPDF()` default parameters. 
-
-## INTRODUCE PDF WITH NORMALIZE = FALSE
+  * `normalised`: normalise the data before plotting, which divides all displacements in a time window by the mean displacement for that time window (`normalised=TRUE`, by default).
+  * `colours`: change the point colours (`colours=rainbow`, by default) and
+  * `legend`: add or remove a legend (`legend=TRUE`, by default).
+  
+`PlotDispPDF()` outputs a dataframe of all data used to create the plot, including:
+  * *pdf*: pdf values,
+  * *disp*: binned displacement values (note that if `normalised=TRUE` the displacements are normalised values), and
+  * *timeWindow*: corresponding time windows
 
 ```{r plot all disp (not norm), echo=TRUE, error=FALSE, message=FALSE, out.width="60%"}
+# Create a probability density function (pdf) plot of raw (i.e., not normalized) displacements
 plot.data.norm <- PlotDispPDF(disp.all, normalised=FALSE)
 ```
 
-**Figure S4** Probability density function (pdf) plot of displacements from the tracks dataset calculated over 10 time windows, 24 to 240 hours at 24 ± 6-hour time intervals with `CalcDisp()`. Plot created with `PlotDispPDF()` where `normalised=FALSE`.
+**Figure V3** Probability density function (pdf) plot of displacements from the `tracks` dataset calculated over 10 time windows, 24 to 240 hours at 24 ± 6-hour time intervals with `CalcDisp()`. Plot created with `PlotDispPDF()` where `normalised=FALSE`.
+
+```{r plot all norm disp, echo=TRUE, error=FALSE, message=FALSE, fig.width = 7, fig.height = 5, out.width="60%"}
+# Create a probability density function (pdf) plot of normalized displacements
+plot.data <- PlotDispPDF(disp.all, normalised=TRUE)
+```
+
+**Figure V4** Probability density function (pdf) plot of normalised displacements from the `tracks` dataset calculated over 10 time windows, 24 to 240 hours at 24 ± 6-hour time intervals with `CalcDisp()`. Plot created with `PlotDispPDF()` default parameters. 
 
 ## Search patterns 
 
-After displacements are calculated you can identify the best-fit
+After displacements are calculated PhysMove functions can be used to identify the best-fit
 distribution of displacements, which can provide insights into the
 search pattern(s) a species may use to locate resources. Determining the
 best-fit distribution for the displacements involves 3 functions
-(Figure 1 in main text, Figure S5 for a methodological overview): 
+(Figure 1 in main text, Figure V5 for a methodological overview): 
 
 1. `FitDist()`: fits cdfs of continuous power-law, exponential, and
 lognormal distributions over the full range of displacements (i.e., full
-distributions) or to displacements truncated by a minimum displacement value, d_min (i.e.,
+distributions) or to displacements truncated by a minimum value (i.e.,
 truncated distributions)
 
-`FitDist()` requires you to consider 4 optional parameters:
+  `FitDist()` requires you to consider 4 optional parameters:
+  
+  * `dist`: distributions you want to fit to the displacement
+  data. `FitDist()` can fit continuous power-law (“pl”), exponential
+  (“exp”), and lognormal (“lnorm”) distributions
+  (`dist=c("pl","exp","lnorm")`, by default). To fit only one or two
+  distributions simply remove the distributions you are not interested in running
+  e.g., `dist=c("exp","lnorm")`.
+  * `full`: determines if distributions are fit over
+  the full range of displacements data (`full=TRUE`), or to the
+  displacements truncated by a minimum value (`full=FALSE`, by default) 
+  * `set_dmin`: used to either force the algorithm to automatically identify the best-fit d_min for each
+  distribution (`set_dmin=NULL`, by default), or to manually assign a minimum displacement value for each 
+  distribution fit (e.g., `set_dmin=1`). Note that set_dmin can only be applied if `full = FALSE'.
+  * `normalise`: normalise displacements before fitting distributions (`normalise=TRUE`, by default). Displacements 
+  should be normalised if they were calculated over multiple temporal periods.
 
-* `dist`: distributions you want to fit to the displacement
-data. By default, `FitDist()` fits continuous power-law (“pl”), exponential
-(“exp”), and lognormal (“lnorm”) distributions
-(`dist=c("pl","exp","lnorm")`, by default). 
-* `full`: set if the distributions should be fit over
-the full range of displacements data (`full=TRUE`), or to the
-displacements truncated by a d_min (`full=FALSE`, by default) 
-* `set_dmin`: used to either force the algorithm to automatically identify the best-fit d_min for each
-distribution (`set_dmin=NULL`, by default), or to manually assign a minimum displacement value that will be used to fit each distribution (e.g., `set_dmin=1`). Note that set_dmin can only be applied if `full = FALSE')
-* `normalise`: normalise displacements before fitting distributions (`normalise=TRUE`, by default). Note that
-displacements should be normalised if they were calculated over multiple temporal periods.
+`FitDist()` outputs a list including two list elements. The first list element is a dataframe that includes: 
+  * *distribution*: all distributions fit to the displacement data (pl, exp, or lnorm),
+  * *dmin*: the minimum value used to fit each distribution
+  * *parameter 1*: the first parameter for each distribution (i.e., α, λ, or μ for pl, exp, and lnorm, respectively)
+  * *parameter 2*: the second distribution parameter (i.e., σ, only applicable to lnorm), and 
+  * *nTail*: the number of values greater than or equal to dmin.
+  
+  The second list element is a logical argument that records if the displacements were normalized (TRUE), or not (FALSE). This is output
+  because it is requires for `PlotDist()` and `CompDist()`. 
 
-Outputs from `FitDist()` include: the *distribution* name (pl, exp, or lnorm),
-*dmin* value, *parameter 1*, the first parameter for each distribution
-(i.e., α, λ, or μ for pl, exp, and lnorm, respectively), *parameter 2*,
-the second distribution parameter (i.e., σ, only applicable to lnorm),
-and *nTail*, the number of values greater than or equal to dmin.
+################## STOPPED HERE
 
 2. `PlotDist()`: uses the results from `FitDist()` to plot ccdfs of the displacements with fit lines for each distribution (e.g., Figure S6).
 
 `PlotDist()` includes 4 optional parameters:
-
-* `fitLines`: add fit lines for each distribution (`fitLines=TRUE`, by default), 
-* `setDist`: plot only specific distributions (`setDist=NULL`, by default), 
-* `colours`: change the colours of the fit lines (`colours=c("red","gold2","blue")`, by default), and
-* `legend`: add a legend (`legend=TRUE`, by default).
+  
+  * `fitLines`: add fit lines for each distribution (`fitLines=TRUE`, by default), 
+  * `setDist`: plot only specific distributions (`setDist=NULL`, by default), 
+  * `colours`: change the colours of the fit lines (`colours=c("red","gold2","blue")`, by default), and
+  * `legend`: add a legend (`legend=TRUE`, by default).
 
 3. `CompDist()`: compares distribution fits from `FitDist()` and
 identifies the best-fit distribution for the displacements. Note that
@@ -572,15 +583,15 @@ each grid cell per area) based on the `tracks` dataset. Map created with
 `Occupancy()` default parameters.
 
 A pdf of the results from `Occupancy()` can be plotted with the
-`pdfPlot()` function when the `desc` parameter is set to “Occupancy”
+`PlotPDF()` function when the `desc` parameter is set to “Occupancy”
 (Figure S14).`
 
 ```{r pdf occ, echo=TRUE, out.width="60%"}
 # Create a pdf plot of occupancy values
-pdf.occ  <- pdfPlot(Occ$Occupancy, desc="Occupancy")
+pdf.occ  <- PlotPDF(Occ$Occupancy, desc="Occupancy")
 ```
 
-**Figure S14** Probability density function (pdf) plot of occupancy per km2 for tracks dataset determined with `Occupancy()` default parameters. Plot created using `pdfPlot()` with `desc=“Occupancy”`.
+**Figure S14** Probability density function (pdf) plot of occupancy per km2 for tracks dataset determined with `Occupancy()` default parameters. Plot created using `PlotPDF()` with `desc=“Occupancy”`.
 
 ## Community-wide movements 
 
@@ -697,17 +708,17 @@ head(GR)
 ```
 
 A pdf of the results from `GyrationRad()` can be plotted with the
-`pdfPlot()` function when the `desc` parameter is set to “GyrationRad”
+`PlotPDF()` function when the `desc` parameter is set to “GyrationRad”
 (Figure S17; Figure 1 in main text).
 
 ```{r, echo=TRUE, out.width="60%"}
 # Create a pdf plot of gyration radius values
-pdf.gr <- pdfPlot((GR$`rG (km)`), desc="GyrationRad")
+pdf.gr <- PlotPDF((GR$`rG (km)`), desc="GyrationRad")
 ```
 
 **Figure** **S17** Probability density function (pdf) plot of gyration
 radius values for `tracks` dataset determined with `GyrationRad()` default
-parameters. Plot created using `pdfPlot()` with `desc=“GyrationRad”`.
+parameters. Plot created using `PlotPDF()` with `desc=“GyrationRad”`.
 
 ## Track entropy
 
@@ -739,17 +750,17 @@ head(Ent)
 ```
 
 A pdf of the results from `Entropy()` can be plotted with the
-`pdfPlot()` function when the `desc` parameter is set to “Entropy” (Figure
+`PlotPDF()` function when the `desc` parameter is set to “Entropy” (Figure
 S19; Figure 1 in main text).
 
 ```{r, echo=TRUE, out.width="60%"}
 # Create a pdf plot of the entropy scores
-pdf.ent <- pdfPlot(Ent$normalisedEntropy, "Entropy")
+pdf.ent <- PlotPDF(Ent$normalisedEntropy, "Entropy")
 ```
 
 **Figure** **S19** Probability density function (pdf) plot of normalised
 entropy scores for `tracks` dataset determined with `Entropy()` default
-parameters. Plot created using `pdfPlot()` with `desc=“Entropy”`.
+parameters. Plot created using `PlotPDF()` with `desc=“Entropy”`.
 
 ## Track predictability 
 
@@ -781,17 +792,17 @@ head(Pred)
 ```
 
 A pdf of the results from `Predictability()` can be plotted with the
-`pdfPlot()` function when the `desc` parameter is set to “Predictability”
+`PlotPDF()` function when the `desc` parameter is set to “Predictability”
 (Figure S21; Figure 1 in main text).
 
 ```{r, echo=TRUE, out.width="60%"}
 # Create a pdf plot of the predictability scores
-pdf.pred <- pdfPlot(Pred$Predictability, desc="Predictability")
+pdf.pred <- PlotPDF(Pred$Predictability, desc="Predictability")
 ```
 
 **Figure** **S21** Probability density function (pdf) plot of predictability
 scores for `tracks` dataset determined with `Predictability()` default
-parameters and results from `Entropy()`. Plot created using `pdfPlot()`
+parameters and results from `Entropy()`. Plot created using `PlotPDF()`
 with `desc=“Predictability”`.
 
 $~$

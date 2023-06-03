@@ -48,8 +48,9 @@ appear about columns or rows summing to 0 this simply means an individual moved 
 Please note: to run this function you must first download the infomapecology package from gitub and install the infomap.exe.
 For details please see: https://ecological-complexity-lab.github.io/infomap_ecology_package/installation
 To learn more about Infomap please visit: https://www.mapequation.org/
-}
-\examples{
+
+Examples:
+library (infomapecology)
 InfomapCommunities(tracks)
 InfomapCommunities(tracks, gridCell=0.25, hours=24, range_hr=6, tpm=FALSE)
 }

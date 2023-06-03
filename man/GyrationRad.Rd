@@ -22,6 +22,7 @@ Gyration radius values for each trajectory. If map=TRUE a map of the gyration ra
 }
 \description{
 This function allows you to calculate the gyration radius of individual trajectories.
+A pdf plot of the gyration radius values can be created with the \code{\link{PlotPDF}} function.
 }
 \examples{
 GyrationRad(tracks)

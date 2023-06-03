@@ -26,6 +26,7 @@ Limit of predictability values for each trajectory. If histPlot=TRUE a histogram
 \description{
 This function allows you to calculate the limit of predictability for each trajectory based on each individual's entropy. This function requires
 'indivEntropy', 'cellsVisited', and 'normalisedEntropy' from the \code{\link{Entropy}} function.
+A pdf plot of the predictability values can be created with the \code{\link{PlotPDF}} function.
 }
 \examples{
 Predictability(tracks, entropyResults)

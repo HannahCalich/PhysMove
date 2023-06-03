@@ -1,7 +1,7 @@
 #' Occupancy
 #'
 #' This function allows you to calculate the occupancy patterns of location estimates and create a map.
-#' A pdf plot of the occupancy values can be created with the \code{\link{pdfPlot}} function.
+#' A pdf plot of the occupancy values can be created with the \code{\link{PlotPDF}} function.
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
@@ -11,9 +11,8 @@
 #' @param map Create a map illustrating where occupancy occurs. Default is TRUE.
 #' @param colGrad  Colour gradient for occupancy map that illustrates low, moderate, and high occupancy, respectively
 #' (applied to ggplot2::scale_fill_gradientn). Default is colGrad=c("blue", "light blue","red").
-#' @return A list containing occupancy results (first list object) and the total number of grid cells analyzed (second list object -
-#' required by the \code{\link{pdfPlot}} function). Occupancy results include a data frame with occupancy values and corresponding
-#' locations (provided as center value of each grid cell). If map=TRUE a map is created.
+#' @return A dataframe including occupancy values and corresponding
+#' locations (provided as centres value of each grid cell). If map=TRUE a map is created.
 #' @importFrom rlang .data
 #' @examples Occupancy(tracks)
 #' @examples Occupancy(tracks, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"))

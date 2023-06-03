@@ -39,8 +39,8 @@ This function allows you to fit power law, exponential, or log-normal distributi
 the \code{\link{CalcDisp}} function. If displacements were calculated over multiple time windows this function will normalise the
 displacements by dividing each displacement by the mean displacement of the corresponding time window
 }
-\examples{
+\details{
+Examples:
 FitDist(displacements)
-FitDist(displacements, dist=c("exp","lnorm"), full=TRUE)
 FitDist(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE)
 }
