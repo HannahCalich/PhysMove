@@ -113,12 +113,9 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
         n <- length(xi)
         pars <- c(mean(xi)) # Initialize create_nll function with mean and sd of log xi
 
-        my_nll <- create_nll(xi) # Calculate negative log likelihood
-
-        mle = suppressWarnings(optim(par = pars, fn = my_nll, method = "L-BFGS-B", lower = 0))
-        init <- mle$par
-
-        # init <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
+        # my_nll <- create_nll(xi) # Calculate negative log likelihood
+        # mle = suppressWarnings(optim(par = pars, fn = my_nll, method = "L-BFGS-B", lower = 0))
+        # init <- mle$par
 
         rev.index <- rev(seq_along(x))
         pars.list <- c()
@@ -127,11 +124,11 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
           xi <- x[x>xmin]
           n <- length(xi)
 
-          my_nll <- create_nll(xi)
-          mle = suppressWarnings(optim(par = init, fn = my_nll, method = "L-BFGS-B", lower = 0))
-          pars.list[i] <- mle$par
+          # my_nll <- create_nll(xi)
+          # mle = suppressWarnings(optim(par = init, fn = my_nll, method = "L-BFGS-B", lower = 0))
+          # pars.list[i] <- mle$par
 
-          # pars.list[i] <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
+          pars.list[i] <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
 
           selection = min(which(x >= (xmin - .Machine$double.eps ^ 0.5))) ## to account for decimal place issue with selection
           n <- rev.index[selection]
@@ -161,12 +158,11 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
         xi <- x[x>xmin] # truncate dataset at xmin
         n <- length(xi)
 
-        my_nll <- create_nll(xi)
-        mle = suppressWarnings(optim(par = mean(xi), fn = my_nll, method = "L-BFGS-B", lower = 0))
-        Exp_lambda <- mle$par
+        # my_nll <- create_nll(xi)
+        # mle = suppressWarnings(optim(par = mean(xi), fn = my_nll, method = "L-BFGS-B", lower = 0))
+        # Exp_lambda <- mle$par
 
-        # Exp_lambda <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
-
+        Exp_lambda <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
         Exp_xmin <- xmin
       }
     }
