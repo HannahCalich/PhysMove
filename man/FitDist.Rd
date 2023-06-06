@@ -18,26 +18,24 @@ FitDist(
 \item{dist}{Continuous distributions that will be fit to the displacements. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
 continuous distributions. Default is dist=c("pl","exp","lnorm").}
 
-\item{set_dmin}{To limit the fitted distribution to values above a specified value. Keep in mind that if your data were normalised
+\item{set_dmin}{To limit the fitted distribution to values above a specified value. If your displacements are going to be normalised
 this value will have to be a normalised value as well. Default is NULL.}
 
 \item{full}{To fit the distributions to the full range of displacement data. Default is FALSE.}
 
-\item{normalise}{Normalises the displacement distances by dividing each displacement by the average displacement for that time window
+\item{normalise}{Normalises the displacement distances by dividing each displacement by the average displacement for that time window;
 normalise=TRUE is required if working with displacements calculated over multiple time windows.}
 }
 \value{
-A list including a data frame that contains the summary statistics for each distribution fit (1st list element) and a logical argument indicating if
-data were normalised. Results dataframe includes the distribution name,
-dmin (the d value used to fit the distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
-distributions respectively, and nTail (the number of data points greater than or equal to dmin). A vector stating if the data were normalised or not,
-('normalise') is automatically assigned to the global environment as this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}
+A list including a dataframe of summary statistics for each distribution fit (1st list element). Results dataframe includes the
+distribution name, dmin (d values used to fit each distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
+distributions respectively, and nTail (the number of data points greater than or equal to dmin). A logical argument indicating if
+data were normalised is exported as the 2nd list element because this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}
 functions.
 }
 \description{
-This function allows you to fit power law, exponential, or log-normal distributions to the displacements calculated with
-the \code{\link{CalcDisp}} function. If displacements were calculated over multiple time windows this function will normalise the
-displacements by dividing each displacement by the mean displacement of the corresponding time window
+This function allows you to fit power law, exponential, or lognormal distributions to the displacements calculated with
+the \code{\link{CalcDisp}} function.
 }
 \details{
 Examples:
