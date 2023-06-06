@@ -92,62 +92,27 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
 
   if ("exp" %in% dist){
     message("Fitting an exponential distribution")
-    dat <- numeric(length(xmins)) #blank vectors for D values
-
-    create_nll <- function(x){
-      n <- length(x)
-      function(lambda){
-        nll <- -(sum(dexp(x, rate=lambda, log=TRUE)) - n*pexp(xmin, rate=lambda, log.p=TRUE, lower.tail=FALSE))
-        if (!is.finite(nll)){
-          nll <- 1e+12
-        }
-        nll
-      }
-    }
-
     if (full==FALSE){
       if (is.null(set_dmin)){
-
-        xmin <- min(x)
-        xi <- x[x>xmin] # truncate dataset at xmin
-        n <- length(xi)
-        pars <- c(mean(xi)) # Initialize create_nll function with mean and sd of log xi
-
-        my_nll <- create_nll(xi) # Calculate negative log likelihood
-
-        mle = suppressWarnings(optim(par = pars, fn = my_nll, method = "L-BFGS-B", lower = 0))
-        init <- mle$par
-
-        # init <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
-
+        dat <- numeric(length(xmins))
         rev.index <- rev(seq_along(x))
         pars.list <- c()
-        for (i in 1:(length(xmins)-length(pars)-1)){ # need at least number of pars + 1 to fit
+        for (i in 1:(length(xmins)-2)){ # need at least number of pars + 1 to fit
           xmin <- xmins[i]
           xi <- x[x>xmin]
           n <- length(xi)
 
-          my_nll <- create_nll(xi)
-          mle = suppressWarnings(optim(par = init, fn = my_nll, method = "L-BFGS-B", lower = 0))
-          pars.list[i] <- mle$par
-
-          # pars.list[i] <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
+          pars.list[i] <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
 
           selection = min(which(x >= (xmin - .Machine$double.eps ^ 0.5))) ## to account for decimal place issue with selection
           n <- rev.index[selection]
           xi <- x[(N-n+1):N]
 
-          # # same as fx calc below
-          # p = pexp(xi, pars.list[i], lower.tail = TRUE)
-          # C = pexp(xmin, pars.list[i], lower.tail = FALSE)
-          # fx1 = (p/C - 1/C + 1)
-          # fx1[xi<xmin] <- 0
+          fx <- 1-exp(-pars.list[i]*(xi-xmin))
+          fx[xi<xmin] <- 0
 
-          fx <- 1-exp(-pars.list[i]*(xi-xmin)) ## original
-          fx[xi<xmin] <- 0 ## original
-
-          sx <- ((0:(n - 1))/n)[1:length(fx)] #complementary empirical CDF ## original
-          dat[i] <- max(abs(sx-fx), na.rm=TRUE) # max difference between fitted and empirical cdfs (KS test) ## original
+          sx <- ((0:(n - 1))/n)[1:length(fx)] #complementary empirical CDF
+          dat[i] <- max(abs(sx-fx), na.rm=TRUE) # max difference between fitted and empirical cdfs (KS test)
         }
         D <- min(dat[dat>0],na.rm=TRUE)
         row <- which.max(dat==D)
@@ -160,27 +125,14 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
         xmin <- set_dmin
         xi <- x[x>xmin] # truncate dataset at xmin
         n <- length(xi)
-
-        my_nll <- create_nll(xi)
-        mle = suppressWarnings(optim(par = mean(xi), fn = my_nll, method = "L-BFGS-B", lower = 0))
-        Exp_lambda <- mle$par
-
-        # Exp_lambda <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
-
+        Exp_lambda <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
         Exp_xmin <- xmin
       }
     }
     if (full==TRUE){
       xmin <- min(x)
-      xi <- x
-      n <- length(xi)
-
-      my_nll <- create_nll(xi)
-      mle = suppressWarnings(optim(par = mean(xi), fn = my_nll, method = "L-BFGS-B", lower = 0))
-      Exp_lambda <- mle$par
-
-      # Exp_lambda <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
-
+      n <- length(x)
+      Exp_lambda <- n*(sum(x-xmin)^-1) # from doi: 10.1038/nature09116
       Exp_xmin <- xmin
     }
     distResults[which(distResults$distribution =="exp"),which(names(distResults)=="dmin")] <- Exp_xmin
