@@ -142,7 +142,6 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
 
   if ("lnorm" %in% dist){
     message("Fitting a lognormal distribution")
-    dat <- numeric(length(xmins)) #blank vectors for D values
 
     create_nll <- function(x){
       n <- length(x)
@@ -157,36 +156,30 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
 
     if (full==FALSE){
       if (is.null(set_dmin)){
-        init <- matrix(ncol=2, nrow=1)# Initializing values with min of data
+        dat <- numeric(length(xmins))
+        init <- matrix(ncol=2, nrow=1)
 
         xmin <- min(x)
-        xi <- x[x>xmin] # truncate dataset at xmin
-        n <- length(xi) #size of truncated data set
+        xi <- x[x>xmin]
+        n <- length(xi)
 
-        pars <- c(mean(log(xi)), stats::sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
-        my_nll <- create_nll(xi) # Calculate negative log likelihood
-
-        # mle <- stats4::mle(minuslogl = my_nll, start=list(mu=pars[1],sigma=pars[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
-        # init <- c(as.numeric(mle@coef[1]), as.numeric(mle@coef[2])) # Records parameters of fit
-
+        pars <- c(mean(log(xi)), stats::sd(log(xi)))
+        my_nll <- create_nll(xi)
         mle <- suppressWarnings(optim(par=pars, fn=my_nll, method="L-BFGS-B", lower=c(-Inf, .Machine$double.eps)))
         init <- c(mle$par[1],mle$par[2])
 
         rev.index <- rev(seq_along(x))
         pars.mat <- matrix(ncol=2, nrow=(length(xmins)-1))
-        for (i in 1:(length(xmins)-length(pars)-1)){ # need at least number of pars + 1 to fit
+        for (i in 1:(length(xmins)-3)){ # need at least number of pars + 1 to fit
           xmin <- xmins[i]
-          xi <- x[x>xmin] # truncate dataset at xmin
-          n <- length(xi) #size of truncated data set
+          xi <- x[x>xmin]
+          n <- length(xi)
 
-          my_nll <- create_nll(xi) # Calculate negative log likelihood
-          # mle <- stats4::mle(minuslogl = my_nll, start=list(mu=init[1],sigma=init[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
-          # pars.mat[i,] = c(as.numeric(mle@coef[1]), as.numeric(mle@coef[2])) # Records parameters of fit
-
+          my_nll <- create_nll(xi)
           mle <- suppressWarnings(optim(par=init, fn=my_nll, method="L-BFGS-B", lower=c(-Inf, .Machine$double.eps)))
           pars.mat[i,] <- c(mle$par[1],mle$par[2])
 
-          selection = min(which(x >= (xmin - .Machine$double.eps ^ 0.5))) ## to account for decimal place issue with selection
+          selection = min(which(x >= (xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
           n <- rev.index[selection]
           xi <- x[(N-n+1):N]
 
@@ -194,49 +187,43 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
           fx <- (plnorm(xi, pars.mat[i,1], pars.mat[i,2], lower.tail = TRUE)/lnormCDF)-(1/lnormCDF)+1
           fx[xi<xmin] = 0
 
-          sx <- ((0:(n - 1))/n)[1:length(fx)] #complementary empirical CDF
+          sx <- ((0:(n - 1))/n)[1:length(fx)] # complementary empirical CDF
           dat[i] <- max(abs(sx-fx)) # max difference between fitted and empirical cdfs
         }
-        D <- min(dat[dat>0], na.rm=TRUE) # find smallest D value
-        row <- which.max(dat==D) #which.max is needed for cases where identical D values are calculated. In this case pick the highest row as it containes the most data.
-        LN_xmin <- xmins[row] # find corresponding xmin value such that LN_xmin is the D value that minimizes the distance between sx and fx
-        LN_mu <- pars.mat[row,1] # determine parameters that correspond with LN_xmin
+        D <- min(dat[dat>0], na.rm=TRUE)
+        row <- which.max(dat==D)
+        LN_xmin <- xmins[row]
+        LN_mu <- pars.mat[row,1]
         LN_sigma <- pars.mat[row,2]
-        n <- length(x[x>=LN_xmin]) # truncate dataset at xmin
+        n <- length(x[x>=LN_xmin])
       }
 
       if (!is.null(set_dmin)){
         xmin <- set_dmin
-        xi <- x[x>xmin] # truncate dataset at xmin
-        n <- length(xi) #size of truncated data set
-        pars <- c(mean(log(xi)), stats::sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
+        xi <- x[x>xmin]
+        n <- length(xi)
 
-        my_nll <- create_nll(xi) # Calculate negative log likelihood
+        pars <- c(mean(log(xi)), stats::sd(log(xi)))
+        my_nll <- create_nll(xi)
         mle <- suppressWarnings(optim(par=pars, fn=my_nll, method="L-BFGS-B", lower=c(-Inf, .Machine$double.eps)))
-        # mle <- stats4::mle(minuslogl = my_nll, start=list(mu=pars[1],sigma=pars[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
-        # LN_mu <- as.numeric(mle@coef[1])
-        # LN_sigma <- as.numeric(mle@coef[2])
 
         LN_mu <- mle$par[1]
         LN_sigma <- mle$par[2]
         LN_xmin <- xmin
-        n <- length(x[x>=LN_xmin]) # truncate dataset at xmin
+        n <- length(x[x>=LN_xmin])
       }
     }
     if (full==TRUE){
       xmin <- min(x)
-      xi <- x[x>xmin] # truncate dataset at xmin
-      n <- length(xi) #size of truncated data set
-      pars <- c(mean(log(xi)), stats::sd(log(xi))) # Initialize create_nll function with mean and sd of log xi
-      my_nll <- create_nll(xi) # Calculate negative log likelihood
+      xi <- x[x>xmin]
+      n <- length(xi)
+      pars <- c(mean(log(xi)), stats::sd(log(xi)))
+      my_nll <- create_nll(xi)
       mle <- suppressWarnings(optim(par=pars, fn=my_nll, method="L-BFGS-B", lower=c(-Inf, .Machine$double.eps)))
-      # mle <- stats4::mle(minuslogl = my_nll, start=list(mu=pars[1],sigma=pars[2]), method = "L-BFGS-B", lower = c(-Inf,.Machine$double.eps))
-      # LN_mu <- as.numeric(mle@coef[1])
-      # LN_sigma <- as.numeric(mle@coef[2])
       LN_mu <- mle$par[1]
       LN_sigma <- mle$par[2]
       LN_xmin <- xmin
-      n <- length(x[x>=LN_xmin]) # truncate dataset at xmin
+      n <- length(x[x>=LN_xmin])
     }
     distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="dmin")] <- LN_xmin
     distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="parameter1")] <- LN_mu
