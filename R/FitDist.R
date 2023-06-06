@@ -94,7 +94,20 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
     message("Fitting an exponential distribution")
     if (full==FALSE){
       if (is.null(set_dmin)){
+<<<<<<< HEAD
         dat <- numeric(length(xmins))
+=======
+
+        xmin <- min(x)
+        xi <- x[x>xmin] # truncate dataset at xmin
+        n <- length(xi)
+        pars <- c(mean(xi)) # Initialize create_nll function with mean and sd of log xi
+
+        # my_nll <- create_nll(xi) # Calculate negative log likelihood
+        # mle = suppressWarnings(optim(par = pars, fn = my_nll, method = "L-BFGS-B", lower = 0))
+        # init <- mle$par
+
+>>>>>>> cde3ef2e1932660567e1ff1da661a10f77cac734
         rev.index <- rev(seq_along(x))
         pars.list <- c()
         for (i in 1:(length(xmins)-2)){ # need at least number of pars + 1 to fit
@@ -102,6 +115,13 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
           xi <- x[x>xmin]
           n <- length(xi)
 
+<<<<<<< HEAD
+=======
+          # my_nll <- create_nll(xi)
+          # mle = suppressWarnings(optim(par = init, fn = my_nll, method = "L-BFGS-B", lower = 0))
+          # pars.list[i] <- mle$par
+
+>>>>>>> cde3ef2e1932660567e1ff1da661a10f77cac734
           pars.list[i] <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
 
           selection = min(which(x >= (xmin - .Machine$double.eps ^ 0.5))) ## to account for decimal place issue with selection
@@ -125,6 +145,14 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
         xmin <- set_dmin
         xi <- x[x>xmin] # truncate dataset at xmin
         n <- length(xi)
+<<<<<<< HEAD
+=======
+
+        # my_nll <- create_nll(xi)
+        # mle = suppressWarnings(optim(par = mean(xi), fn = my_nll, method = "L-BFGS-B", lower = 0))
+        # Exp_lambda <- mle$par
+
+>>>>>>> cde3ef2e1932660567e1ff1da661a10f77cac734
         Exp_lambda <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
         Exp_xmin <- xmin
       }
