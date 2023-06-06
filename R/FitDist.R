@@ -168,6 +168,11 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
         mle <- suppressWarnings(optim(par=pars, fn=my_nll, method="L-BFGS-B", lower=c(-Inf, .Machine$double.eps)))
         init <- c(mle$par[1],mle$par[2])
 
+        # norm_cdf <- function(x){
+        #   phi = 1/2*(1+VGAM::erf((x-pars.mat[i,1])/(pars.mat[i,2]*sqrt(2))))
+        #   phi
+        # }
+
         rev.index <- rev(seq_along(x))
         pars.mat <- matrix(ncol=2, nrow=(length(xmins)-1))
         for (i in 1:(length(xmins)-3)){ # need at least number of pars + 1 to fit
@@ -183,8 +188,12 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
           n <- rev.index[selection]
           xi <- x[(N-n+1):N]
 
+          # fx <- (norm_cdf(log(xi))-norm_cdf(log(xmin)))/
+          #   (1-(1/2*(1+VGAM::erf(xi/sqrt(2))))*((log(xmin)- pars.mat[i,1])/ pars.mat[i,2]))
+
           lnormCDF <- plnorm(xmin, pars.mat[i,1], pars.mat[i,2], lower.tail = FALSE)
-          fx <- (plnorm(xi, pars.mat[i,1], pars.mat[i,2], lower.tail = TRUE)/lnormCDF)-(1/lnormCDF)+1
+          fx <- (plnorm(xi, pars.mat[i,1], pars.mat[i,2], lower.tail = TRUE)/lnormCDF)-
+            (1/lnormCDF)+1
           fx[xi<xmin] = 0
 
           sx <- ((0:(n - 1))/n)[1:length(fx)] # complementary empirical CDF
