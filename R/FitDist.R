@@ -85,6 +85,10 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
     xi <- x[x>=(PL_xmin)] # Use PL_xmin to calculate final datasets and parameters
     n <- length(xi)
     PL_alpha <- 1+n*((sum(log(xi/PL_xmin)))^-1) # calculate alpha using direct MLE based on PL_xmin
+
+    selection = min(which(x >= (PL_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+    n <- rev.index[selection] # number of values of x >= xmin
+
     distResults[which(distResults$distribution =="pl"),which(names(distResults)=="dmin")] <- PL_xmin
     distResults[which(distResults$distribution =="pl"),which(names(distResults)=="parameter1")] <- PL_alpha
     distResults[which(distResults$distribution =="pl"),which(names(distResults)=="nTail")] <- n
@@ -118,7 +122,8 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
         row <- which.max(dat==D)
         Exp_xmin <- xmins[row]
         Exp_lambda <- pars.list[row]
-        n <- length(x[x>=Exp_xmin]) #length of truncated dataset
+        selection = min(which(x >= (Exp_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+        n <- rev.index[selection] # number of values of x >= xmin
       }
 
       if (!is.null(set_dmin)){
@@ -127,13 +132,18 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
         n <- length(xi)
         Exp_lambda <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
         Exp_xmin <- xmin
+        selection = min(which(x >= (Exp_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+        n <- rev.index[selection] # number of values of x >= xmin
       }
     }
     if (full==TRUE){
       xmin <- min(x)
-      n <- length(x)
-      Exp_lambda <- n*(sum(x-xmin)^-1) # from doi: 10.1038/nature09116
+      xi <- x[x>xmin]
+      n <- length(xi)
+      Exp_lambda <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
       Exp_xmin <- xmin
+      selection = min(which(x >= (Exp_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+      n <- rev.index[selection] # number of values of x >= xmin
     }
     distResults[which(distResults$distribution =="exp"),which(names(distResults)=="dmin")] <- Exp_xmin
     distResults[which(distResults$distribution =="exp"),which(names(distResults)=="parameter1")] <- Exp_lambda
@@ -204,7 +214,8 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
         LN_xmin <- xmins[row]
         LN_mu <- pars.mat[row,1]
         LN_sigma <- pars.mat[row,2]
-        n <- length(x[x>=LN_xmin])
+        selection = min(which(x >= (LN_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+        n <- rev.index[selection] # number of values of x >= xmin
       }
 
       if (!is.null(set_dmin)){
@@ -219,20 +230,26 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
         LN_mu <- mle$par[1]
         LN_sigma <- mle$par[2]
         LN_xmin <- xmin
-        n <- length(x[x>=LN_xmin])
+
+        selection = min(which(x >= (LN_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+        n <- rev.index[selection] # number of values of x >= xmin
       }
     }
     if (full==TRUE){
       xmin <- min(x)
       xi <- x[x>xmin]
       n <- length(xi)
+
       pars <- c(mean(log(xi)), stats::sd(log(xi)))
       my_nll <- create_nll(xi)
       mle <- suppressWarnings(optim(par=pars, fn=my_nll, method="L-BFGS-B", lower=c(-Inf, .Machine$double.eps)))
+
       LN_mu <- mle$par[1]
       LN_sigma <- mle$par[2]
       LN_xmin <- xmin
-      n <- length(x[x>=LN_xmin])
+
+      selection = min(which(x >= (LN_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+      n <- rev.index[selection] # number of values of x >= xmin
     }
     distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="dmin")] <- LN_xmin
     distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="parameter1")] <- LN_mu
