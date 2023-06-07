@@ -3,10 +3,6 @@
 #' This function allows you to fit power law, exponential, or lognormal distributions to the displacements calculated with
 #' the \code{\link{CalcDisp}} function.
 #'
-#' Examples:
-#' FitDist(displacements)
-#' FitDist(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE)
-#'
 #' @param displacements List of displacements output from the \code{\link{CalcDisp}} function.
 #' @param dist Continuous distributions that will be fit to the displacements. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
 #' continuous distributions. Default is dist=c("pl","exp","lnorm").
@@ -20,6 +16,8 @@
 #' distributions respectively, and nTail (the number of data points greater than or equal to dmin). A logical argument indicating if
 #' data were normalised is exported as the 2nd list element because this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}
 #' functions.
+#' @examples:
+#' FitDist(displacements, full=TRUE)
 #' @importFrom stats dlnorm plnorm dexp pexp
 #' @export
 
