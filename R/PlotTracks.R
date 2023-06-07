@@ -3,18 +3,17 @@
 #' Plot species' location estimates and tracks .
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
-#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{tracks}}.
 #' @param ref Reference number of track from species_df to plot, options include an individual number (ref=1) or a range of numbers (ref=1:10).
-#' By default all unique reference numbers are plotted. Defalt is NULL.
+#' By default all unique reference numbers are plotted. Default is NULL.
 #' @param tracks Add track lines to the plot. Default is TRUE.
 #' @param colours Colour(s) for plot points. Valid input options include: base R (grDevices) color pallets (e.g., colours=rainbow), RColorBrewer
-#' palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that grDevies color
+#' palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that grDevices colour
 #' pallets do not use quotations. If the palette does not have enough distinct colours to match the communities being plotted the function will automatically
 #' create a continuous pallet with the colours provided. Default is "Dark2".
-#' @return Plot showing the original and randomized track locations and the randomized tracks data used to create the map (original tracks are
-#' from species_df).
+#' @return Map of location estimates and tracks (if tracks=TRUE).
 #' @importFrom grDevices rainbow
 #' @importFrom rlang .data
 #' @examples PlotTracks(tracks, ref=1)
@@ -25,7 +24,7 @@ PlotTracks<-function(species_df, ref=NULL, tracks=TRUE, colours=rainbow){
 
   if(!is.null(ref)){
     if (!all(ref %in% species_df$ref)){
-      stop("What track would you like to plot? Please update the 'ref' parameter to a valid reference number from your species_df")
+      stop("What track would you like to plot? Update the 'ref' parameter to a valid reference number from your species_df")
     }
   }
 
@@ -44,10 +43,8 @@ PlotTracks<-function(species_df, ref=NULL, tracks=TRUE, colours=rainbow){
     myColoursPal <- myPal(length(unique(plot.df$ref)))
   }
 
-  a <- ggplot2::ggplot(plot.df, ggplot2::aes(x=.data$lon, y=.data$lat))+#, color=as.factor(ref))) +
+  a <- ggplot2::ggplot(plot.df, ggplot2::aes(x=.data$lon, y=.data$lat))+
     ggplot2::geom_point(ggplot2::aes(fill=as.factor(ref)),pch=21,size=1.8,colour="grey20",stroke=0.5)+
-    # ggplot2::geom_point(size=1)+
-    # ggplot2::geom_point(size=2, colour="black")+
     ggplot2::theme_bw(base_size=18)+
     ggplot2::theme(axis.line=ggplot2::element_line(colour = "black"),
                                         panel.grid.major = ggplot2::element_line(),

@@ -3,18 +3,17 @@
 #' This function allows you to calculate root-mean-square displacements and plot them scaled with time
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
-#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{tracks}}.
 #' @param wBins Bin width refers to the size of the time bins used to calculate how frequently displacements occurred. Default is 1.1
 #' @param timeUnit Unit used to calculate time between locations (e.g., "secs", "mins", "hours", "days", "weeks"). Default is "days".
-#' @param plot Plot the root-mean-square of displacements versus the mean displacements against their corresponding time periods. Default is TRUE.
+#' @param plot Plot the root-mean-square and mean displacements against their corresponding time periods. Default is TRUE.
 #' @param lm Calculate a linear regression to examine the relationship between the root-mean-square displacement values (target variable)
-#' and time (predictor variable) and add fit line to the plot (if plot=TRUE). The slope of this relationship, which is also known as the Hurst or
-#' scaling exponent) is the RMS statistic and it can be determined by typing 'RMSlinearModel$coefficients[2]'. Default is TRUE.
-#' @return List containing a dataframe of results (list element 1) and if lm = TRUE, the results of the linear model are also output (list element 2).
-#' The results dataframe includes the 'timeWindows' in log-sized bins along with their corresponding 'meanDisplacements', and root-mean-square
-#' displacement 'rmsDisplacements' values. If plot = TRUE, a plot of the mean displacement values and the root-mean-square displacement values
+#' and time (predictor variable) and add fit line to the plot (if plot=TRUE). Default is TRUE.
+#' @return List containing a dataframe of results (list element 1) and the results of the linear model (if lm = TRUE, list element 2).
+#' The results dataframe includes the 'timeWindows' in log-sized bins along with their corresponding 'meanDisplacements' and 'rmsDisplacements'
+#' (root-mean-square displacements). If plot = TRUE, a plot of the mean displacement values and the root-mean-square displacement values
 #' against their corresponding time period is created, and if lm = TRUE, a fit line and reference line are added to the plot.
 #' @examples
 #' RMS(tracks)
@@ -34,27 +33,27 @@ RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
   }
 
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x}) #Convert to Ana terms
-  Radius <- 6371 #Earth Radius in km (disp are in km)
-  rad <- 3.141592653589793/180 #Python has more digits of pi than R, so value pasted here instead of "pi"
-  bins <- seq(1,400,1) #400 time windows
-  tmin <- 1/(60*60*24) # 1 second is min time
+  Radius <- 6371 # Earth Radius in km (disp are in km)
+  rad <- 3.141592653589793/180 # Python has more digits of pi than R, so value pasted here instead of "pi" for consistency with python versions of code
+  bins <- seq(1,400,1)
+  tmin <- 1/(60*60*24) # 1 second in days
   sumDist2 <- sumDist <- Timefreq <- rep(0, length(bins))
   statusMessages <- c("25% complete", "50% complete", "75% complete")
   percent <- c(round(dim(species_df)[1]*0.25),round(dim(species_df)[1]*0.5),round(dim(species_df)[1]*0.75))
-  p <- 1 #for status messages
+  p <- 1 # for status messages
 
-  for(j in 1:dim(species_df)[1]){ # for each row
+  for(j in 1:dim(species_df)[1]){
     if (j %in% percent){
       message(statusMessages[p])
       p <- p+1
     }
-    n <- species_index[[paste(species_df[j,1])]][length(species_index[[paste(species_df[j,1])]])] #row where each individual ends
-    for(k in (j+1):n){ #for each shark, calculate the distance between all locations (k)
+    n <- species_index[[paste(species_df[j,1])]][length(species_index[[paste(species_df[j,1])]])] # row where each individual ends
+    for(k in (j+1):n){ # for each animal, calculate the distance between all locations (k)
       if (j+1 <= n){
         myTime <- as.numeric(difftime(species_df[k,4],species_df[j,4],units=timeUnit))
-        b <- floor(log(myTime/tmin)/log(wBins) + 0.5) #log scale time bin
-        Timefreq[b] <- Timefreq[b] + 1 #Cumulative count of displacements between each location within each log time bin
-        Dist <- MydistHaversine(species_df[k,2], species_df[k,3], species_df[j,2], species_df[j,3]) #Calculates distance from point 1 to all successive points
+        b <- floor(log(myTime/tmin)/log(wBins) + 0.5) # log scale time bin
+        Timefreq[b] <- Timefreq[b] + 1 # Cumulative count of displacements between each location within each log time bin
+        Dist <- MydistHaversine(species_df[k,2], species_df[k,3], species_df[j,2], species_df[j,3]) # Calculates distance from point 1 to all successive points
         sumDist[b] <- sumDist[b] + Dist
         sumDist2[b] <- sumDist2[b] + Dist^2
       }
@@ -73,7 +72,7 @@ RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
   plot.df <- cbind(RMS_Result[,c(1,5,6)])
   names(plot.df) <- c("timeWindow", "meanDisplacements", "rmsDisplacements")
 
-  if (plot==TRUE){ # Plot RMS of displacements, and mean displacements on log-log scale
+  if (plot==TRUE){
     if (nrow(plot.df)>1){
       ylabel <- expression('<'*d^q*'>'^(1/q)* (km)) #generic expression = ('<'*d^q*'>'^(1/q)* (km)), q=1 is mean disp, and q=2 is RMS
       xlabel <- paste('T(',timeUnit,')',sep="")

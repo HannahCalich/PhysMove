@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
     toc: true
-    toc_depth: 3
+    toc_depth: 2
 vignette: >
   %\VignetteIndexEntry{PhysMove}
   %\VignetteEngine{knitr::rmarkdown}
@@ -27,30 +27,25 @@ knitr::opts_chunk$set(
 ```
 
 ```{r, echo=FALSE}
-#htmltools::img(src = knitr::image_uri("../vignettes/PhysMoveHex.PNG"), 
-htmltools::img(src = knitr::image_uri("../vignettes/PhysMoveHex.PNG"), 
+htmltools::img(src = knitr::image_uri("vignettes/PhysMoveHex.PNG"), ## for knit
+# htmltools::img(src = knitr::image_uri("../vignettes/PhysMoveHex.PNG"), ## for devtools check
               #alt = 'logo',  
               style = 'position:absolute; top:0; right:25; padding:10px; border:0',
               width = '250px', height = '250px',
               dpi=300)
 ```
 
-This is a brief vignette to accompany the PhysMove R package. Here, we demonstrate how PhysMove can be used to calculate each of the methods discussed in the main text and review all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove.This vignette also includes all of the codes required to replicate each of the results presented in the main text.
+PhysMove contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. This vignette demonstrates how to calculate each of the methods and reviews all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove (see [here](vignettes#Exploretracksdataset.html) for more details)
 
-# Install
+# Installation 
 
-We recommend users install PhysMove through the devtools R package. The
-code below will install devtools and PhysMove and load the PhysMove R package.
+PhysMove passes all local CRAN checks (i.e., `devtools::check()` does not result in errors, warnings, or notes), and the package has been submitted to CRAN for review. In the meantime, we recommend users install the development version of PhysMove from GitHub using the devtools R package. Note that the authentication token included below will only be required while the accompanying manuscript is under review, PhysMove will be open access on GitHub once the manuscript is accepted for publication.
 
 ```r
 # Install the devtools package from CRAN (if required)
 install.packages("devtools")
-```
 
-```{r install physmove, echo=TRUE, message=FALSE, highlight=TRUE, clipboard=TRUE}
-# Download PhysMove 
-# Note that this authentication token will only be required while the manuscript is under review, PhysMove will be open access once the
-# manuscript is accepted for publication
+# Download the development version from GitHub:
 devtools::install_github("HannahCalich/PhysMove", auth_token = "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")
 ```
 
@@ -61,7 +56,7 @@ library(PhysMove)
 
 ## Data formatting
 
-PhysMove was designed to be user-friendly, and most functions only require you to input a data frame containing standard telemetry data. 
+PhysMove was designed to be user-friendly and most functions only require you to input a data frame containing standard telemetry data. 
 The input data frame must only contain these four columns in the following order: *ref*, *lon*, *lat*, and *day*. 
 
 Columns must be formatted as follows:
@@ -84,8 +79,7 @@ In addition to `CheckTracks()`, you can also compare your dataframe to our sampl
 
 ### Explore `tracks` dataset
 
-As described in the main text, `tracks` is a simulated telemetry dataset containing 25 unique tracks with a defined set of movement parameters.
-`Tracks` was created using a biased, uncorrelated random walk model with variable step lengths drawn from an exponential distribution with λ = 0.125. We defined the turning angles such that 30% indicated directed forward movement (movements with angles <30° or >330°), and 30% indicated directed return movement (angles between 150-210°), allowing the remainder (40%) to be randomly between 0-360°.These metrics were chosen because they are broadly consistent with literature interpretations of animals moving through a resource-rich habitat. See main text for further details. The code used to make the `tracks` dataset is available in the PhysMove `doc` folder on GitHub as “CreateTracks.R”.
+`tracks` is a simulated telemetry dataset of 25 unique tracks with a defined set of movement parameters that was designed to demonstrate each of the PhysMove functions. In detail, `Tracks` was created using a biased, uncorrelated random walk model with variable step lengths drawn from an exponential distribution with λ = 0.125. We defined the turning angles such that 30% indicated directed forward movement (movements with angles <30° or >330°), and 30% indicated directed return movement (angles between 150-210°), allowing the remainder (40%) to be randomly between 0-360°.These metrics were chosen because they are broadly consistent with literature interpretations of animals moving through a resource-rich habitat. See corresponded manuscript for further details. The code used to make the `tracks` dataset is available in the PhysMove `doc` folder on GitHub as “CreateTracks.R”.
 
 ```{r preview tracks, echo=TRUE}
 # Preview the first 6 rows of the tracks dataset
@@ -99,8 +93,9 @@ str(tracks)
 
 ### Create a map of the tracks dataset
 
-A map of telemetry data can be created using our `PlotTracks()` function (Figure V1). 
-`PlotTracks()` has three optional parameters:
+A basic map of your telemetry data can be created using our `PlotTracks()` function (Figure V1). 
+
+`PlotTracks()` requires a dataframe with telemetry data (as described above) and includes three optional parameters:
 
   * `ref`: plot specific tracks based on their reference IDs (`ref=NULL`, by default), 
   * `tracks`: connect points with lines (`tracks=TRUE`, by default), and
@@ -119,33 +114,28 @@ $~$
 
 ## Scale of movement 
 
-The `RMS()` function provides insights into the scale of movement by
-calculating mean and root-mean-square (RMS) displacements and
+The `RMS()` function provides insights into the scale of movement by calculating mean and root-mean-square (RMS) displacements and
 plotting them over time (Figure V2). 
 
-`RMS()` includes four optional parameters:
+`RMS()` requires a dataframe with telemetry data (as described above) and includes four optional parameters:
 
-  * `timeUnit`: change the time unit used to calculate the time
-between locations (`timeUnit= “days”`, by default), 
-  * `wBins`: change the width of the time bins used to calculate how frequently displacements occurred
+  * `timeUnit`: time unit used to calculate the time between locations (`timeUnit= “days”`, by default), 
+  * `wBins`: width of the time bins used to calculate how frequently displacements occurred
 (`wBins=1.1`, by default), 
   * `plot`: create a scatter plot (`plot=TRUE`, by default), and 
-  * `lm`: fit a linear model to examine the relationship between the root-mean-square 
-  displacement values and time (`lm=TRUE`, by default). 
+  * `lm`: fit a linear model to examine the relationship between root-mean-square 
+  displacements and time (`lm=TRUE`, by default). 
 
 `RMS()` results are output as a list. The first list element is a dataframe of results with three columns: 
-  * *timeWindow*: binned time windows in days (or whatever unit was set
-using `timeUnit`) 
-  * *meanDisplacement*: mean displacement values in km that correspond with *timeWindow*
-  * *rmsDisplacement*: root-mean-square displacement values that correspond with *timeWindow*
+  * *timeWindow*: binned time windows in whatever unit was using `timeUnit`) 
+  * *meanDisplacements*: mean displacement values in km that correspond with *timeWindow*
+  * *rmsDisplacements*: root-mean-square displacement values that correspond with *timeWindow*
 
-The second list element is a dataframe of results from
-the linear model and is only exported when `lm=TRUE`. The slope of the linear model is used to describe the scale of
-movement (see Table 3 in the main text for suggestions on interpreting your results).
+The second list element is a dataframe of results from the linear model and is only exported when `lm=TRUE`. 
+The slope of the linear model is used to describe the scale of movement (see Table 3 in the main text for suggestions on interpreting your results).
 
 Note that because `RMS()` calculates all displacements in each track,
-this function may take 10-20+ minutes, depending on your computer;
-progress updates will appear when the calculations are 25%, 50%, 75%,
+this function can take time. Progress updates will appear when calculations are 25%, 50%, 75%,
 and 100% complete.
 
 ```{r calcualte rms, echo=TRUE, message=FALSE, out.width="60%"}
@@ -168,12 +158,13 @@ print(RMSlinearModel)
 RMSlinearModel$estimate[2]
 ```
 
-## Calculate displacements
+## Movement patterns across temporal scales
 
 The `CalcDisp()` function calculates displacements travelled in
-kilometres over set time windows. `CalcDisp()` has four optional
-parameters that allow you to change different aspects of the time
-windows:
+kilometres over set time windows. 
+
+`CalcDisp()` requires a dataframe with telemetry data (as described above) and has four optional
+parameters that allow you to change different aspects of the time windows:
 
   * `min_hr` and `max_hr`: set the minimum and maximum times between
   location estimates in hours (`min_hr=24` and `max_hr=240`, by default),
@@ -247,61 +238,62 @@ truncated distributions)
 
   `FitDist()` requires you to consider 4 optional parameters:
   
-  * `dist`: distributions you want to fit to the displacement
-  data. `FitDist()` can fit continuous power-law (“pl”), exponential
-  (“exp”), and lognormal (“lnorm”) distributions
-  (`dist=c("pl","exp","lnorm")`, by default). To fit only one or two
-  distributions simply remove the distributions you are not interested in running
-  e.g., `dist=c("exp","lnorm")`.
-  * `full`: determines if distributions are fit over
-  the full range of displacements data (`full=TRUE`), or to the
-  displacements truncated by a minimum value (`full=FALSE`, by default) 
-  * `set_dmin`: used to either force the algorithm to automatically identify the best-fit d_min for each
-  distribution (`set_dmin=NULL`, by default), or to manually assign a minimum displacement value for each 
-  distribution fit (e.g., `set_dmin=1`). Note that set_dmin can only be applied if `full = FALSE'.
-  * `normalise`: normalise displacements before fitting distributions (`normalise=TRUE`, by default). Displacements 
-  should be normalised if they were calculated over multiple temporal periods.
+    * `dist`: distributions you want to fit to the displacement
+    data. `FitDist()` can fit continuous power-law (“pl”), exponential
+    (“exp”), and lognormal (“lnorm”) distributions
+    (`dist=c("pl","exp","lnorm")`, by default). To fit only one or two
+    distributions simply remove the distributions you are not interested in running
+    e.g., `dist=c("exp","lnorm")`.
+    * `full`: determines if distributions are fit over
+    the full range of displacements data (`full=TRUE`), or to the
+    displacements truncated by a minimum value (`full=FALSE`, by default) 
+    * `set_dmin`: used to either force the algorithm to automatically identify the best-fit d_min for each
+    distribution (`set_dmin=NULL`, by default), or to manually assign a minimum displacement value for each 
+    distribution fit (e.g., `set_dmin=1`). Note that set_dmin can only be applied if `full = FALSE'.
+    * `normalise`: normalise displacements before fitting distributions (`normalise=TRUE`, by default). Displacements 
+    should be normalised if they were calculated over multiple temporal periods.
 
-`FitDist()` outputs a list including two list elements. The first list element is a dataframe that includes: 
-  * *distribution*: all distributions fit to the displacement data (pl, exp, or lnorm),
-  * *dmin*: the minimum value used to fit each distribution
-  * *parameter 1*: the first parameter for each distribution (i.e., α, λ, or μ for pl, exp, and lnorm, respectively)
-  * *parameter 2*: the second distribution parameter (i.e., σ, only applicable to lnorm), and 
-  * *nTail*: the number of values greater than or equal to dmin.
+  `FitDist()` outputs a list including two list elements. The first list element is a dataframe that includes: 
   
-  The second list element is a logical argument that records if the displacements were normalized (TRUE), or not (FALSE). This is output
-  because it is requires for `PlotDist()` and `CompDist()`. 
+    * *distribution*: all distributions fit to the displacement data (pl, exp, or lnorm),
+    * *dmin*: the minimum value used to fit each distribution
+    * *parameter 1*: the first parameter for each distribution (i.e., α, λ, or μ for pl, exp, and lnorm, respectively)
+    * *parameter 2*: the second distribution parameter (i.e., σ, only applicable to lnorm), and 
+    * *nTail*: the number of values greater than or equal to dmin.
+    
+  The second list element is a logical argument that records if the displacements were normalized (TRUE), or not (FALSE). This is output because   it is required for `PlotDist()` and `CompDist()`. 
 
-################## STOPPED HERE
+2. `PlotDist()`: uses the results from `FitDist()` to plot ccdfs of the displacements with fit lines for each distribution (e.g., Figure V6).
 
-2. `PlotDist()`: uses the results from `FitDist()` to plot ccdfs of the displacements with fit lines for each distribution (e.g., Figure S6).
-
-`PlotDist()` includes 4 optional parameters:
-  
-  * `fitLines`: add fit lines for each distribution (`fitLines=TRUE`, by default), 
-  * `setDist`: plot only specific distributions (`setDist=NULL`, by default), 
-  * `colours`: change the colours of the fit lines (`colours=c("red","gold2","blue")`, by default), and
-  * `legend`: add a legend (`legend=TRUE`, by default).
+  `PlotDist()` includes 4 optional parameters:
+    
+    * `fitLines`: add fit lines for each distribution (`fitLines=TRUE`, by default), 
+    * `setDist`: plot only specific distributions (`setDist=NULL`, by default), 
+    * `colours`: change the colours of the fit lines (`colours=c("red","gold2","blue")`, by default), and
+    * `legend`: add a legend (`legend=TRUE`, by default).
+    
+  `PlotDist()` outputs a plot and a dataframe of the values used in the plot.
 
 3. `CompDist()`: compares distribution fits from `FitDist()` and
 identifies the best-fit distribution for the displacements. Note that
 `CompDist()` can only be used when all distributions are fit to the same
-range of data (e.g., when `full=TRUE` or if `set_dmin≠NULL`), see Figure
-S9. `CompDist()` includes one optional parameter: 
+range of data (e.g., when `full=TRUE` or if `set_dmin≠NULL`).
+  
+  `CompDist()` includes one optional parameter: 
 
-* `force_AICc`: force `CompDist()` to calculate an AICc (`force_AICc=FALSE`, by default). By default, `CompDist()` compares distribution fits using weighted AICc scores (AIC scores corrected for small sample sizes) when the sample size of the displacements used to fit the model (i.e., *nTail*) divided by the number of parameters in the model is less than or equal to 40; else, weighed AIC scores are calculated, following Burnham and Anderson (2004). `force_AICc` is used to calculate an AICc instead of an AIC score (if `force_AICc` = TRUE). The highest wAIC or wAICc score from each comparison indicates the best-fit distribution. See Table 3 in the main text for suggestions on how to interpret results
+    * `force_AICc`: force `CompDist()` to calculate an AICc (`force_AICc=FALSE`, by default). By default, `CompDist()` compares distribution fits using weighted AICc scores (AIC scores corrected for small sample sizes) when the sample size of the displacements used to fit the model (i.e., *nTail*) divided by the number of parameters in the model is less than or equal to 40; else, weighed AIC scores are calculated, following Burnham and Anderson (2004). `force_AICc` is used to calculate an AICc instead of an AIC score (if `force_AICc` = TRUE). The highest wAIC or wAICc score from each comparison indicates the best-fit distribution. See Table 3 in the main text for suggestions on how to interpret results
 
-The highest wAIC or wAICc score from each comparison
-indicates the best-fit distribution. See Table 3 in the main text for 
-suggestions on how to interpret results.
-
-In the example below we calculate displacements over 24 ± 6 hours (to reduce processing times), identify the best-fit distribution for the full range of displacements; then, demonstrate how to identify the best-fit distribution when displacement datasets are truncated by a best-fit d_min. In general, we recommend fitting distributions to full and truncated datasets to gain a comprehensive understanding of displacement patterns (see Figure S5).
+  `CompDist()` outputs a data frame with that contains the summary statistics for each distribution fit (as described for `FitDist()`) with the corresponding AICc/AIC scores and weighted AICc/AIC scores (wAICc/wAIC). The distribution with the highest wAIC or wAICc score from each comparison is the best-fit distribution. See Table 3 in the main text for suggestions on how to interpret results.
 
 ![](https://user-images.githubusercontent.com/73092681/223385586-b06b3dd6-d86a-4eeb-ae26-54484e6a4c28.png){width=70%}
 
-**Figure S5** Diagram outlining the procedure for identifying the best-fit distribution of displacements.
+**Figure V5** Diagram outlining the procedure for identifying the best-fit distribution of displacements.
 
-We begin by calculating displacements over 24 ± 6 hours with `CalcDisp()` and plotting a pdf of the displacements with `PlotDispPDF()` (Figure S6; Figure 1 in main text). 
+### Search patterns example
+
+In the example below we calculate displacements over 24 ± 6 hours (to reduce processing times), plot a pdf of the displacement, identify the best-fit distribution for the full range of displacements, and we identify the best-fit distribution when displacement datasets are truncated by a best-fit d_min. In general, we recommend fitting distributions to both full and truncated datasets to gain a comprehensive understanding of displacement patterns.
+
+We begin by calculating displacements over 24 ± 6 hours with `CalcDisp()` and plotting a pdf of the displacements with `PlotDispPDF()` (Figure V6; Figure 1 in main text). 
 
 ```{r calc disp over 24 hours, echo=TRUE}
 # Calculate displacements over 24 ± 6 hours
@@ -315,7 +307,7 @@ summary(unlist(disp))
 plot.data.pdf <- PlotDispPDF(disp, normalised=FALSE)
 ```
 
-**Figure S6** Probability density function (pdf) plot of displacements calculated using `CalcDisp()` with `max_hr=24`. Plot created with `PlotDispPDF()` and `normalised=FALSE`.
+**Figure V6** Probability density function (pdf) plot of displacements calculated using `CalcDisp()` with `max_hr=24`. Plot created with `PlotDispPDF()` and `normalised=FALSE`.
 
 `FitDist()` is then used to fit the full range of distributions calculated over 24 ± 6 hours to power-law, exponential, and lognormal distributions (Figure S7) and the fits are compared with `CompDist()`.
 
@@ -339,9 +331,10 @@ compResults
 ```
 
 In comparison, the following example demonstrates the procedure for fitting truncated distributions to the same displacements calculated over the 24 ± 6 hour time window.
+
 `FitDist()` is used to identify the best-fit d_min for each distribution (Figure S8).
 
-```{r find best-fit d_min for each dist , echo=TRUE}
+```{r find best-fit d_min for each dist , echo=TRUE, message=FALSE}
 # Fit all distributions and identify the best-fit dmin for each distribution
 distResults.trunc <- FitDist(disp, full=FALSE, normalise=FALSE)
 print(distResults.trunc[["distResults"]])
@@ -374,6 +367,10 @@ same range of displacements, the fits of the distributions can be compared with
 dmin <- distResults.trunc[["distResults"]][1,2]
 distResultsPl <- FitDist(disp, set_dmin=dmin, normalise=FALSE)
 print(distResultsPl)
+
+# Compare distribution fits based on the best-fit d_min value for the power-law distribution
+compResultsPl <- CompDist(disp, distResultsPl)
+compResultsPl
 ```
 
 ```{r fit dist with exp, echo=TRUE, message=FALSE}
@@ -381,6 +378,10 @@ print(distResultsPl)
 dmin <- distResults.trunc[["distResults"]][2,2]
 distResultsExp <- FitDist(disp, set_dmin=dmin, normalise=FALSE)
 print(distResultsExp[["distResults"]])
+
+# Compare distribution fits based on the best-fit d_min value for the exponential distribution
+compResultsExp <- CompDist(disp, distResultsExp)
+compResultsExp
 ```
 
 ```{r fit dist with lnorm, echo=TRUE, message=FALSE}
@@ -388,21 +389,7 @@ print(distResultsExp[["distResults"]])
 dmin <- distResults.trunc[["distResults"]][3,2]
 distResultsLnorm <- FitDist(disp, set_dmin=dmin, normalise=FALSE)
 print(distResultsLnorm[["distResults"]])
-```
 
-```{r compdist pl, echo=TRUE, message=FALSE}
-# Compare distribution fits based on the best-fit d_min value for the power-law distribution
-compResultsPl <- CompDist(disp, distResultsPl)
-compResultsPl
-```
-
-```{r compdist exp, echo=TRUE, message=FALSE}
-# Compare distribution fits based on the best-fit d_min value for the exponential distribution
-compResultsExp <- CompDist(disp, distResultsExp)
-compResultsExp
-```
-
-```{r compdist lnorm, echo=TRUE, message=FALSE}
 # Compare distribution fits based on the best-fit d_min value for the lognormal distribution
 compResultsLnorm <- CompDist(disp, distResultsLnorm)
 compResultsLnorm
