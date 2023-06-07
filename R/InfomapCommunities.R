@@ -9,14 +9,13 @@
 #' For details please see: https://ecological-complexity-lab.github.io/infomap_ecology_package/installation
 #' To learn more about Infomap please visit: https://www.mapequation.org/
 #'
-#' Examples:
+#' Example:
 #' library (infomapecology)
-#' InfomapCommunities(tracks)
 #' InfomapCommunities(tracks, gridCell=0.25, hours=24, range_hr=6, tpm=FALSE)
 
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
-#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{tracks}}.
 #' @param gridCell Grid cell size in degrees. Default is 0.25.
@@ -28,7 +27,7 @@
 #' locations spaced 18 to 32 hours apart. Default is 6.
 #' @param tpm Export the transition probability matrix in link list format. If tpm=TRUE, a 'TransitionProbabilityMatrix' data frame will be automatically
 #' assigned to the global environment. Default is FALSE.
-#' @return A list that includes the Infomap results and the transition probability matrix (tpm), if tpm=TRUE. List element 1 is
+#' @return A list that can include two list elements, the Infomap results and the transition probability matrix (tpm), if tpm=TRUE. List element 1 is
 #' the 'infomap_object' result that summarizes the hierarchical structure of the Infomap communities (regions where individuals are likely to
 #' stay for longer periods of time). If tpm=TRUE the transition probability matrix used to create the 'infomap_object' is assigned
 #' as list element 2.

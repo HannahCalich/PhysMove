@@ -6,16 +6,14 @@
 #' A pdf plot of the normalized entropy values can be created with the \code{\link{PlotPDF}} function.
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
-#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{tracks}}.
 #' @param gridCell Grid cell size in degrees. Default is 0.25.
 #' @param histPlot Plot a histogram of the normalised  entropy values. Default is TRUE.
 #' @return Data frame of the normalised entropy values for each trajectory (main result) as well as the individual entropy
 #' values (not normalised) and the number of cells each trajectory visited. If histPlot=TRUE a histogram of the normalised entropy scores is created.
-#' @examples
-#' Entropy(tracks)
-#' Entropy(tracks, gridCell=0.25, histPlot=TRUE)
+#' @examples Entropy(tracks, gridCell=0.25, histPlot=TRUE)
 #' @export
 
 Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE){
@@ -68,9 +66,7 @@ Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE){
       ggplot2::scale_y_continuous(breaks=function(x) seq(ceiling(x[1]), floor(x[2]), by = 2))+
       ggplot2::scale_x_continuous("Normalised Entropy", breaks=seq(0,1,0.1), labels=c("0.0", "", "0.2", "", "0.4", "", "0.6", "", "0.8", "", "1.0"))+
       ggplot2::labs(y = "Frequency")+
-      ggplot2::theme_classic(base_size = 18)#+
-      # ggplot2::geom_vline(ggplot2::aes(xintercept=0.5, color="0.5"), linetype="dashed", size=1) +
-      # ggplot2::scale_color_manual(name = "", values = c("0.5" = "red"))
+      ggplot2::theme_classic(base_size = 18)
     plot(hist_plot)
   }
   return(entropyResults)

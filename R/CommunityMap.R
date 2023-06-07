@@ -13,7 +13,6 @@
 #' @return A map illustrating level 1 Infomap communities.
 #' @importFrom rlang .data
 #' @examples CommunityMap(infomapResult)
-#' @examples CommunityMap(infomapResult, subset_communities=c(1,2,3), colours="Dark2")
 #' @export
 
 CommunityMap <- function(infomap_object, subset_communities, colours="Dark2"){

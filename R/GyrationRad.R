@@ -4,14 +4,13 @@
 #' A pdf plot of the gyration radius values can be created with the \code{\link{PlotPDF}} function.
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
-#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{tracks}}.
 #' @param map Create a map illustrating the gyration radius of each trajectory. Default is TRUE.
 #' @param mapCol Colours for points and gyration radii on map, respectively. Default is c("Black","Red).
 #' @return Gyration radius values for each trajectory. If map=TRUE a map of the gyration radius results is created.
 #' @importFrom rlang .data
-#' @examples GyrationRad(tracks)
 #' @examples GyrationRad(tracks, map=TRUE, mapCol=c("Black","Red"))
 #' @export
 
@@ -56,7 +55,7 @@ GyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red")){
     for (j in 1:length(species_index[[i]])) { # for each location
       species_df[species_index[[i]][j],14]<- MydistHaversine(species_df[species_index[[i]][j],2],species_df[species_index[[i]][j],3], species_df[species_index[[i]][j],11],species_df[species_index[[i]][j],13]) # Distance in KM between observed and avg locations
     }
-    species_df[species_index[[i]],15] <- sqrt((sum(species_df[species_index[[i]],14]^2))/(length(species_index[[i]]))) # This is consistent with ArcGIS 1SD Standard Distance tool
+    species_df[species_index[[i]],15] <- sqrt((sum(species_df[species_index[[i]],14]^2))/(length(species_index[[i]])))
   }
 
   MyrG <- unique(species_df[,c(1,11,13,15)])

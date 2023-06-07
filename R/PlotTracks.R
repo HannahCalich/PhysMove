@@ -16,7 +16,6 @@
 #' @return Map of location estimates and tracks (if tracks=TRUE).
 #' @importFrom grDevices rainbow
 #' @importFrom rlang .data
-#' @examples PlotTracks(tracks, ref=1)
 #' @examples PlotTracks(tracks, ref=NULL, tracks=TRUE, colours=rainbow)
 #' @export
 

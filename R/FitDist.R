@@ -16,9 +16,8 @@
 #' distributions respectively, and nTail (the number of data points greater than or equal to dmin). A logical argument indicating if
 #' data were normalised is exported as the 2nd list element because this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}
 #' functions.
-#' @examples:
-#' FitDist(displacements, full=TRUE)
 #' @importFrom stats dlnorm plnorm dexp pexp
+#' @examples FitDist(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE)
 #' @export
 
 FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE) {
