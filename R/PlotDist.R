@@ -4,7 +4,7 @@
 #' based on the displacements output from the \code{\link{CalcDisp}} function and the distribution fits calculated with the
 #' \code{\link{FitDist}} function.
 #' @param displacements List of displacements output from the \code{\link{CalcDisp}} function.
-#' @param distResults List output from the \code{\link{FitDist}} function containing a dataframe of fit results (element 1) and a normalisation record (element 2)
+#' @param distResults List output from the \code{\link{FitDist}} function containing a dataframe of fit results (list element 1) and a normalisation record (list element 2)
 #' @param fitLines Add fit lines based on the parameters calculated with the \code{\link{FitDist}} function. Default is TRUE.
 #' @param setDist Plot a subset of lines for each distribution fit calculated with the \code{\link{FitDist}} function (e.g., setDist=c("pl","exp"))
 #' Options include "pl", "exp", and "lnorm". The lines will be drawn in order from "pl", then "exp", then "lnrom" (when applicable).
@@ -15,7 +15,6 @@
 #' @return Complementary cumulative distribution function (ccdf) plot of displacements with fit lines (if fitLines=TRUE).
 #' @importFrom stats plnorm pexp
 #' @examples PlotDist(displacements, distResults)
-#' @examples PlotDist(displacements, distResults, fitLines=TRUE, setDist=NULL, colours=c("red","gold2","blue"))
 #' @export
 
 PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, colours=c("red","gold2","blue"), legend=TRUE){

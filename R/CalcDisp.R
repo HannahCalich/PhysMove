@@ -23,10 +23,10 @@
 
 CalcDisp<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6){
 
-  min_hr<-min_hr*(60*60) # convert hours (input) to seconds
-  max_hr<-max_hr*(60*60) # convert hours (input) to seconds
-  interval_hr<-interval_hr*(60*60) # convert hours (input) to seconds
-  range_hr<-range_hr*(60*60) # convert hours (input) to seconds
+  min_hr <- min_hr*(60*60) # convert hours (input) to seconds
+  max_hr <- max_hr*(60*60) # convert hours (input) to seconds
+  interval_hr <- interval_hr*(60*60) # convert hours (input) to seconds
+  range_hr <- range_hr*(60*60) # convert hours (input) to seconds
 
   MydistHaversine <- function(lon1, lat1, lon2, lat2) {
     radlat1 = rad * lat1

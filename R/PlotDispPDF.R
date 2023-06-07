@@ -1,19 +1,18 @@
 #' Create probability density function (PDF) plots of displacements
 #'
-#' This function allows you to plot probability density functions (PDFs) of raw or normalised displacements. Displacements must be in
+#' This function allows you to plot probability density functions (pdfs) of displacements. Displacements must be in
 #' list format where each list element corresponds to displacements calculated over a specific time window, which is the default output
 #' format from the \code{\link{CalcDisp}} function.
-#' @param displacements Displacements in list format (e.g., the output from the \code{\link{CalcDisp}} function).
-#' @param normalised Normalise the displacements by the mean displacement for each time window.
-#' @param colours Colour(s) for plot points. Valid input options include: base R (grDevices) color pallets (e.g., colours=rainbow), RColorBrewer
-#' palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that grDevies color
+#' @param displacements Displacements in list format (e.g., the output from \code{\link{CalcDisp}}).
+#' @param normalised Normalise the displacements by the mean displacement for each time window. Default is TRUE.
+#' @param colours Colour(s) for plot points. Valid input options include: base R (grDevices) colour pallets (e.g., colours=rainbow), RColorBrewer
+#' palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that grDevices colour
 #' pallets do not use quotations. If the palette does not have enough distinct colours to match the communities being plotted the function will automatically
 #' create a continuous pallet with the colours provided. Default is "Dark2".
 #' @param legend Add legend with legend=TRUE. Default is TRUE.
-#' @return Probability density function (PDF) plots of binned raw or normalised (if normalised=TRUE) displacements.
+#' @return Probability density function (pdf) plots of displacements.
 #' @importFrom rlang .data
 #' @examples PlotDispPDF(displacements)
-#' @examples PlotDispPDF(displacements, normalised=TRUE, colours=rainbow)
 #' @export
 
 PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=TRUE){
@@ -39,12 +38,12 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
   #################################################################
   if (normalised!=TRUE){
 
-    for(d in 1:length(displacements)){  #for each time period
+    for(d in 1:length(displacements)){  # for each time period
       freq <- rep(0, length(bins)) # to count the number of displacements in each bin
       disp <- displacements[[d]]
 
-      for(i in 1:length(disp)){ #for each displacement in the time period. To determine what bin that displacement belongs in,
-        #calculate frequency of the displacements and tally the frequency in "freq", adding 0.5 shifts the bins so the values are on the midpoints of the bars
+      for(i in 1:length(disp)){ # for each displacement in the time period. To determine what bin that displacement belongs in,
+        # calculate frequency of the displacements and tally the frequency in "freq", adding 0.5 shifts the bins so the values are on the midpoints of the bars
         if(disp[i] != 0){
           b <- floor(log(disp[i]/disp0)/log(logbase) + 0.5 ) # to convert the displacements in km to log & zero them
           freq[b] <- freq[b] + 1
@@ -57,11 +56,11 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
 
       for(b in 1:length(bins)){
         if(freq[b] != 0){
-          size[b] <- (logbase^(b +0.5)- logbase^(b-0.5)) * disp0  # when using log scale we need log-sizes bin widths #Log scale & normalised log
+          size[b] <- (logbase^(b +0.5)- logbase^(b-0.5)) * disp0  # when using log scale we need log-sizes bin widths
           # Because we want the probability, we need to divide by the total number of displacements
-          ratio[b] <- freq[b]/size[b]/ length(disp) # need to divide by the area of each bins if we are in log bins #log bins
-          mybins[b] <- disp0*logbase^(b) #log bins
-          pdfPlot[r,] <- c(ratio[b], mybins[b]) # stores the values for each bin #log and all normalised bins
+          ratio[b] <- freq[b]/size[b]/ length(disp) # need to divide by the area of each bins if we are in log bins
+          mybins[b] <- disp0*logbase^(b)
+          pdfPlot[r,] <- c(ratio[b], mybins[b]) # stores the values for each bin
           r <- r + 1
         }
       }
@@ -118,7 +117,8 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
       disp <- displacements[[d]]
       MeanDisp <- mean(displacements[[d]])
 
-      for(i in 1:length(disp)){ #for each displacement in the time period. To determine what bin that displacement belongs in, calculate frequency of the displacements and tally the frequency in "freq", adding 0.5 shifts the bins so the values are on the midpoints of the bars
+      for(i in 1:length(disp)){ # for each displacement in the time period. To determine what bin that displacement belongs in,
+        # calculate frequency of the displacements and tally the frequency in "freq", adding 0.5 shifts the bins so the values are on the midpoints of the bars
         if(disp[i] != 0){
           b <- floor(log(disp[i]/disp0)/log(logbase) + 0.5 ) # to convert the displacements in km to log & zero them
           freq[b] <- freq[b] + 1
@@ -131,9 +131,9 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
       for(b in 1:length(bins)){
         if(freq[b] != 0){
           size[b] <- (logbase^(b +0.5)- logbase^(b-0.5)) * disp0  # when using log scale we need log-sizes bin widths
-          ratio[b] <- (MeanDisp*(freq[b]/size[b])) / length(disp) #normalised log
-          mybins[b] <- (disp0*logbase^(b))/MeanDisp #normalised log bins
-          pdfPlot[r,] <- c(ratio[b], mybins[b]) # stores the values for each bin #log and all normalised bins
+          ratio[b] <- (MeanDisp*(freq[b]/size[b])) / length(disp) # normalised log
+          mybins[b] <- (disp0*logbase^(b))/MeanDisp # normalised log bins
+          pdfPlot[r,] <- c(ratio[b], mybins[b]) # stores the values for each bin
           r <- r + 1
         }
       }
@@ -142,7 +142,7 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
       pdfPlot[pdfPlot==0] <- NA
       pdfPlot <- pdfPlot[stats::complete.cases(pdfPlot),]
       pdfPlot$timeWindow <- rep(d,nrow(pdfPlot))
-      pdfPlotAll <- rbind(pdfPlotAll, pdfPlot) # Add data to df
+      pdfPlotAll <- rbind(pdfPlotAll, pdfPlot)
     }
     pdfPlotAll <- pdfPlotAll[-1,] # Remove initializing row
 
