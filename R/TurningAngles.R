@@ -42,7 +42,7 @@ TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range
   }
 
   Radius <- 6371 # Earth Radius in km (disp are in km)
-  rad <- 3.141592653589793/180 # Python has more digits of pi than R, so value pasted here instead of "pi"
+  rad <- 3.141592653589793/180 # Python has more digits of pi than R, so value pasted here instead of "pi" for consistency with python version of code
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
   MyTime <- c(seq(min_hr,max_hr,interval_hr)) #Time in seconds
 
@@ -96,29 +96,8 @@ TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range
             if(species_df[species_index[[i]][J2],2] - species_df[species_index[[i]][J1],2] < 0 & species_df[species_index[[i]][J2],2] - species_df[species_index[[i]][J1],2] > -180){ bx = -bx }
             if(species_df[species_index[[i]][J2],3] - species_df[species_index[[i]][J1],3] < 0) { by = -by }
 
-            # Now compute the scalar product and vector product, to get the angle
-            # if((ax*bx + ay*by) == 0) { ### prevent the case where tangent is infinite (when cosinus is zero) i.e., the individual did not move in one of the components (J = J1 or J1 = J2)
-            #   if((ax*by - ay*bx) > 0){
-            #     angle <- pi/2
-            #     angleList[[d]] <- append(angleList[[d]], angle)
-            #   } else if ((ax*by - ay*bx) < 0){
-            #     angle <- -pi/2
-            #     angleList[[d]] <- append(angleList[[d]], angle)
-            #   }
-            # } else {
-              # angle <- atan((ax*by - ay*bx) / (ax*bx + ay*by)) ### in radians
-              angle <- atan2((ax*by - ay*bx) , (ax*bx + ay*by)) ### in radians
-              # if(angle > 0){
-              #   if((ax*bx + ay*by) < 0) {
-              #     angle <- angle - pi
-              #   }
-              # } else if(angle <= 0){
-              #   if((ax*bx + ay*by) < 0) {
-              #     angle <- angle + pi
-              #   }
-              # }
-              angleList[[d]] <- append(angleList[[d]], angle)
-            # }
+            angle <- atan2((ax*by - ay*bx) , (ax*bx + ay*by)) ### in radians
+            angleList[[d]] <- append(angleList[[d]], angle)
           }
         }
       }
