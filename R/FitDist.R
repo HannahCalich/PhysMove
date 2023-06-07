@@ -57,6 +57,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
   x <- sort(x)
   N <- length(x)
   distResults <- data.frame("distribution"=dist, "dmin"= c(NA), "parameter1"=c(NA), "parameter2"=c(NA), "nTail"= c(NA)) #make sure dist= is loaded
+  rev.index <- rev(seq_along(x))
 
   if ("pl" %in% dist){
     message("Fitting a power law distribution")
@@ -99,7 +100,6 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
     if (full==FALSE){
       if (is.null(set_dmin)){
         dat <- numeric(length(xmins))
-        rev.index <- rev(seq_along(x))
         pars.list <- c()
         for (i in 1:(length(xmins)-2)){ # need at least number of pars + 1 to fit
           xmin <- xmins[i]
@@ -183,7 +183,6 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
         #   phi
         # }
 
-        rev.index <- rev(seq_along(x))
         pars.mat <- matrix(ncol=2, nrow=(length(xmins)-1))
         for (i in 1:(length(xmins)-3)){ # need at least number of pars + 1 to fit
           xmin <- xmins[i]
