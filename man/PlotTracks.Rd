@@ -9,28 +9,26 @@ PlotTracks(species_df, ref = NULL, tracks = TRUE, colours = rainbow)
 \arguments{
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
-"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 See attached sample data \code{\link{tracks}}.}
 
 \item{ref}{Reference number of track from species_df to plot, options include an individual number (ref=1) or a range of numbers (ref=1:10).
-By default all unique reference numbers are plotted. Defalt is NULL.}
+By default all unique reference numbers are plotted. Default is NULL.}
 
 \item{tracks}{Add track lines to the plot. Default is TRUE.}
 
 \item{colours}{Colour(s) for plot points. Valid input options include: base R (grDevices) color pallets (e.g., colours=rainbow), RColorBrewer
-palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that grDevies color
+palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that grDevices colour
 pallets do not use quotations. If the palette does not have enough distinct colours to match the communities being plotted the function will automatically
 create a continuous pallet with the colours provided. Default is "Dark2".}
 }
 \value{
-Plot showing the original and randomized track locations and the randomized tracks data used to create the map (original tracks are
-from species_df).
+Map of location estimates and tracks (if tracks=TRUE).
 }
 \description{
 Plot species' location estimates and tracks .
 }
 \examples{
-PlotTracks(tracks, ref=1)
 PlotTracks(tracks, ref=NULL, tracks=TRUE, colours=rainbow)
 }

@@ -46,7 +46,7 @@ PhysMove passes all local CRAN checks (i.e., `devtools::check()` does not result
 install.packages("devtools")
 
 # Download the development version from GitHub:
-devtools::install_github("HannahCalich/PhysMove", auth_token = "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", build_vignettes = TRUE, force = TRUE)
+devtools::install_github("HannahCalich/PhysMove", auth_token = "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", build_vignettes = TRUE)
 ```
 
 ```{r load physmove, echo=TRUE, highlight=TRUE, clipboard=TRUE}
@@ -75,7 +75,7 @@ The ```CheckTracks``` function can be used to confirm your input data are format
 CheckTracks(data) # replace "data" with your dataframe
 ```
 
-In addition to `CheckTracks()`, you can also compare your dataframe to our sample dataset `tracks` to ensure your data are formatted correctly.
+You can also compare your dataframe to our sample dataset `tracks` to ensure your data are formatted correctly.
 
 ### Explore `tracks` dataset
 

@@ -16,8 +16,8 @@
 #' distributions respectively, and nTail (the number of data points greater than or equal to dmin). A logical argument indicating if
 #' data were normalised is exported as the 2nd list element because this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}
 #' functions.
-#' @importFrom stats dlnorm plnorm dexp pexp
-#' @examples FitDist(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE)
+#' @importFrom stats dlnorm plnorm optim sd
+#' @examples FitDist(displacements, dist=c("pl","exp","lnorm"), full=TRUE)
 #' @export
 
 FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE) {
@@ -170,7 +170,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
         xi <- x[x>xmin]
         n <- length(xi)
 
-        pars <- c(mean(log(xi)), stats::sd(log(xi)))
+        pars <- c(mean(log(xi)), sd(log(xi)))
         my_nll <- create_nll(xi)
         mle <- suppressWarnings(optim(par=pars, fn=my_nll, method="L-BFGS-B", lower=c(-Inf, .Machine$double.eps)))
         init <- c(mle$par[1],mle$par[2])
@@ -219,7 +219,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
         xi <- x[x>xmin]
         n <- length(xi)
 
-        pars <- c(mean(log(xi)), stats::sd(log(xi)))
+        pars <- c(mean(log(xi)), sd(log(xi)))
         my_nll <- create_nll(xi)
         mle <- suppressWarnings(optim(par=pars, fn=my_nll, method="L-BFGS-B", lower=c(-Inf, .Machine$double.eps)))
 
@@ -236,7 +236,7 @@ FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, f
       xi <- x[x>xmin]
       n <- length(xi)
 
-      pars <- c(mean(log(xi)), stats::sd(log(xi)))
+      pars <- c(mean(log(xi)), sd(log(xi)))
       my_nll <- create_nll(xi)
       mle <- suppressWarnings(optim(par=pars, fn=my_nll, method="L-BFGS-B", lower=c(-Inf, .Machine$double.eps)))
 

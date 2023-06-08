@@ -9,7 +9,7 @@ RMS(species_df, timeUnit = "days", wBins = 1.1, plot = TRUE, lm = TRUE)
 \arguments{
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
-"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 See attached sample data \code{\link{tracks}}.}
 
@@ -17,22 +17,20 @@ See attached sample data \code{\link{tracks}}.}
 
 \item{wBins}{Bin width refers to the size of the time bins used to calculate how frequently displacements occurred. Default is 1.1}
 
-\item{plot}{Plot the root-mean-square of displacements versus the mean displacements against their corresponding time periods. Default is TRUE.}
+\item{plot}{Plot the root-mean-square and mean displacements against their corresponding time periods. Default is TRUE.}
 
 \item{lm}{Calculate a linear regression to examine the relationship between the root-mean-square displacement values (target variable)
-and time (predictor variable) and add fit line to the plot (if plot=TRUE). The slope of this relationship, which is also known as the Hurst or
-scaling exponent) is the RMS statistic and it can be determined by typing 'RMSlinearModel$coefficients[2]'. Default is TRUE.}
+and time (predictor variable) and add fit line to the plot (if plot=TRUE). Default is TRUE.}
 }
 \value{
-List containing a dataframe of results (list element 1) and if lm = TRUE, the results of the linear model are also output (list element 2).
-The results dataframe includes the 'timeWindows' in log-sized bins along with their corresponding 'meanDisplacements', and root-mean-square
-displacement 'rmsDisplacements' values. If plot = TRUE, a plot of the mean displacement values and the root-mean-square displacement values
+List containing a dataframe of results (list element 1) and the results of the linear model (if lm = TRUE, list element 2).
+The results dataframe includes the 'timeWindows' in log-sized bins along with their corresponding 'meanDisplacements' and 'rmsDisplacements'
+(root-mean-square displacements). If plot = TRUE, a plot of the mean displacement values and the root-mean-square displacement values
 against their corresponding time period is created, and if lm = TRUE, a fit line and reference line are added to the plot.
 }
 \description{
 This function allows you to calculate root-mean-square displacements and plot them scaled with time
 }
 \examples{
-RMS(tracks)
 RMS(tracks, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE)
 }

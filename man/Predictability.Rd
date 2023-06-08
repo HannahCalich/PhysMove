@@ -29,6 +29,5 @@ This function allows you to calculate the limit of predictability for each traje
 A pdf plot of the predictability values can be created with the \code{\link{PlotPDF}} function.
 }
 \examples{
-Predictability(tracks, entropyResults)
 Predictability(tracks, entropyResults, startVal=0.99, histPlot=TRUE)
 }

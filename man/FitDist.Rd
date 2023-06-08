@@ -37,8 +37,6 @@ functions.
 This function allows you to fit power law, exponential, or lognormal distributions to the displacements calculated with
 the \code{\link{CalcDisp}} function.
 }
-\details{
-Examples:
-FitDist(displacements)
-FitDist(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE)
+\examples{
+FitDist(displacements, dist=c("pl","exp","lnorm"), full=TRUE)
 }

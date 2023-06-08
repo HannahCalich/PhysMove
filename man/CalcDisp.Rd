@@ -30,9 +30,8 @@ A list containing the displacements in km recorded for each time window. Each li
 windows set (i.e., the first list element is the first time window).
 }
 \description{
-This function allows you to calculate the displacement distances traveled by individuals over set time windows.
+This function allows you to calculate the displacement distances travelled by individuals over set time windows.
 }
 \examples{
-CalcDisp(tracks)
 CalcDisp(tracks, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
 }

@@ -9,7 +9,7 @@ Randomise(species_df, randTrack = 100, gridCell = 0.25, plot = TRUE, lm = TRUE)
 \arguments{
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
-"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 See attached sample data \code{\link{tracks}}.}
 
@@ -33,11 +33,10 @@ Randomised tracks for each ref. Lastly, if plot = TRUE, a plot illustrating the 
 and if lm = TRUE, a fit line and reference line are added to the plot.
 }
 \description{
-This function allows you to investigate the influence spatial and/or temporal correlations may have on an indiivudals' space use patterns.
+This function allows you to investigate the influence spatial and/or temporal correlations may have on an individuals' space use patterns.
 This is done by maintaining the origin and end location of each track, randomizing the order displacements occurred in between these points,
-and calculating how many grid cells the original and Randomised tracks visited, which summarizes their space use.
+and calculating how many grid cells the original and randomised tracks visited, which summarizes their space use.
 }
 \examples{
-Randomise(tracks)
-Randomise(tracks, randTrack=500, gridCell=0.25, plot=TRUE, lm=TRUE)
+Randomise(tracks, randTrack=100, gridCell=0.25, plot=TRUE, lm=TRUE)
 }

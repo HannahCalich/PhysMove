@@ -16,7 +16,7 @@ PlotDist(
 \arguments{
 \item{displacements}{List of displacements output from the \code{\link{CalcDisp}} function.}
 
-\item{distResults}{List output from the \code{\link{FitDist}} function containing a dataframe of fit results (element 1) and a normalisation record (element 2)}
+\item{distResults}{List output from the \code{\link{FitDist}} function containing a dataframe of fit results (list element 1) and a normalisation record (list element 2)}
 
 \item{fitLines}{Add fit lines based on the parameters calculated with the \code{\link{FitDist}} function. Default is TRUE.}
 
@@ -39,5 +39,4 @@ based on the displacements output from the \code{\link{CalcDisp}} function and t
 }
 \examples{
 PlotDist(displacements, distResults)
-PlotDist(displacements, distResults, fitLines=TRUE, setDist=NULL, colours=c("red","gold2","blue"))
 }

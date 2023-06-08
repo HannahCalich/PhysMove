@@ -9,7 +9,7 @@ Entropy(species_df, gridCell = 0.25, histPlot = TRUE)
 \arguments{
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
-"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
+"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 See attached sample data \code{\link{tracks}}.}
 
@@ -28,6 +28,5 @@ Values close to 1 indicate high entropy (disordered trajectories) while values c
 A pdf plot of the normalized entropy values can be created with the \code{\link{PlotPDF}} function.
 }
 \examples{
-Entropy(tracks)
 Entropy(tracks, gridCell=0.25, histPlot=TRUE)
 }

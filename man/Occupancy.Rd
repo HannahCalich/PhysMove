@@ -34,6 +34,5 @@ This function allows you to calculate the occupancy patterns of location estimat
 A pdf plot of the occupancy values can be created with the \code{\link{PlotPDF}} function.
 }
 \examples{
-Occupancy(tracks)
 Occupancy(tracks, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"))
 }

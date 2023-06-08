@@ -27,5 +27,4 @@ To map only a selection of the communities use the subset_communities parameter.
 }
 \examples{
 CommunityMap(infomapResult)
-CommunityMap(infomapResult, subset_communities=c(1,2,3), colours="Dark2")
 }
