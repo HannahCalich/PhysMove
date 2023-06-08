@@ -27,5 +27,5 @@ list format where each list element corresponds to displacements calculated over
 format from the \code{\link{CalcDisp}} function.
 }
 \examples{
-PlotDispPDF(displacements)
+PlotDispPDF(disp)
 }

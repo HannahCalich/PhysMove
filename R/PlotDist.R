@@ -14,7 +14,7 @@
 #' @param legend Add legend with legend=TRUE. Default is TRUE.
 #' @return Complementary cumulative distribution function (ccdf) plot of displacements with fit lines (if fitLines=TRUE).
 #' @importFrom stats plnorm pexp
-#' @examples PlotDist(displacements, distResultsExp)
+#' @examples PlotDist(disp, distResultsExp)
 #' @export
 
 PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, colours=c("red","gold2","blue"), legend=TRUE){

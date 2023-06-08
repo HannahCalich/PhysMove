@@ -26,6 +26,6 @@ K = number of parameters in the model (see Burnham and Anderson (2004) for furth
 if force_AICc = TRUE AICc scores will be calculated regardless of n/K.
 }
 \examples{
-CompDist(displacements, distResultsExp, force_AICc=FALSE)
-CompDist(displacements, distResultsAll, force_AICc=FALSE)
+CompDist(disp, distResultsExp, force_AICc=FALSE)
+CompDist(disp, distResultsAll, force_AICc=FALSE)
 }

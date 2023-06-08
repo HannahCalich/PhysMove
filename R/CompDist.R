@@ -12,8 +12,8 @@
 #' @return A data frame with that contains the summary statistics for each distribution fit (from the \code{\link{FitDist}} function) as well as
 #' the AICc/AIC scores and weighted AICc/AIC scores (wAICc/wAIC) for each distribution fit.
 #' @importFrom stats dlnorm plnorm
-#' @examples CompDist(displacements, distResultsExp, force_AICc=FALSE)
-#' @examples CompDist(displacements, distResultsAll, force_AICc=FALSE)
+#' @examples CompDist(disp, distResultsExp, force_AICc=FALSE)
+#' @examples CompDist(disp, distResultsAll, force_AICc=FALSE)
 #' @export
 
 CompDist<-function(displacements, distResults, force_AICc=FALSE){

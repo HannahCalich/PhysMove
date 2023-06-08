@@ -12,7 +12,7 @@
 #' @param legend Add legend with legend=TRUE. Default is TRUE.
 #' @return Probability density function (pdf) plots of displacements.
 #' @importFrom rlang .data
-#' @examples PlotDispPDF(displacements)
+#' @examples PlotDispPDF(disp)
 #' @export
 
 PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=TRUE){
