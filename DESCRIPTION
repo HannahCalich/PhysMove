@@ -25,7 +25,7 @@ Suggests:
     infomapecology (>= 1.0.6),
     roxygen2 (>= 7.2.3),
     knitr (>= 1.42),
-    rmarkdown (>= 2.2.0),
+    rmarkdown (>= 2.2.0)
 VignetteBuilder: knitr
 License: GPL-3 + file LICENSE
 URL: https://github.com/HannahCalich/PhysMove
