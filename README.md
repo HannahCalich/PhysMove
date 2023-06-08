@@ -39,9 +39,6 @@ install.packages("devtools")
 
 # Download the development version from GitHub:
 devtools::install_github("HannahCalich/PhysMove", auth_token = "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", build_vignettes = TRUE, force = TRUE)
-
-# Load PhysMove
-library(PhysMove)
 ```
 
 ## Data formatting
@@ -65,5 +62,7 @@ You can compare your dataframe to our sample dataset `tracks` to ensure your dat
 All of the information you need to apply the PhysMove methods can be found in our accompanying manuscript and package vignette, available here:
 
 ```r
+library(PhysMove)
+
 browseVignettes("PhysMove")
 ```
