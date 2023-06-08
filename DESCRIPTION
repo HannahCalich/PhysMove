@@ -17,7 +17,6 @@ Imports:
     methods (>= 4.2.2),
     RColorBrewer (>= 1.1),
     scales (>= 1.2.1),
-    stats4 (>= 4.0.5),
     rootSolve (>= 1.8.2.1),
     rlang (>= 0.4.11)
 Suggests:
