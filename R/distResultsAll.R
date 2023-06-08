@@ -4,4 +4,4 @@
 #' and the second list element is a record of if the data were normalized or not, which is needed for \code{\link{CompDist}} and \code{\link{PlotDist}}).
 #'
 #' @format list
-"distResults"
+"distResultsAll"

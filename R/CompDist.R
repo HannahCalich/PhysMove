@@ -13,6 +13,7 @@
 #' the AICc/AIC scores and weighted AICc/AIC scores (wAICc/wAIC) for each distribution fit.
 #' @importFrom stats dlnorm plnorm
 #' @examples CompDist(displacements, distResultsExp, force_AICc=FALSE)
+#' @examples CompDist(displacements, distResultsAll, force_AICc=FALSE)
 #' @export
 
 CompDist<-function(displacements, distResults, force_AICc=FALSE){

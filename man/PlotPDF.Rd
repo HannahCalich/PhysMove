@@ -27,5 +27,5 @@ A pdf plot of the results and the data used to create the plot.
 This function allows you to plot a probability density function (pdf).
 }
 \examples{
-PlotPDF(occupancyDF$Occupancy, desc="Occupancy")
+PlotPDF(occupancyResultsDF$Occupancy, desc="Occupancy")
 }

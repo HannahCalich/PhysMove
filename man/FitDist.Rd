@@ -38,5 +38,5 @@ This function allows you to fit power law, exponential, or lognormal distributio
 the \code{\link{CalcDisp}} function.
 }
 \examples{
-FitDist(displacements, dist=c("pl","exp","lnorm"), full=TRUE)
+FitDist(disp, dist=c("pl","exp","lnorm"), full=TRUE)
 }

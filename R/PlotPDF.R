@@ -14,7 +14,7 @@
 #' code will automatically use 15 bins.
 #' @return A pdf plot of the results and the data used to create the plot.
 #' @importFrom rlang .data
-#' @examples PlotPDF(occupancyDF$Occupancy, desc="Occupancy")
+#' @examples PlotPDF(occupancyResultsDF$Occupancy, desc="Occupancy")
 #' @export
 
 PlotPDF <- function(result, desc=NULL, nBins){

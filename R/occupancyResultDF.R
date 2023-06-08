@@ -4,4 +4,4 @@
 #' simplicity with pdfPlot example (i.e., occupancy.df <- as.data.frame(Occ[[1]]), where Occ was the output from the Occupancy function.
 #'
 #' @format data frame
-"occupancyDF"
+"occupancyResultsDF"

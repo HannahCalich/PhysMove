@@ -27,4 +27,5 @@ if force_AICc = TRUE AICc scores will be calculated regardless of n/K.
 }
 \examples{
 CompDist(displacements, distResultsExp, force_AICc=FALSE)
+CompDist(displacements, distResultsAll, force_AICc=FALSE)
 }
