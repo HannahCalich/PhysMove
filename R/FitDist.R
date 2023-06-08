@@ -17,10 +17,10 @@
 #' data were normalised is exported as the 2nd list element because this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}
 #' functions.
 #' @importFrom stats dlnorm plnorm optim sd
-#' @examples FitDist(displacements, dist=c("pl","exp","lnorm"), full=TRUE)
+#' @examples FitDist(disp, dist=c("pl","exp","lnorm"), full=TRUE)
 #' @export
 
-FitDist <- function (displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE) {
+FitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE) {
 
   if (!("list" %in% is(displacements))){
    stop("Distributions can only be fit to the output from the CalcDisp function in list format.")
