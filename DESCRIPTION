@@ -6,9 +6,9 @@ Date: 2023-05-23
 Authors@R: 
     c(person("Hannah", "Calich", email = "hannah.calich@anu.edu.au", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7541-9584")),
       person("Ana", "Sequeira", email = "Ana.Sequeira@anu.edu.au", role = "aut", comment = c(ORCID = "0000-0001-6906-799X")), 
-      person("Jorge", "Rodriguez", email = "jorgeprodriguezg@gmail.com", role = "ctb"),
+      person("Jorge", "Rodriguez", email = "jorgeprodriguezg@gmail.com", role = "ctb", comment=c(ORCID= "0000-0001-6593-5032")),
       person("Victor", "Eguiluz", email = "victor@ifisc.uib-csic.esu", role = "ctb", comment = c(ORCID = "0000-0003-1133-1289")))
-Description: The PhysMove package aims to help users quantify movement patterns of satellite tagged animals using methods derrived from statistical physics.
+Description: The PhysMove package aims to help users quantify movement patterns of satellite tagged animals using methods derrived from statistical physics. 
 Depends: R (>= 4.0) 
 Imports:
     broom (>= 1.0.3),
@@ -22,10 +22,10 @@ Imports:
 Suggests:
     devtools (>= 2.4.5),
     htmltools (>= 0.5.4),
-    infomapecology (>= 1.0.1),
+    infomapecology (>= 1.0.6),
     roxygen2 (>= 7.2.3),
-    knitr (>= 1.42), 
-    rmarkdown (>= 2.2.0)
+    knitr (>= 1.42),
+    rmarkdown (>= 2.2.0),
 VignetteBuilder: knitr
 License: GPL-3 + file LICENSE
 URL: https://github.com/HannahCalich/PhysMove
@@ -34,3 +34,5 @@ LazyData: true
 LazyDataCompression: xz
 Encoding: UTF-8
 RoxygenNote: 7.2.3
+Remotes:  
+    github::Ecological-Complexity-Lab/infomap_ecology_package
