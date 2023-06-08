@@ -29,6 +29,8 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
 
     steps:
+      run:
+        devtools::install_github('Ecological-Complexity-Lab/infomap_ecology_package')
       - uses: actions/checkout@v3
 
       - uses: r-lib/actions/setup-pandoc@v2
