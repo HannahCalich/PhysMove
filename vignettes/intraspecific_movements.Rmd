@@ -1,0 +1,212 @@
+---
+title: "Intraspecific movements"
+subtitle: "Quantify Animal Movement Patterns Using Statistical Physics Methods"
+author: "Hannah Calich"
+date: "Last updated: `r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+  rmarkdown::pdf_document:
+vignette: >
+  %\VignetteIndexEntry{Intraspecific movements}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+      img {
+      border: 0;
+    }
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(dpi=300) # set all figures to 300 dpi to avoid pixelated images
+knitr::opts_chunk$set(fig.align='center', fig.width = 7, fig.height = 5)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>")
+```
+
+<img src="../vignettes/PhysMoveHex.png" align="right" width="120" />
+
+## Index
+
+1. [Introduction and preparing the data](introduction.html)
+2. [Movement patterns](movement_patterns.html)
+3. [Space-use patterns](space_use_patterns.html)
+4. [Intraspecific movements](intraspecific_movements.html)
+
+## *Intraspecific movements*
+
+PhysMove includes three metrics for quantifying intraspecific movement patterns that are based on four functions, including:
+
+  * [Track dispersion](intraspecific_movements.html#track-dispersion): `GyrationRad()` and `PlotPDF()`
+  * [Track entropy](intraspecific_movements.html#track-entropy): `Entropy()` and `PlotPDF()`
+  * [Track predictability](intraspecific_movements.html#track-predictability): `Predictability()` and `PlotPDF()`
+
+## Track dispersion 
+
+```{r load physmove, echo=FALSE}
+library(PhysMove)
+```
+
+The `GyrationRad()` function calculates the dispersion (i.e., the gyration radius) of each track in a dataset (Figure V16). 
+
+`GyrationRad()` requires a dataframe with telemetry data (as described above) and includes two optional parameters:
+
+* `map`: create a map (`map=TRUE`, by default), and
+* `mapCol`: change the colour of the points, which indicate average track location,
+and circles, which indicate how far each animal dispersed (`mapCol=c(“Black”, “Red”)`, by default).
+create
+
+`GyrationRad()` outputs a dataframe of the results, which were used to create each map, including: 
+
+* *ref*: the reference id for each track,
+* *avg long* and *avg lat*: the average longitude and latitude coordinates in degrees for each track, and 
+* *rG* *(km)*: the gyration radius in kilometres for each track. 
+
+```{r gyrad, echo=TRUE, message=FALSE, fig.width = 7, fig.height = 5, out.width="60%"}
+# Calculate the dispersion of each track in the tracks dataset
+GR <- GyrationRad(tracks)
+```
+
+**Figure** **V16** Map illustrating dispersion patterns for `tracks` dataset using `GyrationRad()` default parameters. Black points represent the
+mean location of each track and red circles represent how far each track dispersed (i.e., their gyration radius).
+
+```{r preview gyrad, echo=TRUE}
+# Preview the first 6 rows of the gyration radius dataset
+head(GR)
+```
+
+### Probability density function of gyration radius results
+
+A pdf of the results from `GyrationRad()` can be plotted with the `PlotPDF()` function when the `desc` parameter is set to “GyrationRad”
+(Figure V17).
+
+```{r gyrad pdf, echo=TRUE, fig.width = 7, fig.height = 5, out.width="60%"}
+# Create a pdf plot of gyration radius values
+pdf.gr <- PlotPDF((GR$`rG (km)`), desc="GyrationRad")
+```
+
+**Figure** **V17** Probability density function (pdf) plot of gyration radius values for `tracks` dataset determined with `GyrationRad()` default
+parameters. Plot created using `PlotPDF()` with `desc=“GyrationRad”`.
+
+$~$
+$~$
+
+[Back to top](intraspecific_movements.html)
+
+## Track entropy
+
+The `Entropy()` function calculates track randomness based on the fraction of data points from each track within each grid cell (Figure V18).
+The resulting entropy scores are then normalised so results can be compared between individuals. 
+
+`Entropy()` requires a dataframe with telemetry data (as described above) and includes two optional parameters:
+
+* `gridCell`: change grid cell size in degrees (`gridCell=0.25`, by default), and
+* `histPlot`: output a histogram (`histPlot=TRUE`, by default).
+
+`Entropy()` outputs results a dataframe with in four columns, including: 
+* *ref*: the reference id for each track,
+* *normalisedEntropy*: normalised entropy scores,
+* *indivEntropy*: individual entropy scores before they were normalised, and 
+* *cellsVisited*: the number of cells visited by each track. 
+
+```{r ent, echo=TRUE, fig.width = 7, fig.height = 5, out.width="60%"}
+# Calculate track entropy using default parameters
+Ent <- Entropy(tracks)
+```
+
+**Figure** **S18** Histogram of normalised entropy scores for `tracks` dataset created using `Entropy()` default parameters.
+
+```{r ent head, echo=TRUE}
+# Preview the first 6 rows of the entropy results
+head(Ent)
+```
+
+### Probability density function of Entropy results
+
+A pdf of the results from `Entropy()` can be plotted with the `PlotPDF()` function when the `desc` parameter is set to “Entropy” (Figure
+V19).
+
+```{r ent pdf, echo=TRUE, fig.width = 7, fig.height = 5, out.width="60%"}
+# Create a pdf plot of the entropy scores
+pdf.ent <- PlotPDF(Ent$normalisedEntropy, "Entropy")
+```
+
+**Figure** **V19** Probability density function (pdf) plot of normalised entropy scores for `tracks` dataset determined with `Entropy()` default
+parameters. Plot created using `PlotPDF()` with `desc=“Entropy”`.
+
+$~$
+$~$
+
+[Back to top](intraspecific_movements.html)
+
+## Track predictability 
+
+The `Predictability()` function calculates the limit of predictability for each track based on their individual entropy scores (Figure V20;
+Figure 1). 
+
+`Predictability()` requires a dataframe with telemetry data (as described above) and a dataframe of results output from `Entropy()`, and includes two optional parameters:
+
+* `startVal`: the starting value used to find a root value for the limit of predictability equation (`startVal=0.99`, by default), and
+* `histPlot`: output a histogram (`histPlot=TRUE`, by default).
+
+`Predictability()` outputs a dataframe of results with two columns, including: 
+* *ref*: the reference id for each track, and 
+* *Predictability*: the predictability scores for each track. 
+
+```{r predict, echo=TRUE, fig.width = 7, fig.height = 5, out.width="60%"}
+# Track predictability using Predictability() default parameters and the output from Entropy()
+Pred <- Predictability(tracks, Ent)
+```
+
+**Figure** **V20** Histogram of predictability scores for `tracks` dataset determined using `Predictability()` default parameters and entropy scores from `Entropy()`.
+
+```{r predict head, echo=TRUE}
+# Preview the first 6 rows of the predictability results
+head(Pred)
+```
+
+### Probability density function of Entropy results
+
+A pdf of the results from `Predictability()` can be plotted with the `PlotPDF()` function when the `desc` parameter is set to “Predictability” (Figure V21).
+
+```{r predict pdf, echo=TRUE, fig.width = 7, fig.height = 5, out.width="60%"}
+# Create a pdf plot of the predictability scores
+pdf.pred <- PlotPDF(Pred$Predictability, desc="Predictability")
+```
+
+**Figure** **V21** Probability density function (pdf) plot of predictability scores for `tracks` dataset determined with `Predictability()` default parameters and results from `Entropy()`. Plot created using `PlotPDF()` with `desc=“Predictability”`.
+
+$~$
+$~$
+
+[Back to top](intraspecific_movements.html)
+
+## References & Recommended resources
+
+Burnham, K.P. & Anderson, D.R. (2004) Multimodel Inference:Understanding
+AIC and BIC in Model Selection. *Sociological Methods & Research*, 33,
+261-304.
+
+Calich, H.J. *et al*. (2021) Comprehensive analytical approaches reveal
+species-specific search strategies in sympatric apex predatory sharks.
+*Ecography*, 44, 1544-1556.
+
+Farage, C. *et al*. (2021) Identifying flow modules in ecological
+networks using Infomap. *Methods in Ecology and Evolution*, 12, 778–786.
+
+Méndez, V., *et al*. (2013). Stochastic Foundations in Movement Ecology:
+Anomalous Diffusion, Front Propagation and Random Searches. Berlin,
+Heidelberg, Germanu, Springer Berlin / Heidelberg.
+
+Rodríguez, J.P. *et al*. (2017) Big data analyses reveal patterns and
+drivers of the movements of southern elephant seals. *Scientific*
+*Reports*, 7, 1-10.
+
+Viswanathan, G. M., *et al*. (2011). The Physics of Foraging: An
+Introduction to Biological Encounters and Random Searches. Cambridge,
+Cambridge University Press.
+
+Wickham, H. (2016) ggplot2: Elegant Graphics for Data Analysis.
+Springer-Verlag, New York.

@@ -29,6 +29,10 @@ PhysMove focuses on three major categories of movement data analyses, and each c
   * Track entropy: `Entropy()` and `PlotPDF()`
   * Track predictability: `Predictability()` and `PlotPDF()`
 
+  * [Track dispersion](intraspecific_movements.html#track-dispersion): `GyrationRad()` and `PlotPDF()`
+  * [Track entropy](intraspecific_movements.html#track-entropy): `Entropy()` and `PlotPDF()`
+  * [Track predictability](intraspecific_movements.html#track-predictability): `Predictability()` and `PlotPDF()`
+
 ## Installation 
 
 PhysMove passes all local CRAN checks (i.e., `devtools::check()` does not result in errors, warnings, or notes), and the package has been submitted to CRAN for review. In the meantime, we recommend users install the development version of PhysMove from GitHub using the devtools R package. Note that the authentication token included below will only be required while the accompanying manuscript is under review, PhysMove will be open access on GitHub once the manuscript is accepted for publication.

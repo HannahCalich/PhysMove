@@ -1,13 +1,13 @@
 ---
-title: "PhysMove"
+title: "Movement patterns"
+subtitle: "Quantify Animal Movement Patterns Using Statistical Physics Methods"
 author: "Hannah Calich"
-date: "`r Sys.Date()`"
+date: "Last updated: `r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
-    toc: true
-    toc_depth: 2
+  rmarkdown::pdf_document:
 vignette: >
-  %\VignetteIndexEntry{PhysMove}
+  %\VignetteIndexEntry{Movement patterns}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -26,14 +26,7 @@ knitr::opts_chunk$set(
   comment = "#>")
 ```
 
-```{r, echo=FALSE}
-# htmltools::img(src = knitr::image_uri("vignettes/PhysMoveHex.PNG"), ## for knit
-htmltools::img(src = knitr::image_uri("../vignettes/PhysMoveHex.PNG"), ## for devtools check
-              #alt = 'logo',  
-              style = 'position:absolute; top:0; right:0; padding:0px; border:0',
-              width = '250px', height = '250px',
-              dpi=300)
-```
+<img src="../vignettes/PhysMoveHex.png" align="right" width="120" />
 
 ## Index
 
@@ -42,82 +35,15 @@ htmltools::img(src = knitr::image_uri("../vignettes/PhysMoveHex.PNG"), ## for de
 3. [Space-use patterns](space_use_patterns.html)
 4. [Intraspecific movements](intraspecific_movements.html)
 
-PhysMove contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. This vignette demonstrates how to calculate each of the methods and reviews all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove ([Explore tracks dataset](vignettes#Exploretracksdataset.html)). For further details on our methods and interpreting results please see our corresponding manuscript. 
+## *Movement patterns*
 
-# Installation 
+PhysMove includes 5 metrics for quantifying movement patterns that are based on ten functions, including:
 
-PhysMove passes all local CRAN checks (i.e., `devtools::check()` does not result in errors, warnings, or notes), and the package has been submitted to CRAN for review. In the meantime, we recommend users install the development version of PhysMove from GitHub using the devtools R package. Note that the authentication token included below will only be required while the accompanying manuscript is under review, PhysMove will be open access on GitHub once the manuscript is accepted for publication.
-
-```r
-# Install the devtools package from CRAN (if required)
-install.packages("devtools")
-
-# Download the development version from GitHub:
-devtools::install_github("HannahCalich/PhysMove", auth_token = "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", build_vignettes = TRUE)
-```
-
-```{r load physmove, echo=TRUE, highlight=TRUE, clipboard=TRUE}
-# Load PhysMove
-library(PhysMove)
-```
-
-## Data formatting
-
-PhysMove was designed to be user-friendly and most functions only require you to input a data frame containing standard telemetry data. 
-The input data frame must only contain these four columns in the following order: *ref*, *lon*, *lat*, and *day*. 
-
-Columns must be formatted as follows:
-
-  * *ref*: the unique telemetry tag ID number for each animal in numeric format (note that characters are not accepted because 
-  they can be slower to process than integers, so please convert all reference IDs to integers before proceeding)
-  * *lon* and *lat*: the longitude (-180 to + 180) and latitude (-90 to +90) in decimal degrees of
-    each position estimate, respectively, in numeric format, and
-  * *day*: the datetime stamp for each location estimate in POSIXct
-    format following yyyy-mm-dd hh:mm:ss.
-
-The ```CheckTracks``` function can be used to confirm your input data are formatted as described above. This function checks that column names are in order and that each column is in the correct format as described above. Note that this function does not evaluate data quality or quantity. 
-
-``` r
-# Check your data are formatted correctly
-CheckTracks(data) # replace "data" with your dataframe
-```
-
-You can also compare your dataframe to our sample dataset `tracks` to ensure your data are formatted correctly.
-
-### Explore `tracks` dataset
-
-`tracks` is a simulated telemetry dataset of 25 unique tracks with a defined set of movement parameters that was designed to demonstrate each of the PhysMove functions. In detail, `Tracks` was created using a biased, uncorrelated random walk model with variable step lengths drawn from an exponential distribution with λ = 0.125. We defined the turning angles such that 30% indicated directed forward movement (movements with angles <30° or >330°), and 30% indicated directed return movement (angles between 150-210°), allowing the remainder (40%) to be randomly between 0-360°.These metrics were chosen because they are broadly consistent with literature interpretations of animals moving through a resource-rich habitat. See corresponded manuscript for further details. The code used to make the `tracks` dataset is available in the PhysMove `doc` folder on GitHub as “CreateTracks.R”.
-
-```{r preview tracks, echo=TRUE}
-# Preview the first 6 rows of the tracks dataset
-head(tracks)
-```
-
-```{r tracks structure, echo=TRUE}
-# Determine the structure of the tracks dataset
-str(tracks)
-```
-
-### Create a map of the tracks dataset
-
-A basic map of your telemetry data can be created using our `PlotTracks()` function (Figure V1). 
-
-`PlotTracks()` requires a dataframe with telemetry data (as described above) and includes three optional parameters:
-
-  * `ref`: plot specific tracks based on their reference IDs (`ref=NULL`, by default), 
-  * `tracks`: connect points with lines (`tracks=TRUE`, by default), and
-  * `colours`: edit the colours used in the map (`colours=rainbow`, by default). 
-
-```{r plot tracks, echo=TRUE, out.width="60%"}
-PlotTracks(tracks)
-```
-
-**Figure V1** Map of the simulated tracking data included in the `tracks` dataset, created with `PlotTracks()` default settings.
-
-$~$
-$~$
-
-# *Movement patterns*
+  * [Scale of movement](movement_patterns.html#scale-of-movement): `RMS()` 
+  * [Movement patterns across temporal scales](movement_patterns.html#movement-patterns-across-temporal-scales): `CalcDisp()` and `PlotDispPDF()`
+  * [Search patterns](movement_patterns.html#search-patterns): `FitDisp()`, `CompDist()`, and `PlotDist()`
+  * [Influence of correlations on movement decisions](movement_patterns.html#influence-of-correlations-on-movement-decisions): `Randomise()` and `PlotRandomTracks()`
+  * [Turning angles](movement_patterns.html#turning-angles): `TurningAngles()` and `PlotAngles()`
 
 ## Scale of movement 
 
@@ -164,6 +90,11 @@ print(RMSlinearModel)
 # Determine the Hurst exponent 
 RMSlinearModel$estimate[2]
 ```
+
+$~$
+$~$
+
+[Back to top](movement_patterns.html)
 
 ## Movement patterns across temporal scales
 
@@ -227,6 +158,11 @@ plot.data.norm <- PlotDispPDF(disp.all, normalised=FALSE)
 ```
 
 **Figure V4** Probability density function (pdf) plot of displacements from the `tracks` dataset calculated over 10 time windows, 24 to 240 hours at 24 ± 6-hour time intervals with `CalcDisp()`. Plot created with `PlotDispPDF()` where `normalised=FALSE`.
+
+$~$
+$~$
+
+[Back to top](movement_patterns.html)
 
 ## Search patterns 
 
@@ -388,6 +324,11 @@ compResultsLnorm
 
 Overall conclusion: As both full and truncated distribution analyses identified an exponential distribution as the best fit, we can report that these displacements are best-fit to an exponential distribution, when compared with power-law and lognormal distributions.
 
+$~$
+$~$
+
+[Back to top](movement_patterns.html)
+
 ## Influence of correlations on movement decisions 
 
 The `Randomise()` function can be used to gain insights into how correlations influenced a species' movements and space-use (Figure V9). 
@@ -463,6 +404,11 @@ plot.data.random.tracks <- PlotRandomTracks(tracks, ref=1, randomResults)
 
 **Figure V10** Map illustrating the original track for reference id 1 from the tracks dataset (black points and line) and the first 5 randomised tracks for track reference id 1 calculated using `Randomise()` (grey points and lines). The starting and ending locations are in red and blue, respectively. Plot created with `PlotRandomTracks()` default parameters and `ref=1`.
 
+$~$
+$~$
+
+[Back to top](movement_patterns.html)
+
 ## Turning angles 
 
 The `TurningAngles()` function calculates turning angles between a set of three consecutive location estimates separated by set time windows to describe how species explore their habitats (Figure V11). 
@@ -523,233 +469,12 @@ intervals). Plot created with `PlotAngles()` default parameters.
 $~$
 $~$
 
-# *Space-use patterns*
+[Proceed to Space-Use Patterns](space_use_patterns.html)
 
-## Occupancy patterns
+[Back to top](movement_patterns.html)
 
-The `Occupancy()` function helps describe species’ space-use patterns by calculating the total number of location estimates within each grid cell
-and dividing this sum by the grid cell’s area, calculated using spherical coordinates (Figure V13). 
 
-The `Occupancy()` function requires a dataframe with telemetry data (as described above) and includes three optional parameters:
-
-* `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default),
-* `map`: present results in a map (`map=TRUE`, by default) and,
-* `colGrad`: edit the colours used in the map to indicate low, moderate, and high occupancy, respectively, which are visualised using
-scale_fill_gradientn() from the ggplot2 package (Wickham 2016) (`colGrad=c(“blue”, “light blue”, “red”)`, by default).
-
-`Occupancy()` outputs a dataframe of all results, including:
-* *Latitude* and *Longitude*: coordinates for the centre point of each grid cell, 
-* *Area*: area of the grid cell,
-* *Counts*: the number of location estimates recorded in the grid cell, and 
-* *Occupancy*: occupancy values per grid cell (number of counts/area).
-
-```{r calc occ, echo=TRUE, message=FALSE, fig.width = 7, fig.height = 5, out.width="60%"}
-# Create an occupancy map based on the tracks dataset
-Occ <- Occupancy(tracks)
-summary(Occ) # Select dataframe of occupancy results
-```
-
-**Figure** **V13** Map of occupancy (total count of location estimates in each grid cell per area) based on the `tracks` dataset. Map created with
-`Occupancy()` default parameters.
-
-### Probability density function of occupancy results
-
-A pdf of the results from `Occupancy()` can be plotted with the `PlotPDF()` function when the `desc` parameter is set to “Occupancy”
-(Figure V14).
-
-```{r pdf occ, echo=TRUE, fig.width = 7, fig.height = 5, out.width="60%"}
-# Create a pdf plot of occupancy values
-pdf.occ  <- PlotPDF(Occ$Occupancy, desc="Occupancy")
-```
-
-**Figure V14** Probability density function (pdf) plot of occupancy per km2 for tracks dataset determined with `Occupancy()` default parameters. Plot created using `PlotPDF()` with `desc=“Occupancy”`.
-
-## Community-wide movements 
-
-Interactions between species’ movements and their space-use can be described using a network analysis algorithm called Infomap, which to identifies communities where animals follow similar movement patterns and remain for extended periods. To identify Infomap communities, PhysMove requires the `infomapecology` R package [Linked here](https://github.com/Ecological-Complexity-Lab/infomap_ecology_package) and a stand-alone Infomap file [Linked here](https://ecological-complexity-lab.github.io/infomap_ecology_package/installation). Installation instructions and further details about Infomap can be found at <https://ecological-complexity-lab.github.io/infomap_ecology_package/installation> and Farage *et* *al*. (2021). The following instructions assume both the `infomapecology` R package and the stand-alone Infomap file have been installed.
-
-The `InfomapCommunities()` function identifies community-wide movements in two steps:
-
-1.`InfomapCommunities()` calculates the probability of individuals moving between specific grid cells along their track within a predetermined time window. This step creates a transition probability matrix (tpm), which can also be referred to as a “unipartite edge list”.  
-
-2.`InfomapCommunities()` then feeds the transition probability matrix into a function from the `infomapecology` package to create an *Infomap monolayer object* that identifies movement communities. 
-
-To ensure the `infomapecology` algorithm calculates movement patterns consistent with telemetry data, we adapted an infomapecology function to allow for directed movement, self-links (i.e., individuals can remain in the same grid cell over time), and hierarchical partitioning (i.e., the resulting communities are composed of multiple levels). Because we allowed hierarchical partitioning, the resulting communities are associated with different levels; level 1 communities are the most inclusive and have been used to identify community-wide movements (following Rodríguez *et* *al*. 2017 and Calich *et*
-*al*. 2021). 
-
-The `InfomapCommunities()` function requires a dataframe with telemetry data (as described above) and includes five optional parameters:
-
-* `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default),
-* `hours`: number of hours between location estimates (`hours=24`, by default), 
-* `range_hr`: time range in hours (`range_hr=6`, by default). This parameter allows you to identify location estimates that are close to, but not exactly separated by the set number of `hours`, and 
-* `tpm`: save the transition probability matrix to the local environment as *TransitionProbabilityMatrix* (`tpm=FALSE`, by default),
-
-`InfomapCommunities()` outputs a list with up to two list objects. The first list object is an *infomap monolayer object* that summarizes the hierarchical structure of the Infomap communities (regions where individuals are likely to stay for longer periods of time). See Farage *et* *al*. (2021) and the `infomapecology` package for further details. The second list object is the transition probability matrix, which is only output if `tpm=TRUE`. 
-
-**Important**: Before running `InfomapCommunities()` you must set your working directory to the folder that contains the stand-alone Infomap file (*Infomap.exe*), see instructions above for installation instructions. 
-
-```{r load infomap, echo=TRUE, message=FALSE, warning=FALSE}
-# Identify community-wide movements from the tracks dataset with InfomapCommunities,
-# Note that the working directory must be set to the folder containing the Infomap file,
-# for more information, please visit:
-# https://ecological-complexity-lab.github.io/infomap_ecology_package/installation
-
-setwd("~/2023/PhysMove") # Update your working directory to the folder containing the infomap.exe file
-library(infomapecology)
-
-infomap <- InfomapCommunities(tracks)
-# Determine the structure of the Infomap monolayer object
-str(infomap)
-```
-
-### Plot Infomap communities
-
-`CommunityMap()` is used to visualise results from `InfomapCommunities()` and converts the *Infomap monolayer object* into a
-map (Figure V15).
-
-The `CommunityMap()` function requires the Infomap monolayer object output from `InfomapCommunities()` and includes two optional parameters:
-
-* `subset_communities`: used to only map specific level 1 communities. For example, `subset_communities = c(1,2,3)` would plot level 1 communities 1, 2, and 3.
-* `colours`: change colours of the communities (`colours= “Dark2”`, by default).
-
-```{r, echo=TRUE, message=FALSE, fig.width = 7, fig.height = 5, out.width="60%"}
-# Create a map of the Infomap communities
-CommunityMap(infomap[["infomap_object"]])
-```
-
-**Figure** **v15** Map illustrating level 1 Infomap communities for the `tracks` dataset determined using `InfomapCommunities()` default
-parameters. Map created with `CommunityMap()` default parameters.
-
-$~$
-$~$
-
-# *Intraspecific movements*
-
-## Track dispersion 
-
-The `GyrationRad()` function calculates the dispersion (i.e., the gyration radius) of each track in a dataset (Figure V16). 
-
-`GyrationRad()` requires a dataframe with telemetry data (as described above) and includes two optional parameters:
-
-* `map`: create a map (`map=TRUE`, by default), and
-* `mapCol`: change the colour of the points, which indicate average track location,
-and circles, which indicate how far each animal dispersed (`mapCol=c(“Black”, “Red”)`, by default).
-create
-
-`GyrationRad()` outputs a dataframe of the results, which were used to create each map, including: 
-
-* *ref*: the reference id for each track,
-* *avg long* and *avg lat*: the average longitude and latitude coordinates in degrees for each track, and 
-* *rG* *(km)*: the gyration radius in kilometres for each track. 
-
-```{r, echo=TRUE, message=FALSE, fig.width = 7, fig.height = 5, out.width="60%"}
-# Calculate the dispersion of each track in the tracks dataset
-GR <- GyrationRad(tracks)
-```
-
-**Figure** **V16** Map illustrating dispersion patterns for `tracks` dataset using `GyrationRad()` default parameters. Black points represent the
-mean location of each track and red circles represent how far each track dispersed (i.e., their gyration radius).
-
-```{r, echo=TRUE}
-# Preview the first 6 rows of the gyration radius dataset
-head(GR)
-```
-
-### Probability density function of gyration radius results
-
-A pdf of the results from `GyrationRad()` can be plotted with the `PlotPDF()` function when the `desc` parameter is set to “GyrationRad”
-(Figure V17).
-
-```{r, echo=TRUE, fig.width = 7, fig.height = 5, out.width="60%"}
-# Create a pdf plot of gyration radius values
-pdf.gr <- PlotPDF((GR$`rG (km)`), desc="GyrationRad")
-```
-
-**Figure** **V17** Probability density function (pdf) plot of gyration radius values for `tracks` dataset determined with `GyrationRad()` default
-parameters. Plot created using `PlotPDF()` with `desc=“GyrationRad”`.
-
-## Track entropy
-
-The `Entropy()` function calculates track randomness based on the fraction of data points from each track within each grid cell (Figure V18).
-The resulting entropy scores are then normalised so results can be compared between individuals. 
-
-`Entropy()` requires a dataframe with telemetry data (as described above) and includes two optional parameters:
-
-* `gridCell`: change grid cell size in degrees (`gridCell=0.25`, by default), and
-* `histPlot`: output a histogram (`histPlot=TRUE`, by default).
-
-`Entropy()` outputs results a dataframe with in four columns, including: 
-* *ref*: the reference id for each track,
-* *normalisedEntropy*: normalised entropy scores,
-* *indivEntropy*: individual entropy scores before they were normalised, and 
-* *cellsVisited*: the number of cells visited by each track. 
-
-```{r, echo=TRUE, fig.width = 7, fig.height = 5, out.width="60%"}
-# Calculate track entropy using default parameters
-Ent <- Entropy(tracks)
-```
-
-**Figure** **S18** Histogram of normalised entropy scores for `tracks` dataset created using `Entropy()` default parameters.
-
-```{r, echo=TRUE}
-# Preview the first 6 rows of the entropy results
-head(Ent)
-```
-
-### Probability density function of Entropy results
-
-A pdf of the results from `Entropy()` can be plotted with the `PlotPDF()` function when the `desc` parameter is set to “Entropy” (Figure
-V19).
-
-```{r, echo=TRUE, fig.width = 7, fig.height = 5, out.width="60%"}
-# Create a pdf plot of the entropy scores
-pdf.ent <- PlotPDF(Ent$normalisedEntropy, "Entropy")
-```
-
-**Figure** **V19** Probability density function (pdf) plot of normalised entropy scores for `tracks` dataset determined with `Entropy()` default
-parameters. Plot created using `PlotPDF()` with `desc=“Entropy”`.
-
-## Track predictability 
-
-The `Predictability()` function calculates the limit of predictability for each track based on their individual entropy scores (Figure V20;
-Figure 1). 
-
-`Predictability()` requires a dataframe with telemetry data (as described above) and a dataframe of results output from `Entropy()`, and includes two optional parameters:
-
-* `startVal`: the starting value used to find a root value for the limit of predictability equation (`startVal=0.99`, by default), and
-* `histPlot`: output a histogram (`histPlot=TRUE`, by default).
-
-`Predictability()` outputs a dataframe of results with two columns, including: 
-* *ref*: the reference id for each track, and 
-* *Predictability*: the predictability scores for each track. 
-
-```{r, echo=TRUE, fig.width = 7, fig.height = 5, out.width="60%"}
-# Track predictability using Predictability() default parameters and the output from Entropy()
-Pred <- Predictability(tracks, Ent)
-```
-
-**Figure** **V20** Histogram of predictability scores for `tracks` dataset determined using `Predictability()` default parameters and entropy scores from `Entropy()`.
-
-```{r, echo=TRUE}
-# Preview the first 6 rows of the predictability results
-head(Pred)
-```
-
-### Probability density function of Entropy results
-
-A pdf of the results from `Predictability()` can be plotted with the `PlotPDF()` function when the `desc` parameter is set to “Predictability” (Figure V21).
-
-```{r, echo=TRUE, fig.width = 7, fig.height = 5, out.width="60%"}
-# Create a pdf plot of the predictability scores
-pdf.pred <- PlotPDF(Pred$Predictability, desc="Predictability")
-```
-
-**Figure** **V21** Probability density function (pdf) plot of predictability scores for `tracks` dataset determined with `Predictability()` default parameters and results from `Entropy()`. Plot created using `PlotPDF()` with `desc=“Predictability”`.
-
-$~$
-$~$
-
-# References & Recommended resources
+## References & Recommended resources
 
 Burnham, K.P. & Anderson, D.R. (2004) Multimodel Inference:Understanding
 AIC and BIC in Model Selection. *Sociological Methods & Research*, 33,
