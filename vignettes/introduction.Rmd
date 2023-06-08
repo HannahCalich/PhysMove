@@ -1,7 +1,7 @@
 ---
 title: "PhysMove: Introduction"
-subtitle: "Quantify Animal Movement Patterns Using Statistical Physics Methods"
-author: "Hannah Calich"
+subtitle: "Quantify animal movement patterns using statistical physics methods"
+author: "Hannah Calich & Ana Sequeira"
 date: "Last updated: `r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
   comment = "#>")
 ```
 
-<img src="../vignettes/PhysMoveHex.png" align="right" width="120" />
+<img src="../vignettes/PhysMoveHex.png" align="right" width="130" />
 
 ## Index
 

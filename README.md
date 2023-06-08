@@ -1,8 +1,9 @@
-# PhysMove <img src="vignettes/PhysMoveHex.png" align="right" width="120" />
+# PhysMove <img src="vignettes/PhysMoveHex.png" align="right" width="130" />
 
-## Quantify Animal Movement Patterns Using Statistical Physics Methods  
+### Quantify animal movement patterns using statistical physics methods
 
-Last updated: June 2023 by Hannah Calich
+Authors: Hannah Calich & Ana Sequeira || 
+Maintained by: Hannah Calich (hannah.calich@gmail.com)
 
 ## Overview 
 
@@ -70,3 +71,5 @@ library(PhysMove)
 
 browseVignettes("PhysMove")
 ```
+Current Version: 1.0.0
+Last updated: June, 2023
