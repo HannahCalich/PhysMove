@@ -35,6 +35,8 @@
 
 InfomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, tpm=FALSE){
 
+  if (rlang::is_installed("infomapecology")){
+
     if(infomapecology::check_infomap()!=TRUE){ # If the infomap.exe file has not been installed or cannot be found in working directory stop and send warning
         stop ('Cannot find infomap.exe, please set working directory to folder containing infomap.exe file. \n  For information on installing infomap.exe visit https://ecological-complexity-lab.github.io/infomap_ecology_package/installation')
     }
@@ -140,4 +142,5 @@ InfomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, 
     }
 
     return(infomap_object)
+  }
 }
