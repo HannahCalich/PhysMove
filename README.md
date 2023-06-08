@@ -30,9 +30,9 @@ PhysMove focuses on three major categories of movement data analyses, and each c
   * Track entropy: `Entropy()` and `PlotPDF()`
   * Track predictability: `Predictability()` and `PlotPDF()`
 
-  * [Track dispersion](intraspecific_movements.html#track-dispersion): `GyrationRad()` and `PlotPDF()`
-  * [Track entropy](intraspecific_movements.html#track-entropy): `Entropy()` and `PlotPDF()`
-  * [Track predictability](intraspecific_movements.html#track-predictability): `Predictability()` and `PlotPDF()`
+  * [Track dispersion](vignettes/intraspecific_movements.html#track-dispersion): `GyrationRad()` and `PlotPDF()`
+  * [Track entropy](vignettes/intraspecific_movements.html#track-entropy): `Entropy()` and `PlotPDF()`
+  * [Track predictability](vignettes/intraspecific_movements.html#track-predictability): `Predictability()` and `PlotPDF()`
 
 ## Installation 
 
