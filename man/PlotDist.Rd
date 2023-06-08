@@ -38,5 +38,5 @@ based on the displacements output from the \code{\link{CalcDisp}} function and t
 \code{\link{FitDist}} function.
 }
 \examples{
-PlotDist(displacements, distResultsExp)
+PlotDist(disp, distResultsExp)
 }
