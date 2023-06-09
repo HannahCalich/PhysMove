@@ -2,7 +2,7 @@
 
 [![R-CMD-check](https://github.com/HannahCalich/PhysMove/workflows/R-CMD-check--as-cran/badge.svg)](https://github.com/HannahCalich/PhysMove/actions)
 
-Authors: Hannah Calich & Ana Sequeira || 
+Authors: Hannah Calich & Ana Sequeira || Contributors:  Jorge P. Rodríguez & Víctor M. Eguíluz
 Maintained by: Hannah Calich (hannah.calich@gmail.com)
 
 ## Overview 
