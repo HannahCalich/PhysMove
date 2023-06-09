@@ -43,7 +43,7 @@ jobs:
       - name: Add infomapecology repo
         run: |
           install.packages("remotes", repos = "http://cran.us.r-project.org")
-          remotes::install_github("Ecological-Complexity-Lab/infomap_ecology_package", dep=true)
+          remotes::install_github("Ecological-Complexity-Lab/infomap_ecology_package", dep=TRUE)
         shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
