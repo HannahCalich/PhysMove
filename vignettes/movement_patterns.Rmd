@@ -399,7 +399,7 @@ The `PlotRandomTracks()` function requires three parameters:
 
 ```{r plot random tracks, echo=TRUE, error=FALSE, message=FALSE,  fig.width = 7, fig.height = 5, out.width="60%"}
 # Plot random tracks for tracks dataset reference id 1
-plot.data.random.tracks <- PlotRandomTracks(tracks, ref=1, randomResults)
+plot.data.random.tracks <- PlotRandomTracks(tracks, ref=1, randomise.result)
 ```
 
 **Figure V10** Map illustrating the original track for reference id 1 from the tracks dataset (black points and line) and the first 5 randomised tracks for track reference id 1 calculated using `Randomise()` (grey points and lines). The starting and ending locations are in red and blue, respectively. Plot created with `PlotRandomTracks()` default parameters and `ref=1`.

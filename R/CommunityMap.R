@@ -12,7 +12,7 @@
 #' create a continuous pallet with the colours provided. Default is "Dark2".
 #' @return A map illustrating level 1 Infomap communities.
 #' @importFrom rlang .data
-#' @examples CommunityMap(infomapResult)
+#' @examples CommunityMap(infomapResult[["infomap_object"]])
 #' @export
 
 CommunityMap <- function(infomap_object, subset_communities, colours="Dark2"){
