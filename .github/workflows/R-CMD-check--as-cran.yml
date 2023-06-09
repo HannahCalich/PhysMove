@@ -41,7 +41,7 @@ jobs:
 
       - name: Add infomapecology repo
         run:
-          install.packages("remotes")
+          install.packages(c("remotes"), dependencies=TRUE)
           remotes::install_github("Ecological-Complexity-Lab/infomap_ecology_package")
         shell: Rscript {0}
 
