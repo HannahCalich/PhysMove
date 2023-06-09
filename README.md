@@ -11,7 +11,7 @@ PhysMove contains a comprehensive collection of methods for documenting species'
 
 PhysMove focuses on three major categories of movement data analyses, and each category is accompanied by method-specific functions:
 
-1. Characterization of movement patterns, including:
+1. **Characterization of movement patterns, including:**
 
   * Scale of movement: `RMS()` 
   * Movement patterns across temporal scales: `CalcDisp()` and `PlotDispPDF()`
@@ -19,12 +19,12 @@ PhysMove focuses on three major categories of movement data analyses, and each c
   * Influence of correlations on movement decisions: `Randomise()` and `PlotRandomTracks()`
   * Turning angles: `TurningAngles()` and `PlotAngles()`
   
-2. Identification of space-use patterns, including:
+2. **Identification of space-use patterns, including:**
 
   * Occupancy patterns: `Occupancy()` and `PlotPDF()`
   * Community-wide movements: `InfomapCommunities()` and `CommunityMap()`
 
-3. Detection of variability in intraspecific movements, including:
+3. **Detection of variability in intraspecific movements, including:**
 
   * Track dispersion: `GyrationRad()` and `PlotPDF()`
   * Track entropy: `Entropy()` and `PlotPDF()`
