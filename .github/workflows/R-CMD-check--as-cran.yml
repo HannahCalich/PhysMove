@@ -41,6 +41,11 @@ jobs:
           use-public-rspm: true
           extra-repositories: "https://github.com/Ecological-Complexity-Lab/infomap_ecology_package"
 
+      - name: download infomapecology
+        run: |
+          writeLines('options(repos = c(infomapecology = "https://github.com/Ecological-Complexity-Lab/infomap_ecology_package", getOption(\"repos\")))', file("~/.Rprofile", "ab"))
+        shell: Rscript {0}
+
       - name: Add infomapecology repo
         run: |
           writeLines('options(repos = c(infomapecology = "https://github.com/Ecological-Complexity-Lab/infomap_ecology_package", getOption(\"repos\")))', file("~/.Rprofile", "ab"))
