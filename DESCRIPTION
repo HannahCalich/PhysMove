@@ -22,7 +22,7 @@ Imports:
 Suggests:
     devtools (>= 2.4.5),
     htmltools (>= 0.5.4),
-    infomapecology (>= 1.0.6),
+    infomapecology,
     roxygen2 (>= 7.2.3),
     knitr (>= 1.42),
     rmarkdown (>= 2.2.0)
@@ -35,4 +35,4 @@ LazyDataCompression: xz
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 #Additional_repositories: https://github.com/Ecological-Complexity-Lab/infomap_ecology_package
-Remotes: infomapecology=url::https://github.com/Ecological-Complexity-Lab/infomap_ecology_package
+Remotes: infomapecology=github::Ecological-Complexity-Lab/infomap_ecology_package
