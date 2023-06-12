@@ -26,5 +26,5 @@ This function allows you to create a map of the level 1 Infomap communities calc
 To map only a selection of the communities use the subset_communities parameter.
 }
 \examples{
-CommunityMap(infomapResult[["infomap_object"]])
+CommunityMap(infomapResult)
 }
