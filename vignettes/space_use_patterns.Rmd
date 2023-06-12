@@ -42,6 +42,11 @@ PhysMove includes two metrics for identifying space-use patterns that are based 
   * [Occupancy patterns](space_use_patterns.html#occupancy-patterns): `Occupancy()` and `PlotPDF()`
   * [Community-wide movements](space_use_patterns.html#community-wide-movements: `InfomapCommunities()` and `CommunityMap()`
 
+```{r load physmove space-use vignette, echo=FALSE}
+# Load PhysMove
+library(PhysMove)
+```
+
 ## Occupancy patterns
 
 The `Occupancy()` function helps describe species’ space-use patterns by calculating the total number of location estimates within each grid cell

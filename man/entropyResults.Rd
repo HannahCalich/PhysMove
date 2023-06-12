@@ -11,6 +11,7 @@ dataframe
 entropyResults
 }
 \description{
-Output from \code{\link{Entropy}} function using default parameters and the \code{\link{tracks}} dataset
+Example output from the \code{\link{Entropy}} function. Results calculated using the \code{\link{tracks}} dataset
+and Entropy() default parameters.
 }
 \keyword{datasets}

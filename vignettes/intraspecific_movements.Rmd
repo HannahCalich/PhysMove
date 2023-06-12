@@ -43,6 +43,11 @@ PhysMove includes three metrics for quantifying intraspecific movement patterns 
   * [Track entropy](intraspecific_movements.html#track-entropy): `Entropy()` and `PlotPDF()`
   * [Track predictability](intraspecific_movements.html#track-predictability): `Predictability()` and `PlotPDF()`
 
+```{r load physmove intraspecific vignette, echo=FALSE}
+# Load PhysMove
+library(PhysMove)
+```
+
 ## Track dispersion 
 
 ```{r load physmove, echo=FALSE}

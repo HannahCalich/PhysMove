@@ -2,14 +2,13 @@
 
 [![R-CMD-check](https://github.com/HannahCalich/PhysMove/workflows/R-CMD-check--as-cran/badge.svg)](https://github.com/HannahCalich/PhysMove/actions)
 
-Authors: Hannah Calich & Ana Sequeira || Contributors:  Jorge P. Rodríguez & Víctor M. Eguíluz
+Authors: Hannah Calich & Ana Sequeira || Contributors: Jorge P. Rodríguez & Víctor M. Eguíluz
 
 Maintained by: Hannah Calich (hannah.calich@gmail.com)
 
 ## Overview 
 
-PhysMove contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. Our accompanying vignette demonstrates how to calculate each of the methods and reviews all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove ([Explore tracks dataset](vignettes#Exploretracksdataset.html)). For further details on our methods, and for suggestions on how to interpret your results please see our corresponding manuscript. 
-
+PhysMove contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. Our accompanying vignette demonstrates how to calculate each of the methods and reviews all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove ([Explore tracks dataset](https://github.com/HannahCalich/PhysMove/vignettes#Exploretracksdataset.html)). Please see our corresponding manuscript for further details on our methods, and for suggestions on how to interpret your results, 
 PhysMove focuses on three major categories of movement data analyses, and each category is accompanied by method-specific functions:
 
 1. **Characterization of movement patterns, including:**
@@ -33,7 +32,9 @@ PhysMove focuses on three major categories of movement data analyses, and each c
 
 ## Installation 
 
-PhysMove passes all local CRAN checks (i.e., `devtools::check()` does not result in errors, warnings, or notes), and the package has been submitted to CRAN for review. In the meantime, we recommend users install the development version of PhysMove from GitHub using the devtools R package. Note that the authentication token included below will only be required while the accompanying manuscript is under review, PhysMove will be open access on GitHub once the manuscript is accepted for publication.
+PhysMove passes all local CRAN checks and has been submitted to CRAN for review. In the meantime, we recommend users install the development version of PhysMove from GitHub using the devtools R package. 
+
+*Note that the authentication token included below will only be required while the accompanying manuscript is under review, PhysMove will be open access on GitHub once the manuscript is accepted for publication.*
 
 ```r
 # Install the devtools package from CRAN (if required)
@@ -61,12 +62,13 @@ You can compare your dataframe to our sample dataset `tracks` to ensure your dat
 
 ## Usage
 
-All of the information you need to apply the PhysMove methods can be found in our accompanying manuscript and package vignette, available here:
+All of the information you need to apply the PhysMove methods can be found in our accompanying manuscript and vignettes, which are available here:
 
 ```r
 library(PhysMove)
 
 browseVignettes("PhysMove")
 ```
+
 Current Version: 1.0.0
 Last updated: June, 2023

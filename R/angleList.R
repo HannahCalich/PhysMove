@@ -1,7 +1,9 @@
-#' Example output from TurningAngles to demonstrate the PlotAngles function
+#' Example output from TurningAngles()
 #'
-#' Output from \code{\link{TurningAngles}} function calculated using the tracks dataset and \code{\link{TurningAngles}} with max_hr = 24. Note that the TurningAngles
-#' default is normally max_hr=240; however, this creates an unnecessarily large file for an example dataset so max_hr = 24 was used instead.
+#' Example output from the \code{\link{TurningAngles}} function. Angles calculated using
+#' the \code{\link{tracks}} dataset and TurningAngles() with max_hr=24. Note that the
+#' TurningAngles() default is normally max_hr=240; however, this creates an unnecessarily
+#' large file for an example dataset so max_hr=24 was used instead.
 #'
-#' @format List containing 10 list elements, 1 for each time window set using \code{\link{TurningAngles}}
+#' @format list
 "angleList"

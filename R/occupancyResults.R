@@ -1,6 +1,7 @@
-#' Example output from Occupancy function for pdfPlot function
+#' Example output from Occupancy()
 #'
-#' Results from Occupancy function using Occupancy() default parameters.
+#' Example output from the \code{\link{Occupancy}} function. Results calculated using the \code{\link{tracks}} dataset
+#' and Occupancy() default parameters.
 #'
-#' @format data frame
+#' @format dataframe
 "occupancyResults"

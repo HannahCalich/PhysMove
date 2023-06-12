@@ -3,14 +3,15 @@
 \docType{data}
 \name{occupancyResults}
 \alias{occupancyResults}
-\title{Example output from Occupancy function for pdfPlot function}
+\title{Example output from Occupancy()}
 \format{
-data frame
+dataframe
 }
 \usage{
 occupancyResults
 }
 \description{
-Results from Occupancy function using Occupancy() default parameters.
+Example output from the \code{\link{Occupancy}} function. Results calculated using the \code{\link{tracks}} dataset
+and Occupancy() default parameters.
 }
 \keyword{datasets}

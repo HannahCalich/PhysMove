@@ -3,7 +3,7 @@
 \docType{data}
 \name{disp}
 \alias{disp}
-\title{Sample displacement data to demonstrate PhysMove functions}
+\title{Example output from CalcDisp()}
 \format{
 A list with 10 elements
 }
@@ -11,6 +11,9 @@ A list with 10 elements
 disp
 }
 \description{
-A list containing the displacements in km recorded for each time window using CalcDisp with max_hr=24.
+Example output from the \code{\link{CalcDisp}} function. Displacements in km calculated using the
+\code{\link{tracks}} dataset and CalcDisp() with max_hr=24. Note that the CalcDisp() default is
+normally max_hr=240; however, this creates an unnecessarily large file for an example dataset
+so max_hr=24 was used instead.
 }
 \keyword{datasets}

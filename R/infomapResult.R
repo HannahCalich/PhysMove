@@ -1,6 +1,9 @@
-#' Example output from InfomapCommunities to demonstrate the CommunityMap function
+#' Example output from InfomapCommunities()
 #'
-#' Infomap monolayer object created using the InfomapCommunities function with default parameters and the tracks dataset
+#' Example output from the \code{\link{InfomapCommunities}} function. Results calculated using the
+#' \code{\link{tracks}} dataset and InfomapCommunities() default parameters. The first list element
+#' contains the Infomap results (i.e., an Infomap monolayer object) and the second list element includes a
+#' transition probability matrix (tpm).
 #'
-#' @format Infomap monolayer object
+#' @format list
 "infomapResult"

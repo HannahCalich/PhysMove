@@ -45,6 +45,11 @@ PhysMove includes 5 metrics for quantifying movement patterns that are based on 
   * [Influence of correlations on movement decisions](movement_patterns.html#influence-of-correlations-on-movement-decisions): `Randomise()` and `PlotRandomTracks()`
   * [Turning angles](movement_patterns.html#turning-angles): `TurningAngles()` and `PlotAngles()`
 
+```{r load physmove movement vignette, echo=FALSE}
+# Load PhysMove
+library(PhysMove)
+```
+
 ## Scale of movement 
 
 The `RMS()` function provides insights into the scale of movement by calculating mean and root-mean-square (RMS) displacements and

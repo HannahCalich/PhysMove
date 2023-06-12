@@ -23,9 +23,10 @@ Suggests:
     devtools (>= 2.4.5),
     htmltools (>= 0.5.4),
     infomapecology,
-    roxygen2 (>= 7.2.3),
     knitr (>= 1.42),
-    rmarkdown (>= 2.2.0)
+    rmarkdown (>= 2.2.0),
+    roxygen2 (>= 7.2.3),
+    sf (>= 1.0-13)
 VignetteBuilder: knitr
 License: GPL-3 + file LICENSE
 URL: https://github.com/HannahCalich/PhysMove
