@@ -35,4 +35,3 @@ LazyData: true
 LazyDataCompression: xz
 Encoding: UTF-8
 RoxygenNote: 7.2.3
-Remotes: infomapecology=github::Ecological-Complexity-Lab/infomap_ecology_package
