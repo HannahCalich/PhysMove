@@ -110,7 +110,7 @@ The `InfomapCommunities()` function requires a dataframe with telemetry data (as
 
 **Important**: Before running `InfomapCommunities()` you must set your working directory to the folder that contains the stand-alone Infomap file (*Infomap.exe*), see instructions above for installation instructions. 
 
-```{r load infomap, echo=TRUE, message=FALSE, warning=FALSE}
+```{r load infomap, eval=FALSE, message=FALSE, warning=FALSE}
 # Identify community-wide movements from the tracks dataset with InfomapCommunities,
 # Note that the working directory must be set to the folder containing the Infomap file,
 # for more information, please visit:
@@ -118,10 +118,12 @@ The `InfomapCommunities()` function requires a dataframe with telemetry data (as
 
 setwd("~/2023/PhysMove") # Update your working directory to the folder containing the infomap.exe file
 library(infomapecology)
+infomapResult <- InfomapCommunities(tracks)
+```
 
-infomap <- InfomapCommunities(tracks)
+```{r run infomap on sample, echo=FALSE, message=FALSE, warning=FALSE}
 # Determine the structure of the Infomap monolayer object
-str(infomap)
+str(infomapResult[["infomap_object"]])
 ```
 
 ### Plot Infomap communities
@@ -134,9 +136,9 @@ The `CommunityMap()` function requires the Infomap monolayer object output from 
 * `subset_communities`: used to only map specific level 1 communities. For example, `subset_communities = c(1,2,3)` would plot level 1 communities 1, 2, and 3.
 * `colours`: change colours of the communities (`colours= “Dark2”`, by default).
 
-```{r, echo=TRUE, message=FALSE, fig.width = 7, fig.height = 5, out.width="60%"}
+```{r infomap map, echo=TRUE, message=FALSE, fig.width = 7, fig.height = 5, out.width="60%"}
 # Create a map of the Infomap communities
-CommunityMap(infomap[["infomap_object"]])
+CommunityMap(infomapResult)
 ```
 
 **Figure** **v15** Map illustrating level 1 Infomap communities for the `tracks` dataset determined using `InfomapCommunities()` default

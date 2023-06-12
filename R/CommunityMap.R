@@ -2,7 +2,7 @@
 #'
 #' This function allows you to create a map of the level 1 Infomap communities calculated using the \code{\link{InfomapCommunities}} function.
 #' To map only a selection of the communities use the subset_communities parameter.
-#' @param infomap_object Infomap monolayer object output from the \code{\link{InfomapCommunities}} function.
+#' @param infomap_output Infomap monolayer object output from the \code{\link{InfomapCommunities}} function.
 #' @param subset_communities Concatenated vector of level 1 communities to be mapped. For example, subset_communities=c(1,2,3) will plot level 1 communities
 #' 1, 2, and 3. This parameter is particularly useful if Infomap has identified many communities and they are difficult to distinguish in the map
 #' Default is NULL.
@@ -12,17 +12,18 @@
 #' create a continuous pallet with the colours provided. Default is "Dark2".
 #' @return A map illustrating level 1 Infomap communities.
 #' @importFrom rlang .data
-#' @examples CommunityMap(infomapResult[["infomap_object"]])
+#' @examples CommunityMap(infomapResult)
 #' @export
 
-CommunityMap <- function(infomap_object, subset_communities, colours="Dark2"){
+CommunityMap <- function(infomap_output, subset_communities, colours="Dark2"){
 
-
-  if (!("infomap_monolayer" %in% is(infomap_object))){
+  if (!("infomap_monolayer" %in% is(infomap_output[["infomap_object"]]))){
     stop("This function requires the Infomap monolayer object that is output from the InfomapCommunities function. \n  Please run the InfomapCommunities function prior to executing CommunityMap.")
   }
 
-  infomap_modules <- as.data.frame(infomap_object$modules)
+  infomap_output <- infomap_output[["infomap_object"]]
+
+  infomap_modules <- as.data.frame(infomap_output$modules)
   infomap_modules <- infomap_modules[-which(is.na(infomap_modules$module_level1)),] # remove row where module_level1 is NA. Note this has only been happening since latest update & is caused by a row where level = 0 in infomap output
 
   if (!missing(subset_communities)){

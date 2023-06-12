@@ -4,10 +4,10 @@
 \alias{CommunityMap}
 \title{Map Infomap communities}
 \usage{
-CommunityMap(infomap_object, subset_communities, colours = "Dark2")
+CommunityMap(infomap_output, subset_communities, colours = "Dark2")
 }
 \arguments{
-\item{infomap_object}{Infomap monolayer object output from the \code{\link{InfomapCommunities}} function.}
+\item{infomap_output}{Infomap monolayer object output from the \code{\link{InfomapCommunities}} function.}
 
 \item{subset_communities}{Concatenated vector of level 1 communities to be mapped. For example, subset_communities=c(1,2,3) will plot level 1 communities
 1, 2, and 3. This parameter is particularly useful if Infomap has identified many communities and they are difficult to distinguish in the map
