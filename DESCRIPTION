@@ -22,7 +22,7 @@ Imports:
 Suggests:
     devtools (>= 2.4.5),
     htmltools (>= 0.5.4),
-    infomapecology,
+    infomapecology (>= 1.0.6),
     knitr (>= 1.42),
     rmarkdown (>= 2.2.0),
     roxygen2 (>= 7.2.3),
@@ -35,4 +35,4 @@ LazyData: true
 LazyDataCompression: xz
 Encoding: UTF-8
 RoxygenNote: 7.2.3
-Additional_repositories: https://hannahcalich.github.io/drat
+Additional_repositories: https://HannahCalich.github.io/drat
