@@ -35,4 +35,4 @@ LazyData: true
 LazyDataCompression: xz
 Encoding: UTF-8
 RoxygenNote: 7.2.3
-Additional_repositories: https://github.com/HannahCalich/drat
+Additional_repositories: https://hannahcalich.github.io/drat/
