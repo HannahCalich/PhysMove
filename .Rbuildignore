@@ -3,3 +3,4 @@
 ^\data-raw$
 ^doc$
 ^\.github$
+^cran-comments\.md$

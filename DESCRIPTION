@@ -4,7 +4,7 @@ Title: Quantify Animal Movement Patterns Using Statistical Physics Methods
 Version: 1.0.0
 Date: 2023-05-23
 Authors@R: 
-    c(person("Hannah", "Calich", email = "hannah.calich@anu.edu.au", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7541-9584")),
+    c(person("Hannah", "Calich", email = "hannah.calich@anu.edu.au", role = c("aut", "cre", "cph"), comment = c(ORCID = "0000-0001-7541-9584")),
       person("Ana", "Sequeira", email = "Ana.Sequeira@anu.edu.au", role = "aut", comment = c(ORCID = "0000-0001-6906-799X")), 
       person("Jorge", "Rodriguez", email = "jorgeprodriguezg@gmail.com", role = "ctb", comment=c(ORCID= "0000-0001-6593-5032")),
       person("Victor", "Eguiluz", email = "victor@ifisc.uib-csic.esu", role = "ctb", comment = c(ORCID = "0000-0003-1133-1289")))
