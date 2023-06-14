@@ -2,8 +2,6 @@
 ###########################################################################################
 #####                                                                                 #####
 ##### Create sample data for the PhysMove R Package                                   #####
-##### Package Authors: Hannah Calich & Ana Sequeira                                   #####
-##### Contact: hannah.calich@gmail.com                                                #####
 ##### Last updated: January 10, 2022                                                  #####
 #####                                                                                 #####
 ###########################################################################################
