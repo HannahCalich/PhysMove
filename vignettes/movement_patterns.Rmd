@@ -1,15 +1,17 @@
 ---
-title: "Movement patterns"
-subtitle: "Quantify animal movement patterns using statistical physics methods"
-author: "Hannah Calich & Ana Sequeira"
+title: "PhysMove: Movement Patterns"
+#subtitle: "Quantify animal movement patterns using statistical physics methods"
+author: "Hannah Calich, Jorge Rodríguez, Víctor Eguíluz & Ana Sequeira"
 date: "Last updated: `r Sys.Date()`"
 output: 
-  rmarkdown::html_vignette:
+  rmarkdown::word_document:
+    reference_docx: "../vignettes/template.docx"
   rmarkdown::pdf_document:
+  rmarkdown::html_vignette:
 vignette: >
-  %\VignetteIndexEntry{Movement patterns}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{PhysMove: Movement Patterns}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 <style>
@@ -55,7 +57,7 @@ library(PhysMove)
 The `RMS()` function provides insights into the scale of movement by calculating mean and root-mean-square (RMS) displacements and
 plotting them over time (Figure V2). 
 
-`RMS()` requires a dataframe with telemetry data (as described above) and includes four optional parameters:
+`RMS()` requires a data frame with telemetry data (as described above) and includes four optional parameters:
 
   * `timeUnit`: time unit used to calculate the time between locations (`timeUnit= “days”`, by default), 
   * `wBins`: width of the time bins used to calculate how frequently displacements occurred
@@ -64,12 +66,12 @@ plotting them over time (Figure V2).
   * `lm`: fit a linear model to examine the relationship between root-mean-square 
   displacements and time (`lm=TRUE`, by default). 
 
-`RMS()` results are output as a list. The first list element is a dataframe of results with three columns: 
+`RMS()` results are output as a list. The first list element is a data frame of results with three columns: 
   * *timeWindow*: binned time windows in whatever unit was using `timeUnit`) 
   * *meanDisplacements*: mean displacement values in km that correspond with *timeWindow*
   * *rmsDisplacements*: root-mean-square displacement values that correspond with *timeWindow*
 
-The second list element is a dataframe of results from the linear model and is only exported when `lm=TRUE`. 
+The second list element is a data frame of results from the linear model and is only exported when `lm=TRUE`. 
 The slope of the linear model is used to describe the scale of movement (see Table 3 in the main text for suggestions on interpreting your results).
 
 Note that because `RMS()` calculates all displacements in each track,
@@ -105,7 +107,7 @@ $~$
 
 The `CalcDisp()` function calculates displacements travelled in kilometres over set time windows. 
 
-`CalcDisp()` requires a dataframe with telemetry data (as described above) and has four optional
+`CalcDisp()` requires a data frame with telemetry data (as described above) and has four optional
 parameters that allow you to change different aspects of the time windows:
 
   * `min_hr` and `max_hr`: set the minimum and maximum times between
@@ -145,7 +147,7 @@ The `PlotDispPDF()` function requires a list of displacements calculated using `
   * `colours`: change the point colours (`colours=rainbow`, by default) and
   * `legend`: add or remove a legend (`legend=TRUE`, by default).
   
-`PlotDispPDF()` outputs a dataframe of all data used to create the plot, including:
+`PlotDispPDF()` outputs a data frame of all data used to create the plot, including:
   * *pdf*: pdf values,
   * *disp*: binned displacement values (note that if `normalised=TRUE` the displacements are normalised values), and
   * *timeWindow*: corresponding time windows
@@ -189,7 +191,7 @@ The `FitDist()` function requires a list of displacements calculated using `Calc
   * `normalise`: normalise displacements before fitting distributions (`normalise=TRUE`, by default). Displacements 
     should be normalised if they were calculated over multiple temporal periods.
 
-`FitDist()` outputs a list including two list elements. The first list element is a dataframe that includes: 
+`FitDist()` outputs a list including two list elements. The first list element is a data frame that includes: 
   
   * *distribution*: all distributions fit to the displacement data (pl, exp, or lnorm),
   * *dmin*: the minimum value used to fit each distribution
@@ -208,7 +210,7 @@ The `PlotDist()` function requires a list of displacements calculated using `Cal
   * `colours`: change the colours of the fit lines (`colours=c("red","gold2","blue")`, by default), and
   * `legend`: add a legend (`legend=TRUE`, by default).
     
-`PlotDist()` outputs a plot and a dataframe of the displacements (x values) and ccdf values (y values) used in the plot.
+`PlotDist()` outputs a plot and a data frame of the displacements (x values) and ccdf values (y values) used in the plot.
 
 3.`CompDist()`: compares distribution fits from `FitDist()` and identifies the best-fit distribution for the displacements. Note that
 `CompDist()` can only be used when all distributions are fit to the same range of data (e.g., when `full=TRUE` or if `set_dmin≠NULL`). See Figure V5 for a methods overview. 
@@ -219,7 +221,7 @@ The `CompDist()` function requires a list of displacements calculated using `Cal
 
   `CompDist()` outputs a data frame with that contains the summary statistics for each distribution fit (as described for `FitDist()`) with the corresponding *AICc*/*AIC* scores and weighted AICc/AIC scores (*wAICc*/*wAIC*). The distribution with the highest *wAIC* or *wAICc* score from each comparison is the best-fit distribution. 
 
-![](https://user-images.githubusercontent.com/73092681/223385586-b06b3dd6-d86a-4eeb-ae26-54484e6a4c28.png){width=70%, fig.align='center'}
+<img src="../vignettes/FitDistFlowChar_updated" align="center" width="130" />
 
 **Figure V5** Diagram outlining the procedure for identifying the best-fit distribution of displacements.
 
@@ -338,7 +340,7 @@ $~$
 
 The `Randomise()` function can be used to gain insights into how correlations influenced a species' movements and space-use (Figure V9). 
 
-The `Randomise()` function requires a dataframe with telemetry data (as described above) and includes four optional parameters:
+The `Randomise()` function requires a data frame with telemetry data (as described above) and includes four optional parameters:
 
 * `randTrack`: change the number of randomised tracks created (`randTrack=100`, by default),
 * `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default),
@@ -354,7 +356,7 @@ randomised tracks and the number of grid cells visited by the original tracks (`
 
 The second and third list elements contain the randomised longitude and latitude values (list elements 2 and 3, respectively), because this information is needed for the `PlotRandomTracks()` function.
 
-```{r randomise tracks, echo=FALSE, error=FALSE, message=FALSE, fig.width = 7, fig.height = 5, out.width="60%"}
+```{r randomise tracks, echo=TRUE, error=FALSE, message=FALSE, fig.width = 7, fig.height = 5, out.width="60%"}
 # Randomise() involves random number selection, so setting a seed enables the replication of results
 set.seed(1)
 # Randomise tracks from the tracks dataset with default parameters
@@ -384,8 +386,8 @@ To visualise the randomised tracks created with `Randomise()` you can use `PlotR
 
 The `PlotRandomTracks()` function requires three parameters:
 
-1. a requires a dataframe with telemetry data (as described above),
-2. a reference id of the track you want to map (ref must be included in the telemetry dataframe), and 
+1. a requires a data frame with telemetry data (as described above),
+2. a reference id of the track you want to map (ref must be included in the telemetry data frame), and 
 3. the results from `Randomise()`
 
 `PlotRandomTracks()` also includes 6 optional parameters:
@@ -418,7 +420,7 @@ $~$
 
 The `TurningAngles()` function calculates turning angles between a set of three consecutive location estimates separated by set time windows to describe how species explore their habitats (Figure V11). 
 
-The `TurningAngles()` function requires requires a dataframe with telemetry data (as described above) and has 5 optional parameters:
+The `TurningAngles()` function requires requires a data frame with telemetry data (as described above) and has 5 optional parameters:
 
 * `min_hr` and `max_hr`: set the minimum and maximum times between
 location estimates in hours (`min_hr=24` and `max_hr=240`, by default),
@@ -457,7 +459,7 @@ The `PlotAngles()` function requires the list of angles output from `TurningAngl
 * `colours`: change line colours (`colours=rainbow`, by default), and
 * `legend`: add a legend (`legend=TRUE`, by default).
 
-`PlotAngles()` outputs a dataframe of all data used to create the circle plot, including: 
+`PlotAngles()` outputs a data frame of all data used to create the circle plot, including: 
 * *timeWindows*: the time windows
 * *frequency*: turning angle frequency, and 
 * *angle*: turning angles in degrees

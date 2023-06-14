@@ -1,17 +1,18 @@
 ---
-title: "Space-Use Patterns"
-subtitle: "Quantify animal movement patterns using statistical physics methods"
-author: "Hannah Calich & Ana Sequeira"
+title: "PhysMove: Space-Use Patterns"
+#subtitle: "Quantify animal movement patterns using statistical physics methods"
+author: "Hannah Calich, Jorge Rodríguez, Víctor Eguíluz & Ana Sequeira"
 date: "Last updated: `r Sys.Date()`"
 output: 
-  rmarkdown::html_vignette:
+  rmarkdown::word_document:
+    reference_docx: "../vignettes/template.docx"
   rmarkdown::pdf_document:
+  rmarkdown::html_vignette:
 vignette: >
-  %\VignetteIndexEntry{Space-Use Patterns}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{PhysMove: Space-Use Pattern}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
-
 <style>
       img {
       border: 0;
@@ -52,14 +53,14 @@ library(PhysMove)
 The `Occupancy()` function helps describe species’ space-use patterns by calculating the total number of location estimates within each grid cell
 and dividing this sum by the grid cell’s area, calculated using spherical coordinates (Figure V13). 
 
-The `Occupancy()` function requires a dataframe with telemetry data (as described above) and includes three optional parameters:
+The `Occupancy()` function requires a data frame with telemetry data (as described above) and includes three optional parameters:
 
 * `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default),
 * `map`: present results in a map (`map=TRUE`, by default) and,
 * `colGrad`: edit the colours used in the map to indicate low, moderate, and high occupancy, respectively, which are visualised using
 scale_fill_gradientn() from the ggplot2 package (Wickham 2016) (`colGrad=c(“blue”, “light blue”, “red”)`, by default).
 
-`Occupancy()` outputs a dataframe of all results, including:
+`Occupancy()` outputs a data frame of all results, including:
 * *Latitude* and *Longitude*: coordinates for the centre point of each grid cell, 
 * *Area*: area of the grid cell,
 * *Counts*: the number of location estimates recorded in the grid cell, and 
@@ -68,7 +69,7 @@ scale_fill_gradientn() from the ggplot2 package (Wickham 2016) (`colGrad=c(“bl
 ```{r calc occ, echo=TRUE, message=FALSE, fig.width = 7, fig.height = 5, out.width="60%"}
 # Create an occupancy map based on the tracks dataset
 Occ <- Occupancy(tracks)
-summary(Occ) # Select dataframe of occupancy results
+summary(Occ) # Select data frame of occupancy results
 ```
 
 **Figure** **V13** Map of occupancy (total count of location estimates in each grid cell per area) based on the `tracks` dataset. Map created with
@@ -99,7 +100,7 @@ The `InfomapCommunities()` function identifies community-wide movements in two s
 To ensure the `infomapecology` algorithm calculates movement patterns consistent with telemetry data, we adapted an infomapecology function to allow for directed movement, self-links (i.e., individuals can remain in the same grid cell over time), and hierarchical partitioning (i.e., the resulting communities are composed of multiple levels). Because we allowed hierarchical partitioning, the resulting communities are associated with different levels; level 1 communities are the most inclusive and have been used to identify community-wide movements (following Rodríguez *et* *al*. 2017 and Calich *et*
 *al*. 2021). 
 
-The `InfomapCommunities()` function requires a dataframe with telemetry data (as described above) and includes five optional parameters:
+The `InfomapCommunities()` function requires a data frame with telemetry data (as described above) and includes five optional parameters:
 
 * `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default),
 * `hours`: number of hours between location estimates (`hours=24`, by default), 

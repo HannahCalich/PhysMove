@@ -1,15 +1,17 @@
 ---
 title: "PhysMove: Introduction"
-subtitle: "Quantify animal movement patterns using statistical physics methods"
-author: "Hannah Calich & Ana Sequeira"
+#subtitle: "Quantify animal movement patterns using statistical physics methods"
+author: "Hannah Calich, Jorge Rodríguez, Víctor Eguíluz & Ana Sequeira"
 date: "Last updated: `r Sys.Date()`"
 output: 
-  rmarkdown::html_vignette:
+  rmarkdown::word_document:
+    reference_docx: "../vignettes/template.docx"
   rmarkdown::pdf_document:
+  rmarkdown::html_vignette:
 vignette: >
+  %\VignetteEncoding{UTF-8}
   %\VignetteIndexEntry{PhysMove: Introduction}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 <style>
@@ -28,10 +30,9 @@ knitr::opts_chunk$set(
 
 <img src="../vignettes/PhysMoveHex.png" align="right" width="130" />
 
-## Index
-
+## Index 
 1. [Introduction and preparing the data](introduction.html)
-2. [Movement patterns](movement_patterns.html)
+2. [Movement patterns](movement_patterns.html) 
 3. [Space-use patterns](space_use_patterns.html)
 4. [Intraspecific movements](intraspecific_movements.html)
 
@@ -39,7 +40,7 @@ PhysMove contains a comprehensive collection of methods for documenting species'
 
 ## Installation 
 
-PhysMove passes all local CRAN checks (i.e., `devtools::check()` does not result in errors, warnings, or notes), and the package has been submitted to CRAN for review. In the meantime, we recommend users install the development version of PhysMove from GitHub using the devtools R package. Note that the authentication token included below will only be required while the accompanying manuscript is under review, PhysMove will be open access on GitHub once the manuscript is accepted for publication.
+We recommend users install the development version of PhysMove from GitHub using the devtools R package. Note that the authentication token included below will only be required while the accompanying manuscript is under review, PhysMove will be open access on GitHub once the manuscript is accepted for publication.
 
 ```r
 # Install the devtools package from CRAN (if required)
@@ -72,10 +73,10 @@ The ```CheckTracks``` function can be used to confirm your input data are format
 
 ``` r
 # Check your data are formatted correctly
-CheckTracks(data) # replace "data" with your dataframe
+CheckTracks(data) # replace "data" with your data frame
 ```
 
-You can also compare your dataframe to our sample dataset `tracks` to ensure your data are formatted correctly.
+You can also compare your data frame to our sample dataset `tracks` to ensure your data are formatted correctly.
 
 ## Explore `tracks` dataset
 
@@ -95,7 +96,7 @@ str(tracks)
 
 A basic map of your telemetry data can be created using our `PlotTracks()` function (Figure V1). 
 
-`PlotTracks()` requires a dataframe with telemetry data (as described above) and includes three optional parameters:
+`PlotTracks()` requires a data frame with telemetry data (as described above) and includes three optional parameters:
 
   * `ref`: plot specific tracks based on their reference IDs (`ref=NULL`, by default), 
   * `tracks`: connect points with lines (`tracks=TRUE`, by default), and

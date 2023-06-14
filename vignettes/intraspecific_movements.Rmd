@@ -1,15 +1,17 @@
 ---
-title: "Intraspecific movements"
-subtitle: "Quantify animal movement patterns using statistical physics methods"
-author: "Hannah Calich & Ana Sequeira"
+title: "PhysMove: Intraspecific Movements"
+#subtitle: "Quantify animal movement patterns using statistical physics methods"
+author: "Hannah Calich, Jorge Rodríguez, Víctor Eguíluz & Ana Sequeira"
 date: "Last updated: `r Sys.Date()`"
 output: 
-  rmarkdown::html_vignette:
+  rmarkdown::word_document:
+    reference_docx: "../vignettes/template.docx"
   rmarkdown::pdf_document:
+  rmarkdown::html_vignette:
 vignette: >
-  %\VignetteIndexEntry{Intraspecific movements}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{PhysMove: Intraspecific Movements}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 <style>
@@ -56,14 +58,14 @@ library(PhysMove)
 
 The `GyrationRad()` function calculates the dispersion (i.e., the gyration radius) of each track in a dataset (Figure V16). 
 
-`GyrationRad()` requires a dataframe with telemetry data (as described above) and includes two optional parameters:
+`GyrationRad()` requires a data frame with telemetry data (as described above) and includes two optional parameters:
 
 * `map`: create a map (`map=TRUE`, by default), and
 * `mapCol`: change the colour of the points, which indicate average track location,
 and circles, which indicate how far each animal dispersed (`mapCol=c(“Black”, “Red”)`, by default).
 create
 
-`GyrationRad()` outputs a dataframe of the results, which were used to create each map, including: 
+`GyrationRad()` outputs a data frame of the results, which were used to create each map, including: 
 
 * *ref*: the reference id for each track,
 * *avg long* and *avg lat*: the average longitude and latitude coordinates in degrees for each track, and 
@@ -78,8 +80,8 @@ GR <- GyrationRad(tracks)
 mean location of each track and red circles represent how far each track dispersed (i.e., their gyration radius).
 
 ```{r preview gyrad, echo=TRUE}
-# Preview the first 6 rows of the gyration radius dataset
-head(GR)
+# Summarize gyration radius results
+summary(GR)
 ```
 
 ### Probability density function of gyration radius results
@@ -105,12 +107,12 @@ $~$
 The `Entropy()` function calculates track randomness based on the fraction of data points from each track within each grid cell (Figure V18).
 The resulting entropy scores are then normalised so results can be compared between individuals. 
 
-`Entropy()` requires a dataframe with telemetry data (as described above) and includes two optional parameters:
+`Entropy()` requires a data frame with telemetry data (as described above) and includes two optional parameters:
 
 * `gridCell`: change grid cell size in degrees (`gridCell=0.25`, by default), and
 * `histPlot`: output a histogram (`histPlot=TRUE`, by default).
 
-`Entropy()` outputs results a dataframe with in four columns, including: 
+`Entropy()` outputs results a data frame with in four columns, including: 
 * *ref*: the reference id for each track,
 * *normalisedEntropy*: normalised entropy scores,
 * *indivEntropy*: individual entropy scores before they were normalised, and 
@@ -124,8 +126,8 @@ Ent <- Entropy(tracks)
 **Figure** **S18** Histogram of normalised entropy scores for `tracks` dataset created using `Entropy()` default parameters.
 
 ```{r ent head, echo=TRUE}
-# Preview the first 6 rows of the entropy results
-head(Ent)
+# Summarise Entropy results
+summary(Ent)
 ```
 
 ### Probability density function of Entropy results
@@ -151,12 +153,12 @@ $~$
 The `Predictability()` function calculates the limit of predictability for each track based on their individual entropy scores (Figure V20;
 Figure 1). 
 
-`Predictability()` requires a dataframe with telemetry data (as described above) and a dataframe of results output from `Entropy()`, and includes two optional parameters:
+`Predictability()` requires a data frame with telemetry data (as described above) and a data frame of results output from `Entropy()`, and includes two optional parameters:
 
 * `startVal`: the starting value used to find a root value for the limit of predictability equation (`startVal=0.99`, by default), and
 * `histPlot`: output a histogram (`histPlot=TRUE`, by default).
 
-`Predictability()` outputs a dataframe of results with two columns, including: 
+`Predictability()` outputs a data frame of results with two columns, including: 
 * *ref*: the reference id for each track, and 
 * *Predictability*: the predictability scores for each track. 
 
@@ -168,11 +170,11 @@ Pred <- Predictability(tracks, Ent)
 **Figure** **V20** Histogram of predictability scores for `tracks` dataset determined using `Predictability()` default parameters and entropy scores from `Entropy()`.
 
 ```{r predict head, echo=TRUE}
-# Preview the first 6 rows of the predictability results
-head(Pred)
+# Summarize Predictability scores
+summary(Pred)
 ```
 
-### Probability density function of Entropy results
+### Probability density function of Predictability results
 
 A pdf of the results from `Predictability()` can be plotted with the `PlotPDF()` function when the `desc` parameter is set to “Predictability” (Figure V21).
 
