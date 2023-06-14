@@ -1,6 +1,6 @@
 ## create example data
 
-setwd("~/2023/PhysMove/PhysMove_Git/PhysMove/data")
+setwd("~2023/PhysMove/data")
 
 library(PhysMove)
 
