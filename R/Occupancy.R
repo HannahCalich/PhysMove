@@ -68,7 +68,7 @@ Occupancy <- function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "li
     z <- ggplot2::ggplot() +
       ggplot2::geom_tile(data = xyz, ggplot2::aes(x = .data$Longitude, y = .data$Latitude, fill = .data$Occupancy))+
       ggplot2::labs(x = "Longitude", y = "Latitude", fill = expression(atop("",atop(textstyle("Occupancy"),
-                                                                                    atop(textstyle("(counts"%*%"area"^-1*")"))))))+
+                                                                                    atop(textstyle("(counts x area"^-1*")"))))))+
       ggplot2::coord_sf(xlim = c(min(xyz$Longitude)- 0.5*gridCell, max(xyz$Longitude)+ 0.5*gridCell),
                         ylim = c(min(xyz$Latitude)- 0.5*gridCell, max(xyz$Latitude)+ 0.5*gridCell))+
       ggplot2::theme_minimal(base_size=18)+
