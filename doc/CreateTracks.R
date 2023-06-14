@@ -22,12 +22,12 @@ directedbackward <- 0.3 # percent of angles showing backward directed movement
 random <- 0.4 # percent of angles showing random movement
 
 # Tagging location
-# set.seed(1)
-# startLatRange <- stats::runif(n.tracks,0,0.1) # random tagging location between 0-2 deg latitude
-# set.seed(2) # stop lat and long from having identical values
-# startLonRange <- stats::runif(n.tracks,0,0.1) # random tagging location between 0-2 deg longitude
+set.seed(1)
+startLatRange <- stats::runif(n.tracks,0,2) # random tagging location between 0-2 deg latitude
+set.seed(2) # stop lat and long from having identical values
+startLonRange <- stats::runif(n.tracks,0,2) # random tagging location between 0-2 deg longitude
 
-startLonRange <- startLatRange <- rep (0, n.tracks)
+#startLonRange <- startLatRange <- rep (0, n.tracks) # To experiment with all tags starting at (0,0)
 
 # Tagging dates
 set.seed(1)
@@ -35,8 +35,7 @@ dates <- sample(seq(as.POSIXct('2015-01-01 12:00:00'), as.POSIXct('2020-01-01 24
                     by="day"), n.tracks)
 
 # Create dataframe
-tracks <- data.frame("ref"=0,"lon"=startLonRange[1],"lat"=startLatRange[1],"day"=dates[1])
-# start loop, delete row at end of loop
+tracks <- data.frame("ref"=0,"lon"=startLonRange[1],"lat"=startLatRange[1],"day"=dates[1]) # initialize data frame
 
 # Number of locations per track
 set.seed(1)
@@ -45,7 +44,7 @@ samplesize <- floor(stats::runif(n.tracks,200,1000)) # how many locations is the
 
 # Parameters needed to create location data
 Radius <- 6371 # Earth Radius in km (displacements are in km)
-rad <- 3.141592653589793/180 #Python has more digits of pi than R, so value pasted here instead of "pi"
+rad <- 3.141592653589793/180 # Python has more digits of pi than R, so value pasted here instead of "pi"
 
 # Create tracks with parameters set above
 i=1
@@ -53,7 +52,7 @@ for (i in 1:n.tracks){ # for each track
   set.seed(1)
 
   r <- stats::runif(samplesize[i]-1,0,1) # create i displacements based on a uniform distribution between 0-1
-  # exp_x <- r
+  # exp_x <- r # If you want to folllow a uniform dist instead of an exponential 
   exp_x <- distmin-(1/lambda)*log(1-r) # convert displacements to an exponential distribution with an xmin
 
   # calculate angles
@@ -96,7 +95,7 @@ for (i in 1:n.tracks){ # for each track
     tracks$day[startRow+j+1] <- tracks$day[startRow+j]+(24*60*60)
   }
 }
-tracks <- tracks[-1,] #remove starting location
+tracks <- tracks[-1,] # remove starting row
 row.names(tracks) <- 1:nrow(tracks) # rename rows 1:n
 
 # Plot tracks
