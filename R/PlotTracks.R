@@ -44,7 +44,7 @@ PlotTracks<-function(species_df, ref=NULL, tracks=TRUE, colours=rainbow){
 
   a <- ggplot2::ggplot(plot.df, ggplot2::aes(x=.data$lon, y=.data$lat))+
     ggplot2::geom_point(ggplot2::aes(fill=as.factor(ref)),pch=21,size=1.8,colour="grey20",stroke=0.5)+
-    ggplot2::theme_bw(base_size=18)+
+    ggplot2::theme_bw(base_size=12)+
     ggplot2::theme(axis.line=ggplot2::element_line(colour = "black"),
                                         panel.grid.major = ggplot2::element_line(),
                                         panel.grid.minor = ggplot2::element_blank(),
