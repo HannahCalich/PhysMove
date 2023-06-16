@@ -1,14 +1,11 @@
 ---
 title: "PhysMove: Intraspecific Movements"
-#subtitle: "Quantify animal movement patterns using statistical physics methods"
 author: "Hannah Calich, Jorge Rodríguez, Víctor Eguíluz & Ana Sequeira"
 date: "Last updated: `r Sys.Date()`"
 output: 
-  rmarkdown::word_document:
-    reference_docx: "../vignettes/template.docx"
-  rmarkdown::pdf_document:
-  rmarkdown::html_vignette:
-vignette: >
+  officedown::rdocx_document:
+    reference_docx: "template.docx"
+vignette: |
   %\VignetteEncoding{UTF-8}
   %\VignetteIndexEntry{PhysMove: Intraspecific Movements}
   %\VignetteEngine{knitr::rmarkdown}
@@ -21,11 +18,14 @@ vignette: >
 </style>
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(dpi=300) # set all figures to 300 dpi to avoid pixelated images
-knitr::opts_chunk$set(fig.align='center', fig.width = 7, fig.height = 5)
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>")
+knitr::opts_chunk$set(dpi = 600, 
+                      fig.align = 'center', 
+                      fig.width = 4, 
+                      fig.height = 3,
+                      echo = TRUE,
+                      collapse = TRUE,
+                      fig.path = "images/",
+                      comment = "#>") 
 ```
 
 <img src="../vignettes/PhysMoveHex.png" align="right" width="130" />
@@ -45,16 +45,12 @@ PhysMove includes three metrics for quantifying intraspecific movement patterns 
   * [Track entropy](intraspecific_movements.html#track-entropy): `Entropy()` and `PlotPDF()`
   * [Track predictability](intraspecific_movements.html#track-predictability): `Predictability()` and `PlotPDF()`
 
-```{r load physmove intraspecific vignette, echo=FALSE}
+```{r load physmove, echo=FALSE}
 # Load PhysMove
 library(PhysMove)
 ```
 
 ## Track dispersion 
-
-```{r load physmove, echo=FALSE}
-library(PhysMove)
-```
 
 The `GyrationRad()` function calculates the dispersion (i.e., the gyration radius) of each track in a dataset (Figure V16). 
 
@@ -71,7 +67,7 @@ create
 * *avg long* and *avg lat*: the average longitude and latitude coordinates in degrees for each track, and 
 * *rG* *(km)*: the gyration radius in kilometres for each track. 
 
-```{r gyrad, echo=TRUE, message=FALSE, fig.width = 7, fig.height = 5, out.width="60%"}
+```{r gyrad, echo=TRUE, message=FALSE}
 # Calculate the dispersion of each track in the tracks dataset
 GR <- GyrationRad(tracks)
 ```
@@ -84,12 +80,27 @@ mean location of each track and red circles represent how far each track dispers
 summary(GR)
 ```
 
+```{r summary gr, echo=FALSE, warning=FALSE, message=FALSE} 
+library(kableExtra)
+
+table <- as.data.frame.matrix(summary(GR))
+row.names(table) <- NULL
+
+table %>%
+    kable("html", align="l") %>%
+    kableExtra::kable_styling(bootstrap_options = c("condensed"), full_width = F, html_font = "Consolas", font_size = 35) %>%
+    kableExtra::column_spec(1:3, width_min = "400px") %>%
+    kableExtra::column_spec(4, width_min = "985px") %>%
+    kableExtra::row_spec(0:nrow(table), background = "#F8F8F8", color = "#60a0b0", extra_css = "padding-top: 0px !important; padding-bottom: 0px !important") %>%
+    kableExtra::save_kable("vignettes/word_formatted/tables/summary_gyrad.png", zoom=1) # html files cant be output to word
+```
+
 ### Probability density function of gyration radius results
 
 A pdf of the results from `GyrationRad()` can be plotted with the `PlotPDF()` function when the `desc` parameter is set to “GyrationRad”
 (Figure V17).
 
-```{r gyrad pdf, echo=TRUE, fig.width = 7, fig.height = 5, out.width="60%"}
+```{r gyrad_pdf, echo=TRUE}
 # Create a pdf plot of gyration radius values
 pdf.gr <- PlotPDF((GR$`rG (km)`), desc="GyrationRad")
 ```
@@ -118,7 +129,7 @@ The resulting entropy scores are then normalised so results can be compared betw
 * *indivEntropy*: individual entropy scores before they were normalised, and 
 * *cellsVisited*: the number of cells visited by each track. 
 
-```{r ent, echo=TRUE, fig.width = 7, fig.height = 5, out.width="60%"}
+```{r ent, echo=TRUE}
 # Calculate track entropy using default parameters
 Ent <- Entropy(tracks)
 ```
@@ -130,12 +141,27 @@ Ent <- Entropy(tracks)
 summary(Ent)
 ```
 
+```{r summary ent, echo=FALSE, warning=FALSE, message=FALSE} 
+library(kableExtra)
+
+table <- as.data.frame.matrix(summary(Ent))
+row.names(table) <- NULL
+
+table %>%
+    kable("html", align="l") %>%
+    kableExtra::kable_styling(bootstrap_options = c("condensed"), full_width = F, html_font = "Consolas", font_size = 35) %>%
+    kableExtra::column_spec(1:3, width_min = "400px") %>%
+    kableExtra::column_spec(4, width_min = "985px") %>%
+    kableExtra::row_spec(0:nrow(table), background = "#F8F8F8", color = "#60a0b0", extra_css = "padding-top: 0px !important; padding-bottom: 0px !important") %>%
+    kableExtra::save_kable("vignettes/word_formatted/tables/summary_ent.png", zoom=1) # html files cant be output to word
+```
+
 ### Probability density function of Entropy results
 
 A pdf of the results from `Entropy()` can be plotted with the `PlotPDF()` function when the `desc` parameter is set to “Entropy” (Figure
 V19).
 
-```{r ent pdf, echo=TRUE, fig.width = 7, fig.height = 5, out.width="60%"}
+```{r ent_pdf, echo=TRUE}
 # Create a pdf plot of the entropy scores
 pdf.ent <- PlotPDF(Ent$normalisedEntropy, "Entropy")
 ```
@@ -162,7 +188,7 @@ Figure 1).
 * *ref*: the reference id for each track, and 
 * *Predictability*: the predictability scores for each track. 
 
-```{r predict, echo=TRUE, fig.width = 7, fig.height = 5, out.width="60%"}
+```{r predict, echo=TRUE}
 # Track predictability using Predictability() default parameters and the output from Entropy()
 Pred <- Predictability(tracks, Ent)
 ```
@@ -174,11 +200,26 @@ Pred <- Predictability(tracks, Ent)
 summary(Pred)
 ```
 
+```{r summary predict, echo=FALSE, warning=FALSE, message=FALSE} 
+library(kableExtra)
+
+table <- as.data.frame.matrix(summary(Pred))
+row.names(table) <- NULL
+
+table %>%
+    kable("html", align="l") %>%
+    kableExtra::kable_styling(bootstrap_options = c("condensed"), full_width = F, html_font = "Consolas", font_size = 35) %>%
+    kableExtra::column_spec(1, width_min = "400px") %>%
+    kableExtra::column_spec(2, width_min = "1785px") %>% 
+    kableExtra::row_spec(0:nrow(table), background = "#F8F8F8", color = "#60a0b0", extra_css = "padding-top: 0px !important; padding-bottom: 0px !important") %>%
+    kableExtra::save_kable("vignettes/word_formatted/tables/summary_predict.png", zoom=1) # html files cant be output to word
+```
+
 ### Probability density function of Predictability results
 
 A pdf of the results from `Predictability()` can be plotted with the `PlotPDF()` function when the `desc` parameter is set to “Predictability” (Figure V21).
 
-```{r predict pdf, echo=TRUE, fig.width = 7, fig.height = 5, out.width="60%"}
+```{r predict_pdf, echo=TRUE}
 # Create a pdf plot of the predictability scores
 pdf.pred <- PlotPDF(Pred$Predictability, desc="Predictability")
 ```
@@ -191,29 +232,30 @@ $~$
 [Back to top](intraspecific_movements.html)
 
 ## References & Recommended resources
-
+::: {custom-style="Bibliography"}
 Burnham, K.P. & Anderson, D.R. (2004) Multimodel Inference:Understanding
 AIC and BIC in Model Selection. *Sociological Methods & Research*, 33,
 261-304.
 
 Calich, H.J. *et al*. (2021) Comprehensive analytical approaches reveal
-species-specific search strategies in sympatric apex predatory sharks.
-*Ecography*, 44, 1544-1556.
+  species-specific search strategies in sympatric apex predatory sharks.
+  *Ecography*, 44, 1544-1556.
 
 Farage, C. *et al*. (2021) Identifying flow modules in ecological
-networks using Infomap. *Methods in Ecology and Evolution*, 12, 778–786.
+  networks using Infomap. *Methods in Ecology and Evolution*, 12, 778–786.
 
 Méndez, V., *et al*. (2013). Stochastic Foundations in Movement Ecology:
-Anomalous Diffusion, Front Propagation and Random Searches. Berlin,
-Heidelberg, Germanu, Springer Berlin / Heidelberg.
+  Anomalous Diffusion, Front Propagation and Random Searches. Berlin,
+  Heidelberg, Germanu, Springer Berlin / Heidelberg.
 
 Rodríguez, J.P. *et al*. (2017) Big data analyses reveal patterns and
-drivers of the movements of southern elephant seals. *Scientific*
-*Reports*, 7, 1-10.
+  drivers of the movements of southern elephant seals. *Scientific*
+  *Reports*, 7, 1-10.
 
 Viswanathan, G. M., *et al*. (2011). The Physics of Foraging: An
-Introduction to Biological Encounters and Random Searches. Cambridge,
-Cambridge University Press.
+  Introduction to Biological Encounters and Random Searches. Cambridge,
+  Cambridge University Press.
 
 Wickham, H. (2016) ggplot2: Elegant Graphics for Data Analysis.
-Springer-Verlag, New York.
+  Springer-Verlag, New York.
+:::

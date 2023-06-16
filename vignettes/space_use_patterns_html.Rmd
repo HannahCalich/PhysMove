@@ -1,12 +1,8 @@
 ---
 title: "PhysMove: Space-Use Patterns"
-#subtitle: "Quantify animal movement patterns using statistical physics methods"
 author: "Hannah Calich, Jorge Rodríguez, Víctor Eguíluz & Ana Sequeira"
 date: "Last updated: `r Sys.Date()`"
 output: 
-  rmarkdown::word_document:
-    reference_docx: "../vignettes/template.docx"
-  rmarkdown::pdf_document:
   rmarkdown::html_vignette:
 vignette: >
   %\VignetteEncoding{UTF-8}
@@ -19,12 +15,15 @@ vignette: >
     }
 </style>
 
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(dpi=300) # set all figures to 300 dpi to avoid pixelated images
-knitr::opts_chunk$set(fig.align='center', fig.width = 7, fig.height = 5)
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>")
+knitr::opts_chunk$set(dpi = 300, 
+                      fig.align = 'center', 
+                      fig.width = 4, 
+                      fig.height = 4,
+                      echo = TRUE,
+                      collapse = TRUE,
+                      comment = "#>") 
 ```
 
 <img src="../vignettes/PhysMoveHex.png" align="right" width="130" />
@@ -66,23 +65,51 @@ scale_fill_gradientn() from the ggplot2 package (Wickham 2016) (`colGrad=c(“bl
 * *Counts*: the number of location estimates recorded in the grid cell, and 
 * *Occupancy*: occupancy values per grid cell (number of counts/area).
 
-```{r calc occ, echo=TRUE, message=FALSE, fig.width = 7, fig.height = 5, out.width="60%"}
+```{r calc occ, eval=FALSE, echo=TRUE, message=FALSE}
 # Create an occupancy map based on the tracks dataset
 Occ <- Occupancy(tracks)
-summary(Occ) # Select data frame of occupancy results
+```
+
+```{r aspect ratio, eval=TRUE, echo=FALSE}
+# First chunk to fetch the image size and calculate its aspect ratio
+img <- magick::image_read("../vignettes/word_formatted/images/occ_map-1.png") # read the image using the magic library
+img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
+```
+
+```{r occ_map_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
+knitr::include_graphics("../vignettes/word_formatted/images/occ_map-1.png")
 ```
 
 **Figure** **V13** Map of occupancy (total count of location estimates in each grid cell per area) based on the `tracks` dataset. Map created with
 `Occupancy()` default parameters.
+
+```{r summarise occ, echo=TRUE, eval=FALSE}
+# Summarize occupancy results
+summary(Occ) 
+```
+
+```{r summary_occ_load_fig, echo=FALSE, fig.align='left'}
+knitr::include_graphics("../vignettes/word_formatted/tables/summary_occ.png")
+```
 
 ### Probability density function of occupancy results
 
 A pdf of the results from `Occupancy()` can be plotted with the `PlotPDF()` function when the `desc` parameter is set to “Occupancy”
 (Figure V14).
 
-```{r pdf occ, echo=TRUE, fig.width = 7, fig.height = 5, out.width="60%"}
+```{r pdf occ, echo=TRUE, eval=FALSE}
 # Create a pdf plot of occupancy values
 pdf.occ  <- PlotPDF(Occ$Occupancy, desc="Occupancy")
+```
+
+```{r aspect ratio2, eval=TRUE, echo=FALSE}
+# First chunk to fetch the image size and calculate its aspect ratio
+img <- magick::image_read("../vignettes/word_formatted/images/occ_pdf-1.png") # read the image using the magic library
+img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
+```
+
+```{r occ_pdf_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
+knitr::include_graphics("../vignettes/word_formatted/images/occ_pdf-1.png")
 ```
 
 **Figure V14** Probability density function (pdf) plot of occupancy per km2 for tracks dataset determined with `Occupancy()` default parameters. Plot created using `PlotPDF()` with `desc=“Occupancy”`.
@@ -122,9 +149,13 @@ library(infomapecology)
 infomapResult <- InfomapCommunities(tracks)
 ```
 
-```{r run infomap on sample, echo=TRUE, message=FALSE, warning=FALSE}
+```{r structure of infomap, echo=TRUE, eval=FALSE}
 # Determine the structure of the Infomap monolayer object
 str(infomapResult[["infomap_object"]])
+```
+
+```{r infomap_str_load_fig, echo=FALSE, fig.align='left'}
+knitr::include_graphics("../vignettes/word_formatted/tables/infomap_str.png")
 ```
 
 ### Plot Infomap communities
@@ -137,9 +168,19 @@ The `CommunityMap()` function requires the Infomap monolayer object output from 
 * `subset_communities`: used to only map specific level 1 communities. For example, `subset_communities = c(1,2,3)` would plot level 1 communities 1, 2, and 3.
 * `colours`: change colours of the communities (`colours= “Dark2”`, by default).
 
-```{r infomap map, echo=TRUE, message=FALSE, fig.width = 7, fig.height = 5, out.width="60%"}
+```{r infomap map, echo=TRUE, message=FALSE, eval=FALSE}
 # Create a map of the Infomap communities
 CommunityMap(infomapResult)
+```
+
+```{r aspect ratio3, eval=TRUE, echo=FALSE}
+# First chunk to fetch the image size and calculate its aspect ratio
+img <- magick::image_read("../vignettes/word_formatted/images/infomap_map-1.png") # read the image using the magic library
+img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
+```
+
+```{r incomap_map_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
+knitr::include_graphics("../vignettes/word_formatted/images/infomap_map-1.png")
 ```
 
 **Figure** **v15** Map illustrating level 1 Infomap communities for the `tracks` dataset determined using `InfomapCommunities()` default
@@ -156,29 +197,34 @@ $~$
 $~$
 
 ## References & Recommended resources
+## References & Recommended resources
+
+<div style="text-indent: -40px; padding-left: 40px;">
 
 Burnham, K.P. & Anderson, D.R. (2004) Multimodel Inference:Understanding
-AIC and BIC in Model Selection. *Sociological Methods & Research*, 33,
-261-304.
+  AIC and BIC in Model Selection. *Sociological Methods & Research*, 33,
+  261-304.
 
 Calich, H.J. *et al*. (2021) Comprehensive analytical approaches reveal
-species-specific search strategies in sympatric apex predatory sharks.
-*Ecography*, 44, 1544-1556.
+  species-specific search strategies in sympatric apex predatory sharks.
+  *Ecography*, 44, 1544-1556.
 
 Farage, C. *et al*. (2021) Identifying flow modules in ecological
-networks using Infomap. *Methods in Ecology and Evolution*, 12, 778–786.
+  networks using Infomap. *Methods in Ecology and Evolution*, 12, 778–786.
 
 Méndez, V., *et al*. (2013). Stochastic Foundations in Movement Ecology:
-Anomalous Diffusion, Front Propagation and Random Searches. Berlin,
-Heidelberg, Germanu, Springer Berlin / Heidelberg.
+  Anomalous Diffusion, Front Propagation and Random Searches. Berlin,
+  Heidelberg, Germanu, Springer Berlin / Heidelberg.
 
 Rodríguez, J.P. *et al*. (2017) Big data analyses reveal patterns and
-drivers of the movements of southern elephant seals. *Scientific*
-*Reports*, 7, 1-10.
+  drivers of the movements of southern elephant seals. *Scientific*
+  *Reports*, 7, 1-10.
 
 Viswanathan, G. M., *et al*. (2011). The Physics of Foraging: An
-Introduction to Biological Encounters and Random Searches. Cambridge,
-Cambridge University Press.
+  Introduction to Biological Encounters and Random Searches. Cambridge,
+  Cambridge University Press.
 
 Wickham, H. (2016) ggplot2: Elegant Graphics for Data Analysis.
-Springer-Verlag, New York.
+  Springer-Verlag, New York.
+
+</div>
