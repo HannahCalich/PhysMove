@@ -146,7 +146,7 @@ PlotPDF <- function(result, desc=NULL, nBins){
           },
           labels = scales::math_format(format = log10)
         ) +
-        ggplot2::theme_bw(base_size=18)+
+        ggplot2::theme_bw(base_size=12)+
         ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
                                             panel.grid.minor = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
                                             axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour="black"),
@@ -160,7 +160,7 @@ PlotPDF <- function(result, desc=NULL, nBins){
       b <- ggplot2::ggplot(data=plot.df, ggplot2::aes(plot.df[,1], plot.df[,2])) +
         ggplot2::geom_line()+
         ggplot2::geom_point()+
-        ggplot2::theme_bw(base_size=18)+
+        ggplot2::theme_bw(base_size=12)+
         ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
                                             panel.grid.minor = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
                                             axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour="black"),
