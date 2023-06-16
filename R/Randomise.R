@@ -111,7 +111,7 @@ Randomise <- function(species_df, randTrack=100, gridCell=0.25, plot=TRUE, lm=TR
   if (plot==TRUE){
     a <- ggplot2::ggplot(plot.df, ggplot2::aes(x=plot.df[,2], y=plot.df[,3])) +
       ggplot2::geom_point(size=2)+
-      ggplot2::theme_bw(base_size=18)+
+      ggplot2::theme_bw(base_size=12)+
       ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
                                           panel.grid.minor=ggplot2::element_blank(), axis.line=ggplot2::element_line(colour="black"),
                                           axis.text.x=ggplot2::element_text(margin=ggplot2::margin(t=10), colour="black"),

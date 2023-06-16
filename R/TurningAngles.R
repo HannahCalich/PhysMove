@@ -127,7 +127,7 @@ TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range
       ggplot2::geom_histogram(breaks=h$breaks, color="black", fill="darkgrey")+
       ggplot2::scale_x_continuous("Turning Angles", breaks=seq(-180,180,30), labels=xlabels)+
       ggplot2::labs(y="Frequency")+
-      ggplot2::theme_classic(base_size=18)
+      ggplot2::theme_classic(base_size=12)
     plot(hist_plot)
   }
   return(angleList)

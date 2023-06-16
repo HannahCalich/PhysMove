@@ -90,7 +90,7 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
         },
         labels = scales::math_format(format = log10),
       ) +
-      ggplot2::theme_bw(base_size=18)+
+      ggplot2::theme_bw(base_size=12)+
       ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
                                           panel.grid.minor = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
                                           axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour="black"),
@@ -163,7 +163,7 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
           },
           labels = scales::math_format(format = log10),
         ) +
-        ggplot2::theme_bw(base_size=18)+
+        ggplot2::theme_bw(base_size=12)+
         ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
                                             panel.grid.minor = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
                                             axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour="black"),
