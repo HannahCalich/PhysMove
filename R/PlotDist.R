@@ -77,7 +77,7 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
   df <- data.frame(x=sort(x), y=ccdf)
 
   a <- ggplot2::ggplot(df, ggplot2::aes(df[,1], df[,2])) +
-    ggplot2::geom_point()+
+    ggplot2::geom_point(size=1.25)+
     ggplot2::scale_x_log10(
       breaks = function(x) {
         brks <- scales::extended_breaks(Q = c(1, 5))(log10(x))

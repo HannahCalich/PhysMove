@@ -74,7 +74,7 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
     pdfPlotAll <- pdfPlotAll[-1,] # Remove initializing row
 
     a <- ggplot2::ggplot(data=pdfPlotAll, ggplot2::aes(x=.data$x, y=.data$y, colour=as.factor(.data$timeWindow))) +
-      ggplot2::geom_point() +
+      ggplot2::geom_point(size=1.25) +
       ggplot2::scale_colour_manual(name="Time Window",values=unique(myColoursPal)) +
       ggplot2::scale_x_log10(
         breaks = function(x) {
@@ -95,7 +95,8 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
                                           panel.grid.minor = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
                                           axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour="black"),
                                           axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour="black"),
-                                          legend.title = ggplot2::element_text())+
+                                          legend.title = ggplot2::element_text(), legend.spacing.y =  grid::unit(0.1, 'cm')) +
+      ggplot2::guides(colour=ggplot2::guide_legend(ncol=2)) +
       ggplot2::annotation_logticks(short=grid::unit(-0.1, "cm"), mid=grid::unit(-0.1, "cm"), long=grid::unit(-0.3,"cm")) +
       ggplot2::coord_cartesian(clip="off")+
       ggplot2::xlab("Displacements (km)")+
@@ -147,7 +148,7 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
     pdfPlotAll <- pdfPlotAll[-1,] # Remove initializing row
 
     a <- ggplot2::ggplot(data=pdfPlotAll, ggplot2::aes(x=.data$x, y=.data$y, colour=as.factor(.data$timeWindow))) +
-        ggplot2::geom_point() +
+        ggplot2::geom_point(size=1.25) +
         ggplot2::scale_colour_manual(name="Time Window",values=unique(myColoursPal)) +
         ggplot2::scale_x_log10(
           breaks = function(x) {
@@ -168,12 +169,12 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
                                             panel.grid.minor = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
                                             axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour="black"),
                                             axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour="black"),
-                                            legend.title = ggplot2::element_text())+
+                                            legend.title = ggplot2::element_text(), legend.spacing.y =  grid::unit(0.1, 'cm'))+
+        ggplot2::guides(colour=ggplot2::guide_legend(ncol=2))+
         ggplot2::annotation_logticks(short=grid::unit(-0.1, "cm"), mid=grid::unit(-0.1, "cm"), long=grid::unit(-0.3,"cm")) +
         ggplot2::coord_cartesian(clip="off")+
         ggplot2::xlab("Normalised displacements")+
         ggplot2::ylab("pdf")
-
     if(legend==FALSE){
       a <- a + ggplot2::theme(legend.position = "none")
     }

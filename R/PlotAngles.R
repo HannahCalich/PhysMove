@@ -72,7 +72,7 @@ PlotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=TRUE){
     ggplot2::xlab("") +
     ggplot2::ylab("")+
     ggplot2::labs(title="")+
-    ggplot2::theme_bw(base_size=18)+
+    ggplot2::theme_bw(base_size=12)+
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(face = "bold"),
       axis.text.y = ggplot2::element_blank(),
@@ -81,7 +81,9 @@ PlotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=TRUE){
       panel.border = ggplot2::element_blank(),
       panel.grid  = ggplot2::element_blank(),
       plot.margin = grid::unit(c(0,0,0,0), "cm"),
-      legend.box.margin=grid::unit(c(0,0,0,0), "cm"))
+      legend.box.margin=grid::unit(c(0,0,0,0), "cm"),
+      legend.spacing.y =  grid::unit(0.1, 'cm')) +
+    ggplot2::guides(colour=ggplot2::guide_legend(ncol=2))
   plot(circle.plot_plot)
   colnames(circle.plot)[2] <- c("frequency")
   return(circle.plot)
