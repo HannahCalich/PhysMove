@@ -1,10 +1,10 @@
 ---
-title: PhysMove: Intraspecific Movements
+title: Intraspecific Movements
 author: "Hannah Calich, Jorge Rodríguez, Víctor Eguíluz & Ana Sequeira"
 date: "Last updated: `r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{PhysMove: Intraspecific Movements}
+  %\VignetteIndexEntry{Intraspecific Movements}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
