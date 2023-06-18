@@ -2,6 +2,5 @@
 ^\.Rproj\.user$
 ^\data-raw$
 ^doc$
-^\.github$
 ^cran-comments\.md$
 ^Meta$
