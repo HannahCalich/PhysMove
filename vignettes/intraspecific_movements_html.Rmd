@@ -1,5 +1,5 @@
 ---
-title: Intraspecific Movements
+title: "Intraspecific Movements"
 author: "Hannah Calich, Jorge Rodríguez, Víctor Eguíluz & Ana Sequeira"
 date: "Last updated: `r Sys.Date()`"
 output: rmarkdown::html_vignette

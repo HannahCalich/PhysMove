@@ -1,14 +1,14 @@
 ---
-title: "PhysMove: Space-Use Patterns"
+title: "Space-Use Patterns"
 author: "Hannah Calich, Jorge Rodríguez, Víctor Eguíluz & Ana Sequeira"
 date: "Last updated: `r Sys.Date()`"
-output: 
-  rmarkdown::html_vignette
+output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteEncoding{UTF-8}
-  %\VignetteIndexEntry{PhysMove: Space-Use Patterns}
+  %\VignetteIndexEntry{Space-Use Patterns}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
+
 <style>
       img {
       border: 0;
