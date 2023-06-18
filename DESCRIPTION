@@ -27,8 +27,7 @@ Suggests:
     magick (>= 2.7.4),
     rmarkdown (>= 2.2.0),
     roxygen2 (>= 7.2.3),
-    sf (>= 1.0-13),
-
+    sf (>= 1.0-13)
 VignetteBuilder: knitr
 License: GPL-3 + file LICENSE
 URL: https://github.com/HannahCalich/PhysMove
@@ -37,4 +36,4 @@ LazyData: true
 LazyDataCompression: xz
 Encoding: UTF-8
 RoxygenNote: 7.2.3
-Additional_repositories: https://HannahCalich.github.io/drat/bin/windows/contrib/4.2/infomapecology_1.0.6.zip
+Additional_repositories: https://HannahCalich.github.io/drat/
