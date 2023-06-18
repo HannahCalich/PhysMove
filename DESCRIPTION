@@ -9,7 +9,7 @@ Authors@R:
       person("Víctor", "Eguíluz", email = "victor@ifisc.uib-csic.esu", role = "aut", comment = c(ORCID = "0000-0003-1133-1289")),
       person("Ana", "Sequeira", email = "Ana.Sequeira@anu.edu.au", role = "aut", comment = c(ORCID = "0000-0001-6906-799X")))
 Description: Quantify movement patterns of satellite tagged animals using methods derrived from statistical physics.
-Depends: R (>= 4.0) 
+Depends: R (>= 4.1.0) 
 Imports:
     broom (>= 1.0.3),
     ggplot2 (>= 3.3.5),
@@ -27,7 +27,19 @@ Suggests:
     magick (>= 2.7.4),
     rmarkdown (>= 2.2.0),
     roxygen2 (>= 7.2.3),
-    sf (>= 1.0-13)
+    sf (>= 1.0-13),
+    attempt,
+    cowplot,
+    ggalluvial,
+    magrittr,
+    dplyr,
+    readr,
+    stringr,
+    tibble,
+    tidyr,
+    rlang,
+    igraph,
+    vegan
 VignetteBuilder: knitr
 License: GPL-3 + file LICENSE
 URL: https://github.com/HannahCalich/PhysMove
