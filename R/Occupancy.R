@@ -72,6 +72,7 @@ Occupancy <- function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "li
       ggplot2::coord_sf(xlim = c(min(xyz$Longitude)- 0.5*gridCell, max(xyz$Longitude)+ 0.5*gridCell),
                         ylim = c(min(xyz$Latitude)- 0.5*gridCell, max(xyz$Latitude)+ 0.5*gridCell))+
       ggplot2::theme_minimal(base_size=12)+
+      ggplot2::theme(legend.key.width=grid::unit(0.5,"cm"))+
       ggplot2::scale_fill_gradientn(colours = c(colGrad))
     tryCatch({
       z <- z +
