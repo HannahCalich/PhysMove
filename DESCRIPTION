@@ -28,18 +28,7 @@ Suggests:
     rmarkdown (>= 2.2.0),
     roxygen2 (>= 7.2.3),
     sf (>= 1.0-13),
-    attempt,
-    cowplot,
-    ggalluvial,
-    magrittr,
-    dplyr,
-    readr,
-    stringr,
-    tibble,
-    tidyr,
-    rlang,
-    igraph,
-    vegan
+
 VignetteBuilder: knitr
 License: GPL-3 + file LICENSE
 URL: https://github.com/HannahCalich/PhysMove
