@@ -34,7 +34,7 @@ knitr::opts_chunk$set(dpi = 600,
 3. [Space-use patterns](space_use_patterns.html)
 4. [Intraspecific movements](intraspecific_movements.html)
 
-PhysMove contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. These vignettes demonstrate how to calculate each of the PhysMove methods and reviews all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove (see [Explore tracks dataset](introduction.html#explore-tracks-dataset) for further details). For further details on our methods and interpreting results please see our corresponding manuscript. 
+PhysMove contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. These vignettes demonstrate how to calculate each of the PhysMove methods and reviews all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove (see [explore tracks dataset](introduction.html#explore-tracks-dataset) for further details). For further details on our methods and interpreting results please see our corresponding manuscript. 
 
 ## Installation 
 
