@@ -4,3 +4,4 @@
 ^doc$
 ^\.github$
 ^cran-comments\.md$
+^Meta$
