@@ -24,6 +24,7 @@ Suggests:
     htmltools (>= 0.5.4),
     infomapecology (>= 1.0.6),
     knitr (>= 1.42),
+    magick (>= 2.7.4),
     rmarkdown (>= 2.2.0),
     roxygen2 (>= 7.2.3),
     sf (>= 1.0-13)
