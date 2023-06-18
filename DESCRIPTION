@@ -48,4 +48,4 @@ LazyData: true
 LazyDataCompression: xz
 Encoding: UTF-8
 RoxygenNote: 7.2.3
-Additional_repositories: https://HannahCalich.github.io/drat
+Additional_repositories: https://HannahCalich.github.io/drat/bin/windows/contrib/4.2/infomapecology_1.0.6.zip
