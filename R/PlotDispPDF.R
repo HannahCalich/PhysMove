@@ -96,11 +96,15 @@ PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
                                           axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour="black"),
                                           axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour="black"),
                                           legend.title = ggplot2::element_text(), legend.spacing.y =  grid::unit(0.1, 'cm')) +
-      ggplot2::guides(colour=ggplot2::guide_legend(ncol=2)) +
       ggplot2::annotation_logticks(short=grid::unit(-0.1, "cm"), mid=grid::unit(-0.1, "cm"), long=grid::unit(-0.3,"cm")) +
       ggplot2::coord_cartesian(clip="off")+
       ggplot2::xlab("Displacements (km)")+
       ggplot2::ylab("pdf")
+
+    if (length(displacements)>5){
+      a <- a + ggplot2::guides(colour=ggplot2::guide_legend(ncol=2))
+    }
+
     if(legend==FALSE){
       a <- a + ggplot2::theme(legend.position = "none")
     }

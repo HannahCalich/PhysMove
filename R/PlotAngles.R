@@ -82,8 +82,12 @@ PlotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=TRUE){
       panel.grid  = ggplot2::element_blank(),
       plot.margin = grid::unit(c(0,0,0,0), "cm"),
       legend.box.margin=grid::unit(c(0,0,0,0), "cm"),
-      legend.spacing.y =  grid::unit(0.1, 'cm')) +
-    ggplot2::guides(colour=ggplot2::guide_legend(ncol=2))
+      legend.spacing.y =  grid::unit(0.1, 'cm'))
+
+  if (length(angleList)>5){
+    circle.plot_plot <- circle.plot_plot + ggplot2::guides(colour=ggplot2::guide_legend(ncol=2))
+  }
+
   plot(circle.plot_plot)
   colnames(circle.plot)[2] <- c("frequency")
   return(circle.plot)
