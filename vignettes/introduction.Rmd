@@ -1,10 +1,10 @@
 ---
-title: "Introduction" 
+title: "PhysMove: Introduction" 
 author: "Hannah Calich, Jorge Rodríguez, Víctor Eguíluz & Ana Sequeira"
 date: 'Last updated: `r Sys.Date()`'
 output: rmarkdown::html_vignette 
 vignette: >
-  %\VignetteIndexEntry{Introduction} 
+  %\VignetteIndexEntry{PhysMove: Introduction} 
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

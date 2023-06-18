@@ -1,10 +1,10 @@
 ---
-title: "Movement Patterns"
+title: "PhysMove: Movement Patterns"
 author: "Hannah Calich, Jorge Rodríguez, Víctor Eguíluz & Ana Sequeira"
 date: "Last updated: `r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Movement Patterns}
+  %\VignetteIndexEntry{PhysMove: Movement Patterns}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
