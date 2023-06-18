@@ -17,7 +17,7 @@ vignette: >
 </style>
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(dpi = 300, 
+knitr::opts_chunk$set(dpi = 600, 
                       fig.align = 'center', 
                       fig.width = 4, 
                       fig.height = 4,
@@ -35,13 +35,13 @@ knitr::opts_chunk$set(dpi = 300,
 3. [Space-use patterns](space_use_patterns.html)
 4. [Intraspecific movements](intraspecific_movements.html)
 
-PhysMove contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. This vignette demonstrates how to calculate each of the methods and reviews all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove ([Explore tracks dataset](introduction.html#explore-tracks-dataset)). For further details on our methods and interpreting results please see our corresponding manuscript. 
+PhysMove contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. These vignettes demonstrate how to calculate each of the PhysMove methods and reviews all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove (see [Explore tracks dataset](introduction.html#explore-tracks-dataset) for further details). For further details on our methods and interpreting results please see our corresponding manuscript. 
 
 ## Installation 
 
 We recommend users install the development version of PhysMove from GitHub using the devtools R package. Note that the authentication token included below will only be required while the accompanying manuscript is under review, PhysMove will be open access on GitHub once the manuscript is accepted for publication.
 
-```r
+```{r installation, eval=FALSE}
 # Install the devtools package from CRAN (if required)
 install.packages("devtools")
 
@@ -57,7 +57,7 @@ library(PhysMove)
 ## Data formatting
 
 PhysMove was designed to be user-friendly and most functions only require you to input a data frame containing standard telemetry data. 
-The input data frame must only contain these four columns in the following order: *ref*, *lon*, *lat*, and *day*. 
+The input data frame must only contain these four columns in the following order: *ref*, *lon*, *lat*, and *day*.  
 
 Columns must be formatted as follows:
 
@@ -68,9 +68,9 @@ Columns must be formatted as follows:
   * *day*: the datetime stamp for each location estimate in POSIXct
     format following yyyy-mm-dd hh:mm:ss.
 
-The ```CheckTracks``` function can be used to confirm your input data are formatted as described above. This function checks that column names are in order and that each column is in the correct format as described above. Note that this function does not evaluate data quality or quantity. 
+The ```CheckTracks``` function can be used to confirm your input data are formatted as described above. This function checks that column names are in order and that each column is in the correct format as described above. Note that this function does not evaluate data quality or quantity.  
 
-``` r
+``` {r check tracks, eval=FALSE}
 # Check your data are formatted correctly
 CheckTracks(data) # replace "data" with your data frame
 ```
@@ -79,35 +79,35 @@ You can also compare your data frame to our sample dataset `tracks` to ensure yo
 
 ## Explore `tracks` dataset
 
-`tracks` is a simulated telemetry dataset of 25 unique tracks with a defined set of movement parameters that was designed to demonstrate each of the PhysMove functions. In detail, `Tracks` was created using a biased, uncorrelated random walk model with variable step lengths drawn from an exponential distribution with λ = 0.125. We defined the turning angles such that 30% indicated directed forward movement (movements with angles <30° or >330°), and 30% indicated directed return movement (angles between 150-210°), allowing the remainder (40%) to be randomly between 0-360°.These metrics were chosen because they are broadly consistent with literature interpretations of animals moving through a resource-rich habitat. See corresponded manuscript for further details. The code used to make the `tracks` dataset is available in the PhysMove `doc` folder on GitHub as “CreateTracks.R”.
+`tracks` is a simulated telemetry dataset of 25 unique tracks with a defined set of movement parameters that was designed to demonstrate each of the PhysMove functions. In detail, `tracks` was created using a biased, uncorrelated random walk model with variable step lengths drawn from an exponential distribution with λ = 0.125. We defined the turning angles such that 30% indicated directed forward movement (movements with angles <30° or >330°), and 30% indicated directed return movement (angles between 150-210°), allowing the remainder (40%) to be randomly between 0-360°. These metrics were chosen because they are broadly consistent with literature interpretations of animals moving through a resource-rich habitat. See corresponded manuscript for further details. The code used to make the `tracks` dataset is available in the PhysMove `doc` folder on GitHub as “CreateTracks.R”.
 
-```{r test, eval=FALSE}
+```{r head tracks, eval=FALSE}
 # Preview the first 6 rows of the tracks dataset
 head(tracks)
 ```
 
-```{r tracks_head_load_fig, echo=FALSE, fig.align='left'}
+```{r tracks_head_load_fig, echo=FALSE, fig.align='left', out.width='100%'}
 knitr::include_graphics("../vignettes/word_formatted/tables/tracks_head.png")
 ```
 
-```{r tracks structure, eval=FALSE}
+```{r structure tracks, eval=FALSE}
 # Determine the structure of the tracks dataset
 str(tracks)
 ```
 
-```{r tracks_str_load_fig, echo=FALSE, fig.align='left'}
+```{r tracks_str_load_fig, echo=FALSE, fig.align='left', out.width='100%'}
 knitr::include_graphics("../vignettes/word_formatted/tables/tracks_str.png")
 ```
 
 ## Create a map of the tracks dataset
 
-A basic map of your telemetry data can be created using our `PlotTracks()` function (*Figure V1*). 
+A basic map of your telemetry data can be created using our `PlotTracks()` function (Figure V1). 
 
-`PlotTracks()` requires a data frame with telemetry data (as described above) and includes three optional parameters:
+`PlotTracks()` requires a data frame with telemetry data (see [data formatting](introduction.html#data-formatting)) and includes three optional parameters:
 
   * `ref`: plot specific tracks based on their reference IDs (`ref=NULL`, by default), 
   * `tracks`: connect points with lines (`tracks=TRUE`, by default), and
-  * `colours`: edit the colours used in the map (`colours=rainbow`, by default). 
+  * `colours`: edit the colours used in the map (`colours=rainbow`, by default).  
 
 ```{r plot tracks, eval=FALSE, message=FALSE}
 PlotTracks(tracks)
@@ -123,7 +123,7 @@ img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calc
 knitr::include_graphics("../vignettes/word_formatted/images/plot_tracks-1.png")
 ```
 
-**Figure V1** Map of the simulated tracking data included in the `tracks` dataset, created with `PlotTracks()` default settings.
+**Figure V1** Map of the simulated `tracks` dataset created with `PlotTracks()` default settings.
 
 $~$
 $~$
@@ -137,7 +137,7 @@ $~$
 
 <div style="text-indent: -40px; padding-left: 40px;">
 
-Burnham, K.P. & Anderson, D.R. (2004) Multimodel Inference:Understanding
+Burnham, K.P. & Anderson, D.R. (2004) Multimodel Inference: Understanding
   AIC and BIC in Model Selection. *Sociological Methods & Research*, 33,
   261-304.
 
@@ -150,7 +150,7 @@ Farage, C. *et al*. (2021) Identifying flow modules in ecological
 
 Méndez, V., *et al*. (2013). Stochastic Foundations in Movement Ecology:
   Anomalous Diffusion, Front Propagation and Random Searches. Berlin,
-  Heidelberg, Germanu, Springer Berlin / Heidelberg.
+  Heidelberg, Germany, Springer Berlin / Heidelberg.
 
 Rodríguez, J.P. *et al*. (2017) Big data analyses reveal patterns and
   drivers of the movements of southern elephant seals. *Scientific*

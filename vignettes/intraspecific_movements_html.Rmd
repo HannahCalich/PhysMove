@@ -17,7 +17,7 @@ vignette: >
 </style>
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(dpi = 300, 
+knitr::opts_chunk$set(dpi = 600, 
                       fig.align = 'center', 
                       fig.width = 4, 
                       fig.height = 4,
@@ -50,20 +50,15 @@ library(PhysMove)
 
 ## Track dispersion 
 
-```{r load physmove, echo=FALSE}
-library(PhysMove)
-```
+The `GyrationRad()` function calculates the dispersion (i.e., the gyration radius) of each track in a dataset (Figure V16).  
 
-The `GyrationRad()` function calculates the dispersion (i.e., the gyration radius) of each track in a dataset (Figure V16). 
-
-`GyrationRad()` requires a data frame with telemetry data (as described above) and includes two optional parameters:
+`GyrationRad()` requires a data frame with telemetry data (see [data formatting](introduction.html#data-formatting)) and includes two optional parameters:
 
 * `map`: create a map (`map=TRUE`, by default), and
 * `mapCol`: change the colour of the points, which indicate average track location,
 and circles, which indicate how far each animal dispersed (`mapCol=c(“Black”, “Red”)`, by default).
-create
 
-`GyrationRad()` outputs a data frame of the results, which were used to create each map, including: 
+`GyrationRad()` outputs a data frame of the results that were used to create the map, including: 
 
 * *ref*: the reference id for each track,
 * *avg long* and *avg lat*: the average longitude and latitude coordinates in degrees for each track, and 
@@ -84,15 +79,14 @@ img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calc
 knitr::include_graphics("../vignettes/word_formatted/images/gyrad-1.png")
 ```
 
-**Figure** **V16** Map illustrating dispersion patterns for `tracks` dataset using `GyrationRad()` default parameters. Black points represent the
-mean location of each track and red circles represent how far each track dispersed (i.e., their gyration radius).
+**Figure** **V16** Map illustrating dispersion patterns for `tracks` dataset using `GyrationRad()` default parameters. Black points represent the mean location of each track and red circles represent how far each track dispersed (i.e., each tracks' gyration radius).
 
 ```{r preview gyrad, echo=TRUE, eval=FALSE}
 # Summarize gyration radius results
 summary(GR)
 ```
 
-```{r summary_gyrad_load_fig, echo=FALSE, fig.align='left'}
+```{r summary_gyrad_load_fig, echo=FALSE, fig.align='left', out.width='100%'}
 knitr::include_graphics("../vignettes/word_formatted/tables/summary_gyrad.png")
 ```
 
@@ -116,8 +110,7 @@ img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calc
 knitr::include_graphics("../vignettes/word_formatted/images/gyrad_pdf-1.png")
 ```
 
-**Figure** **V17** Probability density function (pdf) plot of gyration radius values for `tracks` dataset determined with `GyrationRad()` default
-parameters. Plot created using `PlotPDF()` with `desc=“GyrationRad”`.
+**Figure** **V17** Probability density function (pdf) plot of gyration radius values for the `tracks` dataset determined with `GyrationRad()` default parameters. Plot created using `PlotPDF()` with `desc=“GyrationRad”`.
 
 $~$
 $~$
@@ -126,19 +119,19 @@ $~$
 
 ## Track entropy
 
-The `Entropy()` function calculates track randomness based on the fraction of data points from each track within each grid cell (Figure V18).
-The resulting entropy scores are then normalised so results can be compared between individuals. 
+The `Entropy()` function calculates track randomness based on the fraction of data points from each track within each grid cell (Figure V18). The resulting entropy scores are then normalised so results can be compared between individuals. 
 
-`Entropy()` requires a data frame with telemetry data (as described above) and includes two optional parameters:
+`Entropy()` requires a data frame with telemetry data (see [data formatting](introduction.html#data-formatting)) and includes two optional parameters:
 
 * `gridCell`: change grid cell size in degrees (`gridCell=0.25`, by default), and
 * `histPlot`: output a histogram (`histPlot=TRUE`, by default).
 
 `Entropy()` outputs results a data frame with in four columns, including: 
-* *ref*: the reference id for each track,
+
+* *ref*: reference id for each track,
 * *normalisedEntropy*: normalised entropy scores,
-* *indivEntropy*: individual entropy scores before they were normalised, and 
-* *cellsVisited*: the number of cells visited by each track. 
+* *indivEntropy*: individual entropy scores (before normalisation), and 
+* *cellsVisited*: number of cells visited by each track. 
 
 ```{r ent, echo=TRUE, eval=FALSE}
 # Calculate track entropy using default parameters
@@ -162,14 +155,13 @@ knitr::include_graphics("../vignettes/word_formatted/images/ent-1.png")
 summary(Ent)
 ```
 
-```{r summary_ent_load_fig, echo=FALSE, fig.align='left'}
+```{r summary_ent_load_fig, echo=FALSE, fig.align='left', out.width='100%'}
 knitr::include_graphics("../vignettes/word_formatted/tables/summary_ent.png")
 ```
 
 ### Probability density function of Entropy results
 
-A pdf of the results from `Entropy()` can be plotted with the `PlotPDF()` function when the `desc` parameter is set to “Entropy” (Figure
-V19).
+A pdf of the results from `Entropy()` can be plotted with the `PlotPDF()` function when the `desc` parameter is set to “Entropy” (Figure V19)..
 
 ```{r ent pdf, echo=TRUE, eval=FALSE}
 # Create a pdf plot of the entropy scores
@@ -186,8 +178,7 @@ img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calc
 knitr::include_graphics("../vignettes/word_formatted/images/ent_pdf-1.png")
 ```
 
-**Figure** **V19** Probability density function (pdf) plot of normalised entropy scores for `tracks` dataset determined with `Entropy()` default
-parameters. Plot created using `PlotPDF()` with `desc=“Entropy”`.
+**Figure** **V19** Probability density function (pdf) plot of normalised entropy scores for `tracks` dataset determined with `Entropy()` default parameters. Plot created using `PlotPDF()` with `desc=“Entropy”`.
 
 $~$
 $~$
@@ -197,16 +188,17 @@ $~$
 ## Track predictability 
 
 The `Predictability()` function calculates the limit of predictability for each track based on their individual entropy scores (Figure V20;
-Figure 1). 
+Figure 1).  
 
-`Predictability()` requires a data frame with telemetry data (as described above) and a data frame of results output from `Entropy()`, and includes two optional parameters:
+`Predictability()` requires a data frame with telemetry data (see [data formatting](introduction.html#data-formatting)) and a data frame of results output from `Entropy()`, and includes two optional parameters:
 
-* `startVal`: the starting value used to find a root value for the limit of predictability equation (`startVal=0.99`, by default), and
+* `startVal`: starting value used to find a root value for the limit of predictability equation (`startVal=0.99`, by default), and
 * `histPlot`: output a histogram (`histPlot=TRUE`, by default).
 
 `Predictability()` outputs a data frame of results with two columns, including: 
-* *ref*: the reference id for each track, and 
-* *Predictability*: the predictability scores for each track. 
+
+* *ref*: reference id for each track, and 
+* *Predictability*:  predictability scores for each track. 
 
 ```{r predict, echo=TRUE, eval=FALSE}
 # Track predictability using Predictability() default parameters and the output from Entropy()
@@ -230,7 +222,7 @@ knitr::include_graphics("../vignettes/word_formatted/images/predict-1.png")
 summary(Pred)
 ```
 
-```{r summary_predict_load_fig, echo=FALSE, fig.align='left'}
+```{r summary_predict_load_fig, echo=FALSE, fig.align='left', out.width='100%'}
 knitr::include_graphics("../vignettes/word_formatted/tables/summary_predict.png")
 ```
 
@@ -264,7 +256,7 @@ $~$
 
 <div style="text-indent: -40px; padding-left: 40px;">
 
-Burnham, K.P. & Anderson, D.R. (2004) Multimodel Inference:Understanding
+Burnham, K.P. & Anderson, D.R. (2004) Multimodel Inference: Understanding
   AIC and BIC in Model Selection. *Sociological Methods & Research*, 33,
   261-304.
 
@@ -277,7 +269,7 @@ Farage, C. *et al*. (2021) Identifying flow modules in ecological
 
 Méndez, V., *et al*. (2013). Stochastic Foundations in Movement Ecology:
   Anomalous Diffusion, Front Propagation and Random Searches. Berlin,
-  Heidelberg, Germanu, Springer Berlin / Heidelberg.
+  Heidelberg, Germany, Springer Berlin / Heidelberg.
 
 Rodríguez, J.P. *et al*. (2017) Big data analyses reveal patterns and
   drivers of the movements of southern elephant seals. *Scientific*
