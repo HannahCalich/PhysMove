@@ -3,7 +3,7 @@ title: 'PhysMove: Introduction'
 author: "Hannah Calich, Jorge Rodríguez, Víctor Eguíluz & Ana Sequeira"
 date: 'Last updated: `r Sys.Date()`'
 output:
-  rmarkdown::html_vignette: 
+  rmarkdown::html_vignette 
 vignette: >
   %\VignetteEncoding{UTF-8} 
   %\VignetteIndexEntry{PhysMove: Introduction} 
