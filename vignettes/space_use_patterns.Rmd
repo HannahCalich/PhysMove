@@ -69,6 +69,8 @@ The `Occupancy()` function helps describe species’ space-use patterns by calcu
 Occ <- Occupancy(tracks)
 ```
 
+**Figure** **V13** Map of occupancy patterns from the `tracks` dataset. Map created with `Occupancy()` default parameters.
+
 ```{r aspect ratio, eval=TRUE, echo=FALSE}
 # First chunk to fetch the image size and calculate its aspect ratio
 img <- magick::image_read("../vignettes/word_formatted/images/occ_map-1.png") # read the image using the magic library
@@ -78,8 +80,6 @@ img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calc
 ```{r occ_map_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
 knitr::include_graphics("../vignettes/word_formatted/images/occ_map-1.png")
 ```
-
-**Figure** **V13** Map of occupancy patterns from the `tracks` dataset. Map created with `Occupancy()` default parameters.
 
 ```{r summarise occ, echo=TRUE, eval=FALSE}
 # Summarize occupancy results
