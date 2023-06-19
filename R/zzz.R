@@ -1,3 +1,4 @@
+.pkgenv <- new.env(parent=emptyenv())
 
 .onLoad  <- function(libname, pkgname) {
   infomap_req <- requireNamespace("infomapecology", quietly = TRUE)
