@@ -8,7 +8,7 @@ Maintained by: Hannah Calich (hannah.calich@gmail.com)
 
 ## Overview 
 
-PhysMove contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. Our accompanying vignette demonstrates how to calculate each of the methods and reviews all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove [explore tracks dataset](introduction.html#explore-tracks-dataset). Please see our corresponding manuscript for further details on our methods and for suggestions on how to interpret your results, 
+PhysMove contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. Our accompanying vignette demonstrates how to calculate each of the methods and reviews all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove ([explore tracks dataset](introduction.html#explore-tracks-dataset)). Please see our corresponding manuscript for further details on our methods and for suggestions on how to interpret your results, 
 PhysMove focuses on three major categories of movement data analyses, and each category is accompanied by method-specific functions:
 
 1. **Characterization of movement patterns, including:**
