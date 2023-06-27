@@ -12,6 +12,7 @@ devtools::run_examples()
 
 # Check package as CRAN
 rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"))
+devtools::check(remote = TRUE, manual = TRUE) # HJC added
 
 # Check content
 # install.packages('checkhelper', repos = 'https://thinkr-open.r-universe.dev')
