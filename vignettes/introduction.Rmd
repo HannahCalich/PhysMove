@@ -1,6 +1,6 @@
 ---
 title: "PhysMove: Introduction" 
-author: "Hannah Calich, Jorge Rodríguez, Víctor Eguíluz & Ana Sequeira"
+author: "Hannah J. Calich, Jorge Rodríguez, Víctor Eguíluz & Ana M. M. Sequeira "
 date: 'Last updated: `r Sys.Date()`'
 output: rmarkdown::html_vignette 
 vignette: >
@@ -29,16 +29,18 @@ knitr::opts_chunk$set(dpi = 600,
 
 ## Index 
 
-1. [Introduction and preparing the data](introduction.html)
+1. [Introduction and data preparation](introduction.html)
 2. [Movement patterns](movement_patterns.html) 
 3. [Space-use patterns](space_use_patterns.html)
 4. [Intraspecific movements](intraspecific_movements.html)
 
-PhysMove contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. These vignettes demonstrate how to calculate each of the PhysMove methods and reviews all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove (see [explore tracks dataset](introduction.html#explore-tracks-dataset) for further details). For further details on our methods and interpreting results please see our corresponding manuscript. 
+## Introduction 
+
+PhysMove contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. These vignettes demonstrate how to calculate each of the PhysMove methods and review all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove (see [explore tracks dataset](introduction.html#explore-tracks-dataset) for further details). For further details on our methods and interpreting results please see our corresponding manuscript. 
 
 ## Installation 
 
-We recommend users install the development version of PhysMove from GitHub using the devtools R package. Note that the authentication token included below will only be required while the accompanying manuscript is under review, PhysMove will be open access on GitHub once the manuscript is accepted for publication.
+We recommend users install the development version of PhysMove from GitHub using the devtools R package. 
 
 ```{r installation, eval=FALSE}
 # Install the devtools package from CRAN (if required)

@@ -1,6 +1,6 @@
 ---
 title: "PhysMove: Intraspecific Movements"
-author: "Hannah Calich, Jorge Rodríguez, Víctor Eguíluz & Ana Sequeira"
+author: "Hannah J. Calich, Jorge Rodríguez, Víctor Eguíluz & Ana M. M. Sequeira "
 date: "Last updated: `r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -29,7 +29,7 @@ knitr::opts_chunk$set(dpi = 600,
 
 ## Index
 
-1. [Introduction and preparing the data](introduction.html)
+1. [Introduction and data preparation](introduction.html)
 2. [Movement patterns](movement_patterns.html)
 3. [Space-use patterns](space_use_patterns.html)
 4. [Intraspecific movements](intraspecific_movements.html)
