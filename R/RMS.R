@@ -15,7 +15,12 @@
 #' The results dataframe includes the 'timeWindows' in log-sized bins along with their corresponding 'meanDisplacements' and 'rmsDisplacements'
 #' (root-mean-square displacements). If plot = TRUE, a plot of the mean displacement values and the root-mean-square displacement values
 #' against their corresponding time period is created, and if lm = TRUE, a fit line and reference line are added to the plot.
-#' @examples RMS(tracks, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE)
+#' @examples
+#' \dontrun{
+#'
+#' RMS(tracks, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE)
+#'
+#' }
 #' @export
 
 RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){

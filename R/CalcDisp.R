@@ -17,7 +17,12 @@
 #' locations spaced 18 to 32 hours apart. Default is 6.
 #' @return A list containing the displacements in km recorded for each time window. Each list element corresponds with the time
 #' windows set (i.e., the first list element is the first time window).
-#' @examples CalcDisp(tracks, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
+#' @examples
+#' \dontrun{
+#'
+#' CalcDisp(tracks, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
+#'
+#' }
 #' @export
 
 CalcDisp<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6){

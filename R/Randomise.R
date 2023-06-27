@@ -21,7 +21,12 @@
 #' The dataframe of results includes columns for the number of cells visited by each original track and the average number of cells visited by the
 #' Randomised tracks for each ref. Lastly, if plot = TRUE, a plot illustrating the number of cells visited by the original and randomised tracks is created,
 #' and if lm = TRUE, a fit line and reference line are added to the plot.
-#' @examples Randomise(tracks, randTrack=100, gridCell=0.25, plot=TRUE, lm=TRUE)
+#' @examples
+#' \dontrun{
+#'
+#' Randomise(tracks, randTrack=100, gridCell=0.25, plot=TRUE, lm=TRUE)
+#'
+#' }
 #' @export
 
 Randomise <- function(species_df, randTrack=100, gridCell=0.25, plot=TRUE, lm=TRUE) {

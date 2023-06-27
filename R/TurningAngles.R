@@ -20,7 +20,12 @@
 #' @return List of turning angles for each time window, the name of each list element corresponds with a time window in days. If histPlot = TRUE,
 #' a histogram of results is created.
 #' @importFrom rlang .data
-#' @examples TurningAngles(tracks, min_hr=24, max_hr=240, interval_hr=24, range_hr=6, histPlot=c(FALSE, "all"))
+#' @examples
+#' \dontrun{
+#'
+#' TurningAngles(tracks, min_hr=24, max_hr=240, interval_hr=24, range_hr=6, histPlot=c(FALSE, "all"))
+#'
+#' }
 #' @export
 
 TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range_hr=6, histPlot=c(TRUE, "all")){
