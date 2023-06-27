@@ -10,5 +10,4 @@
 #'   \item{day}{datetime stamp for each location estimate in POSIXct format following: yyyy-mm-dd hh:mm:ss}
 #'   ...
 #' }
-#' @source \url{https://github.com/HannahCalich/PhysMove/tree/master/R}
 "tracks"
