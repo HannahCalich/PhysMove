@@ -14,9 +14,6 @@ A data frame with 15623 rows and 4 variables:
   ...
 }
 }
-\source{
-\url{https://github.com/HannahCalich/PhysMove/tree/master/R}
-}
 \usage{
 tracks
 }

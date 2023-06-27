@@ -38,5 +38,9 @@ This is done by maintaining the origin and end location of each track, randomizi
 and calculating how many grid cells the original and randomised tracks visited, which summarizes their space use.
 }
 \examples{
+\dontrun{
+
 Randomise(tracks, randTrack=100, gridCell=0.25, plot=TRUE, lm=TRUE)
+
+}
 }

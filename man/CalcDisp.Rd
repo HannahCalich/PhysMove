@@ -33,5 +33,9 @@ windows set (i.e., the first list element is the first time window).
 This function allows you to calculate the displacement distances travelled by individuals over set time windows.
 }
 \examples{
+\dontrun{
+
 CalcDisp(tracks, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
+
+}
 }

@@ -32,5 +32,9 @@ against their corresponding time period is created, and if lm = TRUE, a fit line
 This function allows you to calculate root-mean-square displacements and plot them scaled with time
 }
 \examples{
+\dontrun{
+
 RMS(tracks, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE)
+
+}
 }

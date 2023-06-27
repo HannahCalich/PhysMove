@@ -28,5 +28,9 @@ Values close to 1 indicate high entropy (disordered trajectories) while values c
 A pdf plot of the normalized entropy values can be created with the \code{\link{PlotPDF}} function.
 }
 \examples{
+\dontrun{
+
 Entropy(tracks, gridCell=0.25, histPlot=TRUE)
+
+}
 }

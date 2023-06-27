@@ -44,5 +44,9 @@ a histogram of results is created.
 This function allows you to calculate turning angles between sets of three consecutive location estimates separated by set time window(s).
 }
 \examples{
+\dontrun{
+
 TurningAngles(tracks, min_hr=24, max_hr=240, interval_hr=24, range_hr=6, histPlot=c(FALSE, "all"))
+
+}
 }
