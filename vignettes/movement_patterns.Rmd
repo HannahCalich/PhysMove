@@ -25,7 +25,7 @@ knitr::opts_chunk$set(dpi = 600,
                       comment = "#>") 
 ```
 
-<img src="../vignettes/PhysMoveHex.png" align="right" width="130" />
+<img src="../vignettes/PhysMoveHex.PNG" align="right" width="130" />
 
 ## Index
 
@@ -80,12 +80,12 @@ rms.result <- RMS(tracks)
 
 ```{r aspect ratio rms, eval=TRUE, echo=FALSE}
 # First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/calcualte_rms-1.png") # read the image using the magic library
+img <- magick::image_read("../vignettes/word_formatted/images/calcualte_rms-1.PNG") # read the image using the magic library
 img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
 ```
 
 ```{r occ_map_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/calcualte_rms-1.png")
+knitr::include_graphics("../vignettes/word_formatted/images/calcualte_rms-1.PNG")
 ```
 
 **Figure V2** Scatter plot of mean (grey points; q=1) and root-mean-square (RMS; black points; q=2) displacements (d) in kilometers (km) from tracks dataset over time (T) in days, fit to a linear model (red line with standard error shaded in grey). Plot created with `RMS()` default parameters. 
@@ -96,7 +96,7 @@ summary(rms.result[["rmsResults"]])
 ```
 
 ```{r summary_rms_load_fig, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/summary_rms.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/summary_rms.PNG")
 ```
 
 ```{r calculate hurst exponent, eval=FALSE}
@@ -106,7 +106,7 @@ print(RMSlinearModel)
 ```
 
 ```{r rms_lm_load_fig, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/rms_lm.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/rms_lm.PNG")
 ```
 
 ```{r hurst, eval=FALSE}
@@ -115,7 +115,7 @@ RMSlinearModel$estimate[2]
 ```
 
 ```{r hurst_load_fig, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/hurst.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/hurst.PNG")
 ```
 
 $~$
@@ -161,7 +161,7 @@ summary(unlist(disp.all[[1]]))
 ```
 
 ```{r summary_disp_load_fig, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/summary_disp_all_24.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/summary_disp_all_24.PNG")
 ```
 
 ### Probability density function (pdf) of displacements
@@ -187,12 +187,12 @@ plot.data <- PlotDispPDF(disp.all)
 
 ```{r aspect ratio all norm, eval=TRUE, echo=FALSE}
 # First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/plot_all_norm_disp-1.png") # read the image using the magic library
+img <- magick::image_read("../vignettes/word_formatted/images/plot_all_norm_disp-1.PNG") # read the image using the magic library
 img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
 ```
 
 ```{r all_norm_disp_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/plot_all_norm_disp-1.png")
+knitr::include_graphics("../vignettes/word_formatted/images/plot_all_norm_disp-1.PNG")
 ```
 
 **Figure V3** Probability density function (pdf) plot of normalised displacements from the `tracks` dataset calculated over 10 time windows, 24 to 240 hours at 24 ± 6-hour time intervals with `CalcDisp()`. Plot created with `PlotDispPDF()` default parameters (i.e., where `normalised=TRUE`). 
@@ -204,12 +204,12 @@ plot.data.norm <- PlotDispPDF(disp.all, normalised=FALSE)
 
 ```{r aspect ratio all disp, eval=TRUE, echo=FALSE}
 # First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/plot_all_disp_not_norm-1.png") # read the image using the magic library
+img <- magick::image_read("../vignettes/word_formatted/images/plot_all_disp_not_norm-1.PNG") # read the image using the magic library
 img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
 ```
 
 ```{r all_disp_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/plot_all_disp_not_norm-1.png")
+knitr::include_graphics("../vignettes/word_formatted/images/plot_all_disp_not_norm-1.PNG")
 ```
 
 **Figure V4** Probability density function (pdf) plot of displacements from the `tracks` dataset calculated over 10 time windows, 24 to 240 hours at 24 ± 6-hour time intervals with `CalcDisp()`. Plot created with `PlotDispPDF()` where `normalised=FALSE`.
@@ -268,7 +268,7 @@ Compares distribution fits from `FitDist()` and identifies the best-fit distribu
 
 `CompDist()` outputs a data frame that contains the summary statistics for each distribution fit (as described for `FitDist()`) with the corresponding *AICc*/*AIC* scores and weighted AICc/AIC scores (*wAICc*/*wAIC*). The distribution with the highest *wAIC* or *wAICc* score from each comparison is the best-fit distribution.
 
-<img src="../vignettes/word_formatted/FitDistFlowChart_updated.png" align="center" width="500" />
+<img src="../vignettes/word_formatted/FitDistFlowChart_updated.PNG" align="center" width="500" />
 
 **Figure V5** Diagram outlining the procedure for identifying the best-fit distribution of displacements.
 
@@ -291,7 +291,7 @@ summary(unlist(disp))
 ```
 
 ```{r summary_disp24_load_fig, echo=FALSE, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/summary_disp24.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/summary_disp24.PNG")
 ```
 
 ```{r plot 24 hr disp, eval=FALSE}
@@ -301,12 +301,12 @@ plot.data.pdf <- PlotDispPDF(disp, normalised=FALSE)
 
 ```{r aspect ratio disp24, eval=TRUE, echo=FALSE}
 # First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/plot_24hr_disp-1.png") # read the image using the magic library
+img <- magick::image_read("../vignettes/word_formatted/images/plot_24hr_disp-1.PNG") # read the image using the magic library
 img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
 ```
 
 ```{r disp_24_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/plot_24hr_disp-1.png")
+knitr::include_graphics("../vignettes/word_formatted/images/plot_24hr_disp-1.PNG")
 ```
 
 **Figure V6** Probability density function (pdf) plot of displacements calculated using `CalcDisp()` with `max_hr=24`. Plot created with `PlotDispPDF()` and `normalised=FALSE`.
@@ -322,7 +322,7 @@ distResults[["distResults"]]
 ```
 
 ```{r dist_full_load_fig, echo=FALSE, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/dist_full.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/dist_full.PNG")
 ```
 
 ```{r plot full dist, eval=FALSE}
@@ -332,12 +332,12 @@ plot.data.all.pdf <- PlotDist(disp, distResults)
 
 ```{r aspect ratio full dist, eval=TRUE, echo=FALSE}
 # First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/plot_full_dist-1.png") # read the image using the magic library
+img <- magick::image_read("../vignettes/word_formatted/images/plot_full_dist-1.PNG") # read the image using the magic library
 img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
 ```
 
 ```{r all_dist_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/plot_full_dist-1.png")
+knitr::include_graphics("../vignettes/word_formatted/images/plot_full_dist-1.PNG")
 ```
 
 **Figure V7** Complementary cumulative distribution function (ccdf) of displacements (calculated using `CalcDisp()` with `max_hr=24`). Plot includes fit lines for power-law (pl), exponential (exp), and lognormal (lnorm) distributions based on results from `FitDist()` with `full=TRUE`. Plot created using `PlotDist()` default parameters. 
@@ -351,7 +351,7 @@ compResults
 ```
 
 ```{r dist_full_comp_load, echo=FALSE, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/dist_full_comp.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/dist_full_comp.PNG")
 ```
 
 #### Fitting truncated distributions
@@ -365,7 +365,7 @@ print(distResults.trunc[["distResults"]])
 ```
 
 ```{r dist_trunc_load, echo=FALSE, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/dist_trunc.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/dist_trunc.PNG")
 ```
 
 ```{r plot trunc dist, eval=FALSE}
@@ -376,12 +376,12 @@ plot.data.all.trunc <- PlotDist(disp, distResults.trunc)
 
 ```{r aspect ratio trunc dist, eval=TRUE, echo=FALSE}
 # First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/plot_trunc_dist-1.png") # read the image using the magic library
+img <- magick::image_read("../vignettes/word_formatted/images/plot_trunc_dist-1.PNG") # read the image using the magic library
 img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
 ```
 
 ```{r all_trunc_dist_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/plot_trunc_dist-1.png")
+knitr::include_graphics("../vignettes/word_formatted/images/plot_trunc_dist-1.PNG")
 ```
 
 **Figure** **V8** Complementary cumulative distribution function (ccdf) of displacements calculated using `CalcDisp()` with `max_hr=24` including fit lines for truncated power-law (pl), exponential (exp), and lognormal (lnorm) distributions based on the best-fit dmin results from `FitDist()`. Plot created using `PlotDist()` default parameters.
@@ -415,7 +415,7 @@ compResultsPl
 ```
 
 ```{r pl_trunc_dist_load, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/dist_pl_comp.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/dist_pl_comp.PNG")
 ```
 
 ```{r comp exp, eval=FALSE}
@@ -425,7 +425,7 @@ compResultsExp
 ```
 
 ```{r exp_trunc_dist_load, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/dist_exp_comp.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/dist_exp_comp.PNG")
 ```
 
 ```{r comp lnorm, eval=FALSE}
@@ -435,7 +435,7 @@ compResultsLnorm
 ```
 
 ```{r lnorm_trunc_dist_load, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/dist_lnorm_comp.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/dist_lnorm_comp.PNG")
 ```
 
 Overall conclusion: As both full and truncated distribution analyses identified an exponential distribution as the best fit, we can report that these displacements are best-fit to an exponential distribution, when compared with power-law and lognormal distributions.
@@ -474,12 +474,12 @@ randomise.result <- Randomise(tracks)
 
 ```{r aspect ratio randomise tracks, eval=TRUE, echo=FALSE}
 # First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/randomise_tracks-1.png") # read the image using the magic library
+img <- magick::image_read("../vignettes/word_formatted/images/randomise_tracks-1.PNG") # read the image using the magic library
 img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
 ```
 
 ```{r randomise_tracks_load, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/randomise_tracks-1.png")
+knitr::include_graphics("../vignettes/word_formatted/images/randomise_tracks-1.PNG")
 ```
 
 **Figure** **V9** Scatter plot illustrating the relationship between the number of grid cells visited by the original tracks from the `tracks` dataset and the average number of grid cells visited by the randomised tracks. The solid black line represents the linear model fit to this data, the grey shaded area reflects the standard error of the fit, and the dashed black line represents a 1:1 relationship. Plot created with `Randomise()` default parameters.
@@ -490,7 +490,7 @@ summary(randomise.result[["resultsDF"]])
 ```
 
 ```{r summarise_random_load, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/summary_randomise.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/summary_randomise.PNG")
 ```
 
 ```{r lm of randomised results, echo=TRUE, eval=FALSE}
@@ -500,7 +500,7 @@ print(RandomiselinearModel)
 ```
 
 ```{r summarise_random_lm_load, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/randomise_lm.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/randomise_lm.PNG")
 ```
 
 ```{r slope of randomised results, echo=TRUE, eval=FALSE}
@@ -509,7 +509,7 @@ RandomiselinearModel$estimate[2]
 ```
 
 ```{r summarise_random_lm_exp_load, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/randomise_exp.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/randomise_exp.PNG")
 ```
 
 ### Plot randomised tracks
@@ -543,12 +543,12 @@ plot.data.random.tracks <- PlotRandomTracks(tracks, ref=1, randomise.result)
 
 ```{r aspect ratio random tracks, eval=TRUE, echo=FALSE}
 # First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/plot_random_tracks-1.png") # read the image using the magic library
+img <- magick::image_read("../vignettes/word_formatted/images/plot_random_tracks-1.PNG") # read the image using the magic library
 img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
 ```
 
 ```{r random_tracks_load, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/plot_random_tracks-1.png")
+knitr::include_graphics("../vignettes/word_formatted/images/plot_random_tracks-1.PNG")
 ```
 
 **Figure V10** Map illustrating the original track for reference id 1 from the tracks dataset (black points and line) and the first 5 randomised tracks for track reference id 1 calculated using `Randomise()` (grey points and lines). The starting and ending locations are in red and blue, respectively. Plot created with `PlotRandomTracks()` default parameters and `ref=1`.
@@ -593,12 +593,12 @@ angle.results <- TurningAngles(tracks)
 
 ```{r aspect ratio angles, eval=TRUE, echo=FALSE}
 # First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/turn_angles-1.png") # read the image using the magic library
+img <- magick::image_read("../vignettes/word_formatted/images/turn_angles-1.PNG") # read the image using the magic library
 img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
 ```
 
 ```{r turn_angles_load, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/turn_angles-1.png")
+knitr::include_graphics("../vignettes/word_formatted/images/turn_angles-1.PNG")
 ```
 
 **Figure** **V11** Histogram of turning angles from the `tracks` dataset over ten time windows (24 to 240 hours at 24 ± 6 hour intervals). Plot created with `TurningAngles()` default parameters.
@@ -609,7 +609,7 @@ summary(angle.results[[1]])
 ```
 
 ```{r summary_angles_load, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/summary_angles.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/summary_angles.PNG")
 ```
 
 ### Create a circle plot
@@ -639,12 +639,12 @@ plot.data.angles <- PlotAngles(angle.results)
 
 ```{r aspect ratio angles circle, eval=TRUE, echo=FALSE}
 # First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/plot_angles_circle_plot-1.png") # read the image using the magic library
+img <- magick::image_read("../vignettes/word_formatted/images/plot_angles_circle_plot-1.PNG") # read the image using the magic library
 img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
 ```
 
 ```{r angles_circle__load, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/plot_angles_circle_plot-1.png")
+knitr::include_graphics("../vignettes/word_formatted/images/plot_angles_circle_plot-1.PNG")
 ```
 
 **Figure** **S12** Circle plot of turning angles recorded from the `tracks` dataset during ten time windows (24 to 240 hours at 24 ± 6 hour intervals). Plot created with `PlotAngles()` default parameters.

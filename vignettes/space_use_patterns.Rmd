@@ -26,7 +26,7 @@ knitr::opts_chunk$set(dpi = 600,
                       comment = "#>") 
 ```
 
-<img src="../vignettes/PhysMoveHex.png" align="right" width="130" />
+<img src="../vignettes/PhysMoveHex.PNG" align="right" width="130" />
 
 ## Index
 
@@ -73,12 +73,12 @@ Occ <- Occupancy(tracks)
 
 ```{r aspect ratio, eval=TRUE, echo=FALSE}
 # First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/occ_map-1.png") # read the image using the magic library
+img <- magick::image_read("../vignettes/word_formatted/images/occ_map-1.PNG") # read the image using the magic library
 img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
 ```
 
 ```{r occ_map_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/occ_map-1.png")
+knitr::include_graphics("../vignettes/word_formatted/images/occ_map-1.PNG")
 ```
 
 ```{r summarise occ, echo=TRUE, eval=FALSE}
@@ -87,7 +87,7 @@ summary(Occ)
 ```
 
 ```{r summary_occ_load_fig, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/summary_occ.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/summary_occ.PNG")
 ```
 
 ### Probability density function of occupancy results
@@ -101,12 +101,12 @@ pdf.occ  <- PlotPDF(Occ$Occupancy, desc="Occupancy")
 
 ```{r aspect ratio2, eval=TRUE, echo=FALSE}
 # First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/occ_pdf-1.png") # read the image using the magic library
+img <- magick::image_read("../vignettes/word_formatted/images/occ_pdf-1.PNG") # read the image using the magic library
 img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
 ```
 
 ```{r occ_pdf_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/occ_pdf-1.png")
+knitr::include_graphics("../vignettes/word_formatted/images/occ_pdf-1.PNG")
 ```
 
 **Figure V14** Probability density function (pdf) plot of occupancy values for the tracks dataset calculated with `Occupancy()` default parameters. Plot created using `PlotPDF()` with `desc=“Occupancy”`.
@@ -148,7 +148,7 @@ str(infomapResult[["infomap_object"]])
 ```
 
 ```{r infomap_str_load_fig, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/infomap_str.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/infomap_str.PNG")
 ```
 
 ### Plot Infomap communities
@@ -167,12 +167,12 @@ CommunityMap(infomapResult)
 
 ```{r aspect ratio3, eval=TRUE, echo=FALSE}
 # First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/infomap_map-1.png") # read the image using the magic library
+img <- magick::image_read("../vignettes/word_formatted/images/infomap_map-1.PNG") # read the image using the magic library
 img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
 ```
 
 ```{r incomap_map_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/infomap_map-1.png")
+knitr::include_graphics("../vignettes/word_formatted/images/infomap_map-1.PNG")
 ```
 
 **Figure** **v15** Map illustrating level 1 Infomap communities from the `tracks` dataset determined using `InfomapCommunities()` default parameters. Map created with `CommunityMap()` default parameters.

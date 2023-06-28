@@ -25,7 +25,7 @@ knitr::opts_chunk$set(dpi = 600,
                       comment = "#>") 
 ```
 
-<img src="../vignettes/PhysMoveHex.png" align="right" width="130" />
+<img src="../vignettes/PhysMoveHex.PNG" align="right" width="130" />
 
 ## Index 
 
@@ -88,7 +88,7 @@ head(tracks)
 ```
 
 ```{r tracks_head_load_fig, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/tracks_head.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/tracks_head.PNG")
 ```
 
 ```{r structure tracks, eval=FALSE}
@@ -97,7 +97,7 @@ str(tracks)
 ```
 
 ```{r tracks_str_load_fig, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/tracks_str.png")
+knitr::include_graphics("../vignettes/word_formatted/tables/tracks_str.PNG")
 ```
 
 ## Create a map of the tracks dataset
@@ -116,12 +116,12 @@ PlotTracks(tracks)
 
 ```{r aspect ratio, eval=TRUE, echo=FALSE}
 # First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/plot_tracks-1.png") # read the image using the magic library
+img <- magick::image_read("../vignettes/word_formatted/images/plot_tracks-1.PNG") # read the image using the magic library
 img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
 ```
 
 ```{r plot_tracks_load_fig, echo=FALSE, fig.asp=img.asp, out.width="70%"}
-knitr::include_graphics("../vignettes/word_formatted/images/plot_tracks-1.png")
+knitr::include_graphics("../vignettes/word_formatted/images/plot_tracks-1.PNG")
 ```
 
 **Figure V1** Map of the simulated `tracks` dataset created with `PlotTracks()` default settings.
