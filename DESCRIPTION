@@ -8,7 +8,7 @@ Authors@R:
       person("Jorge", "Rodríguez", email = "jorgeprodriguezg@gmail.com", role = "aut", comment=c(ORCID= "0000-0001-6593-5032")),
       person("Víctor", "Eguíluz", email = "victor@ifisc.uib-csic.esu", role = "aut", comment = c(ORCID = "0000-0003-1133-1289")),
       person("Ana M. M.", "Sequeira", email = "Ana.Sequeira@anu.edu.au", role = "aut", comment = c(ORCID = "0000-0001-6906-799X")))
-Description: Quantify movement patterns of satellite tagged animals using methods derrived from statistical physics.
+Description: Quantify movement patterns of satellite tagged animals using methods derived from statistical physics.
 Depends: R (>= 4.1.0) 
 Imports:
     broom (>= 1.0.3),
