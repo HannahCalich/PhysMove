@@ -11,7 +11,11 @@
 #' @param mapCol Colours for points and gyration radii on map, respectively. Default is c("Black","Red).
 #' @return Gyration radius values for each trajectory. If map=TRUE a map of the gyration radius results is created.
 #' @importFrom rlang .data
-#' @examples GyrationRad(tracks, map=TRUE, mapCol=c("Black","Red"))
+#' @examples
+#' \dontrun{
+#'
+#' GyrationRad(tracks, map=TRUE, mapCol=c("Black","Red"))
+#' }
 #' @export
 
 GyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red")){
