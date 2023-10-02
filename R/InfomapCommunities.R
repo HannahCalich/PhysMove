@@ -1,6 +1,6 @@
 #' Identify Infomap communities and create a transition probability matrix
 #'
-#' This function uses the network community detection Infomap to identify Infomap communities based on a transition probability matrix (tmp), which summarizes
+#' This function uses the network community detection Infomap to identify Infomap communities based on a transition probability matrix (tpm), which summarizes
 #' the probability of individuals moving from one grid cell to another over a set time window. This function assumes directed movement, allows for self-links
 #' (where an individual stays in the same cell over time), and uses a tpm in link list format to create an Infomap 'monolayer_object'. Note that if warnings
 #' appear about columns or rows summing to 0 this simply means an individual moved into a cell and did not leave, which is a valid movement and not cause for alarm.
@@ -38,8 +38,8 @@ InfomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, 
   if (rlang::is_installed("infomapecology")){
     if("infomapecology" %in% (.packages())){
 
-      if(infomapecology::check_infomap()!=TRUE){ # If the infomap.exe file has not been installed or cannot be found in working directory stop and send warning
-          stop ('Cannot find infomap.exe, please set working directory to folder containing infomap.exe file. \n  For information on installing infomap.exe visit https://ecological-complexity-lab.github.io/infomap_ecology_package/installation')
+      if(infomapecology::check_infomap()!=TRUE){ # If the Infomap.exe file has not been installed or cannot be found in working directory stop and send warning
+          stop ('Cannot find Infomap.exe, please set working directory to folder containing Infomap.exe file. \n  For information on installing Infomap.exe visit https://ecological-complexity-lab.github.io/infomap_ecology_package/installation')
       }
 
       species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
@@ -120,8 +120,8 @@ InfomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, 
       order.df <- merge(order.df, CellCoords, by.x="DestinationCell", by.y="Cell", all.x=TRUE)
       names(order.df)[8:9] <- c("DestinationLong","DestinationLat")
       order.df <- order.df[,c(3,2,6,7,4,1,8,9,5)]
-      LinkList <- order.df[,c(1,5,9)] # remove cell numbers (infomap requires order of cell visits only)
-      colnames(LinkList) <- c("from", "to", "weight") # rename columns following infomap requirements
+      LinkList <- order.df[,c(1,5,9)] # remove cell numbers (Infomap requires order of cell visits only)
+      colnames(LinkList) <- c("from", "to", "weight") # rename columns following Infomap requirements
       LinkList$from <- sub("^","Node",LinkList$from)
       LinkList$to <- sub("^","Node",LinkList$to)
       names(order.df) <- c(rep(c("Node", "Cell", "Long", "Lat"),2),"Probability")

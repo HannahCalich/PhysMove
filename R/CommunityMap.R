@@ -7,7 +7,7 @@
 #' 1, 2, and 3. This parameter is particularly useful if Infomap has identified many communities and they are difficult to distinguish in the map
 #' Default is NULL.
 #' @param colours Colour(s) for each community in the map. Valid input options include: base R (grDevices) color pallets (e.g., colours=rainbow), RColorBrewer
-#' palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that grDevies color
+#' palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that grDevices color
 #' pallets do not use quotations. If the palette does not have enough distinct colours to match the communities being plotted the function will automatically
 #' create a continuous pallet with the colours provided. Default is "Dark2".
 #' @return A map illustrating level 1 Infomap communities.
