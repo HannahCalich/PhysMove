@@ -17,17 +17,17 @@
 #' @export
 
 PlotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=TRUE){
-
-  bins <- 0.25#360 / 45
+  bins <- 360 / 45
+  # bins <- 0.25
   timeWindows <- as.numeric(names(angleList))
   for (d in 1:length(angleList)){
     h <- graphics::hist(unlist(angleList[[d]]), plot = FALSE, breaks = seq(-180, 180, bins)) # angleList is all angels for a time period from all individuals
     probability <- h$counts/length(unlist(angleList[[d]]))
-    # probability <- c(probability[1:23],probability[23],probability[24:45]) # Duplicated angle at 0 since 360=0 and 360 is needed for plot
-    probability <- c(probability[1:181],probability[181],probability[182:360]) # Duplicated angle at 0 since 360=0 and 360 is needed for plot
+    probability <- c(probability[1:23],probability[23],probability[24:45]) # Duplicated angle at 0 since 360=0 and 360 is needed for plot
+    # probability <- c(probability[1:181],probability[181],probability[182:360]) # Duplicated angle at 0 since 360=0 and 360 is needed for plot
     Cols <- h$mids
-    # angles <- c(Cols[c(1:22)]+360,360,Cols[c(23:45)]) # Added 360 to list for plot. Angles at 360 are the same as at 0
-    angles <- c(Cols[c(1:180)]+360,360,Cols[c(181:360)]) # Added 360 to list for plot. Angles at 360 are the same as at 0
+    angles <- c(Cols[c(1:22)]+360,360,Cols[c(23:45)]) # Added 360 to list for plot. Angles at 360 are the same as at 0
+    # angles <- c(Cols[c(1:180)]+360,360,Cols[c(181:360)]) # Added 360 to list for plot. Angles at 360 are the same as at 0
 
     if (d==1){
       circle.plot <- as.data.frame(cbind(angles, probability, timeWindows=c(rep(timeWindows[d], length(probability)))))
