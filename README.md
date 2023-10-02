@@ -71,4 +71,4 @@ browseVignettes("PhysMove")
 ```
 
 Current Version: 1.0.0
-Last updated: June, 2023
+Last updated: October, 2023
