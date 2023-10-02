@@ -25,5 +25,8 @@ This function allows you to calculate the gyration radius of individual trajecto
 A pdf plot of the gyration radius values can be created with the \code{\link{PlotPDF}} function.
 }
 \examples{
+\dontrun{
+
 GyrationRad(tracks, map=TRUE, mapCol=c("Black","Red"))
+}
 }
