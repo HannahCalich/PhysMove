@@ -44,8 +44,8 @@ PlotRandomTracks<-function(species_df, ref=NULL, randomResults, numPlot=1:5, col
   a <-  as.character(unique(Individual$ref))
   plotpoints <- data.frame("lat"=integer(0),"lon"=integer(0)) # Format the df, the 0s are removed
 
-  for(T in numPlot){ #For the Randomised data
-    lat_long <- data.frame("RandomTraj"=T, "lon"=RandomisedLong[species_index[[a]],T],"lat"=RandomisedLat[species_index[[a]],T])
+  for(P in numPlot){ #For the Randomised data
+    lat_long <- data.frame("RandomTraj"=P, "lon"=RandomisedLong[species_index[[a]],P],"lat"=RandomisedLat[species_index[[a]],P])
     plotpoints <- rbind(plotpoints,lat_long)
   }
 
