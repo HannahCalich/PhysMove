@@ -47,7 +47,7 @@ CompDist<-function(displacements, distResults, force_AICc=FALSE){
 
   if ("pl" %in% dist){
     MyPowerLaw <- function(parameters, displacements){
-      pl_PDF = ((parameters[1]-1)/parameters[2])*((displacements/parameters[2])^(-parameters[1]))
+      pl_PDF <- ((parameters[1]-1)/parameters[2])*((displacements/parameters[2])^(-parameters[1]))
       return(pl_PDF)
     }
     pl_xmin <- distResults[which(distResults$distribution=="pl"),"dmin"]
@@ -61,7 +61,7 @@ CompDist<-function(displacements, distResults, force_AICc=FALSE){
 
   if ("exp" %in% dist){
     MyexponentialTrunc <- function(parameters, displacements){
-        exp_PDF = parameters[1]*exp(-parameters[1]*(displacements-parameters[2]))
+        exp_PDF <- parameters[1]*exp(-parameters[1]*(displacements-parameters[2]))
         return(exp_PDF)
     }
     exp_xmin <- distResults[which(distResults$distribution=="exp"),"dmin"]
@@ -75,7 +75,7 @@ CompDist<-function(displacements, distResults, force_AICc=FALSE){
 
   if ("lnorm" %in% dist){
     MyLogNormalTrunc <- function(parameters, displacements){ # 1=mu, 2= sigma
-      lnorm_PDF = exp(dlnorm(displacements, parameters[1], parameters[2], log = TRUE) - plnorm(parameters[3],parameters[1], parameters[2], lower.tail = FALSE, log.p = TRUE))
+      lnorm_PDF <- exp(dlnorm(displacements, parameters[1], parameters[2], log = TRUE) - plnorm(parameters[3],parameters[1], parameters[2], lower.tail = FALSE, log.p = TRUE))
       return(lnorm_PDF)
     }
     lnorm_xmin <- distResults[which(distResults$distribution=="lnorm"),"dmin"]

@@ -84,7 +84,7 @@ FitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
     n <- length(xi)
     PL_alpha <- 1+n*((sum(log(xi/PL_xmin)))^-1) # calculate alpha using direct MLE based on PL_xmin
 
-    selection = min(which(x >= (PL_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+    selection <- min(which(x >= (PL_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
     n <- rev.index[selection] # number of values of x >= xmin
 
     distResults[which(distResults$distribution =="pl"),which(names(distResults)=="dmin")] <- PL_xmin
@@ -105,7 +105,7 @@ FitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
 
           pars.list[i] <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
 
-          selection = min(which(x >= (xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+          selection <- min(which(x >= (xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
           n <- rev.index[selection]
           xi <- x[(N-n+1):N]
 
@@ -119,7 +119,7 @@ FitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
         row <- which.max(dat==D)
         Exp_xmin <- xmins[row]
         Exp_lambda <- pars.list[row]
-        selection = min(which(x >= (Exp_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+        selection <- min(which(x >= (Exp_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
         n <- rev.index[selection] # number of values of x >= xmin
       }
 
@@ -129,7 +129,7 @@ FitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
         n <- length(xi)
         Exp_lambda <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
         Exp_xmin <- xmin
-        selection = min(which(x >= (Exp_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+        selection <- min(which(x >= (Exp_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
         n <- rev.index[selection] # number of values of x >= xmin
       }
     }
@@ -139,7 +139,7 @@ FitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
       n <- length(xi)
       Exp_lambda <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
       Exp_xmin <- xmin
-      selection = min(which(x >= (Exp_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+      selection <- min(which(x >= (Exp_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
       n <- rev.index[selection] # number of values of x >= xmin
     }
     distResults[which(distResults$distribution =="exp"),which(names(distResults)=="dmin")] <- Exp_xmin
@@ -190,7 +190,7 @@ FitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
           mle <- suppressWarnings(optim(par=init, fn=my_nll, method="L-BFGS-B", lower=c(-Inf, .Machine$double.eps)))
           pars.mat[i,] <- c(mle$par[1],mle$par[2])
 
-          selection = min(which(x >= (xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+          selection <- min(which(x >= (xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
           n <- rev.index[selection]
           xi <- x[(N-n+1):N]
 
@@ -200,7 +200,7 @@ FitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
           lnormCDF <- plnorm(xmin, pars.mat[i,1], pars.mat[i,2], lower.tail = FALSE)
           fx <- (plnorm(xi, pars.mat[i,1], pars.mat[i,2], lower.tail = TRUE)/lnormCDF)-
             (1/lnormCDF)+1
-          fx[xi<xmin] = 0
+          fx[xi<xmin] <- 0
 
           sx <- ((0:(n - 1))/n)[1:length(fx)] # complementary empirical CDF
           dat[i] <- max(abs(sx-fx)) # max difference between fitted and empirical cdfs
@@ -210,7 +210,7 @@ FitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
         LN_xmin <- xmins[row]
         LN_mu <- pars.mat[row,1]
         LN_sigma <- pars.mat[row,2]
-        selection = min(which(x >= (LN_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+        selection <- min(which(x >= (LN_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
         n <- rev.index[selection] # number of values of x >= xmin
       }
 
@@ -227,7 +227,7 @@ FitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
         LN_sigma <- mle$par[2]
         LN_xmin <- xmin
 
-        selection = min(which(x >= (LN_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+        selection <- min(which(x >= (LN_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
         n <- rev.index[selection] # number of values of x >= xmin
       }
     }
@@ -244,7 +244,7 @@ FitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
       LN_sigma <- mle$par[2]
       LN_xmin <- xmin
 
-      selection = min(which(x >= (LN_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+      selection <- min(which(x >= (LN_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
       n <- rev.index[selection] # number of values of x >= xmin
     }
     distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="dmin")] <- LN_xmin

@@ -21,12 +21,12 @@
 GyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red")){
 
   MydistHaversine <- function(lon1, lat1, lon2, lat2) {
-    radlat1 = rad * lat1
-    radlat2 = rad * lat2
-    dlat = radlat2 - radlat1
-    dlon = rad * (lon2 - lon1)
-    a = (sin(dlat/2)^2) + cos(radlat1)*cos(radlat2)*(sin(dlon/2)^2)
-    a = 2*asin(sqrt(a))
+    radlat1 <- rad * lat1
+    radlat2 <- rad * lat2
+    dlat <- radlat2 - radlat1
+    dlon <- rad * (lon2 - lon1)
+    a <- (sin(dlat/2)^2) + cos(radlat1)*cos(radlat2)*(sin(dlon/2)^2)
+    a <- 2*asin(sqrt(a))
     return(a*Radius)
   }
 

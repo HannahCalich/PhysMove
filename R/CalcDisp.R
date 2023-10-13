@@ -33,17 +33,17 @@ CalcDisp<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6){
   range_hr <- range_hr*(60*60) # convert hours (input) to seconds
 
   MydistHaversine <- function(lon1, lat1, lon2, lat2) {
-    radlat1 = rad * lat1
-    radlat2 = rad * lat2
-    dlat = radlat2 - radlat1
-    dlon = rad * (lon2 - lon1)
-    a= (sin(dlat/2)^2) + cos(radlat1)*cos(radlat2)*(sin(dlon/2)^2)
-    a=2*asin(sqrt(a))
+    radlat1 <- rad * lat1
+    radlat2 <- rad * lat2
+    dlat <- radlat2 - radlat1
+    dlon <- rad * (lon2 - lon1)
+    a<- (sin(dlat/2)^2) + cos(radlat1)*cos(radlat2)*(sin(dlon/2)^2)
+    a<-2*asin(sqrt(a))
     return(a*Radius)
   }
 
   Radius <- 6371 # Earth Radius in km (disp are in km)
-  rad = 3.141592653589793/180 # Python has more digits of pi than R, so value pasted here instead of "pi"
+  rad <- 3.141592653589793/180 # Python has more digits of pi than R, so value pasted here instead of "pi"
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
   MyTime <- c(seq(min_hr,max_hr,interval_hr))
   MyList <- list()
