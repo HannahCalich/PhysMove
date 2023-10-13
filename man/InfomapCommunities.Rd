@@ -39,7 +39,7 @@ stay for longer periods of time). If tpm=TRUE the transition probability matrix 
 as list element 2.
 }
 \description{
-This function uses the network community detection Infomap to identify Infomap communities based on a transition probability matrix (tmp), which summarizes
+This function uses the network community detection Infomap to identify Infomap communities based on a transition probability matrix (tpm), which summarizes
 the probability of individuals moving from one grid cell to another over a set time window. This function assumes directed movement, allows for self-links
 (where an individual stays in the same cell over time), and uses a tpm in link list format to create an Infomap 'monolayer_object'. Note that if warnings
 appear about columns or rows summing to 0 this simply means an individual moved into a cell and did not leave, which is a valid movement and not cause for alarm.

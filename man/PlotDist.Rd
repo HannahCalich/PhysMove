@@ -21,7 +21,7 @@ PlotDist(
 \item{fitLines}{Add fit lines based on the parameters calculated with the \code{\link{FitDist}} function. Default is TRUE.}
 
 \item{setDist}{Plot a subset of lines for each distribution fit calculated with the \code{\link{FitDist}} function (e.g., setDist=c("pl","exp"))
-Options include "pl", "exp", and "lnorm". The lines will be drawn in order from "pl", then "exp", then "lnrom" (when applicable).
+Options include "pl", "exp", and "lnorm". The lines will be drawn in order from "pl", then "exp", then "lnorm" (when applicable).
 By default all lines are plotted. Default is NULL.}
 
 \item{colours}{Colours for each fit line. The colours correspond to the drawing order: "pl", "exp", "lnorm" (when applicable).
