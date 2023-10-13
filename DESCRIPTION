@@ -23,21 +23,22 @@ Depends:
 Imports:
     broom (>= 1.0.3),
     ggplot2 (>= 3.3.5),
+    graphics,
+    grDevices,
     grid (>= 4.0.5),
     methods (>= 4.2.2),
     RColorBrewer (>= 1.1),
     rlang (>= 0.4.11),
     rootSolve (>= 1.8.2.1),
-    scales (>= 1.2.1)
+    scales (>= 1.2.1),
+    stats,
+    utils
 Suggests:
-    devtools (>= 2.4.5),
-    htmltools (>= 0.5.4),
     infomapecology (>= 1.0.6),
+    kableExtra,
     knitr (>= 1.42),
-    magick (>= 2.7.4),
+    officedown,
     rmarkdown (>= 2.2.0),
-    roxygen2 (>= 7.2.3),
-    sf (>= 1.0-13),
     spelling,
     testthat (>= 3.0.0)
 VignetteBuilder: 
