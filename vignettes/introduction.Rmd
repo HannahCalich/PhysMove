@@ -12,6 +12,9 @@ vignette: >
 <style>
       img {
       border: 0;
+      height: auto;
+      display: block; 
+      margin: 1em auto
     }
 </style>
 
@@ -25,7 +28,7 @@ knitr::opts_chunk$set(dpi = 600,
                       comment = "#>") 
 ```
 
-<img src="../vignettes/PhysMoveHex.PNG" align="right" width="130" />
+<img src="../vignettes/PhysMoveHex.png" align="right" width="130" />
 
 ## Index 
 
@@ -87,18 +90,15 @@ You can also compare your data frame to our sample dataset `tracks` to ensure yo
 head(tracks)
 ```
 
-```{r tracks_head_load_fig, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/tracks_head.PNG")
-```
+<img src="../vignettes/word_formatted/tables/tracks_head.png" width="100%" />
 
 ```{r structure tracks, eval=FALSE}
 # Determine the structure of the tracks dataset
 str(tracks)
 ```
 
-```{r tracks_str_load_fig, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/tracks_str.PNG")
-```
+<img src="../vignettes/word_formatted/tables/tracks_str.png" width="100%" />
+
 
 ## Create a map of the tracks dataset
 
@@ -114,15 +114,7 @@ A basic map of your telemetry data can be created using our `PlotTracks()` funct
 PlotTracks(tracks)
 ```
 
-```{r aspect ratio, eval=TRUE, echo=FALSE}
-# First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/plot_tracks-1.PNG") # read the image using the magic library
-img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
-```
-
-```{r plot_tracks_load_fig, echo=FALSE, fig.asp=img.asp, out.width="70%"}
-knitr::include_graphics("../vignettes/word_formatted/images/plot_tracks-1.PNG")
-```
+<img src="../vignettes/word_formatted/images/plot_tracks-1.png" width="70%" />
 
 **Figure V1** Map of the simulated `tracks` dataset created with `PlotTracks()` default settings.
 

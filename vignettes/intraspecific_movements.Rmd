@@ -12,6 +12,9 @@ vignette: >
 <style>
       img {
       border: 0;
+      height: auto;
+      display: block; 
+      margin: 1em auto
     }
 </style>
 
@@ -68,15 +71,7 @@ and circles, which indicate how far each animal dispersed (`mapCol=c(“Black”
 GR <- GyrationRad(tracks)
 ```
 
-```{r aspect ratio, eval=TRUE, echo=FALSE}
-# First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/gyrad-1.png") # read the image using the magic library
-img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
-```
-
-```{r gryad_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/gyrad-1.png")
-```
+<img src="../vignettes/word_formatted/images/gyrad-1.png" width="60%" />
 
 **Figure** **V16** Map illustrating dispersion patterns for `tracks` dataset using `GyrationRad()` default parameters. Black points represent the mean location of each track and red circles represent how far each track dispersed (i.e., each tracks' gyration radius).
 
@@ -85,9 +80,8 @@ knitr::include_graphics("../vignettes/word_formatted/images/gyrad-1.png")
 summary(GR)
 ```
 
-```{r summary_gyrad_load_fig, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/summary_gyrad.png")
-```
+<img src="../vignettes/word_formatted/tables/summary_gyrad.png" width="100%" />
+
 
 ### Probability density function of gyration radius results
 
@@ -99,15 +93,7 @@ A pdf of the results from `GyrationRad()` can be plotted with the `PlotPDF()` fu
 pdf.gr <- PlotPDF((GR$`rG (km)`), desc="GyrationRad")
 ```
 
-```{r aspect ratio2, eval=TRUE, echo=FALSE}
-# First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/gyrad_pdf-1.png") # read the image using the magic library
-img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
-```
-
-```{r gyrad_pdf_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/gyrad_pdf-1.png")
-```
+<img src="../vignettes/word_formatted/images/gyrad_pdf-1.png" width="60%" />
 
 **Figure** **V17** Probability density function (pdf) plot of gyration radius values for the `tracks` dataset determined with `GyrationRad()` default parameters. Plot created using `PlotPDF()` with `desc=“GyrationRad”`.
 
@@ -137,15 +123,7 @@ The `Entropy()` function calculates track randomness based on the fraction of da
 Ent <- Entropy(tracks)
 ```
 
-```{r aspect ratio3, eval=TRUE, echo=FALSE}
-# First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/ent-1.png") # read the image using the magic library
-img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
-```
-
-```{r ent_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/ent-1.png")
-```
+<img src="../vignettes/word_formatted/images/ent-1.png" width="60%" />
 
 **Figure** **S18** Histogram of normalised entropy scores for `tracks` dataset created using `Entropy()` default parameters.
 
@@ -154,9 +132,8 @@ knitr::include_graphics("../vignettes/word_formatted/images/ent-1.png")
 summary(Ent)
 ```
 
-```{r summary_ent_load_fig, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/summary_ent.png")
-```
+<img src="../vignettes/word_formatted/tables/summary_ent.png" width="100%" />
+
 
 ### Probability density function of Entropy results
 
@@ -167,15 +144,7 @@ A pdf of the results from `Entropy()` can be plotted with the `PlotPDF()` functi
 pdf.ent <- PlotPDF(Ent$normalisedEntropy, "Entropy")
 ```
 
-```{r aspect ratio4, eval=TRUE, echo=FALSE}
-# First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/ent_pdf-1.png") # read the image using the magic library
-img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
-```
-
-```{r ent_pdf_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/ent_pdf-1.png")
-```
+<img src="../vignettes/word_formatted/images/ent_pdf-1.png" width="60%" />
 
 **Figure** **V19** Probability density function (pdf) plot of normalised entropy scores for `tracks` dataset determined with `Entropy()` default parameters. Plot created using `PlotPDF()` with `desc=“Entropy”`.
 
@@ -204,15 +173,7 @@ Figure 1).
 Pred <- Predictability(tracks, Ent)
 ```
 
-```{r aspect ratio5, eval=TRUE, echo=FALSE}
-# First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/predict-1.png") # read the image using the magic library
-img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
-```
-
-```{r predict_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/predict-1.png")
-```
+<img src="../vignettes/word_formatted/images/predict-1.png" width="60%" />
 
 **Figure** **V20** Histogram of predictability scores for `tracks` dataset determined using `Predictability()` default parameters and entropy scores from `Entropy()`.
 
@@ -221,9 +182,8 @@ knitr::include_graphics("../vignettes/word_formatted/images/predict-1.png")
 summary(Pred)
 ```
 
-```{r summary_predict_load_fig, echo=FALSE, fig.align='left', out.width='100%'}
-knitr::include_graphics("../vignettes/word_formatted/tables/summary_predict.png")
-```
+<img src="../vignettes/word_formatted/tables/summary_predict.png" width="100%" />
+
 
 ### Probability density function of Predictability results
 
@@ -234,15 +194,7 @@ A pdf of the results from `Predictability()` can be plotted with the `PlotPDF()`
 pdf.pred <- PlotPDF(Pred$Predictability, desc="Predictability")
 ```
 
-```{r aspect ratio6, eval=TRUE, echo=FALSE}
-# First chunk to fetch the image size and calculate its aspect ratio
-img <- magick::image_read("../vignettes/word_formatted/images/predict_pdf-1.png") # read the image using the magic library
-img.asp <- magick::image_info(img)$height / magick::image_info(img)$width # calculate the figures aspect ratio
-```
-
-```{r predict_pdf_load_fig, echo=FALSE, fig.asp=img.asp, out.width="60%"}
-knitr::include_graphics("../vignettes/word_formatted/images/predict_pdf-1.png")
-```
+<img src="../vignettes/word_formatted/images/predict_pdf-1.png" width="60%" />
 
 **Figure** **V21** Probability density function (pdf) plot of predictability scores for `tracks` dataset determined with `Predictability()` default parameters and results from `Entropy()`. Plot created using `PlotPDF()` with `desc=“Predictability”`.
 
