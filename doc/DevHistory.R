@@ -34,7 +34,6 @@ inteRgrate::check_gitignore() # Check .gitignore contains standard files -- OK
 
 ### Summary of standard formatting checks:
 ## goodpractice::gp() and inteRgrate::check_lintr() has some good ideas but they aren't urgent edits, can do while in review
-## inteRgrate::check_pkg() gives warning that PhysMove is in use and wont be installed, but seems to test anyways? Package is experimental so not worried about this
 ## File names should be converted to lower case, can do while in review
 ## All others ok/pass
 
@@ -43,7 +42,7 @@ inteRgrate::check_gitignore() # Check .gitignore contains standard files -- OK
 #===========================================================================================
 # usethis::use_test("PhysMove") # set up test files (commented because this creates initial test files)
 devtools::test() # Runs all tests in package -- Pass
-devtools::test_coverage() # Computes test coverage for package
+devtools::test_coverage() # Computes test coverage for package !!!!!!!!!!!!!!!!!!
 devtools::run_examples() # Check examples -- OK
 
 ### Summary of test and example checks:
