@@ -94,11 +94,11 @@ TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range
             by <- MydistHaversine(species_df[species_index[[i]][J1],2], species_df[species_index[[i]][J1],3], species_df[species_index[[i]][J1],2], species_df[species_index[[i]][J2],3])
 
             # Remember to correct direction in longitude and latitude (i.e., W-E, N-S) # but account for potential movement between longitudes -180 and 180 (e.g., going from -180 to -182, which is represented as 178)
-            if(species_df[species_index[[i]][J1],2] - species_df[species_index[[i]][j],2] > 180) { ax = -ax }
-            if(species_df[species_index[[i]][J1],2] - species_df[species_index[[i]][j],2] < 0) { ax = -ax }
-            if(species_df[species_index[[i]][J1],3] - species_df[species_index[[i]][j],3] < 0) { ay = -ay }
-            if(species_df[species_index[[i]][J2],2] - species_df[species_index[[i]][J1],2] < 0 & species_df[species_index[[i]][J2],2] - species_df[species_index[[i]][J1],2] > -180){ bx = -bx }
-            if(species_df[species_index[[i]][J2],3] - species_df[species_index[[i]][J1],3] < 0) { by = -by }
+            if(species_df[species_index[[i]][J1],2] - species_df[species_index[[i]][j],2] > 180) { ax <- -ax }
+            if(species_df[species_index[[i]][J1],2] - species_df[species_index[[i]][j],2] < 0) { ax <- -ax }
+            if(species_df[species_index[[i]][J1],3] - species_df[species_index[[i]][j],3] < 0) { ay <- -ay }
+            if(species_df[species_index[[i]][J2],2] - species_df[species_index[[i]][J1],2] < 0 & species_df[species_index[[i]][J2],2] - species_df[species_index[[i]][J1],2] > -180){ bx <- -bx }
+            if(species_df[species_index[[i]][J2],3] - species_df[species_index[[i]][J1],3] < 0) { by <- -by }
 
             angle <- atan2((ax*by - ay*bx) , (ax*bx + ay*by)) ### in radians
             angleList[[d]] <- append(angleList[[d]], angle)
