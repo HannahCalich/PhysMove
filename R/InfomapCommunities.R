@@ -130,9 +130,9 @@ InfomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, 
       names(nodenames) <- c("node_name","cell", "long", "lat")
       nodenames$node_name <- sub("^","Node",nodenames$node_name)
 
-      monolayer_object <- infomapecology::create_monolayer_object(LinkList, directed = T, bipartite = F, node_metadata = nodenames)
+      monolayer_object <- infomapecology::create_monolayer_object(LinkList, directed = TRUE, bipartite = FALSE, node_metadata = nodenames)
       infomap_object <- suppressWarnings(infomapecology::run_infomap_monolayer(monolayer_object, infomap_executable='infomap', flow_model='directed',
-                                                                                 silent=T, verbose=F, two_level=F))#, ...="-k"))
+                                                                                 silent=TRUE, verbose=FALSE, two_level=FALSE))#, ...="-k"))
       infomap_object <- list(infomap_object)
       names(infomap_object) <- "infomap_object"
 
