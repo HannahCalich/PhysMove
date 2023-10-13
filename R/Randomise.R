@@ -45,12 +45,12 @@ Randomise <- function(species_df, randTrack=100, gridCell=0.25, plot=TRUE, lm=TR
   message("Randomizing tracks, step 1/3")
 
   for (i in 1:length(species_index)){
-    for(T in 1:randTrack){ # Number of Randomised tracks per individual
+    for(r in 1:randTrack){ # Number of Randomised tracks per individual
     # Randomise the order of the positions for each individual (e.g., instead of 1,2,3, the order might be 13,43,5)
       NewPositions <- sample(seq(1:(utils::tail(species_index[[i]],1) - species_index[[i]][1])), utils::tail(species_index[[i]],1) - species_index[[i]][1], replace = FALSE)
-      # For each reshuffling (T), reserve the original first location per individual (i).
-      ShuffledLong[species_index[[i]][1], T] <- species_df[species_index[[i]][1], 2] # first position for each individual is the origin
-      ShuffledLat[species_index[[i]][1], T] <- species_df[species_index[[i]][1], 3]
+      # For each reshuffling (r), reserve the original first location per individual (i).
+      ShuffledLong[species_index[[i]][1], r] <- species_df[species_index[[i]][1], 2] # first position for each individual is the origin
+      ShuffledLat[species_index[[i]][1], r] <- species_df[species_index[[i]][1], 3]
       for(j in 1:length(NewPositions)){
         # Looping through new positions, length is 1 fewer than the number of locations per animal because first position is fixed
         # Create random locations based on the sum of previous location and the distance travelled between a random location and the next point in the track (MyDiff)
@@ -60,8 +60,8 @@ Randomise <- function(species_df, randTrack=100, gridCell=0.25, plot=TRUE, lm=TR
         # (eg if an individual has 65 points, there are 64 new ones, but the code below will make sure the distance between the 65th and 64th point is included)
         # Since this loop is limited by length(NewPositions), we won't include the diffs calculated between individuals
         # Following this approach the math results in the same final destination point for each track
-        ShuffledLong[species_index[[i]][j+1], T] <- ShuffledLong[species_index[[i]][j], T] + MyDiffLong[species_index[[i]][NewPositions[j]+1]]
-        ShuffledLat[species_index[[i]][j+1], T] <- ShuffledLat[species_index[[i]][j], T] + MyDiffLat[species_index[[i]][NewPositions[j]+1]]
+        ShuffledLong[species_index[[i]][j+1], r] <- ShuffledLong[species_index[[i]][j], r] + MyDiffLong[species_index[[i]][NewPositions[j]+1]]
+        ShuffledLat[species_index[[i]][j+1], r] <- ShuffledLat[species_index[[i]][j], r] + MyDiffLat[species_index[[i]][NewPositions[j]+1]]
       }
     }
   }
@@ -82,23 +82,25 @@ Randomise <- function(species_df, randTrack=100, gridCell=0.25, plot=TRUE, lm=TR
   AvgShuffledOccurrences <- SumOriginalOccurrences <- c() # vector to store cell counts for each individual
 
   # Loop through each shuffled position and store counts when individuals occur in each cell
+  i <- r <- 1
   for (i in 1:length(species_index)){ # For each individual
-    for(T in 1:randTrack){ # For each random track, determine what cell each point falls in
+    for(r in 1:randTrack){ # For each random track, determine what cell each point falls in
       j <- 1 # Do not comment this line because it marks the position for each index per individual
       ShuffledPresence <- rep(0, totalcells)
       for (j in 1:length(species_index[[i]])){ # For each point in a track
-        coordlong <- floor(grid * (ShuffledLong[species_index[[i]][j], T] - longmin))
-        coordlat <- floor(grid * (ShuffledLat[species_index[[i]][j], T] - latmin))
+        coordlong <- floor(grid * (ShuffledLong[species_index[[i]][j], r] - longmin))
+        coordlat <- floor(grid * (ShuffledLat[species_index[[i]][j], r] - latmin))
         cellnum <- coordlong + grid * (longmax - longmin) * coordlat
         ShuffledPresence[cellnum] <- 1 # Record the number of unique cells visited (aka presence, not occupancy)
         }
-    SumShuffledOccurrences[i, T] <- sum(ShuffledPresence)
+    SumShuffledOccurrences[i, r] <- sum(ShuffledPresence)
     }
   AvgShuffledOccurrences[i] <- mean(SumShuffledOccurrences[i,])
   }
 
   message("Calculating number of cells visited by original tracks, step 3/3")
 
+  i <- 1
   for (i in 1:length(species_index)){ # For original tracks
     j < -1 # Do not comment this. This is needed to restart j for each animal to find position in index.
     Presence <- rep(0, totalcells)
