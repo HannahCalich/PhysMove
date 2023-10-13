@@ -19,7 +19,7 @@ License: GPL (>= 3)
 URL: https://github.com/HannahCalich/PhysMove
 BugReports: https://github.com/HannahCalich/PhysMove/issues
 Depends: 
-    R (>= 4.2.2)
+    R (>= 4.2)
 Imports:
     broom (>= 1.0.5),
     ggplot2 (>= 3.4.2),
