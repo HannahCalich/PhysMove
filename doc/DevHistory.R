@@ -8,18 +8,25 @@
 ### Package details
 #===========================================================================================
 devtools::document() # Update manual
-usethis::use_news_md() # Update NEWS - Bump version manually and add list of changes
+# usethis::use_news_md(open = rlang::is_interactive()) # Create NEWS - Bump version manually and add list of changes
 usethis::use_cran_comments(open = rlang::is_interactive()) # Update comments for CRAN
-usethis::use_version(which = c("patch", "minor", "major", "dev")[1]) # Upgrade version number
-usethis::use_version("patch")
+usethis::use_version("patch") # Upgrade version number, options include: c("patch", "minor", "major", "dev")
 usethis::use_gpl_license() # Update license info - if applicable
 devtools::spell_check() # Check spelling
+attachment::att_amend_desc(pkg_ignore = c("infomapecology"), extra.suggests = c("infomapecology"), update.config = TRUE) # Amend dependencies in description
+# Code above adds DEV folder which is non-standard and needs to be manually deleted
+checkhelper::find_missing_tags() # check for missing return value for exported functions and missing @export tags
+#all_files_remaining <- checkhelper::check_clean_userspace() # listed as "experimental" in cran docs so skipping this because it's giving unclear messages about temp files
+#all_files_remaining
+# checkhelper::check_as_cran()# listed as "experimental" in cran docs so skipping this because it's not checking the correct packages
+urlchecker::url_check() # this will throw errors until github is public
+# urlchecker::url_update() # this will throw errors until github is public
 
 #===========================================================================================
 ### Package standard formatting checks
 #===========================================================================================
 goodpractice::gp() # Goodpractice check -- skipping for now, some good ideas but not urgent
-inteRgrate::check_pkg() # "installs package dependencies, builds & installs the package, before running package check" -- OK
+inteRgrate::check_pkg() # "installs package dependencies, builds & installs the package, before running package check"
 inteRgrate::check_lintr() # check if code "adheres to standards" -- skipping this, some good ideas but not urgent
 inteRgrate::check_tidy_description() # Check description is tidy -- OK
 inteRgrate::check_r_filenames() # Check file names are correct -- file names need to be lower case -- skipping for now
@@ -27,6 +34,7 @@ inteRgrate::check_gitignore() # Check .gitignore contains standard files -- OK
 
 ### Summary of standard formatting checks:
 ## goodpractice::gp() and inteRgrate::check_lintr() has some good ideas but they aren't urgent edits, can do while in review
+## inteRgrate::check_pkg() gives warning that PhysMove is in use and wont be installed, but seems to test anyways? Package is experimental so not worried about this
 ## File names should be converted to lower case, can do while in review
 ## All others ok/pass
 
@@ -39,7 +47,7 @@ devtools::test_coverage() # Computes test coverage for package
 devtools::run_examples() # Check examples -- OK
 
 ### Summary of test and example checks:
-## test_coverage not used because all troubleshooting was done before I learned about this option but it will be used in future
+## test_coverage not used because all troubleshooting was done before I learned about this option, but it will be used in future
 ## All others ok/pass
 
 #===========================================================================================
@@ -167,10 +175,14 @@ rhub::check_on_ubuntu() # Email says PREPERROR but notes say success and there's
 # revdep_reset()
 
 #===========================================================================================
-### Release package ---
+### Release package
 #===========================================================================================
+
+## Update News.md
+## Update README.md
+## usethis::use_version("patch")
+## devtools::check() # Run one last check
 
 # PUSH CHANGES TO GITHUB
 
-## devtools::check() # Run one last check
 ## devtools::release() # Verify you're ready for release, and release -- used to SUBMIT package to CRAN
