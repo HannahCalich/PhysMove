@@ -1,76 +1,176 @@
-### Prepare for CRAN ----
+### Package development and CRAN checks
 
-### Update license info - if applicable
-# usethis::use_gpl_license()
+### Dev history based on recommendations from:
+# https://www.mzes.uni-mannheim.de/socialsciencedatalab/article/r-package/
+# https://github.com/ThinkR-open/prepare-for-cran
 
+#===========================================================================================
+### Package details
+#===========================================================================================
+devtools::document() # Update manual
+usethis::use_news_md() # Update NEWS - Bump version manually and add list of changes
+usethis::use_cran_comments(open = rlang::is_interactive()) # Update comments for CRAN
+usethis::use_version(which = c("patch", "minor", "major", "dev")[1]) # Upgrade version number
+usethis::use_version("patch")
+usethis::use_gpl_license() # Update license info - if applicable
+devtools::spell_check() # Check spelling
+
+#===========================================================================================
+### Package standard formatting checks
+#===========================================================================================
+goodpractice::gp() # Goodpractice check -- skipping for now, some good ideas but not urgent
+inteRgrate::check_pkg() # "installs package dependencies, builds & installs the package, before running package check" -- OK
+inteRgrate::check_lintr() # check if code "adheres to standards" -- skipping this, some good ideas but not urgent
+inteRgrate::check_tidy_description() # Check description is tidy -- OK
+inteRgrate::check_r_filenames() # Check file names are correct -- file names need to be lower case -- skipping for now
+inteRgrate::check_gitignore() # Check .gitignore contains standard files -- OK
+
+### Summary of standard formatting checks:
+## goodpractice::gp() and inteRgrate::check_lintr() has some good ideas but they aren't urgent edits, can do while in review
+## File names should be converted to lower case, can do while in review
+## All others ok/pass
+
+#===========================================================================================
 ### Run tests and examples
-# usethis::use_test("PhysMove") # set up test files
-devtools::test() #
-devtools::run_examples()
+#===========================================================================================
+# usethis::use_test("PhysMove") # set up test files (commented because this creates initial test files)
+devtools::test() # Runs all tests in package -- Pass
+devtools::test_coverage() # Computes test coverage for package
+devtools::run_examples() # Check examples -- OK
 
+### Summary of test and example checks:
+## test_coverage not used because all troubleshooting was done before I learned about this option but it will be used in future
+## All others ok/pass
+
+#===========================================================================================
 ### Check package as CRAN
-rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"))
-devtools::check(remote = TRUE, manual = TRUE)
+#===========================================================================================
+devtools::check() # Local R CMD check -- OK
+devtools::check(remote = TRUE, manual = TRUE) # Remote CRAN check with manual -- some expected notes, see below
+devtools::check_rhub() # See notes below
+rhub::check_for_cran() # See notes below
 
-### Check content
-# install.packages('checkhelper', repos = 'https://thinkr-open.r-universe.dev')
-checkhelper::find_missing_tags()
-# _Check that you let the house clean after the check, examples and tests
-all_files_remaining <- checkhelper::check_clean_userspace()
-all_files_remaining
+### Summary of CRAN checks:
+# NOTES:
+#   * checking CRAN incoming feasibility ... NOTE
+# Maintainer: 'Hannah J. Calich <hannah.calich@anu.edu.au>'
+# New submission
 
-### Check spelling
-# usethis::use_spell_check()
-spelling::spell_check_package()
+# Suggests or Enhances not in mainstream repositories:
+#   infomapecology
+# Availability using Additional_repositories specification:
+#   infomapecology   yes   https://HannahCalich.github.io/drat
 
-### Check URL are correct
-# install.packages('urlchecker', repos = 'https://r-lib.r-universe.dev')
-urlchecker::url_check()
-urlchecker::url_update()
+## -- This is fine, using a drat repository is common and this is the only way I could get infomap pass CRAN
 
+# Found the following (possibly) invalid URLs:
+#   URL: https://github.com/HannahCalich/PhysMove
+# From: DESCRIPTION
+# Status: 404
+# Message: Not Found
+# URL: https://github.com/HannahCalich/PhysMove/actions
+# From: README.md
+# Status: 404
+# Message: Not Found
+# URL: https://github.com/HannahCalich/PhysMove/issues
+# From: DESCRIPTION
+# Status: 404
+# Message: Not Found
+
+## -- These messages are fine, the repo is private so these URLs will fail until the repo is public
+
+# Size of tarball: 5422183 bytes
+# * checking for non-standard things in the check directory ... NOTE
+# Found the following files/directories:
+#   ''NULL''
+
+## -- According to R-Hub maintainer this should be ignored
+## -- (https://stackoverflow.com/questions/76317685/found-the-following-files-directories-null-when-i-run-devtoolscheck-rhub)
+
+# * checking for detritus in the temp directory ... NOTE
+# Found the following files/directories:
+#   'lastMiKTeXException'
+
+## -- This is likely related to R-hub and is being ignored
+
+#===========================================================================================
+### check on windows
+#===========================================================================================
+rhub::check_on_windows(check_args = "--force-multiarch") # OK
+# devtools::check_win_devel() # Not run -- This uploads to win-builder.r-project.org and isn't recommended for private packages
+
+### Summary of windows checks:
+## No problems detected
+
+#===========================================================================================
 ### check on other distributions
-devtools::check_rhub(platforms = "fedora-clang-devel") # _rhub
-# Notes from rhub that are apparently associated with r-hub and not PhysMove
-# N  checking for non-standard things in the check directory
-# Found the following files/directories:
-#  ''NULL''
-# N  checking for detritus in the temp directory
-# Found the following files/directories:
-#  'lastMiKTeXException'
+#===========================================================================================
+devtools::check_rhub(platforms = "fedora-clang-devel") # See notes below
+rhub::check_on_linux() # Email says PREPERROR but notes say success and there's no error from R so going to assume this is ok
+rhub::check_on_ubuntu() # Email says PREPERROR but notes say success and there's no error from R so going to assume this is ok
 
-rhub::check_on_windows(check_args = "--force-multiarch")
-rhub::check_on_solaris()
-# devtools::check_win_devel() # _win devel
-# This uploads to win-builder.r-project.org and isn't recommended for private packages
-# "This service is intended for useRs who do not have Windows available for checking and building Windows binary package"
+## Summary of checks on other distributions:
+# * checking CRAN incoming feasibility ... [7s/25s] NOTE
+# Maintainer: ‘Hannah J. Calich <hannah.calich@anu.edu.au>’
+#
+# New submission
+#
+# Suggests or Enhances not in mainstream repositories:
+#   infomapecology
+# Availability using Additional_repositories specification:
+#   infomapecology   yes   https://HannahCalich.github.io/drat
+#
+# Found the following (possibly) invalid URLs:
+#   URL: https://github.com/HannahCalich/PhysMove
+# From: DESCRIPTION
+# Status: 404
+# Message: Not Found
+# URL: https://github.com/HannahCalich/PhysMove/actions
+# From: README.md
+# Status: 404
+# Message: Not Found
+# URL: https://github.com/HannahCalich/PhysMove/issues
+# From: DESCRIPTION
+# Status: 404
+# Message: Not Found
+#
+# Size of tarball: 5421613 bytes
+# * checking examples ... [16s/34s] NOTE
+# Examples with CPU (user + system) or elapsed time > 5s
+# user system elapsed
+# Occupancy 2.614    0.1   5.596
+#
+# * checking HTML version of manual ... NOTE
+# Skipping checking HTML validation: no command 'tidy' found
 
-### Check reverse dependencies
+## -- May need to look into occupancy note, it appears it's slower on fedora?
+## -- missing 'tidy' appears to related to test platform, not PhysMove, so this can be ignored
+
+#===========================================================================================
+### Check reverse dependencies -- Not currently relevant but keeping for future
+#===========================================================================================
 # remotes::install_github("r-lib/revdepcheck")
 # install.packages('revdepcheck', repos = 'https://r-lib.r-universe.dev')
 # usethis::use_git_ignore("revdep/")
 # usethis::use_build_ignore("revdep/")
 
-devtools::revdep()
-library(revdepcheck)
-# In another session
-id <- rstudioapi::terminalExecute("Rscript -e 'revdepcheck::revdep_check(num_workers = 4)'")
-rstudioapi::terminalKill(id)
-# See outputs
-revdep_details(revdep = "pkg")
-revdep_summary()                 # table of results by package
-revdep_report() # in revdep/
-# Clean up when on CRAN
-revdep_reset()
+# devtools::revdep()
+# library(revdepcheck)
+# # In another session
+# id <- rstudioapi::terminalExecute("Rscript -e 'revdepcheck::revdep_check(num_workers = 4)'")
+# rstudioapi::terminalKill(id)
+# # See outputs
+# revdep_details(revdep = "pkg")
+# revdep_summary()                 # table of results by package
+# revdep_report() # in revdep/
+# # Clean up when on CRAN
+# revdep_reset()
 
-### Update NEWS
-# Bump version manually and add list of changes
-usethis::use_news_md() #HJC Added
+#===========================================================================================
+### Release package ---
+#===========================================================================================
 
-### Add comments for CRAN
-usethis::use_cran_comments(open = rlang::is_interactive())
+# PUSH CHANGES TO GITHUB
 
-## Upgrade version number
-usethis::use_version(which = c("patch", "minor", "major", "dev")[1])
-
-# Verify you're ready for release, and release
-# devtools::release()
+## devtools::check() # Run one last check
+## devtools::release() # Verify you're ready for release, and release -- used to SUBMIT package to CRAN
