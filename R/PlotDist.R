@@ -27,6 +27,10 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
     stop("Please fit distributions using the FitDist function prior to executing PlotDist")
   }
 
+  if (!("list" %in% is(displacements))){
+    stop("Distributions can only be fit to the output from the CalcDisp function in list format.")
+  }
+
   normalise <- distResults[[2]]
   distResults <- distResults[[1]]
 
@@ -106,7 +110,7 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
   if (fitLines==TRUE){
     if ("lnorm" %in% setDist){
       MyLogNormalPDF <- function(parameters, displacements){ # 1=mu, 2= sigma
-        LN_PDF = exp((plnorm(displacements, parameters[1], parameters[2], lower.tail=FALSE, log.p = TRUE)) -
+        LN_PDF <- exp((plnorm(displacements, parameters[1], parameters[2], lower.tail=FALSE, log.p = TRUE)) -
                        (plnorm(parameters[3],parameters[1], parameters[2], lower.tail = FALSE, log.p = TRUE)))
         return(LN_PDF)
       }
@@ -115,7 +119,7 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
       LN_sigma <- distResults[which(distResults$distribution=="lnorm"),"parameter2"]
       xval <- exp(seq(log(LN_xmin), log(max(x)), length.out = 100)) # log spaced sequence of displacements for log-log plot
       yval <- MyLogNormalPDF(c(LN_mu, LN_sigma, LN_xmin), xval)
-      yval[xval < LN_xmin] = 0
+      yval[xval < LN_xmin] <- 0
       dif <- x - LN_xmin
       upper <- which(dif >= 0)[1]
       lower <- max(upper - 1, 1)
@@ -135,15 +139,15 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
     }
     if ("exp" %in% setDist){
       MyExponentialPDF<- function(parameters, displacements){
-        Exp_CDF = exp(pexp(displacements, parameters[1], lower.tail = FALSE, log.p = TRUE) - pexp(parameters[2], parameters[1], lower.tail = FALSE, log.p = TRUE))
-        # Exp_CDF = parameters*exp(-parameters*displacements)
+        Exp_CDF <- exp(pexp(displacements, parameters[1], lower.tail = FALSE, log.p = TRUE) - pexp(parameters[2], parameters[1], lower.tail = FALSE, log.p = TRUE))
+        # Exp_CDF <- parameters*exp(-parameters*displacements)
         return(Exp_CDF)
       }
       Exp_xmin <- distResults[which(distResults$distribution=="exp"),"dmin"]
       Exp_lambda <- distResults[which(distResults$distribution=="exp"),"parameter1"]
       xval <- exp(seq(log(Exp_xmin), log(max(x)), length.out = 100)) # log spaced sequence of displacements for log-log plot
       yval <- MyExponentialPDF(c(Exp_lambda, Exp_xmin), xval)
-      yval[xval < Exp_xmin] = 0
+      yval[xval < Exp_xmin] <- 0
       dif <- x - Exp_xmin
       upper <- which(dif >= 0)[1]
       lower <- max(upper - 1, 1)
@@ -163,14 +167,14 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
     }
     if ("pl" %in% setDist){
       MyPowerLawCDF <- function(parameters, displacements){
-        PL_CDF  = 1 - (displacements/parameters[2])^(-parameters[1]+1)
+        PL_CDF  <- 1 - (displacements/parameters[2])^(-parameters[1]+1)
         return(PL_CDF)
       }
       PL_xmin <- distResults[which(distResults$distribution=="pl"),"dmin"]
       PL_alpha <- distResults[which(distResults$distribution=="pl"),"parameter1"]
       xval <- exp(seq(log(PL_xmin), log(max(x)), length.out = 100)) # log spaced sequence of displacements for log-log plot
       yval <- 1- MyPowerLawCDF(c(PL_alpha, PL_xmin), xval)
-      yval[xval < round(PL_xmin)] = 0
+      yval[xval < PL_xmin] <- 0
       dif <- x - PL_xmin
       upper <- which(dif >= 0)[1]
       lower <- max(upper - 1, 1)
