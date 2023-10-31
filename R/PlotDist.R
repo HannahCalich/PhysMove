@@ -9,8 +9,7 @@
 #' @param setDist Plot a subset of lines for each distribution fit calculated with the \code{\link{FitDist}} function (e.g., setDist=c("pl","exp"))
 #' Options include "pl", "exp", and "lnorm". The lines will be drawn in order from "pl", then "exp", then "lnorm" (when applicable).
 #' By default all lines are plotted. Default is NULL.
-#' @param colours Colours for each fit line. The colours correspond to the drawing order: "pl", "exp", "lnorm" (when applicable).
-#' Valid input options include colour names or hex numbers. Default is colours=c("red","gold2","blue").
+#' @param colours Colours for each fit line. Valid input options include colour names or hex numbers. Default is colours=c("red","gold2","blue").
 #' @param legend Add legend with legend=TRUE. Default is TRUE.
 #' @return Complementary cumulative distribution function (ccdf) plot of displacements with fit lines (if fitLines=TRUE).
 #' @importFrom stats plnorm pexp
@@ -42,7 +41,7 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
 
   # to make plot colours match dist
   z <- 1
-  if("lnorm" %in% setDist){
+  if("pl" %in% setDist){
     plotCol <- colours[z]
     z <- 2
   } else {
@@ -56,7 +55,7 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
     plotCol <- c(plotCol,NA)
   }
 
-  if("pl" %in% setDist){
+  if("lnorm" %in% setDist){
     plotCol <- c(plotCol,colours[z])
   } else {
     plotCol <- c(plotCol,NA)
