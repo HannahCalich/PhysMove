@@ -24,8 +24,7 @@ PlotDist(
 Options include "pl", "exp", and "lnorm". The lines will be drawn in order from "pl", then "exp", then "lnorm" (when applicable).
 By default all lines are plotted. Default is NULL.}
 
-\item{colours}{Colours for each fit line. The colours correspond to the drawing order: "pl", "exp", "lnorm" (when applicable).
-Valid input options include colour names or hex numbers. Default is colours=c("red","gold2","blue").}
+\item{colours}{Colours for each fit line. Valid input options include colour names or hex numbers. Default is colours=c("red","gold2","blue").}
 
 \item{legend}{Add legend with legend=TRUE. Default is TRUE.}
 }
