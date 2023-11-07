@@ -32,18 +32,18 @@ knitr::opts_chunk$set(dpi = 600,
 
 ## Index
 
-1. [Introduction and data preparation](introduction.html)
-2. [Movement patterns](movement_patterns.html)
-3. [Space-use patterns](space_use_patterns.html)
-4. [Intraspecific movements](intraspecific_movements.html)
+1. [Introduction and data preparation](pt1_introduction.html)
+2. [Movement patterns](pt2_movement_patterns.html)
+3. [Space-use patterns](pt3_space_use_patterns.html)
+4. [Intraspecific movements](pt4_intraspecific_movements.html)
 
 ## *Intraspecific movements*
 
 PhysMove includes three metrics for quantifying intraspecific movement patterns that are based on four functions, including:
 
-  * [Track dispersion](intraspecific_movements.html#track-dispersion): `GyrationRad()` and `PlotPDF()`
-  * [Track entropy](intraspecific_movements.html#track-entropy): `Entropy()` and `PlotPDF()`
-  * [Track predictability](intraspecific_movements.html#track-predictability): `Predictability()` and `PlotPDF()`
+  * [Track dispersion](pt4_intraspecific_movements.html#track-dispersion): `GyrationRad()` and `PlotPDF()`
+  * [Track entropy](pt4_intraspecific_movements.html#track-entropy): `Entropy()` and `PlotPDF()`
+  * [Track predictability](pt4_intraspecific_movements.html#track-predictability): `Predictability()` and `PlotPDF()`
 
 ```{r load physmove intraspecific vignette, echo=FALSE}
 # Load PhysMove
@@ -54,7 +54,7 @@ library(PhysMove)
 
 The `GyrationRad()` function calculates the dispersion (i.e., the gyration radius) of each track in a dataset (Figure V16).  
 
-`GyrationRad()` requires a data frame with telemetry data (see [data formatting](introduction.html#data-formatting)) and includes two optional parameters:
+`GyrationRad()` requires a data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)) and includes two optional parameters:
 
 * `map`: create a map (`map=TRUE`, by default), and
 * `mapCol`: change the colour of the points, which indicate average track location,
@@ -100,13 +100,13 @@ pdf.gr <- PlotPDF((GR$`rG (km)`), desc="GyrationRad")
 $~$
 $~$
 
-[Back to top](intraspecific_movements.html)
+[Back to top](pt4_intraspecific_movements.html)
 
 ## Track entropy
 
 The `Entropy()` function calculates track randomness based on the fraction of data points from each track within each grid cell (Figure V18). The resulting entropy scores are then normalised so results can be compared between individuals. 
 
-`Entropy()` requires a data frame with telemetry data (see [data formatting](introduction.html#data-formatting)) and includes two optional parameters:
+`Entropy()` requires a data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)) and includes two optional parameters:
 
 * `gridCell`: change grid cell size in degrees (`gridCell=0.25`, by default), and
 * `histPlot`: output a histogram (`histPlot=TRUE`, by default).
@@ -151,14 +151,14 @@ pdf.ent <- PlotPDF(Ent$normalisedEntropy, "Entropy")
 $~$
 $~$
 
-[Back to top](intraspecific_movements.html)
+[Back to top](pt4_intraspecific_movements.html)
 
 ## Track predictability 
 
 The `Predictability()` function calculates the limit of predictability for each track based on their individual entropy scores (Figure V20;
 Figure 1).  
 
-`Predictability()` requires a data frame with telemetry data (see [data formatting](introduction.html#data-formatting)) and a data frame of results output from `Entropy()`, and includes two optional parameters:
+`Predictability()` requires a data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)) and a data frame of results output from `Entropy()`, and includes two optional parameters:
 
 * `startVal`: starting value used to find a root value for the limit of predictability equation (`startVal=0.99`, by default), and
 * `histPlot`: output a histogram (`histPlot=TRUE`, by default).
@@ -201,7 +201,7 @@ pdf.pred <- PlotPDF(Pred$Predictability, desc="Predictability")
 $~$
 $~$
 
-[Back to top](intraspecific_movements.html)
+[Back to top](pt4_intraspecific_movements.html)
 
 ## References & Recommended resources
 

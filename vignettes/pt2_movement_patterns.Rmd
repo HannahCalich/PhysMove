@@ -32,20 +32,20 @@ knitr::opts_chunk$set(dpi = 600,
 
 ## Index
 
-1. [Introduction and data preparation](introduction.html)
-2. [Movement patterns](movement_patterns.html)
-3. [Space-use patterns](space_use_patterns.html)
-4. [Intraspecific movements](intraspecific_movements.html)
+1. [Introduction and data preparation](pt1_introduction.html)
+2. [Movement patterns](pt2_movement_patterns.html)
+3. [Space-use patterns](pt3_space_use_patterns.html)
+4. [Intraspecific movements](pt4_intraspecific_movements.html)
 
 ## *Movement patterns*
 
 PhysMove includes 5 metrics for quantifying movement patterns that are based on ten functions, including:
 
-  * [Scale of movement](movement_patterns.html#scale-of-movement): `RMS()` 
-  * [Movement patterns across temporal scales](movement_patterns.html#movement-patterns-across-temporal-scales): `CalcDisp()` and `PlotDispPDF()`
-  * [Search patterns](movement_patterns.html#search-patterns): `FitDisp()`, `CompDist()`, and `PlotDist()`
-  * [Influence of correlations on movement decisions](movement_patterns.html#influence-of-correlations-on-movement-decisions): `Randomise()` and `PlotRandomTracks()`
-  * [Turning angles](movement_patterns.html#turning-angles): `TurningAngles()` and `PlotAngles()`
+  * [Scale of movement](pt2_movement_patterns.html#scale-of-movement): `RMS()` 
+  * [Movement patterns across temporal scales](pt2_movement_patterns.html#movement-patterns-across-temporal-scales): `CalcDisp()` and `PlotDispPDF()`
+  * [Search patterns](pt2_movement_patterns.html#search-patterns): `FitDisp()`, `CompDist()`, and `PlotDist()`
+  * [Influence of correlations on movement decisions](pt2_movement_patterns.html#influence-of-correlations-on-movement-decisions): `Randomise()` and `PlotRandomTracks()`
+  * [Turning angles](pt2_movement_patterns.html#turning-angles): `TurningAngles()` and `PlotAngles()`
 
 ```{r load physmove movement vignette, echo=FALSE}
 # Load PhysMove
@@ -57,7 +57,7 @@ library(PhysMove)
 The `RMS()` function provides insights into the scale of movement by calculating mean and root-mean-square (RMS) displacements and
 plotting them over time (Figure V2).
 
-`RMS()` requires a data frame with telemetry data (see [data formatting](introduction.html#data-formatting)) and includes four optional parameters:
+`RMS()` requires a data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)) and includes four optional parameters:
 
   * `timeUnit`: time unit used to calculate the time between locations (`timeUnit= “days”`, by default),
   * `wBins`: width of the time bins used to calculate how frequently displacements occurred
@@ -110,13 +110,13 @@ RMSlinearModel$estimate[2]
 $~$
 $~$
 
-[Back to top](movement_patterns.html)
+[Back to top](pt2_movement_patterns.html)
 
 ## Movement patterns across temporal scales
 
 The `CalcDisp()` function calculates displacements travelled in kilometres over set time windows.
 
-`CalcDisp()` requires a data frame with telemetry data (see [data formatting](introduction.html#data-formatting)) and has four optional parameters that allow you to change different aspects of the time windows:
+`CalcDisp()` requires a data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)) and has four optional parameters that allow you to change different aspects of the time windows:
 
   * `min_hr` and `max_hr`: set the minimum and maximum times between
   location estimates in hours, respectively (`min_hr=24` and `max_hr=240`, by default),
@@ -189,7 +189,7 @@ plot.data.norm <- PlotDispPDF(disp.all, normalised=FALSE)
 $~$
 $~$
 
-[Back to top](movement_patterns.html)
+[Back to top](pt2_movement_patterns.html)
 
 ## Search patterns 
 
@@ -379,13 +379,13 @@ Overall conclusion: As both full and truncated distribution analyses identified 
 $~$
 $~$
 
-[Back to top](movement_patterns.html)
+[Back to top](pt2_movement_patterns.html)
 
 ## Influence of correlations on movement decisions 
 
 The `Randomise()` function can be used to gain insights into how correlations influenced a species' movements and space-use (Figure V9). 
 
-`Randomise()` requires a data frame with telemetry data (see [data formatting](introduction.html#data-formatting)) and includes four optional parameters:
+`Randomise()` requires a data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)) and includes four optional parameters:
 
 * `randTrack`: change the number of randomised tracks created (`randTrack=100`, by default),
 * `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default),
@@ -440,7 +440,7 @@ To visualise the tracks created with `Randomise()` you can use `PlotRandomTracks
 
 `PlotRandomTracks()` requires three parameters:
 
-1. data frame with telemetry data (see [data formatting](introduction.html#data-formatting)),
+1. data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)),
 2. reference id of the track you want to map (ref must be included in the telemetry data frame), and
 3. results from `Randomise()`.
 
@@ -470,13 +470,13 @@ plot.data.random.tracks <- PlotRandomTracks(tracks, ref=1, randomise.result)
 $~$
 $~$
 
-[Back to top](movement_patterns.html)
+[Back to top](pt2_movement_patterns.html)
 
 ## Turning angles
 
 The `TurningAngles()` function calculates turning angles between sets of three consecutive location estimates separated by set time windows to describe how species explore their habitats (Figure V11).
 
-`TurningAngles()` requires a data frame with telemetry data (see [data formatting](introduction.html#data-formatting)) and includes 5 optional parameters:
+`TurningAngles()` requires a data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)) and includes 5 optional parameters:
 
 * `min_hr` and `max_hr`: set the minimum and maximum times between
 location estimates in hours (`min_hr=24` and `max_hr=240`, by default),
@@ -549,9 +549,9 @@ plot.data.angles <- PlotAngles(angle.results)
 $~$
 $~$
 
-[Proceed to Space-Use Patterns](space_use_patterns.html)
+[Proceed to Space-Use Patterns](pt3_space_use_patterns.html)
 
-[Back to top](movement_patterns.html)
+[Back to top](pt2_movement_patterns.html)
 
 
 ## References & Recommended resources

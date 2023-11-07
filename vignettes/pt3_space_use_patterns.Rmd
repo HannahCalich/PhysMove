@@ -33,17 +33,17 @@ knitr::opts_chunk$set(dpi = 600,
 
 ## Index
 
-1. [Introduction and data preparation](introduction.html)
-2. [Movement patterns](movement_patterns.html)
-3. [Space-use patterns](space_use_patterns.html)
-4. [Intraspecific movements](intraspecific_movements.html)
+1. [Introduction and data preparation](pt1_introduction.html)
+2. [Movement patterns](pt2_movement_patterns.html)
+3. [Space-use patterns](pt3_space_use_patterns.html)
+4. [Intraspecific movements](pt4_intraspecific_movements.html)
 
 ## *Space-use patterns*
 
 PhysMove includes two metrics for identifying space-use patterns that are based on four functions, including:
 
-  * [Community-wide movements](space_use_patterns.html#community-wide-movements): `InfomapCommunities()` and `CommunityMap()`
-  * [Occupancy patterns](space_use_patterns.html#occupancy-patterns): `Occupancy()` and `PlotPDF()`
+  * [Community-wide movements](pt3_space_use_patterns.html#community-wide-movements): `InfomapCommunities()` and `CommunityMap()`
+  * [Occupancy patterns](pt3_space_use_patterns.html#occupancy-patterns): `Occupancy()` and `PlotPDF()`
 
 ```{r load physmove space-use vignette, echo=FALSE}
 # Load PhysMove
@@ -58,7 +58,7 @@ The `InfomapCommunities()` function identifies community-wide movements in two s
 
 To ensure the `infomapecology` algorithm calculates movement patterns consistent with telemetry data, we assign parameters to the infomapecology function that allow for directed movement, self-links (i.e., individuals can remain in the same grid cell over time), and hierarchical partitioning (i.e., the resulting communities are composed of multiple levels). Because we allowed hierarchical partitioning, the resulting communities are associated with different levels. Level 1 communities are the most inclusive and have been used to identify community-wide movements (following Rodríguez *et* *al*. 2017 and Calich *et* *al*. 2021). 
 
-The `InfomapCommunities()` function requires a data frame with telemetry data (see [data formatting](introduction.html#data-formatting)) and includes five optional parameters:
+The `InfomapCommunities()` function requires a data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)) and includes five optional parameters:
 
 * `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default),
 * `hours`: number of hours between location estimates (`hours=24`, by default), 
@@ -102,7 +102,7 @@ CommunityMap(infomapResult)
 
 **Figure** **v13** Map illustrating level 1 Infomap communities from the `tracks` dataset determined using `InfomapCommunities()` default parameters. Map created with `CommunityMap()` default parameters.
 
-[Back to top](space_use_patterns.html)
+[Back to top](pt3_space_use_patterns.html)
 
 $~$
 $~$
@@ -111,7 +111,7 @@ $~$
 
 The `Occupancy()` function helps describe species’ space-use patterns by calculating the total number of location estimates within each grid cell and dividing this sum by the grid cell’s area, calculated using spherical coordinates (Figure V14). 
 
-`Occupancy()` requires a data frame with telemetry data (see [data formatting](introduction.html#data-formatting)) and includes three optional parameters:
+`Occupancy()` requires a data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)) and includes three optional parameters:
 
 * `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default),
 * `map`: present results in a map (`map=TRUE`, by default) and,
@@ -157,9 +157,9 @@ pdf.occ  <- PlotPDF(Occ$Occupancy, desc="Occupancy")
 $~$
 $~$
 
-[Proceed to Intraspecific Movements](intraspecific_movements.html)
+[Proceed to Intraspecific Movements](pt4_intraspecific_movements.html)
 
-[Back to top](space_use_patterns.html)
+[Back to top](pt3_space_use_patterns.html)
 
 $~$
 $~$
