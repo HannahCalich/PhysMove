@@ -32,10 +32,10 @@ knitr::opts_chunk$set(dpi = 600,
 
 ## Index 
 
-1. [Introduction and data preparation](introduction.html)
-2. [Movement patterns](movement_patterns.html) 
-3. [Space-use patterns](space_use_patterns.html)
-4. [Intraspecific movements](intraspecific_movements.html)
+1. [Introduction and data preparation](pt1_introduction.html)
+2. [Movement patterns](pt2_movement_patterns.html) 
+3. [Space-use patterns](pt3_space_use_patterns.html)
+4. [Intraspecific movements](pt4_intraspecific_movements.html)
 
 ## Introduction 
 
