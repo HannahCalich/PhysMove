@@ -32,14 +32,14 @@ knitr::opts_chunk$set(dpi = 600,
 
 ## Index 
 
-1. [Introduction and data preparation](introduction.html)
-2. [Movement patterns](movement_patterns.html) 
-3. [Space-use patterns](space_use_patterns.html)
-4. [Intraspecific movements](intraspecific_movements.html)
+1. [Introduction and data preparation](pt1_introduction.html)
+2. [Movement patterns](pt2_movement_patterns.html) 
+3. [Space-use patterns](pt3_space_use_patterns.html)
+4. [Intraspecific movements](pt4_intraspecific_movements.html)
 
 ## Introduction 
 
-PhysMove contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. These vignettes demonstrate how to calculate each of the PhysMove methods and review all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove (see [explore tracks dataset](introduction.html#explore-tracks-dataset) for further details). For further details on our methods and interpreting results please see our corresponding manuscript. 
+PhysMove contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. These vignettes demonstrate how to calculate each of the PhysMove methods and review all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with PhysMove (see [explore tracks dataset](pt1_introduction.html#explore-tracks-dataset) for further details). For further details on our methods and interpreting results please see our corresponding manuscript. 
 
 ## Installation 
 
@@ -104,7 +104,7 @@ str(tracks)
 
 A basic map of your telemetry data can be created using our `PlotTracks()` function (Figure V1). 
 
-`PlotTracks()` requires a data frame with telemetry data (see [data formatting](introduction.html#data-formatting)) and includes three optional parameters:
+`PlotTracks()` requires a data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)) and includes three optional parameters:
 
   * `ref`: plot specific tracks based on their reference IDs (`ref=NULL`, by default), 
   * `tracks`: connect points with lines (`tracks=TRUE`, by default), and
@@ -121,9 +121,9 @@ PlotTracks(tracks)
 $~$
 $~$
 
-[Proceed to Movement Patterns](movement_patterns.html)
+[Proceed to Movement Patterns](pt2_movement_patterns.html)
 
-[Back to top](introduction.html)
+[Back to top](pt1_introduction.html)
 
 
 ## References & Recommended resources
