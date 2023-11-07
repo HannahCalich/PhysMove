@@ -225,7 +225,7 @@ The second list element is a logical argument that records if the displacements 
 Uses the results from `FitDist()` to plot ccdfs of the displacements with fit lines for each distribution. The `PlotDist()` function requires a list of displacements calculated using `CalcDisp()`, the results from `FitDist()`, and includes four optional parameters:
 
   * `fitLines`: add fit lines for each distribution (`fitLines=TRUE`, by default),
-  * `setDist`: plot only specific distributions (`setDist=NULL`, by default),
+  * `setDist`: plot only specific distributions (`setDist=NULL`, by default, which will plot all distributions),
   * `colours`: change the colours of the fit lines (`colours=c("red","gold2","blue")`, by default), and
   * `legend`: add a legend (`legend=TRUE`, by default).
     
