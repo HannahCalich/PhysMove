@@ -42,13 +42,65 @@ knitr::opts_chunk$set(dpi = 600,
 
 PhysMove includes two metrics for identifying space-use patterns that are based on four functions, including:
 
-  * [Community-wide movements](pt3_space_use_patterns.html#community-wide-movements): `InfomapCommunities()` and `CommunityMap()`
   * [Occupancy patterns](pt3_space_use_patterns.html#occupancy-patterns): `Occupancy()` and `PlotPDF()`
+  * [Community-wide movements](pt3_space_use_patterns.html#community-wide-movements): `InfomapCommunities()` and `CommunityMap()`
 
 ```{r load physmove space-use vignette, echo=FALSE}
 # Load PhysMove
 library(PhysMove)
 ```
+
+## Occupancy patterns
+
+The `Occupancy()` function helps describe species’ space-use patterns by calculating the total number of location estimates within each grid cell and dividing this sum by the grid cell’s area, calculated using spherical coordinates (Figure V13). 
+
+`Occupancy()` requires a data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)) and includes three optional parameters:
+
+* `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default),
+* `map`: present results in a map (`map=TRUE`, by default) and,
+* `colGrad`: edit the colours used in the map to indicate low, moderate, and high occupancy, respectively, which are visualised using scale_fill_gradientn() from the ggplot2 package (Wickham 2016) (`colGrad=c(“blue”, “light blue”, “red”)`, by default).
+
+`Occupancy()` outputs a data frame of all results, including:
+
+* *Latitude* and *Longitude*: coordinates for the centre point of each grid cell, 
+* *Area*: area of the grid cell,
+* *Counts*: the number of location estimates recorded in the grid cell, and 
+* *Occupancy*: occupancy values per grid cell (number of counts/area).
+
+```{r calc occ, eval=FALSE, echo=TRUE, message=FALSE}
+# Create an occupancy map based on the tracks dataset
+Occ <- Occupancy(tracks)
+```
+
+<img src="../vignettes/word_formatted/images/occ_map-1.png" width="60%" />
+
+**Figure** **V13** Map of occupancy patterns from the `tracks` dataset. Map created with `Occupancy()` default parameters.
+
+```{r summarise occ, echo=TRUE, eval=FALSE}
+# Summarize occupancy results
+summary(Occ) 
+```
+
+<img src="../vignettes/word_formatted/tables/summary_occ.png" width="100%" />
+
+
+### Probability density function of occupancy results
+
+A pdf of the results from `Occupancy()` can be plotted with the `PlotPDF()` function when the `desc` parameter is set to “Occupancy” (Figure V14).
+
+```{r pdf occ, echo=TRUE, eval=FALSE}
+# Create a pdf plot of occupancy values
+pdf.occ  <- PlotPDF(Occ$Occupancy, desc="Occupancy")
+```
+
+<img src="../vignettes/word_formatted/images/occ_pdf-1.png" width="60%" />
+
+**Figure V14** Probability density function (pdf) plot of occupancy values for the tracks dataset calculated with `Occupancy()` default parameters. Plot created using `PlotPDF()` with `desc=“Occupancy”`.
+
+[Back to top](pt3_space_use_patterns.html)
+
+$~$
+$~$
 
 ## Community-wide movements 
 
@@ -86,7 +138,7 @@ str(infomapResult[["infomap_object"]])
 
 ### Plot Infomap communities
 
-`CommunityMap()` visualises results from `InfomapCommunities()` by converting the *Infomap monolayer object* into a map (Figure V13).
+`CommunityMap()` visualises results from `InfomapCommunities()` by converting the *Infomap monolayer object* into a map (Figure V15).
 
 The `CommunityMap()` function requires the *Infomap monolayer object* output from `InfomapCommunities()` and includes two optional parameters:
 
@@ -100,59 +152,7 @@ CommunityMap(infomapResult)
 
 <img src="../vignettes/word_formatted/images/infomap_map-1.png" width="60%" />
 
-**Figure** **v13** Map illustrating level 1 Infomap communities from the `tracks` dataset determined using `InfomapCommunities()` default parameters. Map created with `CommunityMap()` default parameters.
-
-[Back to top](pt3_space_use_patterns.html)
-
-$~$
-$~$
-
-## Occupancy patterns
-
-The `Occupancy()` function helps describe species’ space-use patterns by calculating the total number of location estimates within each grid cell and dividing this sum by the grid cell’s area, calculated using spherical coordinates (Figure V14). 
-
-`Occupancy()` requires a data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)) and includes three optional parameters:
-
-* `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default),
-* `map`: present results in a map (`map=TRUE`, by default) and,
-* `colGrad`: edit the colours used in the map to indicate low, moderate, and high occupancy, respectively, which are visualised using scale_fill_gradientn() from the ggplot2 package (Wickham 2016) (`colGrad=c(“blue”, “light blue”, “red”)`, by default).
-
-`Occupancy()` outputs a data frame of all results, including:
-
-* *Latitude* and *Longitude*: coordinates for the centre point of each grid cell, 
-* *Area*: area of the grid cell,
-* *Counts*: the number of location estimates recorded in the grid cell, and 
-* *Occupancy*: occupancy values per grid cell (number of counts/area).
-
-```{r calc occ, eval=FALSE, echo=TRUE, message=FALSE}
-# Create an occupancy map based on the tracks dataset
-Occ <- Occupancy(tracks)
-```
-
-<img src="../vignettes/word_formatted/images/occ_map-1.png" width="60%" />
-
-**Figure** **V14** Map of occupancy patterns from the `tracks` dataset. Map created with `Occupancy()` default parameters.
-
-```{r summarise occ, echo=TRUE, eval=FALSE}
-# Summarize occupancy results
-summary(Occ) 
-```
-
-<img src="../vignettes/word_formatted/tables/summary_occ.png" width="100%" />
-
-
-### Probability density function of occupancy results
-
-A pdf of the results from `Occupancy()` can be plotted with the `PlotPDF()` function when the `desc` parameter is set to “Occupancy” (Figure V15).
-
-```{r pdf occ, echo=TRUE, eval=FALSE}
-# Create a pdf plot of occupancy values
-pdf.occ  <- PlotPDF(Occ$Occupancy, desc="Occupancy")
-```
-
-<img src="../vignettes/word_formatted/images/occ_pdf-1.png" width="60%" />
-
-**Figure V15** Probability density function (pdf) plot of occupancy values for the tracks dataset calculated with `Occupancy()` default parameters. Plot created using `PlotPDF()` with `desc=“Occupancy”`.
+**Figure** **v15** Map illustrating level 1 Infomap communities from the `tracks` dataset determined using `InfomapCommunities()` default parameters. Map created with `CommunityMap()` default parameters.
 
 $~$
 $~$
