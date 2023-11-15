@@ -97,10 +97,10 @@ pdf.occ  <- PlotPDF(Occ$Occupancy, desc="Occupancy")
 
 **Figure V14** Probability density function (pdf) plot of occupancy values for the tracks dataset calculated with `Occupancy()` default parameters. Plot created using `PlotPDF()` with `desc=“Occupancy”`.
 
-[Back to top](pt3_space_use_patterns.html)
+$~$
+$~$
 
-$~$
-$~$
+[Back to top](pt3_space_use_patterns.html)
 
 ## Community-wide movements 
 
