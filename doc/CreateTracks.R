@@ -52,7 +52,7 @@ for (i in 1:n.tracks){ # for each track
   set.seed(1)
 
   r <- stats::runif(samplesize[i]-1,0,1) # create i displacements based on a uniform distribution between 0-1
-  # exp_x <- r # If you want to folllow a uniform dist instead of an exponential 
+  # exp_x <- r # If you want to folllow a uniform dist instead of an exponential
   exp_x <- distmin-(1/lambda)*log(1-r) # convert displacements to an exponential distribution with an xmin
 
   # calculate angles
