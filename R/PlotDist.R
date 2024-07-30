@@ -1,9 +1,8 @@
-#' Plot best-fit distributions to complementary cumulative distribution function (ccdf) of displacements
+#' Plot best-fit distributions to complementary cumulative distribution function (ccdf) of data
 #'
-#' This function allows you to plot a complementary cumulative distribution function (ccdf) of displacements with fit lines
-#' based on the displacements output from the \code{\link{CalcDisp}} function and the distribution fits calculated with the
-#' \code{\link{FitDist}} function.
-#' @param displacements List of displacements output from the \code{\link{CalcDisp}} function.
+#' This function allows you to plot a complementary cumulative distribution function (ccdf) of values with fit lines
+#' based on distribution fits calculated with the \code{\link{FitDist}} function.
+#' @param input List of values used to fit distributions.
 #' @param distResults List output from the \code{\link{FitDist}} function containing a dataframe of fit results (list element 1) and a normalisation record (list element 2)
 #' @param fitLines Add fit lines based on the parameters calculated with the \code{\link{FitDist}} function. Default is TRUE.
 #' @param setDist Plot a subset of lines for each distribution fit calculated with the \code{\link{FitDist}} function (e.g., setDist=c("pl","exp"))
@@ -11,23 +10,24 @@
 #' By default all lines are plotted. Default is NULL.
 #' @param colours Colours for each fit line. Valid input options include colour names or hex numbers. Default is colours=c("red","gold2","blue").
 #' @param legend Add legend with legend=TRUE. Default is TRUE.
-#' @return Complementary cumulative distribution function (ccdf) plot of displacements with fit lines (if fitLines=TRUE).
+#' @param label X axis label. Note that "Normalised" will automatically be added if distributions were fit to normalised data. Default is NULL and will result in x-axis label of "input data".
+#' @return Complementary cumulative distribution function (ccdf) plot of input with fit lines (if fitLines=TRUE).
 #' @importFrom stats plnorm pexp
-#' @examples PlotDist(disp, distResultsExp)
+#' @examples plotDist(disp, distResultsExp)
 #' @export
 
-PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, colours=c("red","gold2","blue"), legend=TRUE){
+plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c("red","gold2","blue"), legend=TRUE, label=NULL){
 
-  if (exists("displacements")==FALSE){
-    stop("Please calculate displacements using CalcDisp and fit distriubtions using FitDisp prior to executing PlotDist")
+  if (exists("input")==FALSE){
+    stop("Input data are missing")
   }
 
   if (exists("distResults")==FALSE){
-    stop("Please fit distributions using the FitDist function prior to executing PlotDist")
+    stop("Please fit distributions using the FitDist function prior to executing plotDist")
   }
 
-  if (!("list" %in% is(displacements))){
-    stop("Distributions can only be fit to the output from the CalcDisp function in list format.")
+  if (!("list" %in% is(input))){
+    stop("plotDist requires input data in list format")
   }
 
   normalise <- distResults[[2]]
@@ -61,17 +61,22 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
     plotCol <- c(plotCol,NA)
   }
 
+  if(is.null(label)){
+    xlabel <- "input data"
+  } else {
+    xlabel <- label
+  }
+
   if (normalise){
     x <- list()
-    for (d in 1:length(displacements)){
-      disp <- unlist(displacements[d])
+    for (d in 1:length(input)){
+      disp <- unlist(input[d])
       x[[d]] <- disp/mean(disp)
     }
     x <- unlist(x)
-    xlabel <- "Normalised displacements"
+    xlabel <- paste("Normalised", xlabel)
   } else {
-    x <- unlist(displacements)
-    xlabel <- "Displacements (km)"
+    x <- unlist(input)
   }
 
   x <- sort(x)
@@ -108,15 +113,15 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
 
   if (fitLines==TRUE){
     if ("lnorm" %in% setDist){
-      MyLogNormalPDF <- function(parameters, displacements){ # 1=mu, 2= sigma
-        LN_PDF <- exp((plnorm(displacements, parameters[1], parameters[2], lower.tail=FALSE, log.p = TRUE)) -
+      MyLogNormalPDF <- function(parameters, input){ # 1=mu, 2= sigma
+        LN_PDF <- exp((plnorm(input, parameters[1], parameters[2], lower.tail=FALSE, log.p = TRUE)) -
                        (plnorm(parameters[3],parameters[1], parameters[2], lower.tail = FALSE, log.p = TRUE)))
         return(LN_PDF)
       }
       LN_xmin <- distResults[which(distResults$distribution=="lnorm"),"dmin"]
       LN_mu <- distResults[which(distResults$distribution=="lnorm"),"parameter1"]
       LN_sigma <- distResults[which(distResults$distribution=="lnorm"),"parameter2"]
-      xval <- exp(seq(log(LN_xmin), log(max(x)), length.out = 100)) # log spaced sequence of displacements for log-log plot
+      xval <- exp(seq(log(LN_xmin), log(max(x)), length.out = 100)) # log spaced sequence of input for log-log plot
       yval <- MyLogNormalPDF(c(LN_mu, LN_sigma, LN_xmin), xval)
       yval[xval < LN_xmin] <- 0
       dif <- x - LN_xmin
@@ -137,14 +142,14 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
         ggplot2::geom_line(data=lnormLine, ggplot2::aes(x=xval, y=yval, colour=plotCol[3]),lwd=1)
     }
     if ("exp" %in% setDist){
-      MyExponentialPDF<- function(parameters, displacements){
-        Exp_CDF <- exp(pexp(displacements, parameters[1], lower.tail = FALSE, log.p = TRUE) - pexp(parameters[2], parameters[1], lower.tail = FALSE, log.p = TRUE))
-        # Exp_CDF <- parameters*exp(-parameters*displacements)
+      MyExponentialPDF<- function(parameters, input){
+        Exp_CDF <- exp(pexp(input, parameters[1], lower.tail = FALSE, log.p = TRUE) - pexp(parameters[2], parameters[1], lower.tail = FALSE, log.p = TRUE))
+        # Exp_CDF <- parameters*exp(-parameters*input)
         return(Exp_CDF)
       }
       Exp_xmin <- distResults[which(distResults$distribution=="exp"),"dmin"]
       Exp_lambda <- distResults[which(distResults$distribution=="exp"),"parameter1"]
-      xval <- exp(seq(log(Exp_xmin), log(max(x)), length.out = 100)) # log spaced sequence of displacements for log-log plot
+      xval <- exp(seq(log(Exp_xmin), log(max(x)), length.out = 100)) # log spaced sequence of input for log-log plot
       yval <- MyExponentialPDF(c(Exp_lambda, Exp_xmin), xval)
       yval[xval < Exp_xmin] <- 0
       dif <- x - Exp_xmin
@@ -165,13 +170,13 @@ PlotDist <- function(displacements, distResults, fitLines=TRUE, setDist=NULL, co
         ggplot2::geom_line(data=expLine, ggplot2::aes(x=xval, y=yval, colour=plotCol[2]),lwd=1)
     }
     if ("pl" %in% setDist){
-      MyPowerLawCDF <- function(parameters, displacements){
-        PL_CDF  <- 1 - (displacements/parameters[2])^(-parameters[1]+1)
+      MyPowerLawCDF <- function(parameters, input){
+        PL_CDF  <- 1 - (input/parameters[2])^(-parameters[1]+1)
         return(PL_CDF)
       }
       PL_xmin <- distResults[which(distResults$distribution=="pl"),"dmin"]
       PL_alpha <- distResults[which(distResults$distribution=="pl"),"parameter1"]
-      xval <- exp(seq(log(PL_xmin), log(max(x)), length.out = 100)) # log spaced sequence of displacements for log-log plot
+      xval <- exp(seq(log(PL_xmin), log(max(x)), length.out = 100)) # log spaced sequence of input for log-log plot
       yval <- 1- MyPowerLawCDF(c(PL_alpha, PL_xmin), xval)
       yval[xval < PL_xmin] <- 0
       dif <- x - PL_xmin
