@@ -13,7 +13,7 @@
 #' @param label X axis label. Note that "Normalised" will automatically be added if distributions were fit to normalised data. Default is NULL and will result in x-axis label of "input data".
 #' @return Complementary cumulative distribution function (ccdf) plot of input with fit lines (if fitLines=TRUE).
 #' @importFrom stats plnorm pexp
-#' @examples plotDist(disp, distResultsExp)
+#' @examples plotDist(input, distResultsExp)
 #' @export
 
 plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c("red","gold2","blue"), legend=TRUE, label=NULL){
@@ -22,19 +22,26 @@ plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c(
     stop("Input data are missing")
   }
 
-  if (exists("distResults")==FALSE){
-    stop("Please fit distributions using the FitDist function prior to executing plotDist")
+  if (!(class(input)=="list")){
+    # if the data are in data frame format from the occupancy function they can automatically be converted to a list
+    if (class(input)=="data.frame" &
+        all(colnames(input)==c("Latitude", "Longitude", "Area", "Counts", "Occupancy"))){
+      input <- list(input$Occupancy)
+      message("Occupancy data automatically converted to list format")
+    } else {
+      stop("plotDist requires input data in list format")
+    }
   }
 
-  if (!("list" %in% is(input))){
-    stop("plotDist requires input data in list format")
+  if (exists("distResults")==FALSE){
+    stop("Please fit distributions using the FitDist function prior to executing plotDist")
   }
 
   normalise <- distResults[[2]]
   distResults <- distResults[[1]]
 
   if (is.null(setDist)){
-    setDist <- distResults$distribution # Use all distributions used in FitDist
+    setDist <- distResults$distribution # Use all distributions used in fitDist
   } else {
     setDist <- as.vector(sort(factor(setDist, ordered=TRUE, levels=c("lnorm","exp","pl")))) # Order and sort the distribution names to make sure the legend is accurate
   }
@@ -70,8 +77,8 @@ plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c(
   if (normalise){
     x <- list()
     for (d in 1:length(input)){
-      disp <- unlist(input[d])
-      x[[d]] <- disp/mean(disp)
+      input <- unlist(input[d])
+      x[[d]] <- input/mean(input)
     }
     x <- unlist(x)
     xlabel <- paste("Normalised", xlabel)
@@ -118,7 +125,7 @@ plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c(
                        (plnorm(parameters[3],parameters[1], parameters[2], lower.tail = FALSE, log.p = TRUE)))
         return(LN_PDF)
       }
-      LN_xmin <- distResults[which(distResults$distribution=="lnorm"),"dmin"]
+      LN_xmin <- distResults[which(distResults$distribution=="lnorm"),"xmin"]
       LN_mu <- distResults[which(distResults$distribution=="lnorm"),"parameter1"]
       LN_sigma <- distResults[which(distResults$distribution=="lnorm"),"parameter2"]
       xval <- exp(seq(log(LN_xmin), log(max(x)), length.out = 100)) # log spaced sequence of input for log-log plot
@@ -147,7 +154,7 @@ plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c(
         # Exp_CDF <- parameters*exp(-parameters*input)
         return(Exp_CDF)
       }
-      Exp_xmin <- distResults[which(distResults$distribution=="exp"),"dmin"]
+      Exp_xmin <- distResults[which(distResults$distribution=="exp"),"xmin"]
       Exp_lambda <- distResults[which(distResults$distribution=="exp"),"parameter1"]
       xval <- exp(seq(log(Exp_xmin), log(max(x)), length.out = 100)) # log spaced sequence of input for log-log plot
       yval <- MyExponentialPDF(c(Exp_lambda, Exp_xmin), xval)
@@ -174,7 +181,7 @@ plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c(
         PL_CDF  <- 1 - (input/parameters[2])^(-parameters[1]+1)
         return(PL_CDF)
       }
-      PL_xmin <- distResults[which(distResults$distribution=="pl"),"dmin"]
+      PL_xmin <- distResults[which(distResults$distribution=="pl"),"xmin"]
       PL_alpha <- distResults[which(distResults$distribution=="pl"),"parameter1"]
       xval <- exp(seq(log(PL_xmin), log(max(x)), length.out = 100)) # log spaced sequence of input for log-log plot
       yval <- 1- MyPowerLawCDF(c(PL_alpha, PL_xmin), xval)

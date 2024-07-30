@@ -1,51 +1,58 @@
-#' Fit distributions to displacements
+#' Fit distributions to data
 #'
-#' This function allows you to fit power law, exponential, or lognormal distributions to the displacements calculated with
-#' the \code{\link{CalcDisp}} function.
+#' This function allows you to fit power law, exponential, or lognormal distributions to data. For example, this function can be used
+#' to fit data output from the \code{\link{CalcDisp}} function or the \code{\link{Occupancy}} function.
 #'
-#' @param displacements List of displacements output from the \code{\link{CalcDisp}} function.
-#' @param dist Continuous distributions that will be fit to the displacements. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
+#' @param input List of values used to fit distribution
+#' @param dist Continuous distributions that will be fit to the data. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
 #' continuous distributions. Default is dist=c("pl","exp","lnorm").
-#' @param set_dmin To limit the fitted distribution to values above a specified value. If your displacements are going to be normalised
+#' @param set_xmin To limit the fitted distribution to values above a specified value. If your data are going to be normalised
 #' this value will have to be a normalised value as well. Default is NULL.
-#' @param full To fit the distributions to the full range of displacement data. Default is FALSE.
+#' @param full To fit the distributions to the full range of data. Default is FALSE.
 #' @param normalise Normalises the displacement distances by dividing each displacement by the average displacement for that time window;
-#' normalise=TRUE is required if working with displacements calculated over multiple time windows.
+#' normalise=TRUE is required if working with data calculated over multiple time windows.
 #' @return A list including a dataframe of summary statistics for each distribution fit (1st list element). Results dataframe includes the
-#' distribution name, dmin (d values used to fit each distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
-#' distributions respectively, and nTail (the number of data points greater than or equal to dmin). A logical argument indicating if
+#' distribution name, xmin (minimum value used to fit each distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
+#' distributions respectively, and nTail (the number of data points greater than or equal to xmin). A logical argument indicating if
 #' data were normalised is exported as the 2nd list element because this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}
 #' functions.
 #' @importFrom stats dlnorm plnorm optim sd
-#' @examples fitDist(disp, dist=c("pl","exp","lnorm"), full=TRUE)
+#' @examples fitDist(input, dist=c("pl","exp","lnorm"), full=TRUE)
 #' @export
 
-fitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE) {
+fitDist <- function(input, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalise=TRUE) {
 
-  if (!("list" %in% is(displacements))){
-   stop("Distributions can only be fit to the output from the CalcDisp function in list format.")
+  if (!(class(input)=="list")){
+    # if the data are in data frame format from the occupancy function they can automatically be converted to a list
+    if (class(input)=="data.frame" &
+        all(colnames(input)==c("Latitude", "Longitude", "Area", "Counts", "Occupancy"))){
+        input <- list(input$Occupancy)
+      message("Occupancy data automatically converted to list format")
+    } else {
+   stop("Distributions can only be fit to data in list format")
+    }
   }
 
-  if ((!is.null(set_dmin)) & (full==TRUE)){
-    stop("To fit distributions to the full range of data use full=TRUE and leave set_dmin as default (NULL).")
+  if ((!is.null(set_xmin)) & (full==TRUE)){
+    stop("To fit distributions to the full range of data use full=TRUE and leave set_xmin as default (NULL)")
   }
 
-  if ((length(displacements)>1) & (normalise==FALSE)){
-    stop("Data must be normalised for displacements from multiple time windows to be collated into 1 dataset.")
+  if ((length(input)>1) & (normalise==FALSE)){
+    stop("Data must be normalised for data from multiple time windows to be collated into 1 dataset")
   }
 
   if (("pl" %in% dist|"exp" %in% dist|"lnorm" %in% dist)!=TRUE){
-    stop("Distributions can only be fit to 'pl','exp', or 'lnorm' distributions.")
+    stop("Distributions can only be fit to 'pl','exp', or 'lnorm' distributions")
   }
 
   if (normalise){
     x <- list()
-    for (d in 1:length(displacements)){
-      disp <- unlist(displacements[d])
+    for (d in 1:length(input)){
+      disp <- unlist(input[d])
       x[[d]] <- disp/mean(disp)
     }
   } else {
-    x <- unlist(displacements)
+    x <- unlist(input)
   }
 
   x <- unlist(x)
@@ -53,13 +60,13 @@ fitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
   dat <- numeric(length(xmins)) #blank vectors for D values
   x <- sort(x)
   N <- length(x)
-  distResults <- data.frame("distribution"=dist, "dmin"= c(NA), "parameter1"=c(NA), "parameter2"=c(NA), "nTail"= c(NA)) #make sure dist= is loaded
+  distResults <- data.frame("distribution"=dist, "xmin"= c(NA), "parameter1"=c(NA), "parameter2"=c(NA), "nTail"= c(NA)) #make sure dist= is loaded
   rev.index <- rev(seq_along(x))
 
   if ("pl" %in% dist){
     message("Fitting a power law distribution")
     if (full==FALSE){
-      if (is.null(set_dmin)){
+      if (is.null(set_xmin)){
         for (i in 1:length(xmins)){
           xmin <- xmins[i]
           xi <- x[x>=(xmin)]
@@ -73,8 +80,8 @@ fitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
         D <- min(dat[dat>0], na.rm=TRUE) #find smallest D value
         PL_xmin <- xmins[which.max(dat==D)] #find corresponding xmin value such that PLxmin is the D value that minimizes the distance between sx and fx
       }
-      if (!is.null(set_dmin)){
-        PL_xmin <- set_dmin # If xmin is supplied, assign it as the PL_xmin
+      if (!is.null(set_xmin)){
+        PL_xmin <- set_xmin # If xmin is supplied, assign it as the PL_xmin
       }
     }
     if (full==TRUE){
@@ -87,7 +94,7 @@ fitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
     selection <- min(which(x >= (PL_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
     n <- rev.index[selection] # number of values of x >= xmin
 
-    distResults[which(distResults$distribution =="pl"),which(names(distResults)=="dmin")] <- PL_xmin
+    distResults[which(distResults$distribution =="pl"),which(names(distResults)=="xmin")] <- PL_xmin
     distResults[which(distResults$distribution =="pl"),which(names(distResults)=="parameter1")] <- PL_alpha
     distResults[which(distResults$distribution =="pl"),which(names(distResults)=="nTail")] <- n
   }
@@ -95,7 +102,7 @@ fitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
   if ("exp" %in% dist){
     message("Fitting an exponential distribution")
     if (full==FALSE){
-      if (is.null(set_dmin)){
+      if (is.null(set_xmin)){
         dat <- numeric(length(xmins))
         pars.list <- c()
         for (i in 1:(length(xmins)-2)){ # need at least number of pars + 1 to fit
@@ -123,8 +130,8 @@ fitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
         n <- rev.index[selection] # number of values of x >= xmin
       }
 
-      if (!is.null(set_dmin)){
-        xmin <- set_dmin
+      if (!is.null(set_xmin)){
+        xmin <- set_xmin
         xi <- x[x>xmin]
         n <- length(xi)
         Exp_lambda <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
@@ -142,7 +149,7 @@ fitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
       selection <- min(which(x >= (Exp_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
       n <- rev.index[selection] # number of values of x >= xmin
     }
-    distResults[which(distResults$distribution =="exp"),which(names(distResults)=="dmin")] <- Exp_xmin
+    distResults[which(distResults$distribution =="exp"),which(names(distResults)=="xmin")] <- Exp_xmin
     distResults[which(distResults$distribution =="exp"),which(names(distResults)=="parameter1")] <- Exp_lambda
     distResults[which(distResults$distribution =="exp"),which(names(distResults)=="nTail")] <- n
   }
@@ -162,7 +169,7 @@ fitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
     } # updated
 
     if (full==FALSE){
-      if (is.null(set_dmin)){
+      if (is.null(set_xmin)){
         dat <- numeric(length(xmins))
         init <- matrix(ncol=2, nrow=1)
 
@@ -214,8 +221,8 @@ fitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
         n <- rev.index[selection] # number of values of x >= xmin
       }
 
-      if (!is.null(set_dmin)){
-        xmin <- set_dmin
+      if (!is.null(set_xmin)){
+        xmin <- set_xmin
         xi <- x[x>xmin]
         n <- length(xi)
 
@@ -247,7 +254,7 @@ fitDist <- function(displacements, dist=c("pl","exp","lnorm"), set_dmin=NULL, fu
       selection <- min(which(x >= (LN_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
       n <- rev.index[selection] # number of values of x >= xmin
     }
-    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="dmin")] <- LN_xmin
+    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="xmin")] <- LN_xmin
     distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="parameter1")] <- LN_mu
     distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="parameter2")] <- LN_sigma
     distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="nTail")] <- n
