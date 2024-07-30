@@ -8,10 +8,10 @@
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' @return If data are formatted correctly the function will output "Your data are formatted correctly", else you will receive an error message describing the problem
 #' @importFrom methods is
-#' @examples CheckTracks(tracks)
+#' @examples checkTracks(tracks)
 #' @export
 
-CheckTracks <- function(species_df){
+checkTracks <- function(species_df){
 
   error_count <- 0
 
