@@ -10,8 +10,8 @@
 devtools::document() # Update manual
 # usethis::use_news_md(open = rlang::is_interactive()) # Create NEWS - Bump version manually and add list of changes
 usethis::use_cran_comments(open = rlang::is_interactive()) # Update comments for CRAN
-usethis::use_version("patch") # Upgrade version number, options include: c("patch", "minor", "major", "dev")
-usethis::use_gpl_license() # Update license info - if applicable
+# usethis::use_version("patch") # Upgrade version number, options include: c("patch", "minor", "major", "dev")
+# usethis::use_gpl_license() # Update license info - if applicable
 devtools::spell_check() # Check spelling
 attachment::att_amend_desc(pkg_ignore = c("infomapecology"), extra.suggests = c("infomapecology"), update.config = TRUE) # Amend dependencies in description
 # Code above adds DEV folder which is non-standard and needs to be manually deleted
@@ -42,7 +42,7 @@ inteRgrate::check_gitignore() # Check .gitignore contains standard files -- OK
 #===========================================================================================
 # usethis::use_test("PhysMove") # set up test files (commented because this creates initial test files)
 devtools::test() # Runs all tests in package -- Pass
-devtools::test_coverage() # Computes test coverage for package !!!!!!!!!!!!!!!!!!
+devtools::test_coverage() # Computes test coverage for package -- may need to restart r session for this to work
 devtools::run_examples() # Check examples -- OK
 
 ### Summary of test and example checks:
@@ -54,7 +54,7 @@ devtools::run_examples() # Check examples -- OK
 #===========================================================================================
 devtools::check() # Local R CMD check -- OK
 devtools::check(remote = TRUE, manual = TRUE) # Remote CRAN check with manual -- some expected notes, see below
-devtools::check_rhub() # See notes below
+devtools::check_rhub() # See notes below -------------------
 rhub::check_for_cran() # See notes below
 
 ### Summary of CRAN checks:
@@ -114,7 +114,8 @@ rhub::check_on_windows(check_args = "--force-multiarch") # OK
 #===========================================================================================
 devtools::check_rhub(platforms = "fedora-clang-devel") # See notes below
 rhub::check_on_linux() # Email says PREPERROR but notes say success and there's no error from R so going to assume this is ok
-rhub::check_on_ubuntu() # Email says PREPERROR but notes say success and there's no error from R so going to assume this is ok
+rhub::check_on_ubuntu() # Email OK
+devtools::check_mac_release() # OK
 
 ## Summary of checks on other distributions:
 # * checking CRAN incoming feasibility ... [7s/25s] NOTE
