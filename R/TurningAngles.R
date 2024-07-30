@@ -23,12 +23,12 @@
 #' @examples
 #' \dontrun{
 #'
-#' TurningAngles(tracks, min_hr=24, max_hr=240, interval_hr=24, range_hr=6, histPlot=c(FALSE, "all"))
+#' turningAngles(tracks, min_hr=24, max_hr=240, interval_hr=24, range_hr=6, histPlot=c(FALSE, "all"))
 #'
 #' }
 #' @export
 
-TurningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range_hr=6, histPlot=c(TRUE, "all")){
+turningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range_hr=6, histPlot=c(TRUE, "all")){
 
   min_hr <- min_hr*(60*60) # convert hours (input) to seconds
   max_hr <- max_hr*(60*60) # convert hours (input) to seconds

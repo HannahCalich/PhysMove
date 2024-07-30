@@ -16,10 +16,10 @@
 #' @return Map of location estimates and tracks (if tracks=TRUE).
 #' @importFrom grDevices rainbow
 #' @importFrom rlang .data
-#' @examples PlotTracks(tracks, ref=NULL, tracks=TRUE, colours=rainbow)
+#' @examples plotTracks(tracks, ref=NULL, tracks=TRUE, colours=rainbow)
 #' @export
 
-PlotTracks<-function(species_df, ref=NULL, tracks=TRUE, colours=rainbow){
+plotTracks<-function(species_df, ref=NULL, tracks=TRUE, colours=rainbow){
 
   if(!is.null(ref)){
     if (!all(ref %in% species_df$ref)){

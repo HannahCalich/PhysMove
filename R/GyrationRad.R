@@ -14,11 +14,11 @@
 #' @examples
 #' \dontrun{
 #'
-#' GyrationRad(tracks, map=TRUE, mapCol=c("Black","Red"))
+#' gyrationRad(tracks, map=TRUE, mapCol=c("Black","Red"))
 #' }
 #' @export
 
-GyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red")){
+gyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red")){
 
   MydistHaversine <- function(lon1, lat1, lon2, lat2) {
     radlat1 <- rad * lat1

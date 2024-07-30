@@ -12,10 +12,10 @@
 #' @param legend Add legend with legend=TRUE. Default is TRUE.
 #' @return Probability density function (pdf) plots of displacements.
 #' @importFrom rlang .data
-#' @examples PlotDispPDF(disp)
+#' @examples plotDispPDF(disp)
 #' @export
 
-PlotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=TRUE){
+plotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=TRUE){
 
   if ("function" %in% is(colours)){ # If a grDevices colour pallet is used
     myColoursPal <- colours(length(displacements))

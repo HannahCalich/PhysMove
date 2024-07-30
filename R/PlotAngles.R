@@ -13,10 +13,10 @@
 #' @param legend Add a legend to the circle plot. Default is TRUE.
 #' @return Circle plot of the angles calculated with the \code{\link{TurningAngles}} function and a dataframe of the data used to create the circle plot.
 #' @importFrom rlang .data
-#' @examples PlotAngles(angleList, timePlot="all", colours=rainbow, legend=TRUE)
+#' @examples plotAngles(angleList, timePlot="all", colours=rainbow, legend=TRUE)
 #' @export
 
-PlotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=TRUE){
+plotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=TRUE){
   bins <- 360 / 45
   # bins <- 0.25
   timeWindows <- as.numeric(names(angleList))

@@ -13,10 +13,10 @@
 #' starting at startVal and decrease by 0.01 at each iteration until an acceptable root value is identified. Default is 0.99
 #' @param histPlot Plot a histogram of the limit of predictability scores. Default is TRUE.
 #' @return Limit of predictability values for each trajectory. If histPlot=TRUE a histogram of the limit of predictability scores is created.
-#' @examples Predictability(tracks, entropyResults, startVal=0.99, histPlot=TRUE)
+#' @examples predictability(tracks, entropyResults, startVal=0.99, histPlot=TRUE)
 #' @export
 
-Predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRUE){
+predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRUE){
 
   if (nrow(entropyResults)!=length(unique(species_df$ref))){
     stop("The number of individuals in the species_df does not match the number of normalised entropy values, check to ensure the right data has \n  been entered.")

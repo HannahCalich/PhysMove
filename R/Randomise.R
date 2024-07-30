@@ -24,12 +24,12 @@
 #' @examples
 #' \dontrun{
 #'
-#' Randomise(tracks, randTrack=100, gridCell=0.25, plot=TRUE, lm=TRUE)
+#' randomise(tracks, randTrack=100, gridCell=0.25, plot=TRUE, lm=TRUE)
 #'
 #' }
 #' @export
 
-Randomise <- function(species_df, randTrack=100, gridCell=0.25, plot=TRUE, lm=TRUE) {
+randomise <- function(species_df, randTrack=100, gridCell=0.25, plot=TRUE, lm=TRUE) {
 
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
   MyDiffLat <- MyDiffLong <- MyDiffTime <- rep(0, dim(species_df)[1]) # Create vector to store the differences in lat and long

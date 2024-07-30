@@ -4,8 +4,8 @@
 #'
 #' @param result Data used to create plot.
 #' @param desc Description of input data. This parameter is used to determine how the data are plotted and to assign appropriate x and y plot labels.
-#' Valid input options include: "Occupancy" (e.g., from the \code{\link{Occupancy}} function), "GyrationRad"  (e.g., from the \code{\link{GyrationRad}} function),
-#' "Entropy" (e.g., from the \code{\link{Entropy}} function), and "Predictability" (from the \code{\link{Predictability}} function). Occupancy pdfs are based on
+#' Valid input options include: "occupancy" (e.g., from the \code{\link{Occupancy}} function), "gyrationRad"  (e.g., from the \code{\link{GyrationRad}} function),
+#' "entropy" (e.g., from the \code{\link{Entropy}} function), and "predictability" (from the \code{\link{Predictability}} function). Occupancy pdfs are based on
 #' the total number of cells globally based on the provided grid cell size and are created on created on a log-log scale due to the nature of the data ranges while the other desc types are create on a standard xy plot (to plot occupancy on a standard
 #' xy scale leave desc as default). Default is NULL.
 #' @param nBins Number of bins used to calculate the pdf plot (e.g., nBins=25). By default, if desc="Occupancy" the code will use 20 log-sized bins (due to the
@@ -14,10 +14,10 @@
 #' code will automatically use 15 bins.
 #' @return A pdf plot of the results and the data used to create the plot.
 #' @importFrom rlang .data
-#' @examples PlotPDF(occupancyResults$Occupancy, desc="Occupancy")
+#' @examples plotPDF(occupancyResults$Occupancy, desc="occupancy")
 #' @export
 
-PlotPDF <- function(result, desc=NULL, nBins){
+plotPDF <- function(result, desc=NULL, nBins){
 
   if ("data.frame" %in% is(result)){
     stop ("A data frame has been entered. Please re-run this function and identify the column of data you want to plot following a dataframe$column structure
@@ -29,7 +29,7 @@ PlotPDF <- function(result, desc=NULL, nBins){
   }
 
   if (length(result)>1){ # A pdf of 1 value is not meaningful
-    if (desc=="Occupancy"){ # Occupancy is separate because it is done on a log scale with log-sized bins and there are warnings about cell size being too small
+    if (desc=="occupancy"){ # occupancy is separate because it is done on a log scale with log-sized bins and there are warnings about cell size being too small
       if (missing(nBins)){
         nBins <- 20
       }
@@ -112,15 +112,15 @@ PlotPDF <- function(result, desc=NULL, nBins){
     plotLog <- ""
     }
 
-    if (desc=="Predictability"){
+    if (desc=="predictability"){
       names(plot.df) <- c("Limit of Predictability","pdf")
       xlabel <- expression('Limit of Predictability')
     }
-    if (desc=="Entropy"){
+    if (desc=="entropy"){
       names(plot.df) <- labels <- c("Normalised Entropy","pdf")
       xlabel <- expression('Normalised Entropy')
     }
-    if (desc=="GyrationRad"){
+    if (desc=="gyrationRad"){
       names(plot.df) <- labels <- c("Gyration Radius (km)","pdf")
       xlabel <- expression('Gyration Radius (km)')
     }

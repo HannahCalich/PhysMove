@@ -18,12 +18,12 @@
 #' @examples
 #' \dontrun{
 #'
-#' RMS(tracks, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE)
+#' rms(tracks, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE)
 #'
 #' }
 #' @export
 
-RMS <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
+rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
 
   MydistHaversine <- function(lon1, lat1, lon2, lat2) {
     radlat1 <- rad * lat1

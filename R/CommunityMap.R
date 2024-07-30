@@ -12,10 +12,10 @@
 #' create a continuous pallet with the colours provided. Default is "Dark2".
 #' @return A map illustrating level 1 Infomap communities.
 #' @importFrom rlang .data
-#' @examples CommunityMap(infomapResult)
+#' @examples communityMap(infomapResult)
 #' @export
 
-CommunityMap <- function(infomap_output, subset_communities, colours="Dark2"){
+communityMap <- function(infomap_output, subset_communities, colours="Dark2"){
 
   if (!("infomap_monolayer" %in% is(infomap_output[["infomap_object"]]))){
     stop("This function requires the Infomap monolayer object that is output from the InfomapCommunities function. \n  Please run the InfomapCommunities function prior to executing CommunityMap.")

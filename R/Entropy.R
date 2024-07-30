@@ -16,12 +16,12 @@
 #' @examples
 #' \dontrun{
 #'
-#' Entropy(tracks, gridCell=0.25, histPlot=TRUE)
+#' entropy(tracks, gridCell=0.25, histPlot=TRUE)
 #'
 #' }
 #' @export
 
-Entropy<-function(species_df, gridCell=0.25, histPlot=TRUE){
+entropy<-function(species_df, gridCell=0.25, histPlot=TRUE){
 
   grid <- 1/gridCell
   longmin <- -180

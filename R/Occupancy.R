@@ -14,10 +14,10 @@
 #' @return A dataframe including occupancy values and corresponding
 #' locations (provided as centres value of each grid cell). If map=TRUE a map is created.
 #' @importFrom rlang .data
-#' @examples Occupancy(tracks, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"))
+#' @examples occupancy(tracks, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"))
 #' @export
 
-Occupancy <- function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red")){
+occupancy <- function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red")){
 
   grid <- 1/gridCell
   Radius <- 6371 #Earth Radius in km (disp are in km)

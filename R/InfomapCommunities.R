@@ -11,7 +11,7 @@
 #'
 #' Example:
 #' library (infomapecology)
-#' InfomapCommunities(tracks, gridCell=0.25, hours=24, range_hr=6, tpm=FALSE)
+#' infomapCommunities(tracks, gridCell=0.25, hours=24, range_hr=6, tpm=FALSE)
 
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
@@ -33,7 +33,7 @@
 #' as list element 2.
 #' @export
 
-InfomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, tpm=FALSE){
+infomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, tpm=FALSE){
 
   if (rlang::is_installed("infomapecology")){
     if("infomapecology" %in% (.packages())){
