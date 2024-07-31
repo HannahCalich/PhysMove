@@ -8,17 +8,17 @@
 #' See attached sample data \code{\link{tracks}}.
 #' @param ref Reference number of track from species_df to plot.
 #' @param randomResults Result from \code{\link{randomise}} function.
-#' @param numPlot Number of Randomised tracks to plot. The Randomised tracks were consecutively numbered from 1 to however many you set in the
-#' \code{\link{Randomise}} function. The input value can either be any of these individual numbers (e.g., 23), or a range of numbers (e.g., 1:10),
+#' @param numPlot Number of randomised tracks to plot. The randomised tracks were consecutively numbered from 1 to however many you set in the
+#' \code{\link{randomise}} function. The input value can either be any of these individual numbers (e.g., 23), or a range of numbers (e.g., 1:10),
 #' which will plot all of the random tracks created within the range. Default is 1:5.
-#' @param colours Colours to plot points from original and Randomised tracks, respectively. Default is colours=c("black","grey70").
+#' @param colours Colours to plot points from original and randomised tracks, respectively. Default is colours=c("black","grey70").
 #' @param tracks Add track lines to the plot. Default is TRUE.
 #' @param startCol Colour for origin location. startCol=NULL will cause the symbology of the origin location to match the symbology of the rest
 #' of the original track. Default is startCol="red".
 #' @param endCol Colour for destination location. endCol=NULL will cause the symbology of the destination location to match the symbology of the rest
 #' of the original track. Default is endCol="blue".
 #' @param legend legend Add legend with legend=TRUE (default).
-#' @return Plot showing the original and Randomised track locations and the Randomised tracks data used to create the map (original tracks are
+#' @return Plot showing the original and randomised track locations and the randomised tracks data used to create the map (original tracks are
 #' from species_df).
 #' @importFrom rlang .data
 #' @examples plotRandomTracks(tracks, ref=1, randomResults, numPlot=1, startCol="red", endCol="blue")
