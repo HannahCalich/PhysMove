@@ -13,7 +13,7 @@ predictability(species_df, entropyResults, startVal = 0.99, histPlot = TRUE)
 "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 See attached sample data \code{\link{tracks}}.}
 
-\item{entropyResults}{Data frame of results output from the \code{\link{Entropy}} function.}
+\item{entropyResults}{Data frame of results output from the \code{\link{entropy}} function.}
 
 \item{startVal}{Starting value used to find a root value for the limit of predictability equation. Function will loop through values
 starting at startVal and decrease by 0.01 at each iteration until an acceptable root value is identified. Default is 0.99}
@@ -25,8 +25,8 @@ Limit of predictability values for each trajectory. If histPlot=TRUE a histogram
 }
 \description{
 This function allows you to calculate the limit of predictability for each trajectory based on each individual's entropy. This function requires
-'indivEntropy', 'cellsVisited', and 'normalisedEntropy' from the \code{\link{Entropy}} function.
-A pdf plot of the predictability values can be created with the \code{\link{PlotPDF}} function.
+'indivEntropy', 'cellsVisited', and 'normalisedEntropy' from the \code{\link{entropy}} function.
+A pdf plot of the predictability values can be created with the \code{\link{plotPDF}} function.
 }
 \examples{
 predictability(tracks, entropyResults, startVal=0.99, histPlot=TRUE)

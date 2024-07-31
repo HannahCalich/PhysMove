@@ -7,7 +7,7 @@
 plotDispPDF(displacements, normalised = TRUE, colours = rainbow, legend = TRUE)
 }
 \arguments{
-\item{displacements}{Displacements in list format (e.g., the output from \code{\link{CalcDisp}}).}
+\item{displacements}{Displacements in list format (e.g., the output from \code{\link{calcDisp}}).}
 
 \item{normalised}{Normalise the displacements by the mean displacement for each time window. Default is TRUE.}
 
@@ -24,7 +24,7 @@ Probability density function (pdf) plots of displacements.
 \description{
 This function allows you to plot probability density functions (pdfs) of displacements. Displacements must be in
 list format where each list element corresponds to displacements calculated over a specific time window, which is the default output
-format from the \code{\link{CalcDisp}} function.
+format from the \code{\link{calcDisp}} function.
 }
 \examples{
 plotDispPDF(disp)

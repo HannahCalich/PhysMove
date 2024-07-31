@@ -31,7 +31,7 @@ locations (provided as centres value of each grid cell). If map=TRUE a map is cr
 }
 \description{
 This function allows you to calculate the occupancy patterns of location estimates and create a map.
-A pdf plot of the occupancy values can be created with the \code{\link{PlotPDF}} function.
+A pdf plot of the occupancy values can be created with the \code{\link{plotPDF}} function.
 }
 \examples{
 occupancy(tracks, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"))

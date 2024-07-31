@@ -25,7 +25,7 @@ See attached sample data \code{\link{tracks}}.}
 
 \item{ref}{Reference number of track from species_df to plot.}
 
-\item{randomResults}{Result from \code{\link{Randomise}} function.}
+\item{randomResults}{Result from \code{\link{randomise}} function.}
 
 \item{numPlot}{Number of Randomised tracks to plot. The Randomised tracks were consecutively numbered from 1 to however many you set in the
 \code{\link{Randomise}} function. The input value can either be any of these individual numbers (e.g., 23), or a range of numbers (e.g., 1:10),
@@ -48,7 +48,7 @@ Plot showing the original and Randomised track locations and the Randomised trac
 from species_df).
 }
 \description{
-Plot locations from original and reshuffled tracks using RandomisedLat and RandomisedLong outputs from the \code{\link{Randomise}} function
+Plot locations from original and reshuffled tracks using RandomisedLat and RandomisedLong outputs from the \code{\link{randomise}} function
 }
 \examples{
 plotRandomTracks(tracks, ref=1, randomResults, numPlot=1, startCol="red", endCol="blue")

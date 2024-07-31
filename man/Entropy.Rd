@@ -25,7 +25,7 @@ values (not normalised) and the number of cells each trajectory visited. If hist
 This function allows you to calculate the normalised entropy of individual trajectories (individual entropy scores are
 normalised by the log number of cells each trajectory visited), which provides insight to how ordered or disordered the trajectories were.
 Values close to 1 indicate high entropy (disordered trajectories) while values closer to 0 indicate low entropy (ordered trajectories).
-A pdf plot of the normalized entropy values can be created with the \code{\link{PlotPDF}} function.
+A pdf plot of the normalized entropy values can be created with the \code{\link{plotPDF}} function.
 }
 \examples{
 \dontrun{

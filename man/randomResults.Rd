@@ -11,8 +11,8 @@ list
 randomResults
 }
 \description{
-Example output from the \code{\link{Randomise}} function. Results calculated using the \code{\link{tracks}} dataset
-and Randomise() with randTrack=1. Note that the Randomise() default is normally randTrack=100; however, this creates
+Example output from the \code{\link{randomise}} function. Results calculated using the \code{\link{tracks}} dataset
+and randomise() with randTrack=1. Note that the randomise() default is normally randTrack=100; however, this creates
 an unnecessarily large file for an example dataset so randTrack=1 was used instead.
 }
 \keyword{datasets}

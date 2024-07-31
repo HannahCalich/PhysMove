@@ -7,7 +7,7 @@
 communityMap(infomap_output, subset_communities, colours = "Dark2")
 }
 \arguments{
-\item{infomap_output}{Infomap monolayer object output from the \code{\link{InfomapCommunities}} function.}
+\item{infomap_output}{Infomap monolayer object output from the \code{\link{infomapCommunities}} function.}
 
 \item{subset_communities}{Concatenated vector of level 1 communities to be mapped. For example, subset_communities=c(1,2,3) will plot level 1 communities
 1, 2, and 3. This parameter is particularly useful if Infomap has identified many communities and they are difficult to distinguish in the map
@@ -22,7 +22,7 @@ create a continuous pallet with the colours provided. Default is "Dark2".}
 A map illustrating level 1 Infomap communities.
 }
 \description{
-This function allows you to create a map of the level 1 Infomap communities calculated using the \code{\link{InfomapCommunities}} function.
+This function allows you to create a map of the level 1 Infomap communities calculated using the \code{\link{infomapCommunities}} function.
 To map only a selection of the communities use the subset_communities parameter.
 }
 \examples{

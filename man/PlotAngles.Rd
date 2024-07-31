@@ -7,7 +7,7 @@
 plotAngles(angleList, timePlot = "all", colours = rainbow, legend = TRUE)
 }
 \arguments{
-\item{angleList}{List of angles calculated with the \code{\link{TurningAngles}} function.}
+\item{angleList}{List of angles calculated with the \code{\link{turningAngles}} function.}
 
 \item{timePlot}{Plot angles from all time windows or only plot angles from one specific time window. For example,
 timePlot=1 will only plot angles from the first time window while timePlot="all" will plot angles from all time windows.
@@ -21,11 +21,11 @@ automatically create a continuous pallet with the colours provided. Default is r
 \item{legend}{Add a legend to the circle plot. Default is TRUE.}
 }
 \value{
-Circle plot of the angles calculated with the \code{\link{TurningAngles}} function and a dataframe of the data used to create the circle plot.
+Circle plot of the angles calculated with the \code{\link{turningAngles}} function and a dataframe of the data used to create the circle plot.
 }
 \description{
 This function allows you to create a circle plot illustrating the frequency of turning angles from
-the \code{\link{TurningAngles}} function.
+the \code{\link{turningAngles}} function.
 }
 \examples{
 plotAngles(angleList, timePlot="all", colours=rainbow, legend=TRUE)

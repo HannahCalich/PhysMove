@@ -17,11 +17,11 @@ plotDist(
 \arguments{
 \item{input}{List of values used to fit distributions.}
 
-\item{distResults}{List output from the \code{\link{FitDist}} function containing a dataframe of fit results (list element 1) and a normalisation record (list element 2)}
+\item{distResults}{List output from the \code{\link{fitDist}} function containing a dataframe of fit results (list element 1) and a normalisation record (list element 2)}
 
-\item{fitLines}{Add fit lines based on the parameters calculated with the \code{\link{FitDist}} function. Default is TRUE.}
+\item{fitLines}{Add fit lines based on the parameters calculated with the \code{\link{fitDist}} function. Default is TRUE.}
 
-\item{setDist}{Plot a subset of lines for each distribution fit calculated with the \code{\link{FitDist}} function (e.g., setDist=c("pl","exp"))
+\item{setDist}{Plot a subset of lines for each distribution fit calculated with the \code{\link{fitDist}} function (e.g., setDist=c("pl","exp"))
 Options include "pl", "exp", and "lnorm". The lines will be drawn in order from "pl", then "exp", then "lnorm" (when applicable).
 By default all lines are plotted. Default is NULL.}
 
@@ -36,7 +36,7 @@ Complementary cumulative distribution function (ccdf) plot of input with fit lin
 }
 \description{
 This function allows you to plot a complementary cumulative distribution function (ccdf) of values with fit lines
-based on distribution fits calculated with the \code{\link{FitDist}} function.
+based on distribution fits calculated with the \code{\link{fitDist}} function.
 }
 \examples{
 plotDist(input, distResultsExp)

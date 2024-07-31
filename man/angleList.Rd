@@ -11,9 +11,9 @@ list
 angleList
 }
 \description{
-Example output from the \code{\link{TurningAngles}} function. Angles calculated using
-the \code{\link{tracks}} dataset and TurningAngles() with max_hr=24. Note that the
-TurningAngles() default is normally max_hr=240; however, this creates an unnecessarily
+Example output from the \code{\link{turningAngles}} function. Angles calculated using
+the \code{\link{tracks}} dataset and turningAngles() with max_hr=24. Note that the
+turningAngles() default is normally max_hr=240; however, this creates an unnecessarily
 large file for an example dataset so max_hr=24 was used instead.
 }
 \keyword{datasets}
