@@ -27,11 +27,11 @@ See attached sample data \code{\link{tracks}}.}
 
 \item{randomResults}{Result from \code{\link{randomise}} function.}
 
-\item{numPlot}{Number of Randomised tracks to plot. The Randomised tracks were consecutively numbered from 1 to however many you set in the
-\code{\link{Randomise}} function. The input value can either be any of these individual numbers (e.g., 23), or a range of numbers (e.g., 1:10),
+\item{numPlot}{Number of randomised tracks to plot. The randomised tracks were consecutively numbered from 1 to however many you set in the
+\code{\link{randomise}} function. The input value can either be any of these individual numbers (e.g., 23), or a range of numbers (e.g., 1:10),
 which will plot all of the random tracks created within the range. Default is 1:5.}
 
-\item{colours}{Colours to plot points from original and Randomised tracks, respectively. Default is colours=c("black","grey70").}
+\item{colours}{Colours to plot points from original and randomised tracks, respectively. Default is colours=c("black","grey70").}
 
 \item{tracks}{Add track lines to the plot. Default is TRUE.}
 
@@ -44,7 +44,7 @@ of the original track. Default is endCol="blue".}
 \item{legend}{legend Add legend with legend=TRUE (default).}
 }
 \value{
-Plot showing the original and Randomised track locations and the Randomised tracks data used to create the map (original tracks are
+Plot showing the original and randomised track locations and the randomised tracks data used to create the map (original tracks are
 from species_df).
 }
 \description{
