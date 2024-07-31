@@ -39,7 +39,6 @@ Suggests:
     knitr (>= 1.43),
     officedown (>= 0.3.0),
     rmarkdown (>= 2.22),
-    sf (>= 1.0-13),
     spelling (>= 2.2.1),
     testthat (>= 3.1.9)
 VignetteBuilder: 
@@ -50,4 +49,4 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 LazyDataCompression: xz
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
