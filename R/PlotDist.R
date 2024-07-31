@@ -1,11 +1,11 @@
 #' Plot best-fit distributions to complementary cumulative distribution function (ccdf) of data
 #'
 #' This function allows you to plot a complementary cumulative distribution function (ccdf) of values with fit lines
-#' based on distribution fits calculated with the \code{\link{FitDist}} function.
+#' based on distribution fits calculated with the \code{\link{fitDist}} function.
 #' @param input List of values used to fit distributions.
-#' @param distResults List output from the \code{\link{FitDist}} function containing a dataframe of fit results (list element 1) and a normalisation record (list element 2)
-#' @param fitLines Add fit lines based on the parameters calculated with the \code{\link{FitDist}} function. Default is TRUE.
-#' @param setDist Plot a subset of lines for each distribution fit calculated with the \code{\link{FitDist}} function (e.g., setDist=c("pl","exp"))
+#' @param distResults List output from the \code{\link{fitDist}} function containing a dataframe of fit results (list element 1) and a normalisation record (list element 2)
+#' @param fitLines Add fit lines based on the parameters calculated with the \code{\link{fitDist}} function. Default is TRUE.
+#' @param setDist Plot a subset of lines for each distribution fit calculated with the \code{\link{fitDist}} function (e.g., setDist=c("pl","exp"))
 #' Options include "pl", "exp", and "lnorm". The lines will be drawn in order from "pl", then "exp", then "lnorm" (when applicable).
 #' By default all lines are plotted. Default is NULL.
 #' @param colours Colours for each fit line. Valid input options include colour names or hex numbers. Default is colours=c("red","gold2","blue").

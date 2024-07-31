@@ -2,8 +2,8 @@
 #'
 #' This function allows you to plot probability density functions (pdfs) of displacements. Displacements must be in
 #' list format where each list element corresponds to displacements calculated over a specific time window, which is the default output
-#' format from the \code{\link{CalcDisp}} function.
-#' @param displacements Displacements in list format (e.g., the output from \code{\link{CalcDisp}}).
+#' format from the \code{\link{calcDisp}} function.
+#' @param displacements Displacements in list format (e.g., the output from \code{\link{calcDisp}}).
 #' @param normalised Normalise the displacements by the mean displacement for each time window. Default is TRUE.
 #' @param colours Colour(s) for plot points. Valid input options include: base R (grDevices) colour pallets (e.g., colours=rainbow), RColorBrewer
 #' palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that grDevices colour

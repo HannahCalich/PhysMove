@@ -1,7 +1,7 @@
 #' Fit distributions to data
 #'
 #' This function allows you to fit power law, exponential, or lognormal distributions to data. For example, this function can be used
-#' to fit data output from the \code{\link{CalcDisp}} function or the \code{\link{Occupancy}} function.
+#' to fit data output from the \code{\link{calcDisp}} function or the \code{\link{occupancy}} function.
 #'
 #' @param input List of values used to fit distribution
 #' @param dist Continuous distributions that will be fit to the data. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
@@ -14,7 +14,7 @@
 #' @return A list including a dataframe of summary statistics for each distribution fit (1st list element). Results dataframe includes the
 #' distribution name, xmin (minimum value used to fit each distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
 #' distributions respectively, and nTail (the number of data points greater than or equal to xmin). A logical argument indicating if
-#' data were normalised is exported as the 2nd list element because this information is needed for the \code{\link{CompDist}} and \code{\link{PlotDist}}
+#' data were normalised is exported as the 2nd list element because this information is needed for the \code{\link{compDist}} and \code{\link{plotDist}}
 #' functions.
 #' @importFrom stats dlnorm plnorm optim sd
 #' @examples fitDist(input, dist=c("pl","exp","lnorm"), full=TRUE)

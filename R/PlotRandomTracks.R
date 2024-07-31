@@ -1,13 +1,13 @@
 #' Plot Randomised Tracks
 #'
-#' Plot locations from original and reshuffled tracks using RandomisedLat and RandomisedLong outputs from the \code{\link{Randomise}} function
+#' Plot locations from original and reshuffled tracks using RandomisedLat and RandomisedLong outputs from the \code{\link{randomise}} function
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{tracks}}.
 #' @param ref Reference number of track from species_df to plot.
-#' @param randomResults Result from \code{\link{Randomise}} function.
+#' @param randomResults Result from \code{\link{randomise}} function.
 #' @param numPlot Number of Randomised tracks to plot. The Randomised tracks were consecutively numbered from 1 to however many you set in the
 #' \code{\link{Randomise}} function. The input value can either be any of these individual numbers (e.g., 23), or a range of numbers (e.g., 1:10),
 #' which will plot all of the random tracks created within the range. Default is 1:5.

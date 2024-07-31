@@ -17,7 +17,7 @@
 #' adds a solid black fit line to the data points and a black dashed line, which represents a 1:1 relationship. The slope of the fit line can
 #' be determined by typing 'RandomiselinearModel$coefficients[2]'. Default is TRUE.
 #' @return List containing a dataframe of results (list element 1), the randomised longitude and latitude values (list elements 2 and 3, respectively),
-#' which are needed for the \code{\link{PlotRandomTracks}} function, and if lm = TRUE, the results of the linear model are output (list element 4).
+#' which are needed for the \code{\link{plotRandomTracks}} function, and if lm = TRUE, the results of the linear model are output (list element 4).
 #' The dataframe of results includes columns for the number of cells visited by each original track and the average number of cells visited by the
 #' Randomised tracks for each ref. Lastly, if plot = TRUE, a plot illustrating the number of cells visited by the original and randomised tracks is created,
 #' and if lm = TRUE, a fit line and reference line are added to the plot.

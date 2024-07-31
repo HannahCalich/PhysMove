@@ -1,8 +1,8 @@
 #' Plot turning angles with a circle plot
 #'
 #' This function allows you to create a circle plot illustrating the frequency of turning angles from
-#' the \code{\link{TurningAngles}} function.
-#' @param angleList List of angles calculated with the \code{\link{TurningAngles}} function.
+#' the \code{\link{turningAngles}} function.
+#' @param angleList List of angles calculated with the \code{\link{turningAngles}} function.
 #' @param timePlot Plot angles from all time windows or only plot angles from one specific time window. For example,
 #' timePlot=1 will only plot angles from the first time window while timePlot="all" will plot angles from all time windows.
 #' Default is timePlot="all".
@@ -11,7 +11,7 @@
 #' grDevices colour pallets are functions and do not use quotations. If the palette does not have enough distinct colours to match the lines being plotted the function will
 #' automatically create a continuous pallet with the colours provided. Default is rainbow.
 #' @param legend Add a legend to the circle plot. Default is TRUE.
-#' @return Circle plot of the angles calculated with the \code{\link{TurningAngles}} function and a dataframe of the data used to create the circle plot.
+#' @return Circle plot of the angles calculated with the \code{\link{turningAngles}} function and a dataframe of the data used to create the circle plot.
 #' @importFrom rlang .data
 #' @examples plotAngles(angleList, timePlot="all", colours=rainbow, legend=TRUE)
 #' @export

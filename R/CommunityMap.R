@@ -1,8 +1,8 @@
 #' Map Infomap communities
 #'
-#' This function allows you to create a map of the level 1 Infomap communities calculated using the \code{\link{InfomapCommunities}} function.
+#' This function allows you to create a map of the level 1 Infomap communities calculated using the \code{\link{infomapCommunities}} function.
 #' To map only a selection of the communities use the subset_communities parameter.
-#' @param infomap_output Infomap monolayer object output from the \code{\link{InfomapCommunities}} function.
+#' @param infomap_output Infomap monolayer object output from the \code{\link{infomapCommunities}} function.
 #' @param subset_communities Concatenated vector of level 1 communities to be mapped. For example, subset_communities=c(1,2,3) will plot level 1 communities
 #' 1, 2, and 3. This parameter is particularly useful if Infomap has identified many communities and they are difficult to distinguish in the map
 #' Default is NULL.

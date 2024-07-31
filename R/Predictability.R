@@ -1,14 +1,14 @@
 #' Predictability of trajectories
 #'
 #' This function allows you to calculate the limit of predictability for each trajectory based on each individual's entropy. This function requires
-#' 'indivEntropy', 'cellsVisited', and 'normalisedEntropy' from the \code{\link{Entropy}} function.
-#' A pdf plot of the predictability values can be created with the \code{\link{PlotPDF}} function.
+#' 'indivEntropy', 'cellsVisited', and 'normalisedEntropy' from the \code{\link{entropy}} function.
+#' A pdf plot of the predictability values can be created with the \code{\link{plotPDF}} function.
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{tracks}}.
-#' @param entropyResults Data frame of results output from the \code{\link{Entropy}} function.
+#' @param entropyResults Data frame of results output from the \code{\link{entropy}} function.
 #' @param startVal Starting value used to find a root value for the limit of predictability equation. Function will loop through values
 #' starting at startVal and decrease by 0.01 at each iteration until an acceptable root value is identified. Default is 0.99
 #' @param histPlot Plot a histogram of the limit of predictability scores. Default is TRUE.

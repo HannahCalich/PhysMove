@@ -1,7 +1,7 @@
 #' Occupancy
 #'
 #' This function allows you to calculate the occupancy patterns of location estimates and create a map.
-#' A pdf plot of the occupancy values can be created with the \code{\link{PlotPDF}} function.
+#' A pdf plot of the occupancy values can be created with the \code{\link{plotPDF}} function.
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
