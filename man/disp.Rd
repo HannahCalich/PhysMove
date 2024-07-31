@@ -3,7 +3,7 @@
 \docType{data}
 \name{disp}
 \alias{disp}
-\title{Example output from CalcDisp()}
+\title{Example output from calcDisp()}
 \format{
 A list with 10 elements
 }

@@ -6,4 +6,4 @@
 #' so max_hr=24 was used instead.
 #'
 #' @format A list with 10 elements
-"input"
+"disp"
