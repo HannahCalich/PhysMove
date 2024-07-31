@@ -2,7 +2,7 @@ Type: Package
 Package: PhysMove
 Title: Quantify Animal Movement Patterns Using Statistical Physics Methods
 Version: 1.0.1
-Date: 2023-10-02
+Date: 2024-08-01
 Authors@R: c(
     person("Hannah J.", "Calich", , "hannah.calich@anu.edu.au", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0001-7541-9584")),
@@ -34,6 +34,7 @@ Imports:
     stats (>= 4.2.2),
     utils (>= 4.2.2)
 Suggests:
+    devtools,
     infomapecology (>= 1.0.6),
     kableExtra (>= 1.3.4),
     knitr (>= 1.43),
