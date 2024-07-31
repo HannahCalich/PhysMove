@@ -13,6 +13,7 @@
 #' @param histPlot Plot a histogram of the normalised  entropy values. Default is TRUE.
 #' @return Data frame of the normalised entropy values for each trajectory (main result) as well as the individual entropy
 #' values (not normalised) and the number of cells each trajectory visited. If histPlot=TRUE a histogram of the normalised entropy scores is created.
+#' @importFrom rlang .data
 #' @examples
 #' \dontrun{
 #'
@@ -66,7 +67,7 @@ entropy<-function(species_df, gridCell=0.25, histPlot=TRUE){
   if (histPlot==TRUE){
     entropyResults.plot <- entropyResults[!is.na(entropyResults$normalisedEntropy),]
     h <- graphics::hist(entropyResults.plot$normalisedEntropy, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
-    hist_plot <- ggplot2::ggplot(entropyResults.plot, ggplot2::aes(normalisedEntropy))+
+    hist_plot <- ggplot2::ggplot(entropyResults.plot, ggplot2::aes(.data$normalisedEntropy))+
       ggplot2::geom_histogram(breaks=h$breaks, color="black", fill="darkgrey")+
       ggplot2::scale_y_continuous(breaks=function(x) seq(ceiling(x[1]), floor(x[2]), by = 2))+
       ggplot2::scale_x_continuous("Normalised Entropy", breaks=seq(0,1,0.1), labels=c("0.0", "", "0.2", "", "0.4", "", "0.6", "", "0.8", "", "1.0"))+

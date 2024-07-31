@@ -13,6 +13,7 @@
 #' starting at startVal and decrease by 0.01 at each iteration until an acceptable root value is identified. Default is 0.99
 #' @param histPlot Plot a histogram of the limit of predictability scores. Default is TRUE.
 #' @return Limit of predictability values for each trajectory. If histPlot=TRUE a histogram of the limit of predictability scores is created.
+#' @importFrom rlang .data
 #' @examples predictability(tracks, entropyResults, startVal=0.99, histPlot=TRUE)
 #' @export
 
@@ -59,10 +60,10 @@ predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRU
   predictabilityResults <- as.data.frame(cbind("ref"=unique(species_df$ref),"Predictability"=Pred))
 
   if (histPlot==TRUE){
-    Predictability.plot <- as.data.frame(predictabilityResults[!is.na(predictabilityResults$Predictability),])
-    h <- graphics::hist(Predictability.plot$Predictability, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
+    predictabilityPlot <- as.data.frame(predictabilityResults[!is.na(predictabilityResults$Predictability),])
+    h <- graphics::hist(predictabilityPlot$Predictability, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
     xlab <- c(0,"",0.2,"",0.4,"",0.6,"",0.8,"",1)
-    hist_plot <- ggplot2::ggplot(Predictability.plot, ggplot2::aes(Predictability))+
+    hist_plot <- ggplot2::ggplot(predictabilityPlot, ggplot2::aes(.data$Predictability))+
       ggplot2::geom_histogram(breaks=h$breaks, color="black", fill="darkgrey")+
       ggplot2::scale_y_continuous(breaks=function(x) seq(ceiling(x[1]), floor(x[2]), by = 2))+
       ggplot2::scale_x_continuous("Limit of Predictability", breaks=seq(0,1,0.1), labels=c("0.0", "", "0.2", "", "0.4", "", "0.6", "", "0.8", "", "1.0"))+
