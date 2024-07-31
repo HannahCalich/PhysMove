@@ -38,5 +38,5 @@ This function allows you to fit power law, exponential, or lognormal distributio
 to fit data output from the \code{\link{calcDisp}} function or the \code{\link{occupancy}} function.
 }
 \examples{
-fitDist(input, dist=c("pl","exp","lnorm"), full=TRUE)
+fitDist(disp, dist=c("pl","exp","lnorm"), full=TRUE)
 }

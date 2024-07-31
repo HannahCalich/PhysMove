@@ -39,5 +39,5 @@ This function allows you to plot a complementary cumulative distribution functio
 based on distribution fits calculated with the \code{\link{fitDist}} function.
 }
 \examples{
-plotDist(input, distResultsExp)
+plotDist(disp, distResultsExp)
 }

@@ -13,7 +13,7 @@
 #' @param label X axis label. Note that "Normalised" will automatically be added if distributions were fit to normalised data. Default is NULL and will result in x-axis label of "input data".
 #' @return Complementary cumulative distribution function (ccdf) plot of input with fit lines (if fitLines=TRUE).
 #' @importFrom stats plnorm pexp
-#' @examples plotDist(input, distResultsExp)
+#' @examples plotDist(disp, distResultsExp)
 #' @export
 
 plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c("red","gold2","blue"), legend=TRUE, label=NULL){

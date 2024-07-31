@@ -17,7 +17,7 @@
 #' data were normalised is exported as the 2nd list element because this information is needed for the \code{\link{compDist}} and \code{\link{plotDist}}
 #' functions.
 #' @importFrom stats dlnorm plnorm optim sd
-#' @examples fitDist(input, dist=c("pl","exp","lnorm"), full=TRUE)
+#' @examples fitDist(disp, dist=c("pl","exp","lnorm"), full=TRUE)
 #' @export
 
 fitDist <- function(input, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalise=TRUE) {
