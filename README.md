@@ -13,22 +13,22 @@ PhysMove focuses on three major categories of movement data analyses, and each c
 
 1. **Characterization of movement patterns, including:**
 
-  * Scale of movement: `RMS()` 
-  * Movement patterns across temporal scales: `CalcDisp()` and `PlotDispPDF()`
-  * Search patterns: `FitDisp()`, `CompDist()`, and `PlotDist()`
-  * Influence of correlations on movement decisions: `Randomise()` and `PlotRandomTracks()`
-  * Turning angles: `TurningAngles()` and `PlotAngles()`
+  * Scale of movement: `rms()` 
+  * Movement patterns across temporal scales: `calcDisp()` and `plotDispPDF()`
+  * Search patterns: `fitDisp()`, `compDist()`, and `plotDist()`
+  * Influence of correlations on movement decisions: `randomise()` and `plotRandomTracks()`
+  * Turning angles: `turningAngles()` and `plotAngles()`
   
 2. **Identification of space-use patterns, including:**
 
-  * Occupancy patterns: `Occupancy()` and `PlotPDF()`
-  * Community-wide movements: `InfomapCommunities()` and `CommunityMap()`
+  * Occupancy patterns: `occupancy()` and `plotPDF()`
+  * Community-wide movements: `infomapCommunities()` and `communityMap()`
 
 3. **Detection of variability in intraspecific movements, including:**
 
-  * Track dispersion: `GyrationRad()` and `PlotPDF()`
-  * Track entropy: `Entropy()` and `PlotPDF()`
-  * Track predictability: `Predictability()` and `PlotPDF()`
+  * Track dispersion: `gyrationRad()` and `plotPDF()`
+  * Track entropy: `entropy()` and `plotPDF()`
+  * Track predictability: `predictability()` and `plotPDF()`
 
 ## Installation 
 
@@ -71,4 +71,4 @@ browseVignettes("PhysMove")
 ```
 
 Current Version: 1.0.1
-Last updated: October, 2023
+Last updated: July, 2024
