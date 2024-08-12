@@ -6,7 +6,7 @@
 #' AICc scores (AIC scores corrected for small sample sizes) if n/K is <= 40 for the largest value of K, where n = sample size (nTail) and
 #' K = number of parameters in the model (see Burnham and Anderson (2004) for further details, DOI: 10.1177/0049124104268644). However,
 #' if force_AICc = TRUE AICc scores will be calculated regardless of n/K.
-#' @param input List of values used to fit distribution
+#' @param input Values used to fit distributions in either list or dataframe format; however, dataframe format is only allowed for results output from \code{\link{occupancy}}
 #' @param distResults List output from the \code{\link{fitDist}} function containing a dataframe of fit results (element 1) and a normalisation record (element 2)
 #' @param force_AICc Force function to calculate AICc scores instead of AIC scores when n/K is > 40. Default is FALSE.
 #' @return A data frame with that contains the summary statistics for each distribution fit (from the \code{\link{fitDist}} function) as well as
@@ -18,9 +18,9 @@
 
 compDist<-function(input, distResults, force_AICc=FALSE){
 
-  if (!(class(input)=="list")){
+  if (!(inherits(input, "list"))){
     # if the data are in data frame format from the occupancy function they can automatically be converted to a list
-    if (class(input)=="data.frame" &
+    if (inherits(input, "data.frame") &
         all(colnames(input)==c("Latitude", "Longitude", "Area", "Counts", "Occupancy"))){
       input <- list(input$Occupancy)
       message("Occupancy data automatically converted to list format")
@@ -40,9 +40,9 @@ compDist<-function(input, distResults, force_AICc=FALSE){
   normalise <- distResults[[2]]
   if (normalise){
     x <- list()
-    for (d in 1:length(input)){
-      input <- unlist(input[d])
-      x[[d]] <- input/mean(input)
+    for (d in seq_along(input)){
+      vals <- unlist(input[d])
+      x[[d]] <- vals/mean(vals)
     }
     x <- unlist(x)
   } else {
