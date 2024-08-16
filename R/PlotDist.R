@@ -2,7 +2,7 @@
 #'
 #' This function allows you to plot a complementary cumulative distribution function (ccdf) of values with fit lines
 #' based on distribution fits calculated with the \code{\link{fitDist}} function.
-#' @param input List of values used to fit distributions.
+#' @param input Values used to fit distributions in either list or dataframe format; however, dataframe format is only allowed for results output from \code{\link{occupancy}}
 #' @param distResults List output from the \code{\link{fitDist}} function containing a dataframe of fit results (list element 1) and a normalisation record (list element 2)
 #' @param fitLines Add fit lines based on the parameters calculated with the \code{\link{fitDist}} function. Default is TRUE.
 #' @param setDist Plot a subset of lines for each distribution fit calculated with the \code{\link{fitDist}} function (e.g., setDist=c("pl","exp"))
@@ -22,9 +22,9 @@ plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c(
     stop("Input data are missing")
   }
 
-  if (!(class(input)=="list")){
+  if (!(inherits(input, "list"))){
     # if the data are in data frame format from the occupancy function they can automatically be converted to a list
-    if (class(input)=="data.frame" &
+    if (inherits(input, "data.frame") &
         all(colnames(input)==c("Latitude", "Longitude", "Area", "Counts", "Occupancy"))){
       input <- list(input$Occupancy)
       message("Occupancy data automatically converted to list format")
@@ -77,8 +77,8 @@ plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c(
   if (normalise){
     x <- list()
     for (d in 1:length(input)){
-      input <- unlist(input[d])
-      x[[d]] <- input/mean(input)
+      vals <- unlist(input[d])
+      x[[d]] <- vals/mean(vals)
     }
     x <- unlist(x)
     xlabel <- paste("Normalised", xlabel)
