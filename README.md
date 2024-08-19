@@ -3,7 +3,7 @@
 [![R-CMD-check--as-cran](https://github.com/HannahCalich/PhysMove/workflows/R-CMD-check--as-cran/badge.svg)](https://github.com/HannahCalich/PhysMove/actions)
 [![R-CMD-check-standard](https://github.com/HannahCalich/PhysMove/workflows/R-CMD-check-standard/badge.svg)](https://github.com/HannahCalich/PhysMove/actions)
 [![R-hub](https://github.com/HannahCalich/PhysMove/workflows/R-hub/badge.svg)](https://github.com/HannahCalich/PhysMove/actions)
-#![DOI] -- UPDATE
+
 Authors: Hannah Calich, Jorge P. Rodríguez, Víctor M. Eguíluz & Ana Sequeira
 
 Maintained by: Hannah Calich (hannah.calich@gmail.com)
