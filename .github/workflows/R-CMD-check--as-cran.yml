@@ -45,10 +45,10 @@ jobs:
           extra-repositories: https://hannahcalich.github.io/drat/ 
           #extra-packages: infomapecology=?ignore-before-r=99.0.0 
       
-      - name: Install further dependencies
-        run: |
-          install.packages(pkgs = "infomapecology", contriburl = "https://hannahcalich.github.io/drat/docs/src/contrib", type = "source")
-        shell: Rscript {0}
+      #- name: Install further dependencies
+      #  run: |
+      #    install.packages(pkgs = "infomapecology", contriburl = "https://hannahcalich.github.io/drat/docs/src/contrib", type = "source")
+      #  shell: Rscript {0}
       
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
