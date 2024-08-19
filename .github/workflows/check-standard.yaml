@@ -1,6 +1,10 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 
+# NOTE: infomapecology is currently hosted on drat repo on GitHub and there is a known issue with rhub being unable to locate GitHub repos. 
+# As a result, infomapecology is currently being ignored during setup-deps@v1 following suggestions:
+# https://github.com/r-hub/rhub2/issues/11
+
 on:
   workflow_dispatch:
 
