@@ -42,12 +42,12 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
-          extra-repositories: "https://github.com/Ecological-Complexity-Lab/infomap_ecology_package"
+          extra-repositories: https://HannahCalich.github.io/drat #"https://github.com/Ecological-Complexity-Lab/infomap_ecology_package"
 
-      - name: Add infomapecology repo
-        run: |
-          writeLines('options(repos = c(infomapecology = "https://github.com/Ecological-Complexity-Lab/infomap_ecology_package", getOption(\"repos\")))', file("~/.Rprofile", "ab"))
-        shell: Rscript {0}
+      #- name: Add infomapecology repo
+      #  run: |
+      #    writeLines('options(repos = c(infomapecology = "https://github.com/Ecological-Complexity-Lab/infomap_ecology_package", getOption(\"repos\")))', file("~/.Rprofile", "ab"))
+      #  shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
