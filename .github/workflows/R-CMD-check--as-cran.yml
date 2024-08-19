@@ -42,7 +42,7 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
-          extra-repositories: https://github.com/HannahCalich/drat #"https://github.com/Ecological-Complexity-Lab/infomap_ecology_package"
+          extra-repositories: "https://github.com/HannahCalich/drat" #"https://github.com/Ecological-Complexity-Lab/infomap_ecology_package"
 
       #- name: Add infomapecology repo
       #  run: |
