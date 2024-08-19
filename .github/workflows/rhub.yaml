@@ -51,7 +51,7 @@ jobs:
       image: ${{ matrix.config.container }}
 
     steps:
-      - uses: r-hub/rhub2/actions/checkout@v1
+      - uses: r-hub/rhub2/actions/checkout@v2
       - uses: r-hub/rhub2/actions/platform-info@v1
         with:
           token: ${{ secrets.RHUB_TOKEN }}
@@ -77,7 +77,7 @@ jobs:
         config: ${{ fromJson(needs.setup.outputs.platforms) }}
 
     steps:
-      - uses: r-hub/rhub2/actions/checkout@v1
+      - uses: r-hub/rhub2/actions/checkout@v2
       - uses: r-hub/rhub2/actions/setup-r@v1
         with:
           job-config: ${{ matrix.config.job-config }}
