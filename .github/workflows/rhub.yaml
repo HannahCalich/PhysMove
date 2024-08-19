@@ -33,7 +33,7 @@ jobs:
 
     steps:
     # NO NEED TO CHECKOUT HERE
-    - uses: r-hub/rhub2/actions/setup@v1
+    - uses: r-hub/actions/setup@v1
       with:
         config: ${{ github.event.inputs.config }}
       id: rhub-setup
@@ -51,8 +51,8 @@ jobs:
       image: ${{ matrix.config.container }}
 
     steps:
-      - uses: r-hub/rhub2/actions/checkout@v1
-      - uses: r-hub/rhub2/actions/platform-info@v1
+      - uses: r-hub/actions/checkout@v1
+      - uses: r-hub/actions/platform-info@v1
         with:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
@@ -60,16 +60,11 @@ jobs:
         with:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
-      - uses: r-hub/rhub2/actions/run-check@v1
+      - uses: r-hub/actions/run-check@v1
         with:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
-      - uses: r-hub/rhub2/actions/rhub-setup-deps@v1
-        with:
-          token: ${{ secrets.RHUB_TOKEN }}
-          job-config: ${{ matrix.config.job-config }}
-          extra-packages: infomapecology=?ignore-before-r=99.0.0
-  
+
   other-platforms:
     needs: setup
     if: ${{ needs.setup.outputs.platforms != '[]' }}
@@ -81,25 +76,20 @@ jobs:
         config: ${{ fromJson(needs.setup.outputs.platforms) }}
 
     steps:
-      - uses: r-hub/rhub2/actions/checkout@v1
-      - uses: r-hub/rhub2/actions/setup-r@v1
+      - uses: r-hub/actions/checkout@v1
+      - uses: r-hub/actions/setup-r@v1
         with:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
-      - uses: r-hub/rhub2/actions/platform-info@v1
+      - uses: r-hub/actions/platform-info@v1
         with:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
-      - uses: r-hub/rhub2/actions/setup-deps@v1
+      - uses: r-hub/actions/setup-deps@v1
         with:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
-      - uses: r-hub/rhub2/actions/run-check@v1
+      - uses: r-hub/actions/run-check@v1
         with:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
-      - uses: r-hub/rhub2/actions/rhub-setup-deps@v1
-        with:
-          job-config: ${{ matrix.config.job-config }}
-          token: ${{ secrets.RHUB_TOKEN }}
-          extra-packages: infomapecology=?ignore-before-r=99.0.0
