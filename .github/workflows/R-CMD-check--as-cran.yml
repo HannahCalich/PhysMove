@@ -43,7 +43,6 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
           extra-repositories: https://hannahcalich.github.io/drat/ 
-          #extra-packages: infomapecology=?ignore-before-r=99.0.0 
       
       #- name: Install further dependencies
       #  run: |
@@ -52,7 +51,7 @@ jobs:
       
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck
+          extra-packages: any::rcmdcheck, infomapecology=?ignore-before-r=99.0.0 
           needs: check
      
       - uses: r-lib/actions/check-r-package@v2
