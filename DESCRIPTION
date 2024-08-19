@@ -42,6 +42,17 @@ Suggests:
     sf (>= 1.0-16),
     spelling (>= 2.2.1),
     testthat (>= 3.1.9)
+    attempt,
+    cowplot,
+    ggalluvial,
+    magrittr, 
+    dplyr, 
+    readr, 
+    stringr, 
+    tibble
+    tidyr,
+    igraph,
+    vegan
 VignetteBuilder: 
     knitr
 Additional_repositories: https://HannahCalich.github.io/drat/
