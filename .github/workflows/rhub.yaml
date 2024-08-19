@@ -37,10 +37,6 @@ jobs:
       with:
         config: ${{ github.event.inputs.config }}
       id: rhub-setup
-    # - uses: r-lib/actions/setup-r-dependencies@v2
-    #   with:
-    #     extra-packages: infomapecology=?ignore
-    #     needs: check  
 
   linux-containers:
     needs: setup
@@ -68,10 +64,12 @@ jobs:
         with:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
-    # - uses: r-lib/actions/setup-r-dependencies@v2
-    #   with:
-    #   extra-packages: infomapecology=?ignore
-    #     needs: check  
+      - uses: r-hub/rhub2/actions/rhub-setup-deps@v1
+        with:
+          token: ${{ secrets.RHUB_TOKEN }}
+          job-config: ${{ matrix.config.job-config }}
+          extra-packages: infomapecology=?ignore
+  
   other-platforms:
     needs: setup
     if: ${{ needs.setup.outputs.platforms != '[]' }}
@@ -100,7 +98,8 @@ jobs:
         with:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
-    # - uses: r-lib/actions/setup-r-dependencies@v2
-    #   with:
-    #     extra-packages: infomapecology=?ignore
-    #     needs: check  
+      - uses: r-hub/rhub2/actions/rhub-setup-deps@v1
+        with:
+          token: ${{ secrets.RHUB_TOKEN }}
+          job-config: ${{ matrix.config.job-config }}
+          extra-packages: infomapecology=?ignore
