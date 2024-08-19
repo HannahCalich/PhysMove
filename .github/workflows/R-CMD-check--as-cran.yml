@@ -46,7 +46,7 @@ jobs:
       
       - name: Install further dependencies
         run: |
-          install.packages(pkgs = "infomapecology", contriburl = "https://hannahcalich.github.io/drat/src/contrib", type = "source")
+          install.packages(pkgs = "infomapecology", contriburl = "https://hannahcalich.github.io/drat/docs/rc/contrib", type = "source")
         shell: Rscript {0}
       
       - uses: r-lib/actions/setup-r-dependencies@v2
