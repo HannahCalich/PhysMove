@@ -51,7 +51,8 @@ jobs:
 
       - name: Install further dependencies
         run: |
-          install.packages(pkgs = "infomapecology", contriburl = "https://hannahcalich.github.io/drat/docs/src/contrib", type = "source")
+          devtools::install_github('Ecological-Complexity-Lab/infomap_ecology_package', force=T)
+          #install.packages(pkgs = "infomapecology", contriburl = "https://hannahcalich.github.io/drat/docs/src/contrib", type = "source")
         shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
