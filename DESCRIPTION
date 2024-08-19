@@ -34,6 +34,7 @@ Imports:
     stats (>= 4.2.2),
     utils (>= 4.2.2)
 Suggests:
+    infomapecology,
     kableExtra (>= 1.3.4),
     knitr (>= 1.43),
     officedown (>= 0.3.0),
