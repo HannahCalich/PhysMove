@@ -6,6 +6,10 @@
 #
 # It is unlikely that you need to modify this file manually.
 
+# NOTE: infomapecology is currently hosted on drat repo on GitHub and there is a known issue with rhub being unable to locate GitHub repos. 
+# As a result, infomapecology is currently being ignored during setup-deps@v1 following suggestions:
+# https://github.com/r-hub/rhub2/issues/11
+
 name: R-hub
 run-name: "${{ github.event.inputs.id }}: ${{ github.event.inputs.name || format('Manually run by {0}', github.triggering_actor) }}"
 
@@ -60,7 +64,7 @@ jobs:
         with:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
-          extra-packages: infomapecology=?ignore-before-r=99.0.0 #, any::rcmdcheck
+          extra-packages: infomapecology=?ignore-before-r=99.0.0 
       - uses: r-hub/actions/run-check@v1
         with:
           token: ${{ secrets.RHUB_TOKEN }}
@@ -90,7 +94,7 @@ jobs:
         with:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
-          extra-packages: infomapecology=?ignore-before-r=99.0.0 #, any::rcmdcheck
+          extra-packages: infomapecology=?ignore-before-r=99.0.0 
       - uses: r-hub/actions/run-check@v1
         with:
           job-config: ${{ matrix.config.job-config }}
