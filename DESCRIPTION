@@ -41,7 +41,7 @@ Suggests:
     rmarkdown (>= 2.22),
     spelling (>= 2.2.1),
     testthat (>= 3.1.9)
-Config/Needs/check: <infomapecology>=github::HannahCalich/drat
+Config/Needs/check: infomapecology=github::HannahCalich/drat
 VignetteBuilder: 
     knitr
 Additional_repositories: https://HannahCalich.github.io/drat
