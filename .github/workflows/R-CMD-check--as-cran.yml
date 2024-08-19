@@ -43,16 +43,18 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
           extra-repositories: https://hannahcalich.github.io/drat/ 
-
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::rcmdcheck, any::remotes
-          needs: check
-
+      
       - name: Install further dependencies
         run: |
           install.packages(pkgs = "infomapecology", contriburl = "https://hannahcalich.github.io/drat/src/contrib", type = "source")
         shell: Rscript {0}
+      
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+
+
         
       - uses: r-lib/actions/check-r-package@v2
         with:
