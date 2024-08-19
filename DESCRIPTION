@@ -44,7 +44,7 @@ Suggests:
     testthat (>= 3.1.9)
 VignetteBuilder: 
     knitr
-Additional_repositories: https://HannahCalich.github.io/drat
+Additional_repositories: https://HannahCalich.github.io/drat/
 Config/Needs/check: rcmdcheck
 Config/testthat/edition: 3
 Encoding: UTF-8
