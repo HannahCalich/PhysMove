@@ -43,6 +43,7 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
           extra-repositories: https://hannahcalich.github.io/drat/ 
+          extra-packages: infomapecology=?ignore-before-r=99.0.0 
       
       - name: Install further dependencies
         run: |
