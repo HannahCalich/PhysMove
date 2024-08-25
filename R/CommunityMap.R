@@ -24,7 +24,6 @@ communityMap <- function(infomap_output, subset_communities, colours="Dark2"){
   infomap_output <- infomap_output[["infomap_object"]]
 
   infomap_modules <- as.data.frame(infomap_output$modules)
-  infomap_modules <- infomap_modules[-which(is.na(infomap_modules$module_level1)),] # remove row where module_level1 is NA. Note this has only been happening since latest update & is caused by a row where level = 0 in infomap output
 
   if (!missing(subset_communities)){
     infomap_modules<-infomap_modules[which(infomap_modules$module_level1 %in% subset_communities),]
