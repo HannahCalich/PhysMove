@@ -29,12 +29,12 @@ goodpractice::gp() # Goodpractice check -- skipping for now, some good ideas but
 inteRgrate::check_pkg() # "installs package dependencies, builds & installs the package, before running package check"
 inteRgrate::check_lintr() # check if code "adheres to standards" -- skipping this, some good ideas but not urgent
 inteRgrate::check_tidy_description() # Check description is tidy -- OK
-inteRgrate::check_r_filenames() # Check file names are correct -- file names need to be lower case -- skipping for now
+inteRgrate::check_r_filenames() # Check file names are correct -- file names should be lower case
 inteRgrate::check_gitignore() # Check .gitignore contains standard files -- OK
 
 ### Summary of standard formatting checks:
 ## goodpractice::gp() and inteRgrate::check_lintr() has some good ideas but they aren't urgent edits, can do while in review
-## File names should be converted to lower case, can do while in review
+## File names should be converted to lower case but this makes the function names too hard to read so skipping this for now
 ## All others ok/pass
 
 #===========================================================================================
@@ -42,7 +42,7 @@ inteRgrate::check_gitignore() # Check .gitignore contains standard files -- OK
 #===========================================================================================
 # usethis::use_test("PhysMove") # set up test files (commented because this creates initial test files)
 devtools::test() # Runs all tests in package -- Pass
-devtools::test_coverage() # Computes test coverage for package -- may need to restart r session for this to work
+devtools::test_coverage() # Determines the percentage of package covered by tests -- may need to restart r session for this to work
 devtools::run_examples() # Check examples -- OK
 
 ### Summary of test and example checks:
@@ -54,51 +54,10 @@ devtools::run_examples() # Check examples -- OK
 #===========================================================================================
 devtools::check() # Local R CMD check -- OK
 devtools::check(remote = TRUE, manual = TRUE) # Remote CRAN check with manual -- some expected notes, see below
-devtools::check_rhub() # See notes below -------------------
-rhub::check_for_cran() # See notes below
 
-### Summary of CRAN checks:
-# NOTES:
-#   * checking CRAN incoming feasibility ... NOTE
-# Maintainer: 'Hannah J. Calich <hannah.calich@anu.edu.au>'
-# New submission
-
-# Suggests or Enhances not in mainstream repositories:
-#   infomapecology
-# Availability using Additional_repositories specification:
-#   infomapecology   yes   https://HannahCalich.github.io/drat
-
-## -- This is fine, using a drat repository is common and this is the only way I could get infomap pass CRAN
-
-# Found the following (possibly) invalid URLs:
-#   URL: https://github.com/HannahCalich/PhysMove
-# From: DESCRIPTION
-# Status: 404
-# Message: Not Found
-# URL: https://github.com/HannahCalich/PhysMove/actions
-# From: README.md
-# Status: 404
-# Message: Not Found
-# URL: https://github.com/HannahCalich/PhysMove/issues
-# From: DESCRIPTION
-# Status: 404
-# Message: Not Found
-
-## -- These messages are fine, the repo is private so these URLs will fail until the repo is public
-
-# Size of tarball: 5422183 bytes
-# * checking for non-standard things in the check directory ... NOTE
-# Found the following files/directories:
-#   ''NULL''
-
-## -- According to R-Hub maintainer this should be ignored
-## -- (https://stackoverflow.com/questions/76317685/found-the-following-files-directories-null-when-i-run-devtoolscheck-rhub)
-
-# * checking for detritus in the temp directory ... NOTE
-# Found the following files/directories:
-#   'lastMiKTeXException'
-
-## -- This is likely related to R-hub and is being ignored
+# rhub::rhub_setup()
+# rhub::rhub_check() -- moved to GitHub actions.
+# Note that rhub run needed infomap to be ignored because it's causing instillation issues.
 
 #===========================================================================================
 ### check on windows
