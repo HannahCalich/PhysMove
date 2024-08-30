@@ -3,13 +3,13 @@
 #' This function allows you to fit power law, exponential, or lognormal distributions to data. For example, this function can be used
 #' to fit data output from the \code{\link{calcDisp}} function or the \code{\link{occupancy}} function.
 #'
-#' @param input List of values used to fit distribution
+#' @param input List of values that will be fit to each distribution
 #' @param dist Continuous distributions that will be fit to the data. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
 #' continuous distributions. Default is dist=c("pl","exp","lnorm").
 #' @param set_xmin To limit the fitted distribution to values above a specified value. If your data are going to be normalised
 #' this value will have to be a normalised value as well. Default is NULL.
 #' @param full To fit the distributions to the full range of data. Default is FALSE.
-#' @param normalise Normalises the displacement distances by dividing each displacement by the average displacement for that time window;
+#' @param normalise Normalises the input values by dividing each input value by the average value for that time window;
 #' normalise=TRUE is required if working with data calculated over multiple time windows.
 #' @return A list including a dataframe of summary statistics for each distribution fit (1st list element). Results dataframe includes the
 #' distribution name, xmin (minimum value used to fit each distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
@@ -22,9 +22,9 @@
 
 fitDist <- function(input, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalise=TRUE) {
 
-  if (!(class(input)=="list")){
-    # if the data are in data frame format from the occupancy function they can automatically be converted to a list
-    if (class(input)=="data.frame" &
+  if (!(inherits(input, "list"))){ #
+    # if the data are in data frame format AND from the occupancy function they can automatically be converted to a list
+    if (inherits(input, "data.frame") &
         all(colnames(input)==c("Latitude", "Longitude", "Area", "Counts", "Occupancy"))){
         input <- list(input$Occupancy)
       message("Occupancy data automatically converted to list format")
@@ -47,9 +47,9 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE
 
   if (normalise){
     x <- list()
-    for (d in 1:length(input)){
-      disp <- unlist(input[d])
-      x[[d]] <- disp/mean(disp)
+    for (d in seq_along(input)){
+      vals <- unlist(input[d])
+      x[[d]] <- vals/mean(vals)
     }
   } else {
     x <- unlist(input)
