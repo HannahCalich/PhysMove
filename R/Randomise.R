@@ -141,6 +141,7 @@ randomise <- function(species_df, randTrack=100, gridCell=0.25, plot=TRUE, lm=TR
     fit <- lm(plot.df$AvgCellsInRandomisedTracks ~ plot.df$CellsInOriginalTracks, data=plot.df)
     randomResults[[4]] <- as.data.frame(broom::tidy(fit))
     names(randomResults) <- c("resultsDF", "RandomisedLong", "RandomisedLat", "lm")
+    message("Slope = ", round(fit$coefficients[[2]],4))
     rm(fit)
   }
 
