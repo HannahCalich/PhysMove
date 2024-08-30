@@ -15,6 +15,7 @@ usethis::use_cran_comments(open = rlang::is_interactive()) # Update comments for
 devtools::spell_check() # Check spelling
 attachment::att_amend_desc(pkg_ignore = c("infomapecology"), extra.suggests = c("infomapecology"), update.config = TRUE) # Amend dependencies in description
 # Code above adds DEV folder which is non-standard and needs to be manually deleted
+
 checkhelper::find_missing_tags() # check for missing return value for exported functions and missing @export tags
 #all_files_remaining <- checkhelper::check_clean_userspace() # listed as "experimental" in cran docs so skipping this because it's giving unclear messages about temp files
 #all_files_remaining
@@ -25,15 +26,15 @@ urlchecker::url_check() # this will throw errors until github is public
 #===========================================================================================
 ### Package standard formatting checks
 #===========================================================================================
-goodpractice::gp() # Goodpractice check -- skipping for now, some good ideas but not urgent
+goodpractice::gp() # Goodpractice check -- skipping for now, some good ideas but not essential
 inteRgrate::check_pkg() # "installs package dependencies, builds & installs the package, before running package check"
-inteRgrate::check_lintr() # check if code "adheres to standards" -- skipping this, some good ideas but not urgent
+inteRgrate::check_lintr() # check if code "adheres to standards" -- skipping this, some good ideas but not essential
 inteRgrate::check_tidy_description() # Check description is tidy -- OK
-inteRgrate::check_r_filenames() # Check file names are correct -- file names should be lower case
+inteRgrate::check_r_filenames() # Check file names are correct -- file names should be lower case but this makes things too hard to read
 inteRgrate::check_gitignore() # Check .gitignore contains standard files -- OK
 
 ### Summary of standard formatting checks:
-## goodpractice::gp() and inteRgrate::check_lintr() has some good ideas but they aren't urgent edits, can do while in review
+## goodpractice::gp() and inteRgrate::check_lintr() has some good ideas but they aren't essential
 ## File names should be converted to lower case but this makes the function names too hard to read so skipping this for now
 ## All others ok/pass
 
@@ -55,63 +56,39 @@ devtools::run_examples() # Check examples -- OK
 devtools::check() # Local R CMD check -- OK
 devtools::check(remote = TRUE, manual = TRUE) # Remote CRAN check with manual -- some expected notes, see below
 
-# rhub::rhub_setup()
+# rhub::rhub_setup() #done already
 # rhub::rhub_check() -- moved to GitHub actions.
 # Note that rhub run needed infomap to be ignored because it's causing instillation issues.
 
-#===========================================================================================
-### check on windows
-#===========================================================================================
-rhub::check_on_windows(check_args = "--force-multiarch") # OK
-# devtools::check_win_devel() # Not run -- This uploads to win-builder.r-project.org and isn't recommended for private packages
-
-### Summary of windows checks:
-## No problems detected
-
-#===========================================================================================
-### check on other distributions
-#===========================================================================================
-devtools::check_rhub(platforms = "fedora-clang-devel") # See notes below
-rhub::check_on_linux() # Email says PREPERROR but notes say success and there's no error from R so going to assume this is ok
-rhub::check_on_ubuntu() # Email OK
-devtools::check_mac_release() # OK
-
-## Summary of checks on other distributions:
-# * checking CRAN incoming feasibility ... [7s/25s] NOTE
-# Maintainer: ‘Hannah J. Calich <hannah.calich@anu.edu.au>’
-#
-# New submission
-#
-# Suggests or Enhances not in mainstream repositories:
-#   infomapecology
-# Availability using Additional_repositories specification:
-#   infomapecology   yes   https://HannahCalich.github.io/drat
-#
-# Found the following (possibly) invalid URLs:
-#   URL: https://github.com/HannahCalich/PhysMove
-# From: DESCRIPTION
-# Status: 404
-# Message: Not Found
-# URL: https://github.com/HannahCalich/PhysMove/actions
-# From: README.md
-# Status: 404
-# Message: Not Found
-# URL: https://github.com/HannahCalich/PhysMove/issues
-# From: DESCRIPTION
-# Status: 404
-# Message: Not Found
-#
-# Size of tarball: 5421613 bytes
-# * checking examples ... [16s/34s] NOTE
-# Examples with CPU (user + system) or elapsed time > 5s
-# user system elapsed
-# Occupancy 2.614    0.1   5.596
-#
-# * checking HTML version of manual ... NOTE
-# Skipping checking HTML validation: no command 'tidy' found
-
-## -- May need to look into occupancy note, it appears it's slower on fedora?
-## -- missing 'tidy' appears to related to test platform, not PhysMove, so this can be ignored
+## Summary of CRAN checks incl on other distributions:
+## checking CRAN incoming feasibility ... NOTE
+## Maintainer: 'Hannah J. Calich <hannah.calich@anu.edu.au>'
+##
+## New submission
+##
+## Suggests or Enhances not in mainstream repositories:
+##   emln, infomapecology
+## Availability using Additional_repositories specification:
+##   emln             yes   https://HannahCalich.github.io/drat
+## infomapecology   yes   https://HannahCalich.github.io/drat
+##
+## Found the following (possibly) invalid URLs:
+##   URL: https://github.com/HannahCalich/PhysMove
+## From: DESCRIPTION
+## Status: 404
+## Message: Not Found
+## URL: https://github.com/HannahCalich/PhysMove/actions
+## From: README.md
+## Status: 404
+## Message: Not Found
+## URL: https://github.com/HannahCalich/PhysMove/issues
+## From: DESCRIPTION
+## Status: 404
+## Message: Not Found
+##
+## Size of tarball: 5422399 bytes
+##
+## 0 errors ✔ | 0 warnings ✔ | 1 note ✖
 
 #===========================================================================================
 ### Check reverse dependencies -- Not currently relevant but keeping for future
