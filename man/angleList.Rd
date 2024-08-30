@@ -3,7 +3,7 @@
 \docType{data}
 \name{angleList}
 \alias{angleList}
-\title{Example output from TurningAngles()}
+\title{Example output from turningAngles()}
 \format{
 list
 }

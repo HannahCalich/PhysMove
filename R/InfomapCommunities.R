@@ -5,7 +5,7 @@
 #' (where an individual stays in the same cell over time), and uses a tpm in link list format to create an Infomap 'monolayer_object'. Note that if warnings
 #' appear about columns or rows summing to 0 this simply means an individual moved into a cell and did not leave, which is a valid movement and not cause for alarm.
 #'
-#' Please note: to run this function you must first download the infomapecology package from gitub and install the infomap.exe.
+#' Please note: to run this function you must first download the infomapecology package from GitHub and install the infomap.exe.
 #' For details please see: https://ecological-complexity-lab.github.io/infomap_ecology_package/installation
 #' To learn more about Infomap please visit: https://www.mapequation.org/
 #'
