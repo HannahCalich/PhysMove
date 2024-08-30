@@ -197,7 +197,7 @@ $~$
 1. `fitDist()`:
 
 Fits cdfs of continuous power-law, exponential, and lognormal distributions over the full range of displacements (i.e., full
-distributions) or to displacements truncated by a minimum value (i.e., truncated distributions). The `fitDist()` function requires a list of displacements calculated using `calcDisp()` and includes four optional parameters:
+distributions) or to displacements truncated by a minimum value (i.e., truncated distributions). The `fitDist()` function requires a list of values (e.g., displacements calculated using `calcDisp()`) and includes four optional parameters:
 
   * `dist`: distributions you want to fit to the displacement data. `fitDist()` can fit continuous power-law (“pl”), exponential
     (“exp”), and lognormal (“lnorm”) distributions (`dist=c("pl","exp","lnorm")`, by default). To fit only one or two
