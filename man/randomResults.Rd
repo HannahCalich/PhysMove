@@ -3,7 +3,7 @@
 \docType{data}
 \name{randomResults}
 \alias{randomResults}
-\title{Example output from Randomise()}
+\title{Example output from randomise()}
 \format{
 list
 }

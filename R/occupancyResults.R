@@ -1,7 +1,7 @@
-#' Example output from Occupancy()
+#' Example output from occupancy()
 #'
 #' Example output from the \code{\link{occupancy}} function. Results calculated using the \code{\link{tracks}} dataset
-#' and Occupancy() default parameters.
+#' and occupancy() default parameters.
 #'
 #' @format dataframe
 "occupancyResults"

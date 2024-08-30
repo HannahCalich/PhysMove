@@ -45,7 +45,7 @@ the probability of individuals moving from one grid cell to another over a set t
 appear about columns or rows summing to 0 this simply means an individual moved into a cell and did not leave, which is a valid movement and not cause for alarm.
 }
 \details{
-Please note: to run this function you must first download the infomapecology package from gitub and install the infomap.exe.
+Please note: to run this function you must first download the infomapecology package from GitHub and install the infomap.exe.
 For details please see: https://ecological-complexity-lab.github.io/infomap_ecology_package/installation
 To learn more about Infomap please visit: https://www.mapequation.org/
 

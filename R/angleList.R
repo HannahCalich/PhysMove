@@ -1,4 +1,4 @@
-#' Example output from TurningAngles()
+#' Example output from turningAngles()
 #'
 #' Example output from the \code{\link{turningAngles}} function. Angles calculated using
 #' the \code{\link{tracks}} dataset and turningAngles() with max_hr=24. Note that the

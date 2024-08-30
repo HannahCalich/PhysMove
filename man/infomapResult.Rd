@@ -3,7 +3,7 @@
 \docType{data}
 \name{infomapResult}
 \alias{infomapResult}
-\title{Example output from InfomapCommunities()}
+\title{Example output from infomapCommunities()}
 \format{
 list
 }

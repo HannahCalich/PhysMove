@@ -3,7 +3,7 @@
 \docType{data}
 \name{entropyResults}
 \alias{entropyResults}
-\title{Example output from Entropy}
+\title{Example output from entropy()}
 \format{
 dataframe
 }
@@ -12,6 +12,6 @@ entropyResults
 }
 \description{
 Example output from the \code{\link{entropy}} function. Results calculated using the \code{\link{tracks}} dataset
-and Entropy() default parameters.
+and entropy() default parameters.
 }
 \keyword{datasets}
