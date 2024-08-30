@@ -13,7 +13,7 @@ fitDist(
 )
 }
 \arguments{
-\item{input}{List of values used to fit distribution}
+\item{input}{List of values that will be fit to each distribution}
 
 \item{dist}{Continuous distributions that will be fit to the data. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
 continuous distributions. Default is dist=c("pl","exp","lnorm").}
@@ -23,7 +23,7 @@ this value will have to be a normalised value as well. Default is NULL.}
 
 \item{full}{To fit the distributions to the full range of data. Default is FALSE.}
 
-\item{normalise}{Normalises the displacement distances by dividing each displacement by the average displacement for that time window;
+\item{normalise}{Normalises the input values by dividing each input value by the average value for that time window;
 normalise=TRUE is required if working with data calculated over multiple time windows.}
 }
 \value{

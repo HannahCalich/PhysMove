@@ -7,7 +7,7 @@
 compDist(input, distResults, force_AICc = FALSE)
 }
 \arguments{
-\item{input}{List of values used to fit distribution}
+\item{input}{List of values that will be fit to each distribution}
 
 \item{distResults}{List output from the \code{\link{fitDist}} function containing a dataframe of fit results (element 1) and a normalisation record (element 2)}
 

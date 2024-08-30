@@ -2,7 +2,7 @@
 #'
 #' This function allows you to plot a complementary cumulative distribution function (ccdf) of values with fit lines
 #' based on distribution fits calculated with the \code{\link{fitDist}} function.
-#' @param input Values used to fit distributions in either list or dataframe format; however, dataframe format is only allowed for results output from \code{\link{occupancy}}
+#' @param input List of values that will be fit to each distribution
 #' @param distResults List output from the \code{\link{fitDist}} function containing a dataframe of fit results (list element 1) and a normalisation record (list element 2)
 #' @param fitLines Add fit lines based on the parameters calculated with the \code{\link{fitDist}} function. Default is TRUE.
 #' @param setDist Plot a subset of lines for each distribution fit calculated with the \code{\link{fitDist}} function (e.g., setDist=c("pl","exp"))
