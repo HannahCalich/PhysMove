@@ -70,7 +70,7 @@ plotPDF <- function(result, desc=NULL, nBins){
       xlabel <- expression('Occupancy (km'^'-2'*')')
       plotLog <-"xy" # Restricted to occupancy because the plot is based on log-10 scales which is too large for the other data types
 
-    } else { # If description is not "Occupancy"
+    } else { # If description is not "occupancy"
       if (all(result>=0 & result<=1)){ # If values range from 0-1 (e.g., entropy or predictability scores)
         if (missing(nBins)){
           nBins <- 40
