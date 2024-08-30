@@ -40,7 +40,7 @@ knitr::opts_chunk$set(dpi = 600,
 
 ## *Space-use patterns*
 
-PhysMove includes two metrics for identifying space-use patterns that are based on four functions, including:
+*PhysMove* includes two metrics for identifying space-use patterns that are based on four functions, including:
 
   * [Community-wide movements](pt3_space_use_patterns.html#community-wide-movements): `infomapCommunities()` and `communityMap()`
   * [Occupancy patterns](pt3_space_use_patterns.html#occupancy-patterns): `occupancy()` and `plotPDF()`
@@ -52,31 +52,28 @@ library(PhysMove)
 
 ## Community-wide movements 
 
-Interactions between species’ movements and their space-use can be described using a network analysis algorithm called Infomap, which identifies communities where animals follow similar movement patterns and remain for extended periods. To identify Infomap communities, PhysMove requires the `infomapecology` R package [linked here](https://github.com/Ecological-Complexity-Lab/infomap_ecology_package), the `emln` R package [linked here] (https://github.com/Ecological-Complexity-Lab/emln), and a stand-alone Infomap file (*Infomap.exe*) [linked here](https://ecological-complexity-lab.github.io/infomap_ecology_package/installation). Installation instructions and further details about Infomap can be found at: <https://ecological-complexity-lab.github.io/infomap_ecology_package/installation> and Farage *et* *al*. (2021). The following instructions assume both the `infomapecology` and `emln` R packages and the stand-alone Infomap file have been installed.
+Interactions between species’ movements and their space-use can be described using a network analysis algorithm called Infomap, which identifies communities where animals follow similar movement patterns and remain for extended periods. To identify Infomap communities, *PhysMove* requires the `infomapecology` R package [linked here](https://github.com/Ecological-Complexity-Lab/infomap_ecology_package), the `emln` R package [linked here](https://github.com/Ecological-Complexity-Lab/emln), and a stand-alone Infomap file (*Infomap.exe*) [linked here](https://ecological-complexity-lab.github.io/infomap_ecology_package/installation). Installation instructions and further details about Infomap can be found at: <https://ecological-complexity-lab.github.io/infomap_ecology_package/installation> and Farage *et* *al*. (2021). The following instructions assume both the `infomapecology` and `emln` R packages and the stand-alone *Infomap.exe* file have been installed.
 
-The `infomapCommunities()` function identifies community-wide movements in two steps. First, `infomapCommunities()` calculates the probability of individuals moving between specific grid cells along their track within a predetermined time window. This step creates a transition probability matrix (tpm), which can also be referred to as a “unipartite edge list”.  Next, `infomapCommunities()` feeds the transition probability matrix into a function from the `infomapecology` package to create an *Infomap monolayer object* that identifies movement communities. 
+The `infomapCommunities()` function identifies community-wide movements in two steps. First, `infomapCommunities()` calculates the probability of individuals moving between specific grid cells along their track within a predetermined time window. This step creates a transition probability matrix (tpm), which can also be referred to as a “unipartite edge list”.  Next, `infomapCommunities()` feeds the transition probability matrix into functions from the `emln` and `infomapecology` R packages to create an *Infomap monolayer object* that identifies movement communities. 
 
-To ensure the `infomapecology` algorithm calculates movement patterns consistent with telemetry data, we assign parameters to the infomapecology function that allow for directed movement, self-links (i.e., individuals can remain in the same grid cell over time), and hierarchical partitioning (i.e., the resulting communities are composed of multiple levels). Because we allowed hierarchical partitioning, the resulting communities are associated with different levels. Level 1 communities are the most inclusive and have been used to identify community-wide movements (following Rodríguez *et* *al*. 2017 and Calich *et* *al*. 2021). 
+To ensure the `infomapecology` algorithm calculates movement patterns consistent with telemetry data, we assign parameters to the `infomapecology` function that allow for directed movement, self-links (i.e., individuals can remain in the same grid cell over time), and hierarchical partitioning (i.e., resulting communities can be composed of multiple levels). Because we allowed hierarchical partitioning, the resulting communities are associated with different levels. Level 1 communities are the most inclusive and have been used to identify community-wide movements (following Rodríguez *et* *al*. 2017 and Calich *et* *al*. 2021). 
 
 The `infomapCommunities()` function requires a data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)) and includes five optional parameters:
 
-* `gridCell`: change the grid cell size in degrees (`gridCell=0.25`, by default),
+* `gridCell`: grid cell size in degrees (`gridCell=0.25`, by default),
 * `hours`: number of hours between location estimates (`hours=24`, by default), 
 * `range_hr`: time range in hours (`range_hr=6`, by default). This parameter allows you to identify location estimates that are close to, but not exactly separated by the set number of `hours`, and 
 * `tpm`: save the transition probability matrix to the output list as a second list element(`tpm=FALSE`, by default).
 
 `infomapCommunities()` outputs a list with up to two list objects. The first list object is an *infomap monolayer object* that summarizes the hierarchical structure of the Infomap communities (regions where individuals follow similar movement patterns and are likely to stay for longer periods of time). The second list object is the transition probability matrix, which is only output if `tpm=TRUE`.
 
-**Important**: Before running `infomapCommunities()` you must set your working directory to the folder that contains the stand-alone Infomap file (*Infomap.exe*). 
-
-```{r load infomap, eval=FALSE, message=FALSE, warning=FALSE}
-# Identify community-wide movements 
-setwd("~/2024/PhysMove") # Update your working directory to the folder containing the infomap file
-library(infomapecology) 
-infomapResult <- infomapCommunities(tracks)
-```
+**Important**: Before running `infomapCommunities()` you must:
+1) set your working directory to the folder that contains the stand-alone Infomap file (*Infomap.exe*) using `setwd()` and 2) load the infomap ecology r package using `library(infomapecology)`
 
 ```{r structure of infomap, echo=TRUE, eval=FALSE}
+# Identify community-wide movements 
+infomapResult <- infomapCommunities(tracks)
+
 # View the Infomap monolayer object structure
 str(infomapResult[["infomap_object"]])
 ```
@@ -86,7 +83,7 @@ str(infomapResult[["infomap_object"]])
 
 ### Plot Infomap communities
 
-`communityMap()` visualises results from `infomapCommunities()` by converting the *Infomap monolayer object* into a map (Figure V15).
+`communityMap()` visualises results from `infomapCommunities()` by converting the *Infomap monolayer object* into a map (Figure V13).
 
 The `communityMap()` function requires the *Infomap monolayer object* output from `infomapCommunities()` and includes two optional parameters:
 
@@ -109,7 +106,7 @@ $~$
 
 ## Occupancy patterns
 
-The `occupancy()` function helps describe species’ space-use patterns by calculating the total number of location estimates within each grid cell and dividing this sum by the grid cell’s area, calculated using spherical coordinates (Figure V13). 
+The `occupancy()` function helps describe species’ space-use patterns by calculating the total number of location estimates within each grid cell and dividing this sum by the grid cell’s area, calculated using spherical coordinates (Figure V14). 
 
 `occupancy()` requires a data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)) and includes three optional parameters:
 
@@ -122,7 +119,7 @@ The `occupancy()` function helps describe species’ space-use patterns by calcu
 * *Latitude* and *Longitude*: coordinates for the centre point of each grid cell, 
 * *Area*: area of the grid cell,
 * *Counts*: the number of location estimates recorded in the grid cell, and 
-* *Occupancy*: occupancy values per grid cell (number of counts/area).
+* *Occupancy*: occupancy values per grid cell, defined as the number of counts/area.
 
 ```{r calc occ, eval=FALSE, echo=TRUE, message=FALSE}
 # Create an occupancy map based on the tracks dataset
@@ -131,7 +128,7 @@ occ <- occupancy(tracks)
 
 <img src="../vignettes/word_formatted/images/occ_map-1.png" width="60%" />
 
-**Figure** **V14** Map of occupancy patterns from the `tracks` dataset. Map created with `Occupancy()` default parameters.
+**Figure** **V14** Map of occupancy patterns from the `tracks` dataset. Map created with `occupancy()` default parameters.
 
 ```{r summarise occ, echo=TRUE, eval=FALSE}
 # Summarize occupancy results
@@ -143,7 +140,7 @@ summary(Occ)
 
 ### Probability density function of occupancy results
 
-A pdf of the results from `occupancy()` can be plotted with the `plotPDF()` function when the `desc` parameter is set to “Occupancy” (Figure V14).
+A pdf of the results from `occupancy()` can be plotted with the `plotPDF()` function when the `desc` parameter is set to “occupancy” (Figure V15).
 
 ```{r pdf occ, echo=TRUE, eval=FALSE}
 # Create a pdf plot of occupancy values
