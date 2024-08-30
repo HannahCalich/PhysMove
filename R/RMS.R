@@ -107,7 +107,7 @@ rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
                                             panel.grid.minor = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
                                             axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour = "black"),
                                             axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour = "black"),
-                                            legend.position = c(0, 1), legend.justification = c(0, 1), legend.direction = 'vertical',
+                                            legend.position = "inside", legend.position.inside = c(0, 1), legend.justification = c(0, 1), legend.direction = 'vertical',
                                             legend.background =ggplot2::element_blank(), legend.title = ggplot2::element_blank())+
         ggplot2::annotation_logticks(short=grid::unit(-0.1, "cm"), mid=grid::unit(-0.1, "cm"), long=grid::unit(-0.3,"cm")) +
         ggplot2::coord_cartesian(clip="off")+
@@ -127,6 +127,7 @@ rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
       fit <- lm(log(RMS_Result$Sqrt_dRMS_per_tb) ~ log(RMS_Result$timeBin_log), data = RMS_Result)
       plot.df[[2]] <- as.data.frame(broom::tidy(fit))
       names(plot.df) <- c("rmsResults", "lm")
+      message("Hurst exponent = ", round(fit$coefficients[[2]],4))
       rm(fit)
     } else {
       warning("Not enough data fit linear model")
