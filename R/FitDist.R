@@ -1,7 +1,6 @@
 #' Fit distributions to data
 #'
-#' This function allows you to fit power law, exponential, or lognormal distributions to data. For example, this function can be used
-#' to fit data output from the \code{\link{calcDisp}} function or the \code{\link{occupancy}} function.
+#' This function allows you to fit power law, exponential, or lognormal distributions to a list of values (e.g., displacement data).
 #'
 #' @param input List of values that will be fit to each distribution
 #' @param dist Continuous distributions that will be fit to the data. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
