@@ -5,7 +5,7 @@
 #' @param infomap_output Infomap monolayer object output from the \code{\link{infomapCommunities}} function.
 #' @param subset_communities Concatenated vector of level 1 communities to be mapped. For example, subset_communities=c(1,2,3) will plot level 1 communities
 #' 1, 2, and 3. This parameter is particularly useful if Infomap has identified many communities and they are difficult to distinguish in the map
-#' Default is NULL.
+#' All communities are included by default.
 #' @param colours Colour(s) for each community in the map. Valid input options include: base R (grDevices) color pallets (e.g., colours=rainbow), RColorBrewer
 #' palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that grDevices color
 #' pallets do not use quotations. If the palette does not have enough distinct colours to match the communities being plotted the function will automatically
