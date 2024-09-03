@@ -6,8 +6,8 @@
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
 #' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
 #' See attached sample data \code{\link{tracks}}.
-#' @param wBins Bin width refers to the size of the time bins used to calculate how frequently displacements occurred. Default is 1.1
 #' @param timeUnit Unit used to calculate time between locations (e.g., "secs", "mins", "hours", "days", "weeks"). Default is "days".
+#' @param wBins Bin width refers to the size of the time bins used to calculate how frequently displacements occurred. Default is 1.1
 #' @param plot Plot the root-mean-square and mean displacements against their corresponding time periods. Default is TRUE.
 #' @param lm Calculate a linear regression to examine the relationship between the root-mean-square displacement values (target variable)
 #' and time (predictor variable) and add fit line to the plot (if plot=TRUE). Default is TRUE.
