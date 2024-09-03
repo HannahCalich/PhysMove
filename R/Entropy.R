@@ -11,7 +11,7 @@
 #' See attached sample data \code{\link{tracks}}.
 #' @param gridCell Grid cell size in degrees. Default is 0.25.
 #' @param histPlot Plot a histogram of the normalised  entropy values. Default is TRUE.
-#' @return Data frame of the normalised entropy values for each trajectory (main result) as well as the individual entropy
+#' @return Data frame of the normalised entropy values for each trajectory as well as the individual entropy
 #' values (not normalised) and the number of cells each trajectory visited. If histPlot=TRUE a histogram of the normalised entropy scores is created.
 #' @importFrom rlang .data
 #' @examples
