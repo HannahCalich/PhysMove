@@ -11,14 +11,14 @@ plotPDF(result, desc = NULL, nBins)
 
 \item{desc}{Description of input data. This parameter is used to determine how the data are plotted and to assign appropriate x and y plot labels.
 Valid input options include: "occupancy" (e.g., from the \code{\link{occupancy}} function), "gyrationRad"  (e.g., from the \code{\link{gyrationRad}} function),
-"entropy" (e.g., from the \code{\link{entropy}} function), and "predictability" (from the \code{\link{predictability}} function). Occupancy pdfs are based on
-the total number of cells globally based on the provided grid cell size and are created on created on a log-log scale due to the nature of the data ranges while the other desc types are create on a standard xy plot (to plot occupancy on a standard
+"entropy" (e.g., from the \code{\link{entropy}} function), "predictability" (from the \code{\link{predictability}} function), and NULL. Occupancy pdfs are created on
+a log-log scale due to the nature of the data while the other desc types are create on a standard xy plot (to plot occupancy on a standard
 xy scale leave desc as default). Default is NULL.}
 
 \item{nBins}{Number of bins used to calculate the pdf plot (e.g., nBins=25). By default, if desc="occupancy" the code will use 20 log-sized bins (due to the
-nature of the data ranges) else the number of bins is determined by the data ranges. If the input result values range from 0 to 1 (e.g., entropy or
-predictability results) the code will automatically use 40 bins, and if the input results fall outside the 0 to 1 range (e.g., gyration radius results) the
-code will automatically use 15 bins.}
+nature of the data) else the number of bins is determined by the range of the data. If the input values range from 0 to 1 (e.g., entropy or
+predictability results) the code will use 40 bins by default. If the input results fall outside the 0 to 1 range (e.g., gyration radius results) the
+code will use 15 bins by default.}
 }
 \value{
 A pdf plot of the results and the data used to create the plot.

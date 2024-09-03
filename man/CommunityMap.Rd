@@ -11,7 +11,7 @@ communityMap(infomap_output, subset_communities, colours = "Dark2")
 
 \item{subset_communities}{Concatenated vector of level 1 communities to be mapped. For example, subset_communities=c(1,2,3) will plot level 1 communities
 1, 2, and 3. This parameter is particularly useful if Infomap has identified many communities and they are difficult to distinguish in the map
-Default is NULL.}
+All communities are included by default.}
 
 \item{colours}{Colour(s) for each community in the map. Valid input options include: base R (grDevices) color pallets (e.g., colours=rainbow), RColorBrewer
 palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that grDevices color

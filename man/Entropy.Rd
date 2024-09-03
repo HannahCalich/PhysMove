@@ -18,7 +18,7 @@ See attached sample data \code{\link{tracks}}.}
 \item{histPlot}{Plot a histogram of the normalised  entropy values. Default is TRUE.}
 }
 \value{
-Data frame of the normalised entropy values for each trajectory (main result) as well as the individual entropy
+Data frame of the normalised entropy values for each trajectory as well as the individual entropy
 values (not normalised) and the number of cells each trajectory visited. If histPlot=TRUE a histogram of the normalised entropy scores is created.
 }
 \description{

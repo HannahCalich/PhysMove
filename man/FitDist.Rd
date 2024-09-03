@@ -34,8 +34,7 @@ data were normalised is exported as the second list element because this informa
 functions.
 }
 \description{
-This function allows you to fit power law, exponential, or lognormal distributions to data. For example, this function can be used
-to fit data output from the \code{\link{calcDisp}} function or the \code{\link{occupancy}} function.
+This function allows you to fit power law, exponential, or lognormal distributions to a list of values (e.g., displacement data).
 }
 \examples{
 fitDist(disp, dist=c("pl","exp","lnorm"), full=TRUE)
