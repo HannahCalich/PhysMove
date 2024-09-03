@@ -1,0 +1,431 @@
+---
+title: "PhysMove: Movement Patterns"
+author: "Hannah Calich, Jorge Rodríguez, Víctor Eguíluz & Ana Sequeira"
+date: "Last updated: `r Sys.Date()`"
+output:
+  officedown::rdocx_document:
+    reference_docx: "template.docx"
+    plots:
+      style: Figure
+      align: center
+    tables:
+      style: Table
+vignette: |
+  %\VignetteEncoding{UTF-8}  
+  %\VignetteIndexEntry{PhysMove: Introduction}  
+  %\VignetteEngine{knitr::rmarkdown}
+---
+<style>
+      img {border: 0;}
+</style>
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(dpi = 600, 
+                      fig.align = 'center', 
+                      echo = TRUE,
+                      collapse = TRUE,
+                      fig.path = "images/",
+                      comment = "#>") 
+```
+
+<img src="../vignettes/PhysMoveHex.png" align="right" width="130" />
+
+```{r load physmove movement vignette, echo=FALSE}
+# Load PhysMove
+library(PhysMove)
+```
+ 
+```{r calcualte_rms, echo=TRUE, message=FALSE, eval=FALSE}
+# Calculate RMS values with default parameters
+rms.result <- rms(tracks)
+```
+  
+```{r summarise rms results, echo=TRUE, eval=FALSE}
+# Summarise RMS results
+summary(rms.result[["rmsResults"]])
+```
+
+```{r summary rms, echo=FALSE, warning=FALSE, message=FALSE,  eval=FALSE} 
+library(kableExtra)
+
+table <- as.data.frame.matrix(summary(rms.result[["rmsResults"]]))
+row.names(table) <- NULL
+
+table %>%
+    kable("html", align="l") %>%
+    kableExtra::kable_styling(bootstrap_options = c("condensed"), full_width = F, html_font = "Consolas", font_size = 35) %>%
+    kableExtra::column_spec(1:2, width_min = "400px") %>%
+    kableExtra::column_spec(3, width_min = "1385px") %>%
+    kableExtra::row_spec(0:nrow(table), background = "#F8F8F8", color = "#60a0b0", extra_css = "padding-top: 0px !important; padding-bottom: 0px !important") %>%
+    kableExtra::save_kable("vignettes/word_formatted/tables/summary_rms.png", zoom=1) # html files cant be output to word
+```
+
+```{r calculate hurst exponent, echo=TRUE,  eval=FALSE}
+# Summarise linear model results and identify the Hurst exponent 
+RMSlinearModel <- rms.result[["lm"]]
+print(RMSlinearModel)
+```
+
+```{r rms lm, echo=FALSE, warning=FALSE, message=FALSE, eval=FALSE} 
+library(kableExtra)
+
+table <- as.data.frame.matrix(RMSlinearModel)
+row.names(table) <- NULL
+
+table %>%
+    kable("html", align="l") %>%
+    kableExtra::kable_styling(bootstrap_options = c("condensed"), full_width = F, html_font = "Consolas", font_size = 35) %>%
+    kableExtra::column_spec(1, width_min = "585px") %>%
+    kableExtra::column_spec(2:4, width_min = "400px") %>%
+    kableExtra::column_spec(5, width_min = "400px") %>%
+    kableExtra::row_spec(0:nrow(table), background = "#F8F8F8", color = "#60a0b0", extra_css = "padding-top: 0px !important; padding-bottom: 0px !important") %>%
+    kableExtra::save_kable("vignettes/word_formatted/tables/rms_lm.png", zoom=1) # html files cant be output to word
+```
+
+```{r hurst est, echo=TRUE, eval=FALSE}
+# Determine the Hurst exponent 
+RMSlinearModel$estimate[2]
+```
+
+```{r hurst rms, echo=FALSE, warning=FALSE, message=FALSE, eval=FALSE} 
+library(kableExtra)
+
+table <- as.data.frame(RMSlinearModel$estimate[2])
+row.names(table) <- NULL
+
+table %>%
+    kable("html", align="l") %>%
+    kableExtra::kable_styling(bootstrap_options = c("condensed"), full_width = F, html_font = "Consolas", font_size = 35) %>%
+    kableExtra::column_spec(1, width_min = "2185px") %>%
+    kableExtra::row_spec(0:nrow(table), background = "#F8F8F8", color = "#60a0b0", extra_css = "padding-top: 0px !important; padding-bottom: 0px !important") %>%
+    kableExtra::save_kable("vignettes/word_formatted/tables/hurst.png", zoom=1) # html files cant be output to word
+```
+
+```{r calc disp, echo=TRUE}
+# Calculate displacements with default parameters
+disp.all <- calcDisp(tracks)
+```
+
+```{r sum disp from 1st time window, echo=TRUE}
+# Summarise displacements calculated over 24 ± 6 hours
+summary(unlist(disp.all[[1]]))
+```
+
+```{r summary disp 1, echo=FALSE, warning=FALSE, message=FALSE} 
+library(kableExtra)
+
+table <- unclass(summary(unlist(disp.all[[1]])))
+table <- data.frame(t(table))
+names(table) <- c( "Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
+
+table %>%
+    kable("html", align="l") %>%
+    kableExtra::kable_styling(bootstrap_options = c("condensed"), full_width = F, html_font = "Consolas", font_size = 35) %>%
+    kableExtra::column_spec(1:5, width_min = "300px", include_thead = T) %>%
+    kableExtra::column_spec(6, width_min = "685px") %>%
+    kableExtra::row_spec(0:nrow(table), background = "#F8F8F8", color = "#60a0b0", extra_css = "padding-top: 0px !important; padding-bottom: 0px !important") %>%
+    kableExtra::save_kable("vignettes/word_formatted/tables/summary_disp_all_24.png", zoom=1) # html files cant be output to word
+```
+
+```{r plot_all_norm_disp, echo=TRUE, error=FALSE, message=FALSE, fig.width = 5}
+# Create a pdf plot of normalized displacements
+plot.data <- plotDispPDF(disp.all)
+```
+ 
+```{r plot_all_disp_not_norm, echo=TRUE, error=FALSE, message=FALSE, fig.width = 5}
+# Create a pdf plot of raw (i.e., not normalized) displacements
+plot.data.norm <- plotDispPDF(disp.all, normalised=FALSE)
+```
+
+```{r calc disp over 24 hours, echo=TRUE, message=FALSE}
+# Calculate displacements over 24 ± 6 hours
+disp <- calcDisp(tracks, max_hr=24)
+```
+
+```{r summarise disp over 24 hours, echo=TRUE}
+# Summarise displacements
+summary(unlist(disp))
+```
+
+```{r summary disp 24, echo=FALSE, warning=FALSE, message=FALSE} 
+library(kableExtra)
+
+table <- unclass(summary(unlist(disp)))
+table <- data.frame(t(table))
+names(table) <- c( "Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
+
+table %>%
+    kable("html", align="l") %>%
+    kableExtra::kable_styling(bootstrap_options = c("condensed"), full_width = F, html_font = "Consolas", font_size = 35) %>%
+    kableExtra::column_spec(1:5, width_min = "300px") %>%
+    kableExtra::column_spec(6, width_min = "685px") %>%
+    kableExtra::row_spec(0:nrow(table), background = "#F8F8F8", color = "#60a0b0", extra_css = "padding-top: 0px !important; padding-bottom: 0px !important") %>%
+    kableExtra::save_kable("vignettes/word_formatted/tables/summary_disp24.png", zoom=1) # html files cant be output to word
+```
+
+```{r plot_24hr_disp, echo=TRUE, error=FALSE, message=FALSE, fig.width = 5}
+# Plot displacements (as displacements were only calculated over one time window they do not need to be normalised)
+plot.data.pdf <- plotDispPDF(disp, normalised=FALSE)
+```
+
+```{r fit full dist, echo=TRUE}
+# Fit all distributions to the full range of displacement data 
+distResults <- fitDist(disp, full=TRUE, normalise=FALSE) 
+```
+
+```{r full dist summary, echo=TRUE}
+distResults[["distResults"]]
+```
+
+```{r dist full, echo=FALSE, warning=FALSE, message=FALSE} 
+library(kableExtra)
+
+table <- as.data.frame.matrix(distResults[["distResults"]])
+row.names(table) <- NULL
+
+table %>%
+    kable("html", align="l") %>%
+    kableExtra::kable_styling(bootstrap_options = c("condensed"), full_width = F, html_font = "Consolas", font_size = 35) %>%
+    kableExtra::column_spec(1:4, width_min = "400px") %>%
+    kableExtra::column_spec(5, width_min = "585px") %>%
+    kableExtra::row_spec(0:nrow(table), background = "#F8F8F8", color = "#60a0b0", extra_css = "padding-top: 0px !important; padding-bottom: 0px !important") %>%
+    kableExtra::save_kable("vignettes/word_formatted/tables/dist_full.png", zoom=1) # html files cant be output to word
+```
+
+```{r plot_full_dist, echo=TRUE, error=FALSE, message=FALSE, fig.width = 5}
+# Create a ccdf plot of displacements with fit lines illustrating distributions fit to the full range of displacements
+plot.data.all.pdf <- plotDist(disp, distResults, label="Displacements (km)")
+```
+
+```{r comp dist fits, echo=TRUE}
+# Identify the best-fit distribution for the full range of displacement data
+compResults <- compDist(disp, distResults)
+compResults
+```
+
+```{r dist full comp, echo=FALSE, warning=FALSE, message=FALSE} 
+library(kableExtra)
+
+table <- as.data.frame.matrix(compResults)
+row.names(table) <- NULL
+
+table %>%
+    kable("html", align="l") %>%
+    kableExtra::kable_styling(bootstrap_options = c("condensed"), full_width = F, html_font = "Consolas", font_size = 35) %>%
+    kableExtra::column_spec(1:6, width_min = "300px") %>%
+    kableExtra::column_spec(7, width_min = "385px") %>%
+    kableExtra::row_spec(0:nrow(table), background = "#F8F8F8", color = "#60a0b0", extra_css = "padding-top: 0px !important; padding-bottom: 0px !important") %>%
+    kableExtra::save_kable("vignettes/word_formatted/tables/dist_full_comp.png", zoom=1) # html files cant be output to word
+```
+
+```{r find best-fit xmin for each dist, echo=TRUE, message=FALSE}
+# Fit all distributions and identify the best-fit xmin for each distribution
+distResults.trunc <- fitDist(disp, full=FALSE, normalise=FALSE)
+print(distResults.trunc[["distResults"]])
+```
+
+```{r dist trunc, echo=FALSE, warning=FALSE, message=FALSE} 
+library(kableExtra)
+
+table <- as.data.frame.matrix(distResults.trunc[["distResults"]])
+row.names(table) <- NULL
+
+table %>%
+    kable("html", align="l") %>%
+    kableExtra::kable_styling(bootstrap_options = c("condensed"), full_width = F, html_font = "Consolas", font_size = 35) %>%
+    kableExtra::column_spec(1:4, width_min = "400px") %>%
+    kableExtra::column_spec(5, width_min = "585px") %>%
+    kableExtra::row_spec(0:nrow(table), background = "#F8F8F8", color = "#60a0b0", extra_css = "padding-top: 0px !important; padding-bottom: 0px !important") %>%
+    kableExtra::save_kable("vignettes/word_formatted/tables/dist_trunc.png", zoom=1) # html files cant be output to word
+```
+
+```{r plot_trunc_dist, echo=TRUE, message=FALSE, fig.width = 5}
+# Create a ccdf plot of displacements with fit lines illustrating distributions
+# fit to the best-fit xmin for each distribution
+plot.data.all.trunc <- plotDist(disp, distResults.trunc, label = "Displacements (km)")
+```
+
+```{r fit dist with pl, echo=TRUE, message=FALSE}
+# Fit all distributions using the xmin value for the power-law distribution
+xmin <- distResults.trunc[["distResults"]][1,2]
+distResultsPl <- fitDist(disp, set_xmin=xmin, normalise=FALSE)
+```
+
+```{r fit dist with exp, echo=TRUE, message=FALSE}
+# Fit all distributions using the xmin value for the exponential distribution
+xmin <- distResults.trunc[["distResults"]][2,2]
+distResultsExp <- fitDist(disp, set_xmin=xmin, normalise=FALSE)
+```
+
+```{r fit dist with lnorm, echo=TRUE, message=FALSE}
+# Fit all distributions using the xmin value for the lognormal distribution
+xmin <- distResults.trunc[["distResults"]][3,2]
+distResultsLnorm <- fitDist(disp, set_xmin=xmin, normalise=FALSE)
+```
+
+```{r comp pl, echo=TRUE, message=FALSE}
+# Compare distribution fits based on the best-fit xmin value for the power-law distribution
+compResultsPl <- compDist(disp, distResultsPl)
+compResultsPl
+```
+
+```{r comp results pl, echo=FALSE, warning=FALSE, message=FALSE} 
+library(kableExtra)
+
+table <- as.data.frame.matrix(compResultsPl)
+row.names(table) <- NULL
+
+table %>%
+    kable("html", align="l") %>%
+    kableExtra::kable_styling(bootstrap_options = c("condensed"), full_width = F, html_font = "Consolas", font_size = 35) %>%
+    kableExtra::column_spec(1:6, width_min = "300px") %>%
+    kableExtra::column_spec(7, width_min = "385px") %>%
+    kableExtra::row_spec(0:nrow(table), background = "#F8F8F8", color = "#60a0b0", extra_css = "padding-top: 0px !important; padding-bottom: 0px !important") %>%
+    kableExtra::save_kable("vignettes/word_formatted/tables/dist_pl_comp.png", zoom=1) # html files cant be output to word
+```
+
+```{r comp exp, echo=TRUE, message=FALSE}
+# Compare distribution fits based on the best-fit xmin value for the exponential distribution
+compResultsExp <- compDist(disp, distResultsExp)
+compResultsExp
+```
+
+```{r comp results exp, echo=FALSE, warning=FALSE, message=FALSE} 
+library(kableExtra)
+
+table <- as.data.frame.matrix(compResultsExp)
+row.names(table) <- NULL
+
+table %>%
+    kable("html", align="l") %>%
+    kableExtra::kable_styling(bootstrap_options = c("condensed"), full_width = F, html_font = "Consolas", font_size = 35) %>%
+    kableExtra::column_spec(1:6, width_min = "300px") %>%
+    kableExtra::column_spec(7, width_min = "385px") %>%
+    kableExtra::row_spec(0:nrow(table), background = "#F8F8F8", color = "#60a0b0", extra_css = "padding-top: 0px !important; padding-bottom: 0px !important") %>%
+    kableExtra::save_kable("vignettes/word_formatted/tables/dist_exp_comp.png", zoom=1) # html files cant be output to word
+```
+
+```{r comp lnorm, echo=TRUE, message=FALSE}
+# Compare distribution fits based on the best-fit xmin value for the lognormal distribution
+compResultsLnorm <- compDist(disp, distResultsLnorm)
+compResultsLnorm
+```
+
+```{r comp results lnorm, echo=FALSE, warning=FALSE, message=FALSE} 
+library(kableExtra)
+
+table <- as.data.frame.matrix(compResultsLnorm)
+row.names(table) <- NULL
+
+table %>%
+    kable("html", align="l") %>%
+    kableExtra::kable_styling(bootstrap_options = c("condensed"), full_width = F, html_font = "Consolas", font_size = 35) %>%
+    kableExtra::column_spec(1:6, width_min = "300px") %>%
+    kableExtra::column_spec(7, width_min = "385px") %>%
+    kableExtra::row_spec(0:nrow(table), background = "#F8F8F8", color = "#60a0b0", extra_css = "padding-top: 0px !important; padding-bottom: 0px !important") %>%
+    kableExtra::save_kable("vignettes/word_formatted/tables/dist_lnorm_comp.png", zoom=1) # html files cant be output to word
+```
+
+```{r randomise_tracks, echo=TRUE, error=FALSE, message=FALSE}
+# Randomise() involves random number selection, so setting a seed enables the replication of results
+set.seed(1)
+# Randomise tracks from the tracks dataset with default parameters
+randomise.result <- randomise(tracks)
+```
+
+```{r view random results, echo=TRUE}
+# Summarise RMS results
+summary(randomise.result[["resultsDF"]])
+```
+
+```{r summary randomise, echo=FALSE, warning=FALSE, message=FALSE} 
+library(kableExtra)
+
+table <- as.data.frame.matrix(summary(randomise.result[["resultsDF"]]))
+row.names(table) <- NULL
+
+table %>%
+    kable("html", align="l") %>%
+    kableExtra::kable_styling(bootstrap_options = c("condensed"), full_width = F, html_font = "Consolas", font_size = 35) %>%
+    kableExtra::column_spec(1:2, width_min = "450px") %>%
+    kableExtra::column_spec(3, width_min = "1285px") %>%
+    kableExtra::row_spec(0:nrow(table), background = "#F8F8F8", color = "#60a0b0", extra_css = "padding-top: 0px !important; padding-bottom: 0px !important") %>%
+    kableExtra::save_kable("vignettes/word_formatted/tables/summary_randomise.png", zoom=1) # html files cant be output to word
+```
+
+```{r lm of randomised results, echo=TRUE}
+# Determine the slope of the linear model
+RandomiselinearModel <- randomise.result[["lm"]]
+print(RandomiselinearModel)
+```
+
+```{r randomise lm, echo=FALSE, warning=FALSE, message=FALSE} 
+library(kableExtra)
+
+table <- as.data.frame.matrix(RandomiselinearModel)
+row.names(table) <- NULL
+
+table %>%
+    kable("html", align="l") %>%
+    kableExtra::kable_styling(bootstrap_options = c("condensed"), full_width = F, html_font = "Consolas", font_size = 35) %>%
+    kableExtra::column_spec(1, width_min = "585px") %>%
+    kableExtra::column_spec(2:4, width_min = "400px") %>%
+    kableExtra::column_spec(5, width_min = "400px") %>%
+    kableExtra::row_spec(0:nrow(table), background = "#F8F8F8", color = "#60a0b0", extra_css = "padding-top: 0px !important; padding-bottom: 0px !important") %>%
+    kableExtra::save_kable("vignettes/word_formatted/tables/randomise_lm.png", zoom=1) # html files cant be output to word
+```
+
+```{r slope of randomised results, echo=TRUE}
+# Determine the slope without displaying the full linear model summary
+RandomiselinearModel$estimate[2]
+```
+
+```{r randomise exp, echo=FALSE, warning=FALSE, message=FALSE} 
+library(kableExtra)
+
+table <- as.data.frame(RandomiselinearModel$estimate[2])
+row.names(table) <- NULL
+
+table %>%
+    kable("html", align="l") %>%
+    kableExtra::kable_styling(bootstrap_options = c("condensed"), full_width = F, html_font = "Consolas", font_size = 35) %>%
+    kableExtra::column_spec(1, width_min = "2185px") %>%
+    kableExtra::row_spec(0:nrow(table), background = "#F8F8F8", color = "#60a0b0", extra_css = "padding-top: 0px !important; padding-bottom: 0px !important") %>%
+    kableExtra::save_kable("vignettes/word_formatted/tables/randomise_exp.png", zoom=1) # html files cant be output to word
+```
+
+```{r plot_random_tracks, echo=TRUE, error=FALSE, message=FALSE, fig.width = 5}
+# Plot random tracks for tracks dataset reference id 1
+plot.data.random.tracks <- plotRandomTracks(tracks, ref=1, randomise.result)
+```
+
+```{r turn_angles, echo=TRUE, message=FALSE}
+# Calculate turning angles in the tracks dataset using default parameters
+angle.results <- turningAngles(tracks)
+
+```
+  
+```{r summarise turning angles, echo=TRUE}
+# Summarise turning angles calculated over the first time window 
+summary(angle.results[[1]])
+```
+
+```{r summary angles, echo=FALSE, warning=FALSE, message=FALSE} 
+library(kableExtra)
+
+table <- unclass(summary(angle.results[[1]]))
+table <- data.frame(t(table))
+names(table) <- c( "Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
+
+table %>%
+    kable("html", align="l") %>%
+    kableExtra::kable_styling(bootstrap_options = c("condensed"), full_width = F, html_font = "Consolas", font_size = 35) %>%
+    kableExtra::column_spec(1:5, width_min = "300px") %>%
+    kableExtra::column_spec(6, width_min = "685px") %>%
+    kableExtra::row_spec(0:nrow(table), background = "#F8F8F8", color = "#60a0b0", extra_css = "padding-top: 0px !important; padding-bottom: 0px !important") %>%
+    kableExtra::save_kable("vignettes/word_formatted/tables/summary_angles.png", zoom=1) # html files cant be output to word
+```
+
+```{r plot_angles_circle_plot, echo=TRUE, error=FALSE, message=FALSE, fig.width = 5}
+# Plot angles with a circle plot
+plot.data.angles <- plotAngles(angle.results)
+```

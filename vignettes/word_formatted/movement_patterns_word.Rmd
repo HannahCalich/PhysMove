@@ -28,6 +28,7 @@ knitr::opts_chunk$set(dpi = 600,
                       fig.path = "images/",
                       comment = "#>") 
 ```
+
 <img src="../vignettes/PhysMoveHex.png" align="right" width="130" />
 
 ## Index

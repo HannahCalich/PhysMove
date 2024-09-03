@@ -28,6 +28,11 @@ knitr::opts_chunk$set(dpi = 600,
                       comment = "#>") 
 ```
 
+```{r ms, include=FALSE}
+ms <- FALSE
+```
+
+`r if (ms) paste0("![](", "images/PhysMoveHex.png", "){width='",130, "'}")`
 <img src="../vignettes/PhysMoveHex.png" align="right" width="130" />
 
 ## Index
@@ -73,22 +78,22 @@ The `rms()` function provides insights into the scale of movement by calculating
 
 The second list element is a data frame of results from the linear model and is only exported when `lm=TRUE`. The slope of the linear model is used to describe the scale of movement.
 
-Note that because `rms()` calculates all displacements in each track, this function can take time. Progress updates will appear when calculations are 25%, 50%, 75%, and 100% complete..
+Note that because `rms()` calculates all displacements in each track, this function can take time. Progress updates will appear when calculations are 25%, 50%, 75%, and 100% complete.
 
 ```{r calcualte rms, eval=FALSE}
 # Calculate RMS values with default parameters
 rms.result <- rms(tracks)
 ```
-
+`r if (ms) paste0("![](", "images/calcualte_rms-1.png", ")")`
 <img src="../vignettes/word_formatted/images/calcualte_rms-1.png" width="60%" />
 
-**Figure V2** Scatter plot of mean (grey points; q=1) and root-mean-square (RMS; black points; q=2) displacements (d) in kilometers (km) from tracks dataset over time (T) in days, fit to a linear model (red line with standard error shaded in grey). Plot created with `rms()` default parameters. 
+**Figure V2** Scatter plot of mean (grey points; q=1) and root-mean-square (RMS; black points; q=2) displacements (d) in kilometers (km) from `'tracks'` dataset over time (T) in days, fit to a linear model (red line with standard error shaded in grey). Plot created with `rms()` default parameters. 
 
 ```{r summarise rms results, eval=FALSE}
 # Summarise RMS results
 summary(rms.result[["rmsResults"]])
 ```
-
+`r if (ms) paste0("![](", "tables/summary_rms.png", "){width=800}")`
 <img src="../vignettes/word_formatted/tables/summary_rms.png" width="100%" />
 
 ```{r calculate hurst exponent, eval=FALSE}
@@ -96,14 +101,14 @@ summary(rms.result[["rmsResults"]])
 RMSlinearModel <- rms.result[["lm"]]
 print(RMSlinearModel)
 ```
-
+`r if (ms) paste0("![](", "tables/rms_lm.png", "){width=800}")`
 <img src="../vignettes/word_formatted/tables/rms_lm.png" width="100%" />
 
 ```{r hurst, eval=FALSE}
 # Determine the Hurst exponent 
 RMSlinearModel$estimate[2]
 ```
-
+`r if (ms) paste0("![](", "tables/hurst.png", "){width=800}")`
 <img src="../vignettes/word_formatted/tables/hurst.png" width="100%" />
 
 $~$
@@ -144,10 +149,10 @@ disp.all <- calcDisp(tracks)
 ```
 
 ```{r sum disp from 1st time window, eval=FALSE}
-# Summarise displacements calculated over the first time window (24 ± 6 hours)
+# Summarise displacements calculated over the first time window (24 ± 6 hrs)
 summary(unlist(disp.all[[1]]))
 ```
-
+`r if (ms) paste0("![](", "tables/summary_disp_all_24.png", "){width=800}")`
 <img src="../vignettes/word_formatted/tables/summary_disp_all_24.png" width="100%" />
 
 
@@ -168,22 +173,24 @@ The `plotDispPDF()` function requires a list of displacements calculated using `
   * *timeWindow*: corresponding time windows
 
 ```{r plot all norm disp, eval=FALSE}
-# Create a probability density function (pdf) plot of normalized displacements
+# Create a probability density function (pdf) plot of normalized 
+# displacements
 plot.data <- plotDispPDF(disp.all)
 ```
-
+`r if (ms) paste0("![](", "images/plot_all_norm_disp-1.png", ")")`
 <img src="../vignettes/word_formatted/images/plot_all_norm_disp-1.png" width="60%" />
 
-**Figure V3** Probability density function (pdf) plot of normalised displacements from the `tracks` dataset calculated over 10 time windows, 24 to 240 hours at 24 ± 6-hour time intervals with `calcDisp()`. Plot created with `plotDispPDF()` default parameters (i.e., where `normalised=TRUE`). 
+**Figure V3** Probability density function (pdf) plot of normalised displacements from the `'tracks'` dataset calculated over 10 time windows, 24 to 240 hours at 24 ± 6-hour time intervals with `calcDisp()`. Plot created with `plotDispPDF()` default parameters (i.e., where `normalised=TRUE`). 
 
 ```{r plot all disp (not norm), eval=FALSE}
-# Create a probability density function (pdf) plot of raw (i.e., not normalized) displacements
+# Create a probability density function (pdf) plot of raw (i.e., not 
+# normalized) displacements
 plot.data.norm <- plotDispPDF(disp.all, normalised=FALSE)
 ```
-
+`r if (ms) paste0("![](", "images/plot_all_disp_not_norm-1.png", ")")`
 <img src="../vignettes/word_formatted/images/plot_all_disp_not_norm-1.png" width="60%" />
 
-**Figure V4** Probability density function (pdf) plot of displacements from the `tracks` dataset calculated over 10 time windows, 24 to 240 hours at 24 ± 6-hour time intervals with `calcDisp()`. Plot created with `plotDispPDF()` where `normalised=FALSE`.
+**Figure V4** Probability density function (pdf) plot of displacements from the `'tracks'` dataset calculated over 10 time windows, 24 to 240 hours at 24 ± 6-hour time intervals with `calcDisp()`. Plot created with `plotDispPDF()` where `normalised=FALSE`.
 
 $~$
 $~$
@@ -215,11 +222,11 @@ distributions) or to displacements truncated by a minimum value (i.e., truncated
   * *parameter 2*: second distribution parameter (i.e., σ, only applicable to lnorm), and
   * *nTail*: number of values greater than or equal to xmin.
     
-The second list element is a logical argument that records if the displacements were normalized (TRUE), or not (FALSE). This information is required for `plotDist()` and `compDist()`.
+The second list element is a logical argument that records if the displacements were normalized (TRUE) or not (FALSE). This information is required for `plotDist()` and `compDist()`.
 
 2. `plotDist()`:
 
-Uses the results from `fitDist()` to plot ccdfs of the displacements with fit lines for each distribution. The `plotDist()` function requires a list of displacements calculated using `calcDisp()`, results from `fitDist()`, and includes five optional parameters:
+Uses the results from `fitDist()` to plot ccdfs of the displacements with fit lines for each distribution. The `plotDist()` function requires a list of values (e.g., calculated using `calcDisp()`) and results from `fitDist()`, and includes four optional parameters:
 
   * `fitLines`: add fit lines for each distribution (`fitLines=TRUE`, by default),
   * `setDist`: plot only specific distributions (`setDist=NULL`, by default, which will plot all distributions),
@@ -238,6 +245,7 @@ Compares distribution fits from `fitDist()` and identifies the best-fit distribu
 
 `compDist()` outputs a data frame that contains the summary statistics for each distribution fit (as described for `fitDist()`) with the corresponding *AICc*/*AIC* scores and weighted AICc/AIC scores (*wAICc*/*wAIC*). The distribution with the highest *wAIC* or *wAICc* score from each comparison is the best-fit distribution.
 
+`r if (ms) paste0("![](", "images/FitDistFlowChart_updated.png", ")")`
 <img src="../vignettes/word_formatted/FitDistFlowChart_updated.png" align="center" width="500" />
 
 **Figure V5** Diagram outlining the procedure for identifying the best-fit distribution of displacements.
@@ -259,14 +267,14 @@ disp <- calcDisp(tracks, max_hr=24)
 # Summarise displacements
 summary(unlist(disp))
 ```
-
+`r if (ms) paste0("![](", "tables/summary_disp24.png", "){width=800}")`
 <img src="../vignettes/word_formatted/tables/summary_disp24.png" width="100%" />
 
 ```{r plot 24 hr disp, eval=FALSE}
 # Plot displacements (as displacements were only calculated over one time window they do not need to be normalised)
 plot.data.pdf <- plotDispPDF(disp, normalised=FALSE)
 ```
-
+`r if (ms) paste0("![](", "images/plot_24hr_disp-1.png", ")")`
 <img src="../vignettes/word_formatted/images/plot_24hr_disp-1.png" width="60%" />
 
 **Figure V6** Probability density function (pdf) plot of displacements calculated using `calcDisp()` with `max_hr=24`. Plot created with `plotDispPDF()` and `normalised=FALSE`.
@@ -280,14 +288,15 @@ We use `fitDist()` to fit the full range of distributions calculated over 24 ± 
 distResults <- fitDist(disp, full=TRUE, normalise=FALSE) 
 distResults[["distResults"]]
 ```
-
+`r if (ms) paste0("![](", "tables/dist_full.png", "){width=800}")`
 <img src="../vignettes/word_formatted/tables/dist_full.png" width="100%" />
 
 ```{r plot full dist, eval=FALSE}
-# Create a ccdf plot of displacements with fit lines illustrating distributions fit to the full range of displacements
-plot.data.all.pdf <- plotDist(disp, distResults)
+# Create a ccdf plot of displacements with fit lines illustrating 
+# distributions fit to the full range of displacements
+plot.data.all.pdf <- plotDist(disp, distResults, label="Displacements (km)")
 ```
-
+`r if (ms) paste0("![](", "images/plot_full_dist-1.png", ")")`
 <img src="../vignettes/word_formatted/images/plot_full_dist-1.png" width=60%" />
 
 **Figure V7** Complementary cumulative distribution function (ccdf) of displacements (calculated using `calcDisp()` with `max_hr=24`). Plot includes fit lines for power-law (pl), exponential (exp), and lognormal (lnorm) distributions based on results from `fitDist()` with `full=TRUE`. Plot created using `plotDist()` default parameters. 
@@ -299,7 +308,7 @@ Next, we use `compDist()` to compare distribution fits over the full range of di
 compResults <- compDist(disp, distResults)
 compResults
 ```
-
+`r if (ms) paste0("![](", "tables/dist_full_comp.png", "){width=800}")`
 <img src="../vignettes/word_formatted/tables/dist_full_comp.png" width=100%" />
 
 
@@ -312,16 +321,16 @@ We use `fitDist()` to identify the best-fit xmin for each distribution and fit t
 distResults.trunc <- fitDist(disp, full=FALSE, normalise=FALSE)
 print(distResults.trunc[["distResults"]])
 ```
-
+`r if (ms) paste0("![](", "tables/dist_trunc.png", "){width=800}")`
 <img src="../vignettes/word_formatted/tables/dist_trunc.png" width=100%" />
 
 
 ```{r plot trunc dist, eval=FALSE}
-# Create a ccdf plot of displacements with fit lines illustrating distributions
-# fit to the best-fit xmin for each distribution
-plot.data.all.trunc <- plotDist(disp, distResults.trunc)
+# Create a ccdf plot of displacements with fit lines illustrating 
+# distributions fit to the best-fit xmin for each distribution
+plot.data.all.trunc <- plotDist(disp, distResults.trunc, label="Displacements (km)")
 ```
-
+`r if (ms) paste0("![](", "images/plot_trunc_dist-1.png", ")")`
 <img src="../vignettes/word_formatted/images/plot_trunc_dist-1.png" width=60%" />
 
 **Figure** **V8** Complementary cumulative distribution function (ccdf) of displacements calculated using `calcDisp()` with `max_hr=24` including fit lines for truncated power-law (pl), exponential (exp), and lognormal (lnorm) distributions based on the best-fit xmin results from `fitDist()`. Plot created using `plotDist()` default parameters.
@@ -329,19 +338,22 @@ plot.data.all.trunc <- plotDist(disp, distResults.trunc)
 Since each distribution was fit to a different range of data (i.e., *nTail* values are different for each distribution), we cannot run `compDist()` directly. Instead, we must make pairwise comparisons where `fitDist()` is re-run three times (once for each of the three distributions) where the `set_xmin` parameter is set to each of the best-fit xmin values in turn. 
 
 ```{r fit dist with pl, eval=FALSE}
-# Fit all distributions using the xmin value for the power-law distribution
+# Fit all distributions using the xmin value for the 
+# power-law distribution
 xmin <- distResults.trunc[["distResults"]][1,2]
 distResultsPl <- fitDist(disp, set_xmin=xmin, normalise=FALSE)
 ```
 
 ```{r fit dist with exp, eval=FALSE}
-# Fit all distributions using the xmin value for the exponential distribution
+# Fit all distributions using the xmin value for the 
+# exponential distribution
 xmin <- distResults.trunc[["distResults"]][2,2]
 distResultsExp <- fitDist(disp, set_xmin=xmin, normalise=FALSE)
 ```
 
 ```{r fit dist with lnorm, eval=FALSE}
-# Fit all distributions using the xmin value for the lognormal distribution
+# Fit all distributions using the xmin value for the 
+# lognormal distribution
 xmin <- distResults.trunc[["distResults"]][3,2]
 distResultsLnorm <- fitDist(disp, set_xmin=xmin, normalise=FALSE)
 ```
@@ -352,7 +364,7 @@ Once all distributions are fit using each of the best-fit xmin values, the distr
 compResultsPl <- compDist(disp, distResultsPl)
 compResultsPl
 ```
-
+`r if (ms) paste0("![](", "tables/dist_pl_comp.png", "){width=800}")`
 <img src="../vignettes/word_formatted/tables/dist_pl_comp.png" width=100%" />
 
 ```{r comp exp, eval=FALSE}
@@ -360,7 +372,7 @@ compResultsPl
 compResultsExp <- compDist(disp, distResultsExp)
 compResultsExp
 ```
-
+`r if (ms) paste0("![](", "tables/dist_exp_comp.png", "){width=800}")`
 <img src="../vignettes/word_formatted/tables/dist_exp_comp.png" width=100%" />
 
 ```{r comp lnorm, eval=FALSE}
@@ -368,7 +380,7 @@ compResultsExp
 compResultsLnorm <- compDist(disp, distResultsLnorm)
 compResultsLnorm
 ```
-
+`r if (ms) paste0("![](", "tables/dist_lnorm_comp.png", "){width=800}")`
 <img src="../vignettes/word_formatted/tables/dist_lnorm_comp.png" width=100%" />
 
 Overall conclusion: The data were best-fit to both full and truncated exponential distributions, when compared with power-law and lognormal distributions. Because the full distribution includes all of the data we will refer to the full distribution when presenting and discussing our final results.
@@ -399,21 +411,23 @@ randomised tracks and the number of grid cells visited by the original tracks (`
 The second and third list elements contain the randomised longitude and latitude values in list elements 2 and 3, respectively, which are needed for the `plotRandomTracks()` function
 
 ```{r randomise tracks, eval=FALSE}
-# randomise() involves random number selection, so setting a seed enables the replication of results
+# randomise() involves random number selection, so setting a seed enables the 
+# replication of results
 set.seed(1)
-# Randomise tracks from the tracks dataset with default parameters
+
+# Randomise tracks from the `'tracks'` dataset with default parameters
 randomise.result <- randomise(tracks)
 ```
-
+`r if (ms) paste0("![](", "images/randomise_tracks-1.png", ")")`
 <img src="../vignettes/word_formatted/images/randomise_tracks-1.png" width=60%" />
 
-**Figure** **V9** Scatter plot illustrating the relationship between the number of grid cells visited by the original tracks from the `tracks` dataset and the average number of grid cells visited by the randomised tracks. The solid black line represents the linear model fit to this data, the grey shaded area reflects the standard error of the fit, and the dashed black line represents a 1:1 relationship. Plot created with `randomise()` default parameters.
+**Figure** **V9** Scatter plot illustrating the relationship between the number of grid cells visited by the original tracks from the `'tracks'` dataset and the average number of grid cells visited by the randomised tracks. The solid black line represents the linear model fit to this data, the grey shaded area reflects the standard error of the fit, and the dashed black line represents a 1:1 relationship. Plot created with `randomise()` default parameters.
 
 ```{r view random results, eval=FALSE}
 # Summarise RMS results
 summary(randomise.result[["resultsDF"]])
 ```
-
+`r if (ms) paste0("![](", "tables/summary_randomise.png", "){width=800}")`
 <img src="../vignettes/word_formatted/tables/summary_randomise.png" width=100%" />
 
 ```{r lm of randomised results, echo=TRUE, eval=FALSE}
@@ -421,14 +435,14 @@ summary(randomise.result[["resultsDF"]])
 RandomiselinearModel <- randomise.result[["lm"]]
 print(RandomiselinearModel)
 ```
-
+`r if (ms) paste0("![](", "tables/randomise_lm.png", "){width=800}")`
 <img src="../vignettes/word_formatted/tables/randomise_lm.png" width=100%" />
 
 ```{r slope of randomised results, echo=TRUE, eval=FALSE}
 # Determine the slope without displaying the full linear model summary
 RandomiselinearModel$estimate[2]
 ```
-
+`r if (ms) paste0("![](", "tables/randomise_exp.png", "){width=800}")`
 <img src="../vignettes/word_formatted/tables/randomise_exp.png" width=100%" />
 
 ### Plot randomised tracks
@@ -456,13 +470,13 @@ To visualise the tracks created with `randomise()` you can use `plotRandomTracks
 * *lat*: latitude coordinates of the randomised tracks.
 
 ```{r plot random tracks, eval=FALSE}
-# Plot random tracks for tracks dataset reference id 1
+# Plot random tracks for `'tracks'` dataset reference id 1
 plot.data.random.tracks <- plotRandomTracks(tracks, ref=1, randomise.result)
 ```
-
+`r if (ms) paste0("![](", "images/plot_random_tracks-1.png", ")")`
 <img src="../vignettes/word_formatted/images/plot_random_tracks-1.png" width=60%" />
 
-**Figure V10** Map illustrating the original track for reference id 1 from the tracks dataset (black points and line) and the first 5 randomised tracks for track reference id 1 calculated using `randomise()` (grey points and lines). The starting and ending locations are in red and blue, respectively. Plot created with `plotRandomTracks()` default parameters and `ref=1`.
+**Figure V10** Map illustrating the original track for reference id 1 from the `'tracks'` dataset (black points and line) and the first 5 randomised tracks for track reference id 1 calculated using `randomise()` (grey points and lines). The starting and ending locations are in red and blue, respectively. Plot created with `plotRandomTracks()` default parameters and `ref=1`.
 
 $~$
 $~$
@@ -487,7 +501,7 @@ default), and
 Results are output in a list where each list element contains the angles calculated over a time window, such that the first list element contains data from the first time window and so on.
 
 ```{r calc turn angles, eval=FALSE}
-# Calculate turning angles in the tracks dataset using default parameters
+# Calculate turning angles in the `'tracks'` dataset using default parameters
 angle.results <- turningAngles(tracks)
 
 # "15573 angles in 24 +/- 6 hour(s)"
@@ -502,15 +516,16 @@ angle.results <- turningAngles(tracks)
 # "15123 angles in 240 +/- 6 hour(s)"
 ```
 
-<img src="../vignettes/word_formatted/images/turn_angles-1.png" width=60%" />
+`r if (ms) paste0("![](", "images/turn_angles.png", ")")`
+<img src="../vignettes/word_formatted/images/turn_angles.png" width=60%" />
 
-**Figure** **V11** Histogram of turning angles from the `tracks` dataset over ten time windows (24 to 240 hours at 24 ± 6 hour intervals). Plot created with `turningAngles()` default parameters.
+**Figure** **V11** Histogram of turning angles from the `'tracks'` dataset over ten time windows (24 to 240 hours at 24 ± 6 hour intervals). Plot created with `turningAngles()` default parameters.
 
 ```{r summarise turning angles, eval=FALSE}
 # Summarise turning angles calculated over the first time window 
 summary(angle.results[[1]])
 ```
-
+`r if (ms) paste0("![](", "tables/summary_angles.png", "){width=800}")`
 <img src="../vignettes/word_formatted/tables/summary_angles.png" width=100%" />
 
 
@@ -538,10 +553,10 @@ plot) showing the frequency of turning angles over each time window
 # Plot angles with a circle plot
 plot.data.angles <- plotAngles(angle.results)
 ```
+`r if (ms) paste0("![](", "images/plot_angles_circle_plot.png", ")")`
+<img src="../vignettes/word_formatted/images/plot_angles_circle_plot.png" width=60%" />
 
-<img src="../vignettes/word_formatted/images/plot_angles_circle_plot-1.png" width=60%" />
-
-**Figure** **S12** Circle plot of turning angles recorded from the `tracks` dataset during ten time windows (24 to 240 hours at 24 ± 6 hour intervals). Plot created with `plotAngles()` default parameters.
+**Figure** **S12** Circle plot of turning angles recorded from the `'tracks'` dataset during ten time windows (24 to 240 hours at 24 ± 6 hour intervals). Plot created with `plotAngles()` default parameters.
 
 $~$
 $~$

@@ -22,13 +22,16 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(dpi = 600, 
                       fig.align = 'center', 
-                      fig.width = 4, 
-                      fig.height = 4,
                       echo = TRUE,
                       collapse = TRUE,
                       comment = "#>") 
 ```
 
+```{r ms, include=FALSE}
+ms <- FALSE
+```
+
+`r if (ms) paste0("![](", "images/PhysMoveHex.png", "){width='",130, "'}")`
 <img src="../vignettes/PhysMoveHex.png" align="right" width="130" />
 
 ## Index
@@ -63,12 +66,13 @@ The `infomapCommunities()` function requires a data frame with telemetry data (s
 * `gridCell`: grid cell size in degrees (`gridCell=0.25`, by default),
 * `hours`: number of hours between location estimates (`hours=24`, by default), 
 * `range_hr`: time range in hours (`range_hr=6`, by default). This parameter allows you to identify location estimates that are close to, but not exactly separated by the set number of `hours`, and 
-* `tpm`: save the transition probability matrix to the output list as a second list element(`tpm=FALSE`, by default).
+* `tpm`: save the transition probability matrix to the output list as a second list element (`tpm=FALSE`, by default).
 
 `infomapCommunities()` outputs a list with up to two list objects. The first list object is an *infomap monolayer object* that summarizes the hierarchical structure of the Infomap communities (regions where individuals follow similar movement patterns and are likely to stay for longer periods of time). The second list object is the transition probability matrix, which is only output if `tpm=TRUE`.
 
 **Important**: Before running `infomapCommunities()` you must:
-1) set your working directory to the folder that contains the stand-alone Infomap file (*Infomap.exe*) using `setwd()` and 2) load the infomap ecology r package using `library(infomapecology)`
+1) set your working directory to the folder that contains the stand-alone Infomap file (*Infomap.exe*) using `setwd()` and 
+2) load the infomapecology r package using `library(infomapecology)`
 
 ```{r structure of infomap, echo=TRUE, eval=FALSE}
 # Identify community-wide movements 
@@ -77,9 +81,8 @@ infomapResult <- infomapCommunities(tracks)
 # View the Infomap monolayer object structure
 str(infomapResult[["infomap_object"]])
 ```
-
-<img src="../vignettes/word_formatted/tables/infomap_str.png" width="100%" />
-
+`r if (ms) paste0("![](", "tables/infomap_str.png", ")")`
+<img src="../vignettes/word_formatted/tables/infomap_str.png" width="50%" />
 
 ### Plot Infomap communities
 
@@ -87,17 +90,17 @@ str(infomapResult[["infomap_object"]])
 
 The `communityMap()` function requires the *Infomap monolayer object* output from `infomapCommunities()` and includes two optional parameters:
 
-* `subset_communities`: used to only map specific level 1 communities. For example, `subset_communities = c(1,2,3)` would plot the first three level 1 communities, and
+* `subset_communities`: used to only map specific level 1 communities. For example, `subset_communities = c(1,2,3)` would plot the first three level 1 communities (all communities are included by default), and
 * `colours`: change colours of the communities (`colours= “Dark2”`, by default).
 
 ```{r infomap map, echo=TRUE, message=FALSE, eval=FALSE}
 # Create a map of the Infomap communities
 communityMap(infomapResult)
 ```
-
+`r if (ms) paste0("![](", "images/infomap_map-1.png", ")")`
 <img src="../vignettes/word_formatted/images/infomap_map-1.png" width="60%" />
 
-**Figure** **v13** Map illustrating level 1 Infomap communities from the `tracks` dataset determined using `infomapCommunities()` default parameters. Map created with `communityMap()` default parameters.
+**Figure** **v13** Map illustrating level 1 Infomap communities from the `'tracks'` dataset determined using `infomapCommunities()` default parameters. Map created with `communityMap()` default parameters.
 
 $~$
 $~$
@@ -125,16 +128,16 @@ The `occupancy()` function helps describe species’ space-use patterns by calcu
 # Create an occupancy map based on the tracks dataset
 occ <- occupancy(tracks)
 ```
-
+`r if (ms) paste0("![](", "images/occ_map-1.png", ")")`
 <img src="../vignettes/word_formatted/images/occ_map-1.png" width="60%" />
 
-**Figure** **V14** Map of occupancy patterns from the `tracks` dataset. Map created with `occupancy()` default parameters.
+**Figure** **V14** Map of occupancy patterns from the `'tracks'` dataset. Map created with `occupancy()` default parameters.
 
 ```{r summarise occ, echo=TRUE, eval=FALSE}
 # Summarize occupancy results
 summary(Occ) 
 ```
-
+`r if (ms) paste0("![](", "tables/summary_occ.png", ")")`
 <img src="../vignettes/word_formatted/tables/summary_occ.png" width="100%" />
 
 
@@ -146,7 +149,7 @@ A pdf of the results from `occupancy()` can be plotted with the `plotPDF()` func
 # Create a pdf plot of occupancy values
 pdf.occ  <- plotPDF(occ$Occupancy, desc="occupancy")
 ```
-
+`r if (ms) paste0("![](", "images/occ_pdf-1.png", ")")`
 <img src="../vignettes/word_formatted/images/occ_pdf-1.png" width="60%" />
 
 **Figure V15** Probability density function (pdf) plot of occupancy values for the tracks dataset calculated with `occupancy()` default parameters. Plot created using `plotPDF()` with `desc=“occupancy”`.

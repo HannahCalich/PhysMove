@@ -79,9 +79,9 @@ Columns must be formatted as follows:
 The ```CheckTracks``` function can be used to confirm your input data are formatted as described above. This function checks that column names are in order and that each column is in the correct format as described above. Note that this function does not evaluate data quality or quantity. 
 
 <br>  
-``` {r check tracks, eval=FALSE}
+``` {r check tracks, eval=TRUE}
 # Check your data are formatted correctly
-CheckTracks(data) # replace "data" with your data frame
+checkTracks(tracks) # replace "data" with your data frame
 ```
 
 You can also compare your data frame to our sample dataset `tracks` to ensure your data are formatted correctly.
@@ -144,7 +144,7 @@ A basic map of your telemetry data can be created using our `PlotTracks()` funct
 
 <br>  
 ```{r plot_tracks, message=FALSE, fig.width=5, fig.height=3.5}
-PlotTracks(tracks) 
+plotTracks(tracks) 
 ```
 
 **Figure V1** Map of the simulated `tracks` dataset created with `PlotTracks()` default settings.

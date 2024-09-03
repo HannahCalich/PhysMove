@@ -1,0 +1,186 @@
+---
+title: "PhysMove: Introduction" 
+author: "Hannah J. Calich, Jorge Rodríguez, Víctor Eguíluz & Ana M. M. Sequeira"
+date: 'Last updated: `r Sys.Date()`'
+output: rmarkdown::html_vignette 
+vignette: >
+  %\VignetteIndexEntry{PhysMove: Introduction} 
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+      img {
+      border: 0;
+      height: auto;
+      display: block; 
+      margin: 1em auto
+    }
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(dpi = 600, 
+                      fig.align = 'center', 
+                      #fig.width = 4, 
+                      #fig.height = 4,
+                      echo = TRUE,
+                      collapse = TRUE,
+                      comment = "#>") 
+```
+
+```{r ms, include=FALSE}
+ms <- FALSE
+```
+
+`r if (ms) paste0("![](", "images/PhysMoveHex.png", "){width='",50, "'}")`
+<img src="../vignettes/PhysMoveHex.png" align="right" width="130" />
+
+```{r logo, echo=FALSE, fig.align="right", fig.width=2.5, fig.height=2.5}
+# if (ms==TRUE){
+#   knitr::include_graphics(normalizePath("./vignettes/word_formatted/images/PhysMoveHex.png"), rel_path = FALSE)
+# }
+```
+
+## Index 
+
+1. [Introduction and data preparation](pt1_introduction.html)
+2. [Movement patterns](pt2_movement_patterns.html) 
+3. [Space-use patterns](pt3_space_use_patterns.html)
+4. [Intraspecific movements](pt4_intraspecific_movements.html)
+
+## Introduction 
+
+*PhysMove* contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. These vignettes demonstrate how to calculate each of the *PhysMove* methods and review all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called '`tracks`', which is automatically loaded with *PhysMove* (see [explore tracks dataset](pt1_introduction.html#explore-tracks-dataset) for further details). For further details on our methods and interpreting results please see our corresponding manuscript. 
+
+The most up-to-date version of *PhysMove* and the accompanying vignettes can be installed by following the instructions below.
+
+## Installation 
+
+We recommend users install the development version of *PhysMove* from GitHub using the devtools R package. 
+
+```{r installation, eval=FALSE}
+# Install the devtools package from CRAN (if required)
+install.packages("devtools")
+
+# Download the development version from GitHub:
+devtools::install_github("HannahCalich/PhysMove", auth_token = "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", build_vignettes = TRUE)
+```
+
+```{r load physmove}
+# Load PhysMove
+library(PhysMove)
+```
+
+## Data formatting
+
+*PhysMove* was designed to be user-friendly and most functions only require you to input a data frame containing standard telemetry data. The input data frame must only contain these four columns in the following order: *ref*, *lon*, *lat*, and *day*.  
+
+Columns must be formatted as follows:
+
+  * *ref*: the unique telemetry tag ID number for each animal in numeric format (note that characters are not accepted because 
+  they can be slower to process than integers, so please convert all reference IDs to integers before proceeding)
+  * *lon* and *lat*: the longitude (-180 to + 180) and latitude (-90 to +90) in decimal degrees of
+    each position estimate, respectively, in numeric format, and
+  * *day*: the datetime stamp for each location estimate in POSIXct
+    format following yyyy-mm-dd hh:mm:ss.
+
+The ```checkTracks``` function can be used to confirm your input data are formatted as described above. This function checks that column names are in order and that each column is in the correct format as described above. Note that this function does not evaluate data quality or quantity.  
+
+``` {r check_tracks, eval=FALSE}
+# Check your data are formatted correctly
+checkTracks(tracks) # replace "tracks" with your data frame
+```
+
+You can also compare your data frame to our sample dataset '`tracks`' to ensure your data are formatted correctly.
+
+## Explore '`tracks`' dataset
+
+'`tracks`' is a simulated telemetry dataset of 25 unique tracks with a defined set of movement parameters that was designed to demonstrate each of the *PhysMove* functions. In detail, '`tracks`' was created using a biased, uncorrelated random walk model with variable step lengths drawn from an exponential distribution with λ = 0.125. We defined the turning angles such that 30% indicated directed forward movement (movements with angles <30° or >330°), and 30% indicated directed return movement (angles between 150-210°), allowing the remainder (40%) to be randomly between 0-360°. These metrics were chosen because they are broadly consistent with literature interpretations of animals moving through a resource-rich habitat. See corresponded manuscript for further details. The code used to make the '`tracks`' dataset is available in the *PhysMove* `doc` folder on GitHub as “createTracks.R”.
+
+```{r head tracks, eval=FALSE}
+# Preview the first 6 rows of the tracks dataset
+head(tracks)
+```
+
+```{r tracks_head, echo=FALSE, fig.width=6.5, fig.height=1.25}
+# if (ms==TRUE){
+#   knitr::include_graphics(normalizePath("./vignettes/word_formatted/tables/tracks_head.png"), rel_path = FALSE)
+# }
+```
+`r if (ms) paste0("![](", "tables/tracks_head.png", ")")`
+<img src="../vignettes/word_formatted/tables/tracks_head.png" width="100%" />
+```{r structure tracks, eval=FALSE}
+# Determine the structure of the tracks dataset
+str(tracks)
+```
+
+```{r tracks_str, echo=FALSE, fig.width=6.5, fig.height=0.7}
+# if (ms==TRUE){
+#   knitr::include_graphics(normalizePath("./vignettes/word_formatted/tables/tracks_str.png"), rel_path = FALSE)
+# }
+```
+`r if (ms) paste0("![](", "tables/tracks_str.png", ")")`
+<img src="../vignettes/word_formatted/tables/tracks_str.png" width="100%" />
+
+## Create a map of the tracks dataset
+
+A basic map of your telemetry data can be created using our `plotTracks()` function (Figure V1). 
+
+`plotTracks()` requires a data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)) and includes three optional parameters:
+
+  * `ref`: plot specific tracks based on their reference IDs (`ref=NULL`, by default), 
+  * `tracks`: connect points with lines (`tracks=TRUE`, by default), and
+  * `colours`: edit the colours used in the map (`colours=rainbow`, by default).  
+
+```{r plot_tracks, eval=FALSE, message=FALSE}
+plotTracks(tracks)
+```
+
+```{r tracks_image, echo=FALSE, fig.width=5, fig.height=3.5}
+# if (ms==TRUE){
+#   knitr::include_graphics(normalizePath("./vignettes/word_formatted/images/plot_tracks-1.png"), rel_path = FALSE)
+# }
+```
+`r if (ms) paste0("![](", "images/plot_tracks-1.png", ")")`
+<img src="../vignettes/word_formatted/images/plot_tracks-1.png" width="70%" />
+**Figure V1** Map of the simulated '`tracks`' dataset created with `plotTracks()` default settings.
+
+$~$
+$~$
+
+[Proceed to Movement Patterns](pt2_movement_patterns.html)
+
+[Back to top](pt1_introduction.html)
+
+
+## References & Recommended resources
+
+<div style="text-indent: -40px; padding-left: 40px;">
+
+Burnham, K.P. & Anderson, D.R. (2004) Multimodel Inference: Understanding
+  AIC and BIC in Model Selection. *Sociological Methods & Research*, 33,
+  261-304.
+
+Calich, H.J. *et al*. (2021) Comprehensive analytical approaches reveal
+  species-specific search strategies in sympatric apex predatory sharks.
+  *Ecography*, 44, 1544-1556.
+
+Farage, C. *et al*. (2021) Identifying flow modules in ecological
+  networks using Infomap. *Methods in Ecology and Evolution*, 12, 778–786.
+
+Méndez, V., *et al*. (2013). Stochastic Foundations in Movement Ecology:
+  Anomalous Diffusion, Front Propagation and Random Searches. Berlin,
+  Heidelberg, Germany, Springer Berlin / Heidelberg.
+
+Rodríguez, J.P. *et al*. (2017) Big data analyses reveal patterns and
+  drivers of the movements of southern elephant seals. *Scientific*
+  *Reports*, 7, 1-10.
+
+Viswanathan, G. M., *et al*. (2011). The Physics of Foraging: An
+  Introduction to Biological Encounters and Random Searches. Cambridge,
+  Cambridge University Press.
+
+Wickham, H. (2016) ggplot2: Elegant Graphics for Data Analysis.
+  Springer-Verlag, New York.
+
+</div>

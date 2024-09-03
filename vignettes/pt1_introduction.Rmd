@@ -1,6 +1,6 @@
 ---
 title: "PhysMove: Introduction" 
-author: "Hannah J. Calich, Jorge Rodríguez, Víctor Eguíluz & Ana M. M. Sequeira "
+author: "Hannah J. Calich, Jorge Rodríguez, Víctor Eguíluz & Ana M. M. Sequeira"
 date: 'Last updated: `r Sys.Date()`'
 output: rmarkdown::html_vignette 
 vignette: >
@@ -21,13 +21,16 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(dpi = 600, 
                       fig.align = 'center', 
-                      fig.width = 4, 
-                      fig.height = 4,
                       echo = TRUE,
                       collapse = TRUE,
                       comment = "#>") 
 ```
 
+```{r ms, include=FALSE}
+ms <- FALSE
+```
+
+`r if (ms) paste0("![](", "images/PhysMoveHex.png", "){width='",130, "'}")`
 <img src="../vignettes/PhysMoveHex.png" align="right" width="130" />
 
 ## Index 
@@ -39,11 +42,13 @@ knitr::opts_chunk$set(dpi = 600,
 
 ## Introduction 
 
-*PhysMove* contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. These vignettes demonstrate how to calculate each of the *PhysMove* methods and review all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called `tracks`, which is automatically loaded with *PhysMove* (see [explore tracks dataset](pt1_introduction.html#explore-tracks-dataset) for further details). For further details on our methods and interpreting results please see our corresponding manuscript. 
+*PhysMove* contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. These vignettes demonstrate how to calculate each of the *PhysMove* methods and review all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called '`tracks`', which is automatically loaded with *PhysMove* (see [explore 'tracks' dataset](pt1_introduction.html#explore-tracks-dataset) for further details). For further details on our methods and interpreting results please see our corresponding manuscript. 
+
+The most up-to-date version of *PhysMove* and the accompanying vignettes can be installed by following the instructions below.
 
 ## Installation 
 
-We recommend users install the development version of PhysMove from GitHub using the devtools R package. 
+We recommend users install the development version of *PhysMove* from GitHub using the devtools R package. 
 
 ```{r installation, eval=FALSE}
 # Install the devtools package from CRAN (if required)
@@ -60,8 +65,7 @@ library(PhysMove)
 
 ## Data formatting
 
-*PhysMove* was designed to be user-friendly and most functions only require you to input a data frame containing standard telemetry data. 
-The input data frame must only contain these four columns in the following order: *ref*, *lon*, *lat*, and *day*.  
+*PhysMove* was designed to be user-friendly and most functions only require you to input a data frame containing standard telemetry data. The input data frame must only contain these four columns in the following order: *ref*, *lon*, *lat*, and *day*.  
 
 Columns must be formatted as follows:
 
@@ -74,33 +78,34 @@ Columns must be formatted as follows:
 
 The ```checkTracks``` function can be used to confirm your input data are formatted as described above. This function checks that column names are in order and that each column is in the correct format as described above. Note that this function does not evaluate data quality or quantity.  
 
-``` {r check tracks, eval=FALSE}
+``` {r check_tracks, eval=FALSE}
 # Check your data are formatted correctly
-checkTracks(data) # replace "data" with your data frame
+checkTracks(tracks) # replace 'tracks' with your data frame
 ```
 
-You can also compare your data frame to our sample dataset `tracks` to ensure your data are formatted correctly.
+You can also compare your data frame to our sample dataset '`tracks`' to ensure your data are formatted correctly.
 
-## Explore `tracks` dataset
+## Explore '`tracks`' dataset
 
-`tracks` is a simulated telemetry dataset of 25 unique tracks with a defined set of movement parameters that was designed to demonstrate each of the *PhysMove* functions. In detail, `tracks` was created using a biased, uncorrelated random walk model with variable step lengths drawn from an exponential distribution with λ = 0.125. We defined the turning angles such that 30% indicated directed forward movement (movements with angles <30° or >330°), and 30% indicated directed return movement (angles between 150-210°), allowing the remainder (40%) to be randomly between 0-360°. These metrics were chosen because they are broadly consistent with literature interpretations of animals moving through a resource-rich habitat. See corresponded manuscript for further details. The code used to make the `tracks` dataset is available in the *PhysMove* `doc` folder on GitHub as “createTracks.R”.
+'`tracks`' is a simulated telemetry dataset of 25 unique tracks with a defined set of movement parameters that was designed to demonstrate each of the *PhysMove* functions. In detail, '`tracks`' was created using a biased, uncorrelated random walk model with variable step lengths drawn from an exponential distribution with λ = 0.125. We defined the turning angles such that 30% indicated directed forward movement (movements with angles <30° or >330°), and 30% indicated directed return movement (angles between 150-210°), allowing the remainder (40%) to be randomly between 0-360°. These metrics were chosen because they are broadly consistent with literature interpretations of animals moving through a resource-rich habitat. See corresponded manuscript for further details. The code used to make the '`tracks`' dataset is available in the *PhysMove* `doc` folder on GitHub as “createTracks.R”.
 
 ```{r head tracks, eval=FALSE}
-# Preview the first 6 rows of the tracks dataset
+# Preview the first 6 rows of the 'tracks' dataset
 head(tracks)
 ```
 
+`r if (ms) paste0("![](", "tables/tracks_head.png", "){width=800}")`
 <img src="../vignettes/word_formatted/tables/tracks_head.png" width="100%" />
 
 ```{r structure tracks, eval=FALSE}
-# Determine the structure of the tracks dataset
+# Determine the structure of the 'tracks' dataset
 str(tracks)
 ```
 
+`r if (ms) paste0("![](", "tables/tracks_str.png", "){width=800}")`
 <img src="../vignettes/word_formatted/tables/tracks_str.png" width="100%" />
 
-
-## Create a map of the tracks dataset
+## Create a map of the 'tracks' dataset
 
 A basic map of your telemetry data can be created using our `plotTracks()` function (Figure V1). 
 
@@ -110,13 +115,13 @@ A basic map of your telemetry data can be created using our `plotTracks()` funct
   * `tracks`: connect points with lines (`tracks=TRUE`, by default), and
   * `colours`: edit the colours used in the map (`colours=rainbow`, by default).  
 
-```{r plot tracks, eval=FALSE, message=FALSE}
+```{r plot_tracks, eval=FALSE, message=FALSE}
 plotTracks(tracks)
 ```
-
+`r if (ms) paste0("![](", "images/plot_tracks-1.png", ")")`
 <img src="../vignettes/word_formatted/images/plot_tracks-1.png" width="70%" />
 
-**Figure V1** Map of the simulated `tracks` dataset created with `plotTracks()` default settings.
+**Figure V1** Map of the simulated '`tracks`' dataset created with `plotTracks()` default settings.
 
 $~$
 $~$
