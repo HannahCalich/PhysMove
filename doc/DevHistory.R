@@ -55,11 +55,21 @@ devtools::run_examples() # Check examples -- OK
 #===========================================================================================
 devtools::check() # Local R CMD check -- OK
 devtools::check(remote = TRUE, manual = TRUE) # Remote CRAN check with manual -- some expected notes, see below
+# rcmdcheck::rcmdcheck() # This is struggling to find the drat repos but they are working fine and devtools can find them, might be a bug.
 
-# rhub::rhub_setup() #done already
-# rhub::rhub_check() -- moved to GitHub actions.
-# Note that rhub run needed infomap to be ignored because it's causing instillation issues.
+#===========================================================================================
+### Test drat repos work
+install.packages("infomapecology", repos="https://HannahCalich.github.io/drat")
+install.packages("emln", repos="https://HannahCalich.github.io/drat")
+#===========================================================================================
 
+# rhub::rhub_setup() # done already
+# rhub::rhub_check() # moved to GitHub actions.
+# Github actions yaml files updated to ignore infomapecology and emln based on bug reported here: https://github.com/r-hub/rhub2/issues/11
+
+#===========================================================================================
+### Summary of devtools notes
+#===========================================================================================
 ## Summary of CRAN checks incl on other distributions:
 ## checking CRAN incoming feasibility ... NOTE
 ## Maintainer: 'Hannah J. Calich <hannah.calich@anu.edu.au>'
