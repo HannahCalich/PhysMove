@@ -100,7 +100,7 @@ communityMap(infomapResult)
 `r if (ms) paste0("![](", "images/infomap_map-1.png", ")")`
 <img src="../vignettes/word_formatted/images/infomap_map-1.png" width="60%" />
 
-**Figure** **v13** Map illustrating level 1 Infomap communities from the `'tracks'` dataset determined using `infomapCommunities()` default parameters. Map created with `communityMap()` default parameters.
+**Figure** **V13** Map illustrating level 1 Infomap communities from the `'tracks'` dataset determined using `infomapCommunities()` default parameters. Map created with `communityMap()` default parameters.
 
 $~$
 $~$
