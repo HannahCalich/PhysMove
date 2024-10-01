@@ -556,7 +556,7 @@ plot.data.angles <- plotAngles(angle.results)
 `r if (ms) paste0("![](", "images/plot_angles_circle_plot.png", ")")`
 <img src="../vignettes/word_formatted/images/plot_angles_circle_plot.png" width=60%" />
 
-**Figure** **S12** Circle plot of turning angles recorded from the `'tracks'` dataset during ten time windows (24 to 240 hours at 24 ± 6 hour intervals). Plot created with `plotAngles()` default parameters.
+**Figure** **V12** Circle plot of turning angles recorded from the `'tracks'` dataset during ten time windows (24 to 240 hours at 24 ± 6 hour intervals). Plot created with `plotAngles()` default parameters.
 
 $~$
 $~$
