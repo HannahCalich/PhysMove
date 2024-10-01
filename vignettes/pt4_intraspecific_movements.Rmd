@@ -129,7 +129,7 @@ Ent <- entropy(tracks)
 `r if (ms) paste0("![](", "images/ent-1.png", ")")`
 <img src="../vignettes/word_formatted/images/ent-1.png" width="60%" />
 
-**Figure** **S18** Histogram of normalised entropy scores for `'tracks'` dataset created using `entropy()` default parameters.
+**Figure** **V18** Histogram of normalised entropy scores for `'tracks'` dataset created using `entropy()` default parameters.
 
 ```{r ent head, echo=TRUE, eval=FALSE}
 # Summarise entropy results
