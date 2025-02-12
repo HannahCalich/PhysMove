@@ -1,4 +1,4 @@
-# PhysMove <img src="vignettes/PhysMoveHex.png" align="right" width="130" />
+# PhysMove <img src="vignettes/PhysMoveHexNew.png" align="right" width="130" />
 
 [![R-CMD-check--as-cran](https://github.com/HannahCalich/PhysMove/workflows/R-CMD-check--as-cran/badge.svg)](https://github.com/HannahCalich/PhysMove/actions)
 [![R-CMD-check-standard](https://github.com/HannahCalich/PhysMove/workflows/R-CMD-check-standard/badge.svg)](https://github.com/HannahCalich/PhysMove/actions)
@@ -73,4 +73,4 @@ browseVignettes("PhysMove")
 ```
 
 Current Version: 1.0.1
-Last updated: August, 2024
+Last updated: October, 2024

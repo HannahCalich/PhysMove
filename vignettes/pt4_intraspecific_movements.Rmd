@@ -32,8 +32,8 @@ knitr::opts_chunk$set(dpi = 600,
 ms <- FALSE
 ```
 
-`r if (ms) paste0("![](", "images/PhysMoveHex.png", "){width='",130, "'}")`
-<img src="../vignettes/PhysMoveHex.png" align="right" width="130" />
+`r if (ms) paste0("![](", "images/PhysMoveHexNew.png", "){width='",130, "'}")`
+<img src="../vignettes/PhysMoveHexNew.png" align="right" width="130" />
 
 ## Index
 
@@ -129,7 +129,7 @@ Ent <- entropy(tracks)
 `r if (ms) paste0("![](", "images/ent-1.png", ")")`
 <img src="../vignettes/word_formatted/images/ent-1.png" width="60%" />
 
-**Figure** **S18** Histogram of normalised entropy scores for `'tracks'` dataset created using `entropy()` default parameters.
+**Figure** **V18** Histogram of normalised entropy scores for `'tracks'` dataset created using `entropy()` default parameters.
 
 ```{r ent head, echo=TRUE, eval=FALSE}
 # Summarise entropy results
