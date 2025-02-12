@@ -6,3 +6,4 @@
 ^\.github$
 ^doc$
 ^LICENSE\.md$
+^dev$
