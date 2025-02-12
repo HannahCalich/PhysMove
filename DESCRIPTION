@@ -1,8 +1,8 @@
 Type: Package
 Package: PhysMove
 Title: Quantify Animal Movement Patterns Using Statistical Physics Methods
-Version: 1.0.1
-Date: 2024-09-04
+Version: 1.0.2
+Date: 2025-02-11
 Authors@R: c(
     person("Hannah J.", "Calich", , "hannah.calich@anu.edu.au", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0001-7541-9584")),
@@ -19,9 +19,10 @@ License: GPL (>= 3)
 URL: https://github.com/HannahCalich/PhysMove
 BugReports: https://github.com/HannahCalich/PhysMove/issues
 Depends: 
-    R (>= 4.2)
+    R (>= 4.4)
 Imports:
     broom (>= 1.0.5),
+    emln (>= 1.0),
     ggplot2 (>= 3.4.2),
     graphics (>= 4.2.2),
     grDevices (>= 4.2.2),
@@ -34,23 +35,20 @@ Imports:
     stats (>= 4.2.2),
     utils (>= 4.2.2)
 Suggests:
-    emln (>= 1.0),
     infomapecology (>= 2.0.0),
     kableExtra (>= 1.3.4),
     knitr (>= 1.43),
     officedown (>= 0.3.0),
     rmarkdown (>= 2.22),
-    sf (>= 1.0-16),
     spelling (>= 2.2.1),
     testthat (>= 3.1.9)
 VignetteBuilder: 
     knitr
-Additional_repositories: 
-    https://HannahCalich.github.io/drat
+Additional_repositories: https://HannahCalich.github.io/drat
 Config/Needs/check: rcmdcheck
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
 LazyData: true
 LazyDataCompression: xz
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
