@@ -30,7 +30,7 @@ jobs:
           - {os: windows-latest, r: 'release'}
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
-          - {os: ubuntu-latest,   r: 'oldrel-1'}
+          #- {os: ubuntu-latest,   r: 'oldrel-1'} Commented off because PhysMove only works on current version of R
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
