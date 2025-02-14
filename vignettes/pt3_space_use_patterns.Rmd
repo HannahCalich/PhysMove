@@ -135,7 +135,7 @@ occ <- occupancy(tracks)
 
 ```{r summarise occ, echo=TRUE, eval=FALSE}
 # Summarize occupancy results
-summary(Occ) 
+summary(occ) 
 ```
 `r if (ms) paste0("![](", "tables/summary_occ.png", ")")`
 <img src="../vignettes/word_formatted/tables/summary_occ.png" width="100%" />
