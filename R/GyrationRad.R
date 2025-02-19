@@ -97,7 +97,7 @@ gyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red")){
 
     tryCatch({ # This prevents the plot from crashing if the mapped area does not overlap with the world polygon (e.g., for pelagic species)
       z <- z +
-        ggplot2::borders(maps::map_data("world"), colour="gray50", fill="gray50", xlim = c(min(circles$long), max(circles$long)), ylim = c(min(circles$lat), max(circles$lat)))
+        ggplot2::borders("world", colour="gray50", fill="gray50", xlim = c(min(circles$long), max(circles$long)), ylim = c(min(circles$lat), max(circles$lat)))
     }, error = function(e){message('Please note: World polygon does not overlap with gyration radius results')})
 
     print(z)
