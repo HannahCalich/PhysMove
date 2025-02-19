@@ -5,7 +5,7 @@
 #' (where an individual stays in the same cell over time), and uses a tpm in link list format to create an Infomap 'monolayer_object'. Note that if warnings
 #' appear about columns or rows summing to 0 this simply means an individual moved into a cell and did not leave, which is a valid movement and not cause for alarm.
 #'
-#' Please note: to run this function you must first download the infomapecology and emln R packages from GitHub and install the infomap.exe.
+#' Please note: to run this function you must first download the infomapecology and emln R packages from GitHub and install the stand-alone Infomap file.
 #' For details please see: https://ecological-complexity-lab.github.io/infomap_ecology_package/installation
 #' To learn more about Infomap please visit: https://www.mapequation.org/
 #'
@@ -38,8 +38,8 @@ infomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, 
   if (rlang::is_installed(c("infomapecology", "emln"))){
     if("infomapecology" %in% (.packages())){
 
-      if(infomapecology::check_infomap()!=TRUE){ # If the Infomap.exe file has not been installed or cannot be found in working directory stop and send warning
-          stop ('Cannot find Infomap.exe, please set working directory to folder containing stand-alone Infomap file. \n  For information on installing the Infomap file visit https://ecological-complexity-lab.github.io/infomap_ecology_package/installation')
+      if(infomapecology::check_infomap()!=TRUE){ # If the Infomap file has not been installed or cannot be found in working directory stop and send warning
+          stop ('Cannot find Infomap, please set working directory to folder containing stand-alone Infomap file. \n  To install Infomap please visit https://ecological-complexity-lab.github.io/infomap_ecology_package/installation')
       }
 
       species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
