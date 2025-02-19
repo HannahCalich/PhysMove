@@ -30,6 +30,11 @@ gyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red")){
     return(a*Radius)
   }
 
+  if(length(mapCol)==1){
+    message("Only one colour has been included in 'mapCol' so only the average locaton of each track will be displayed.
+    To also display each track's gyration radius please include a second colour following the format, mapCol=c('black','red')")
+  }
+
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
   Radius <- 6371 # Earth Radius in km (disp are in km)
   rad <- 3.141592653589793/180 # Convert degrees to radians
@@ -85,14 +90,14 @@ gyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red")){
     xyz <- MyrG[,c(3,2,4)]
     z <- ggplot2::ggplot() +
       ggplot2::geom_point(data = xyz, ggplot2::aes(.data$lon.avg.deg, .data$lat.avg.deg), size=2, color = mapCol[1])+
-      ggplot2::coord_sf(xlim = c(min(circles$long), max(circles$long)), ylim = c(min(circles$lat), max(circles$lat)))+
+      ggplot2::coord_sf(xlim = c(min(circles$long), max(circles$long)), ylim = c(min(circles$lat), max(circles$lat)), datum = sf::st_crs(4326))+
       ggplot2::theme_minimal(base_size = 12)+
       ggplot2::geom_polygon(data = circles, ggplot2::aes(.data$long, .data$lat, group = .data$Ref), color = mapCol[2], alpha=0)+
       ggplot2::labs(x="Longitude", y="Latitude")
 
     tryCatch({ # This prevents the plot from crashing if the mapped area does not overlap with the world polygon (e.g., for pelagic species)
       z <- z +
-        ggplot2::borders("world", colour="gray50", fill="gray50", xlim = c(min(circles$long), max(circles$long)), ylim = c(min(circles$lat), max(circles$lat)))
+        ggplot2::borders(maps::map_data("world"), colour="gray50", fill="gray50", xlim = c(min(circles$long), max(circles$long)), ylim = c(min(circles$lat), max(circles$lat)))
     }, error = function(e){message('Please note: World polygon does not overlap with gyration radius results')})
 
     print(z)
