@@ -39,7 +39,7 @@ infomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, 
     if("infomapecology" %in% (.packages())){
 
       if(infomapecology::check_infomap()!=TRUE){ # If the Infomap.exe file has not been installed or cannot be found in working directory stop and send warning
-          stop ('Cannot find Infomap.exe, please set working directory to folder containing Infomap.exe file. \n  For information on installing Infomap.exe visit https://ecological-complexity-lab.github.io/infomap_ecology_package/installation')
+          stop ('Cannot find Infomap.exe, please set working directory to folder containing stand-alone Infomap file. \n  For information on installing the Infomap file visit https://ecological-complexity-lab.github.io/infomap_ecology_package/installation')
       }
 
       species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
