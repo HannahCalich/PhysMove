@@ -14,7 +14,7 @@ distResultsAll <- fitDist(disp, full=TRUE)
 save(distResultsAll, file="distResultsAll.RData")
 
 distResultsTrunc <- fitDist(disp, full=FALSE) # find best-fit dmin for all
-distResultsExp <- fitDist(disp, set_xmin = distResultsTrunc[[1]][2,2], normalise = distResultsTrunc[2][[1]]) # fit all dist to best fit dmin for exp
+distResultsExp <- fitDist(disp, set_dmin = distResultsTrunc[[1]][2,2], normalise = distResultsTrunc[2][[1]]) # fit all dist to best fit dmin for exp
 save(distResultsExp, file="distResultsExp.RData")
 
 entropyResults <- entropy(tracks)
