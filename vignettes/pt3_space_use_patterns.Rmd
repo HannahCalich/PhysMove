@@ -73,7 +73,7 @@ The `infomapCommunities()` function requires a data frame with telemetry data (s
 `infomapCommunities()` outputs a list with up to two list objects. The first list object is an *infomap monolayer object* that summarizes the hierarchical structure of the Infomap communities (regions where individuals follow similar movement patterns and are likely to stay for longer periods of time). The second list object is the transition probability matrix, which is only output if `tpm=TRUE`.
 
 **Important**: Before running `infomapCommunities()` you must:
-1) set your working directory to the folder that contains the stand-alone Infomap file (*Infomap.exe*) using `setwd()` and 
+1) set your working directory to the folder that contains the stand-alone Infomap file using `setwd()` and 
 2) load the infomapecology r package using `library(infomapecology)`
 
 ```{r structure of infomap, echo=TRUE, eval=FALSE}
