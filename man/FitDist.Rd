@@ -7,7 +7,7 @@
 fitDist(
   input,
   dist = c("pl", "exp", "lnorm"),
-  set_xmin = NULL,
+  set_dmin = NULL,
   full = FALSE,
   normalise = TRUE
 )
@@ -18,7 +18,7 @@ fitDist(
 \item{dist}{Continuous distributions that will be fit to the data. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
 continuous distributions. Default is dist=c("pl","exp","lnorm").}
 
-\item{set_xmin}{To limit the fitted distribution to values above a specified value. If your data are going to be normalised
+\item{set_dmin}{To limit the fitted distribution to values above a specified value. If your data are going to be normalised
 this value will have to be a normalised value as well. Default is NULL.}
 
 \item{full}{To fit the distributions to the full range of data. Default is FALSE.}
@@ -28,8 +28,8 @@ normalise=TRUE is required if working with data calculated over multiple time wi
 }
 \value{
 A list including a dataframe of summary statistics for each distribution fit (first list element). Results dataframe includes the
-distribution name, xmin (minimum value used to fit each distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
-distributions respectively, and nTail (the number of data points greater than or equal to xmin). A logical argument indicating if
+distribution name, dmin (minimum value used to fit each distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
+distributions respectively, and nTail (the number of data points greater than or equal to dmin). A logical argument indicating if
 data were normalised is exported as the second list element because this information is needed for the \code{\link{compDist}} and \code{\link{plotDist}}
 functions.
 }
