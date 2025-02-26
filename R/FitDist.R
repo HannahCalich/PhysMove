@@ -5,21 +5,21 @@
 #' @param input List of values that will be fit to each distribution
 #' @param dist Continuous distributions that will be fit to the data. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
 #' continuous distributions. Default is dist=c("pl","exp","lnorm").
-#' @param set_xmin To limit the fitted distribution to values above a specified value. If your data are going to be normalised
+#' @param set_dmin To limit the fitted distribution to values above a specified value. If your data are going to be normalised
 #' this value will have to be a normalised value as well. Default is NULL.
 #' @param full To fit the distributions to the full range of data. Default is FALSE.
 #' @param normalise Normalises the input values by dividing each input value by the average value for that time window;
 #' normalise=TRUE is required if working with data calculated over multiple time windows.
 #' @return A list including a dataframe of summary statistics for each distribution fit (first list element). Results dataframe includes the
-#' distribution name, xmin (minimum value used to fit each distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
-#' distributions respectively, and nTail (the number of data points greater than or equal to xmin). A logical argument indicating if
+#' distribution name, dmin (minimum value used to fit each distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
+#' distributions respectively, and nTail (the number of data points greater than or equal to dmin). A logical argument indicating if
 #' data were normalised is exported as the second list element because this information is needed for the \code{\link{compDist}} and \code{\link{plotDist}}
 #' functions.
 #' @importFrom stats dlnorm plnorm optim sd
 #' @examples fitDist(disp, dist=c("pl","exp","lnorm"), full=TRUE)
 #' @export
 
-fitDist <- function(input, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE, normalise=TRUE) {
+fitDist <- function(input, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE, normalise=TRUE) {
 
   if (!(inherits(input, "list"))){ #
     # if the data are in data frame format AND from the occupancy function they can automatically be converted to a list
@@ -32,8 +32,8 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE
     }
   }
 
-  if ((!is.null(set_xmin)) & (full==TRUE)){
-    stop("To fit distributions to the full range of data use full=TRUE and leave set_xmin as default (NULL)")
+  if ((!is.null(set_dmin)) & (full==TRUE)){
+    stop("To fit distributions to the full range of data use full=TRUE and leave set_dmin as default (NULL)")
   }
 
   if ((length(input)>1) & (normalise==FALSE)){
@@ -55,45 +55,45 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE
   }
 
   x <- unlist(x)
-  xmins <- sort(unique(x)) #possible xmin values
-  dat <- numeric(length(xmins)) #blank vectors for D values
+  dmins <- sort(unique(x)) #possible dmin values
+  dat <- numeric(length(dmins)) #blank vectors for D values
   x <- sort(x)
   N <- length(x)
-  distResults <- data.frame("distribution"=dist, "xmin"= c(NA), "parameter1"=c(NA), "parameter2"=c(NA), "nTail"= c(NA)) #make sure dist= is loaded
+  distResults <- data.frame("distribution"=dist, "dmin"= c(NA), "parameter1"=c(NA), "parameter2"=c(NA), "nTail"= c(NA)) #make sure dist= is loaded
   rev.index <- rev(seq_along(x))
 
   if ("pl" %in% dist){
     message("Fitting a power law distribution")
     if (full==FALSE){
-      if (is.null(set_xmin)){
-        for (i in 1:length(xmins)){
-          xmin <- xmins[i]
-          xi <- x[x>=(xmin)]
+      if (is.null(set_dmin)){
+        for (i in 1:length(dmins)){
+          dmin <- dmins[i]
+          xi <- x[x>=(dmin)]
           n <- length(xi) #size of truncated data set
-          a <- 1+n*((sum(log(xi/xmin)))^-1) #estimate alpha using direct MLE
-          fx <- 1-((xi/xmin)^(-a+1)) #construct CCDF for fitted data
-          fx[xi<round(xmin)] <- 0
+          a <- 1+n*((sum(log(xi/dmin)))^-1) #estimate alpha using direct MLE
+          fx <- 1-((xi/dmin)^(-a+1)) #construct CCDF for fitted data
+          fx[xi<round(dmin)] <- 0
           sx <- ((0:(n - 1))/n)[1:length(fx)] #complementary empirical CDF
           dat[i] <- max(abs(fx-sx))
         }
         D <- min(dat[dat>0], na.rm=TRUE) #find smallest D value
-        PL_xmin <- xmins[which.max(dat==D)] #find corresponding xmin value such that PLxmin is the D value that minimizes the distance between sx and fx
+        PL_dmin <- dmins[which.max(dat==D)] #find corresponding dmin value such that PLdmin is the D value that minimizes the distance between sx and fx
       }
-      if (!is.null(set_xmin)){
-        PL_xmin <- set_xmin # If xmin is supplied, assign it as the PL_xmin
+      if (!is.null(set_dmin)){
+        PL_dmin <- set_dmin # If dmin is supplied, assign it as the PL_dmin
       }
     }
     if (full==TRUE){
-      PL_xmin <- min(x)
+      PL_dmin <- min(x)
     }
-    xi <- x[x>=(PL_xmin)] # Use PL_xmin to calculate final datasets and parameters
+    xi <- x[x>=(PL_dmin)] # Use PL_dmin to calculate final datasets and parameters
     n <- length(xi)
-    PL_alpha <- 1+n*((sum(log(xi/PL_xmin)))^-1) # calculate alpha using direct MLE based on PL_xmin
+    PL_alpha <- 1+n*((sum(log(xi/PL_dmin)))^-1) # calculate alpha using direct MLE based on PL_dmin
 
-    selection <- min(which(x >= (PL_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
-    n <- rev.index[selection] # number of values of x >= xmin
+    selection <- min(which(x >= (PL_dmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+    n <- rev.index[selection] # number of values of x >= dmin
 
-    distResults[which(distResults$distribution =="pl"),which(names(distResults)=="xmin")] <- PL_xmin
+    distResults[which(distResults$distribution =="pl"),which(names(distResults)=="dmin")] <- PL_dmin
     distResults[which(distResults$distribution =="pl"),which(names(distResults)=="parameter1")] <- PL_alpha
     distResults[which(distResults$distribution =="pl"),which(names(distResults)=="nTail")] <- n
   }
@@ -101,54 +101,54 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE
   if ("exp" %in% dist){
     message("Fitting an exponential distribution")
     if (full==FALSE){
-      if (is.null(set_xmin)){
-        dat <- numeric(length(xmins))
+      if (is.null(set_dmin)){
+        dat <- numeric(length(dmins))
         pars.list <- c()
-        for (i in 1:(length(xmins)-2)){ # need at least number of pars + 1 to fit
-          xmin <- xmins[i]
-          xi <- x[x>xmin]
+        for (i in 1:(length(dmins)-2)){ # need at least number of pars + 1 to fit
+          dmin <- dmins[i]
+          xi <- x[x>dmin]
           n <- length(xi)
 
-          pars.list[i] <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
+          pars.list[i] <- n*(sum(xi-dmin)^-1) # from doi: 10.1038/nature09116
 
-          selection <- min(which(x >= (xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+          selection <- min(which(x >= (dmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
           n <- rev.index[selection]
           xi <- x[(N-n+1):N]
 
-          fx <- 1-exp(-pars.list[i]*(xi-xmin))
-          fx[xi<xmin] <- 0
+          fx <- 1-exp(-pars.list[i]*(xi-dmin))
+          fx[xi<dmin] <- 0
 
           sx <- ((0:(n - 1))/n)[1:length(fx)] # complementary empirical CDF
           dat[i] <- max(abs(sx-fx), na.rm=TRUE) # max difference between fitted and empirical cdfs (KS test)
         }
         D <- min(dat[dat>0],na.rm=TRUE)
         row <- which.max(dat==D)
-        Exp_xmin <- xmins[row]
+        Exp_dmin <- dmins[row]
         Exp_lambda <- pars.list[row]
-        selection <- min(which(x >= (Exp_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
-        n <- rev.index[selection] # number of values of x >= xmin
+        selection <- min(which(x >= (Exp_dmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+        n <- rev.index[selection] # number of values of x >= dmin
       }
 
-      if (!is.null(set_xmin)){
-        xmin <- set_xmin
-        xi <- x[x>xmin]
+      if (!is.null(set_dmin)){
+        dmin <- set_dmin
+        xi <- x[x>dmin]
         n <- length(xi)
-        Exp_lambda <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
-        Exp_xmin <- xmin
-        selection <- min(which(x >= (Exp_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
-        n <- rev.index[selection] # number of values of x >= xmin
+        Exp_lambda <- n*(sum(xi-dmin)^-1) # from doi: 10.1038/nature09116
+        Exp_dmin <- dmin
+        selection <- min(which(x >= (Exp_dmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+        n <- rev.index[selection] # number of values of x >= dmin
       }
     }
     if (full==TRUE){
-      xmin <- min(x)
-      xi <- x[x>xmin]
+      dmin <- min(x)
+      xi <- x[x>dmin]
       n <- length(xi)
-      Exp_lambda <- n*(sum(xi-xmin)^-1) # from doi: 10.1038/nature09116
-      Exp_xmin <- xmin
-      selection <- min(which(x >= (Exp_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
-      n <- rev.index[selection] # number of values of x >= xmin
+      Exp_lambda <- n*(sum(xi-dmin)^-1) # from doi: 10.1038/nature09116
+      Exp_dmin <- dmin
+      selection <- min(which(x >= (Exp_dmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+      n <- rev.index[selection] # number of values of x >= dmin
     }
-    distResults[which(distResults$distribution =="exp"),which(names(distResults)=="xmin")] <- Exp_xmin
+    distResults[which(distResults$distribution =="exp"),which(names(distResults)=="dmin")] <- Exp_dmin
     distResults[which(distResults$distribution =="exp"),which(names(distResults)=="parameter1")] <- Exp_lambda
     distResults[which(distResults$distribution =="exp"),which(names(distResults)=="nTail")] <- n
   }
@@ -159,7 +159,7 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE
     create_nll <- function(x){
       n <- length(x)
       function(param) {
-        nll <- -(sum(dlnorm(x, meanlog=param[1], sdlog=param[2], log=TRUE)) - n*plnorm(xmin, meanlog=param[1], sdlog=param[2], log.p=TRUE, lower.tail=FALSE))
+        nll <- -(sum(dlnorm(x, meanlog=param[1], sdlog=param[2], log=TRUE)) - n*plnorm(dmin, meanlog=param[1], sdlog=param[2], log.p=TRUE, lower.tail=FALSE))
         if (!is.finite(nll)){
           nll <- 1e+12
         }
@@ -168,12 +168,12 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE
     } # updated
 
     if (full==FALSE){
-      if (is.null(set_xmin)){
-        dat <- numeric(length(xmins))
+      if (is.null(set_dmin)){
+        dat <- numeric(length(dmins))
         init <- matrix(ncol=2, nrow=1)
 
-        xmin <- min(x)
-        xi <- x[x>xmin]
+        dmin <- min(x)
+        xi <- x[x>dmin]
         n <- length(xi)
 
         pars <- c(mean(log(xi)), sd(log(xi)))
@@ -186,43 +186,43 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE
         #   phi
         # }
 
-        pars.mat <- matrix(ncol=2, nrow=(length(xmins)-1))
-        for (i in 1:(length(xmins)-3)){ # need at least number of pars + 1 to fit
-          xmin <- xmins[i]
-          xi <- x[x>xmin]
+        pars.mat <- matrix(ncol=2, nrow=(length(dmins)-1))
+        for (i in 1:(length(dmins)-3)){ # need at least number of pars + 1 to fit
+          dmin <- dmins[i]
+          xi <- x[x>dmin]
           n <- length(xi)
 
           my_nll <- create_nll(xi)
           mle <- suppressWarnings(optim(par=init, fn=my_nll, method="L-BFGS-B", lower=c(-Inf, .Machine$double.eps)))
           pars.mat[i,] <- c(mle$par[1],mle$par[2])
 
-          selection <- min(which(x >= (xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+          selection <- min(which(x >= (dmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
           n <- rev.index[selection]
           xi <- x[(N-n+1):N]
 
-          # fx <- (norm_cdf(log(xi))-norm_cdf(log(xmin)))/
-          #   (1-(1/2*(1+VGAM::erf(xi/sqrt(2))))*((log(xmin)- pars.mat[i,1])/ pars.mat[i,2]))
+          # fx <- (norm_cdf(log(xi))-norm_cdf(log(dmin)))/
+          #   (1-(1/2*(1+VGAM::erf(xi/sqrt(2))))*((log(dmin)- pars.mat[i,1])/ pars.mat[i,2]))
 
-          lnormCDF <- plnorm(xmin, pars.mat[i,1], pars.mat[i,2], lower.tail = FALSE)
+          lnormCDF <- plnorm(dmin, pars.mat[i,1], pars.mat[i,2], lower.tail = FALSE)
           fx <- (plnorm(xi, pars.mat[i,1], pars.mat[i,2], lower.tail = TRUE)/lnormCDF)-
             (1/lnormCDF)+1
-          fx[xi<xmin] <- 0
+          fx[xi<dmin] <- 0
 
           sx <- ((0:(n - 1))/n)[1:length(fx)] # complementary empirical CDF
           dat[i] <- max(abs(sx-fx)) # max difference between fitted and empirical cdfs
         }
         D <- min(dat[dat>0], na.rm=TRUE)
         row <- which.max(dat==D)
-        LN_xmin <- xmins[row]
+        LN_dmin <- dmins[row]
         LN_mu <- pars.mat[row,1]
         LN_sigma <- pars.mat[row,2]
-        selection <- min(which(x >= (LN_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
-        n <- rev.index[selection] # number of values of x >= xmin
+        selection <- min(which(x >= (LN_dmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+        n <- rev.index[selection] # number of values of x >= dmin
       }
 
-      if (!is.null(set_xmin)){
-        xmin <- set_xmin
-        xi <- x[x>xmin]
+      if (!is.null(set_dmin)){
+        dmin <- set_dmin
+        xi <- x[x>dmin]
         n <- length(xi)
 
         pars <- c(mean(log(xi)), sd(log(xi)))
@@ -231,15 +231,15 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE
 
         LN_mu <- mle$par[1]
         LN_sigma <- mle$par[2]
-        LN_xmin <- xmin
+        LN_dmin <- dmin
 
-        selection <- min(which(x >= (LN_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
-        n <- rev.index[selection] # number of values of x >= xmin
+        selection <- min(which(x >= (LN_dmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+        n <- rev.index[selection] # number of values of x >= dmin
       }
     }
     if (full==TRUE){
-      xmin <- min(x)
-      xi <- x[x>xmin]
+      dmin <- min(x)
+      xi <- x[x>dmin]
       n <- length(xi)
 
       pars <- c(mean(log(xi)), sd(log(xi)))
@@ -248,12 +248,12 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_xmin=NULL, full=FALSE
 
       LN_mu <- mle$par[1]
       LN_sigma <- mle$par[2]
-      LN_xmin <- xmin
+      LN_dmin <- dmin
 
-      selection <- min(which(x >= (LN_xmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
-      n <- rev.index[selection] # number of values of x >= xmin
+      selection <- min(which(x >= (LN_dmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+      n <- rev.index[selection] # number of values of x >= dmin
     }
-    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="xmin")] <- LN_xmin
+    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="dmin")] <- LN_dmin
     distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="parameter1")] <- LN_mu
     distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="parameter2")] <- LN_sigma
     distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="nTail")] <- n

@@ -125,18 +125,18 @@ plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c(
                        (plnorm(parameters[3],parameters[1], parameters[2], lower.tail = FALSE, log.p = TRUE)))
         return(LN_PDF)
       }
-      LN_xmin <- distResults[which(distResults$distribution=="lnorm"),"xmin"]
+      LN_dmin <- distResults[which(distResults$distribution=="lnorm"),"dmin"]
       LN_mu <- distResults[which(distResults$distribution=="lnorm"),"parameter1"]
       LN_sigma <- distResults[which(distResults$distribution=="lnorm"),"parameter2"]
-      xval <- exp(seq(log(LN_xmin), log(max(x)), length.out = 100)) # log spaced sequence of input for log-log plot
-      yval <- MyLogNormalPDF(c(LN_mu, LN_sigma, LN_xmin), xval)
-      yval[xval < LN_xmin] <- 0
-      dif <- x - LN_xmin
+      xval <- exp(seq(log(LN_dmin), log(max(x)), length.out = 100)) # log spaced sequence of input for log-log plot
+      yval <- MyLogNormalPDF(c(LN_mu, LN_sigma, LN_dmin), xval)
+      yval[xval < LN_dmin] <- 0
+      dif <- x - LN_dmin
       upper <- which(dif >= 0)[1]
       lower <- max(upper - 1, 1)
       x_dif <- x[lower] - x[upper]
       y_dif <- ccdf[lower] - ccdf[upper]
-      scale <- ccdf[lower] + y_dif * (LN_xmin - x[lower])/x_dif
+      scale <- ccdf[lower] + y_dif * (LN_dmin - x[lower])/x_dif
       if (is.nan(scale)){
         scale <- 1
       }
@@ -154,17 +154,17 @@ plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c(
         # Exp_CDF <- parameters*exp(-parameters*input)
         return(Exp_CDF)
       }
-      Exp_xmin <- distResults[which(distResults$distribution=="exp"),"xmin"]
+      Exp_dmin <- distResults[which(distResults$distribution=="exp"),"dmin"]
       Exp_lambda <- distResults[which(distResults$distribution=="exp"),"parameter1"]
-      xval <- exp(seq(log(Exp_xmin), log(max(x)), length.out = 100)) # log spaced sequence of input for log-log plot
-      yval <- MyExponentialPDF(c(Exp_lambda, Exp_xmin), xval)
-      yval[xval < Exp_xmin] <- 0
-      dif <- x - Exp_xmin
+      xval <- exp(seq(log(Exp_dmin), log(max(x)), length.out = 100)) # log spaced sequence of input for log-log plot
+      yval <- MyExponentialPDF(c(Exp_lambda, Exp_dmin), xval)
+      yval[xval < Exp_dmin] <- 0
+      dif <- x - Exp_dmin
       upper <- which(dif >= 0)[1]
       lower <- max(upper - 1, 1)
       x_dif <- x[lower] - x[upper]
       y_dif <- ccdf[lower] - ccdf[upper]
-      scale <- ccdf[lower] + y_dif * (Exp_xmin - x[lower])/x_dif
+      scale <- ccdf[lower] + y_dif * (Exp_dmin - x[lower])/x_dif
       if (is.nan(scale)){
         scale <- 1
       }
@@ -181,17 +181,17 @@ plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c(
         PL_CDF  <- 1 - (input/parameters[2])^(-parameters[1]+1)
         return(PL_CDF)
       }
-      PL_xmin <- distResults[which(distResults$distribution=="pl"),"xmin"]
+      PL_dmin <- distResults[which(distResults$distribution=="pl"),"dmin"]
       PL_alpha <- distResults[which(distResults$distribution=="pl"),"parameter1"]
-      xval <- exp(seq(log(PL_xmin), log(max(x)), length.out = 100)) # log spaced sequence of input for log-log plot
-      yval <- 1- MyPowerLawCDF(c(PL_alpha, PL_xmin), xval)
-      yval[xval < PL_xmin] <- 0
-      dif <- x - PL_xmin
+      xval <- exp(seq(log(PL_dmin), log(max(x)), length.out = 100)) # log spaced sequence of input for log-log plot
+      yval <- 1- MyPowerLawCDF(c(PL_alpha, PL_dmin), xval)
+      yval[xval < PL_dmin] <- 0
+      dif <- x - PL_dmin
       upper <- which(dif >= 0)[1]
       lower <- max(upper - 1, 1)
       x_dif <- x[lower] - x[upper]
       y_dif <- ccdf[lower] - ccdf[upper]
-      scale <- ccdf[lower] + y_dif * (PL_xmin - x[lower])/x_dif
+      scale <- ccdf[lower] + y_dif * (PL_dmin - x[lower])/x_dif
       if (is.nan(scale)){
         scale <- 1
       }

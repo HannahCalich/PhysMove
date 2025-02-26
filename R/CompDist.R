@@ -1,7 +1,7 @@
 #' Identify the best-fit distribution for data
 #'
 #' This function allows you to determine if a power law, exponential, or log-normal distribution best-fit a probability density function
-#' of the input data using weighted Akaike Information Criterion (AIC). These fits use input data in conjunction with xmin and parameter values that were
+#' of the input data using weighted Akaike Information Criterion (AIC). These fits use input data in conjunction with dmin and parameter values that were
 #' previously calculated with the \code{\link{fitDist}} function. By default, this function will calculate
 #' AICc scores (AIC scores corrected for small sample sizes) if n/K is <= 40 for the largest value of K, where n = sample size (nTail) and
 #' K = number of parameters in the model (see Burnham and Anderson (2004) for further details, DOI: 10.1177/0049124104268644). However,
@@ -50,7 +50,7 @@ compDist<-function(input, distResults, force_AICc=FALSE){
 
   distResults <- distResults[[1]]
   dist <- distResults$distribution
-  xmins <- sort(unique(x))
+  dmins <- sort(unique(x))
   x <- sort(x)
   n_all <- c()
   K_all <- c()
@@ -60,11 +60,11 @@ compDist<-function(input, distResults, force_AICc=FALSE){
       pl_PDF <- ((parameters[1]-1)/parameters[2])*((input/parameters[2])^(-parameters[1]))
       return(pl_PDF)
     }
-    pl_xmin <- distResults[which(distResults$distribution=="pl"),"xmin"]
+    pl_dmin <- distResults[which(distResults$distribution=="pl"),"dmin"]
     pl_alpha <- distResults[which(distResults$distribution=="pl"),"parameter1"]
     n_all <- c(n_all,distResults[which(distResults$distribution=="pl"),"nTail"])
-    pl_pdf <- MyPowerLaw(c(pl_alpha, pl_xmin), x)
-    pl_pdf[x<pl_xmin] <- 0
+    pl_pdf <- MyPowerLaw(c(pl_alpha, pl_dmin), x)
+    pl_pdf[x<pl_dmin] <- 0
     pl_logLik <- sum(log(pl_pdf[pl_pdf>0]))
     K_all <- c(K_all, 1)
   }
@@ -74,11 +74,11 @@ compDist<-function(input, distResults, force_AICc=FALSE){
         exp_PDF <- parameters[1]*exp(-parameters[1]*(input-parameters[2]))
         return(exp_PDF)
     }
-    exp_xmin <- distResults[which(distResults$distribution=="exp"),"xmin"]
+    exp_dmin <- distResults[which(distResults$distribution=="exp"),"dmin"]
     exp_lambda <- distResults[which(distResults$distribution=="exp"),"parameter1"]
     n_all <- c(n_all,distResults[which(distResults$distribution=="exp"),"nTail"])
-    exp_pdf <- MyexponentialTrunc(c(exp_lambda, exp_xmin), x)
-    exp_pdf[x<exp_xmin] <- 0
+    exp_pdf <- MyexponentialTrunc(c(exp_lambda, exp_dmin), x)
+    exp_pdf[x<exp_dmin] <- 0
     exp_logLik <- sum(log(exp_pdf[exp_pdf>0]))
     K_all <- c(K_all, 1)
   }
@@ -88,18 +88,18 @@ compDist<-function(input, distResults, force_AICc=FALSE){
       lnorm_PDF <- exp(dlnorm(input, parameters[1], parameters[2], log = TRUE) - plnorm(parameters[3],parameters[1], parameters[2], lower.tail = FALSE, log.p = TRUE))
       return(lnorm_PDF)
     }
-    lnorm_xmin <- distResults[which(distResults$distribution=="lnorm"),"xmin"]
+    lnorm_dmin <- distResults[which(distResults$distribution=="lnorm"),"dmin"]
     lnorm_mu <- distResults[which(distResults$distribution=="lnorm"),"parameter1"]
     lnorm_sigma <- distResults[which(distResults$distribution=="lnorm"),"parameter2"]
     n_all <- c(n_all,distResults[which(distResults$distribution=="lnorm"),"nTail"])
-    lnorm_pdf <- MyLogNormalTrunc(c(lnorm_mu, lnorm_sigma, lnorm_xmin), x)
-    lnorm_pdf[x<lnorm_xmin] <- 0
+    lnorm_pdf <- MyLogNormalTrunc(c(lnorm_mu, lnorm_sigma, lnorm_dmin), x)
+    lnorm_pdf[x<lnorm_dmin] <- 0
     lnorm_logLik <- sum(log(lnorm_pdf[lnorm_pdf>0]))
     K_all <- c(K_all,2)
   }
   if (n_all[which.max(K_all)]/max(K_all)>40 & force_AICc==FALSE){ # use AIC according to Burnham and Anderson (2004)
     if (length(unique(n_all))!=1){
-      stop("The n/K ratio is > 40 and AIC values can be calculated, however, AIC values can only be compared over equal data ranges. Please re-run FitDist using the set_xmin parameter or full=TRUE to fit each distribution to the same data range")
+      stop("The n/K ratio is > 40 and AIC values can be calculated, however, AIC values can only be compared over equal data ranges. Please re-run FitDist using the set_dmin parameter or full=TRUE to fit each distribution to the same data range")
     }
     AIC_Scores <- c()
     distResults <- cbind(distResults,"AIC"=c(NA), "wAIC"=c(NA))
