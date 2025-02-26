@@ -53,9 +53,9 @@ devtools::run_examples() # Check examples -- OK
 #===========================================================================================
 ### Check package as CRAN
 #===========================================================================================
-devtools::check() # Local R CMD check -- OK
+devtools::check() # Local R CMD check -- this is giving a nonsense error about doc file size being too large
 devtools::check(remote = TRUE, manual = TRUE) # Remote CRAN check with manual -- some expected notes, see below
-# rcmdcheck::rcmdcheck() # This is struggling to find the drat repos but they are working fine and devtools can find them, might be a bug.
+rcmdcheck::rcmdcheck() # This is struggling to find the drat repos but they are working fine and devtools can find them, might be a bug.
 
 #===========================================================================================
 ### Test drat repos work
