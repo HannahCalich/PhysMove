@@ -27,7 +27,7 @@ rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
 
   MydistHaversine <- function(lon1, lat1, lon2, lat2) {
     # radlat1 <- rad * lat1
-    # radlat2 <- rad * lat2
+    # radlat2 <- rad * lat2 # convert to rad at end of function
     dlat <- lat2 - lat1
     dlon <- rad * (lon2 - lon1)
     a <- (sin(dlat/2)^2) + cos(radlat1)*cos(radlat2)*(sin(dlon/2)^2)
