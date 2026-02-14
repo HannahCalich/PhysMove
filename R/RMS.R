@@ -11,6 +11,8 @@
 #' @param plot Plot the root-mean-square and mean displacements against their corresponding time periods. Default is TRUE.
 #' @param lm Calculate a linear regression to examine the relationship between the root-mean-square displacement values (target variable)
 #' and time (predictor variable) and add fit line to the plot (if plot=TRUE). Default is TRUE.
+#' @param strict If TRUE, abort with a detailed error when invalid time/displacement pairs are found; if FALSE, warn and
+#' proceed using only valid pairs (up to 25 examples shown). Default is TRUE.
 #' @return List containing a dataframe of results (list element 1) and the results of the linear model (if lm = TRUE, list element 2).
 #' The results dataframe includes the 'timeWindows' in log-sized bins along with their corresponding 'meanDisplacements' and 'rmsDisplacements'
 #' (root-mean-square displacements). If plot = TRUE, a plot of the mean displacement values and the root-mean-square displacement values
@@ -23,8 +25,7 @@
 #' }
 #' @export
 
-rms_new <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE, strict=TRUE){
-  # TRUE: stop() on invalid pairs; FALSE: warn and continue, max of 25 examples
+rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE, strict=TRUE){
 
   Radius <- 6371 # Earth Radius in km (disp are in km)
   rad <- 3.141592653589793/180 # Python has more digits of pi than R, so value pasted here instead of "pi" for consistency with python versions of code

@@ -4,7 +4,14 @@
 \alias{rms}
 \title{Root-Mean-Square of Displacements}
 \usage{
-rms(species_df, timeUnit = "days", wBins = 1.1, plot = TRUE, lm = TRUE)
+rms(
+  species_df,
+  timeUnit = "days",
+  wBins = 1.1,
+  plot = TRUE,
+  lm = TRUE,
+  strict = TRUE
+)
 }
 \arguments{
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
@@ -21,6 +28,9 @@ See attached sample data \code{\link{tracks}}.}
 
 \item{lm}{Calculate a linear regression to examine the relationship between the root-mean-square displacement values (target variable)
 and time (predictor variable) and add fit line to the plot (if plot=TRUE). Default is TRUE.}
+
+\item{strict}{If TRUE, abort with a detailed error when invalid time/displacement pairs are found; if FALSE, warn and
+proceed using only valid pairs (up to 25 examples shown). Default is TRUE.}
 }
 \value{
 List containing a dataframe of results (list element 1) and the results of the linear model (if lm = TRUE, list element 2).
