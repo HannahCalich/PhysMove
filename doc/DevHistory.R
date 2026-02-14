@@ -13,7 +13,7 @@ usethis::use_cran_comments(open = rlang::is_interactive()) # Update comments for
 #usethis::use_version("minor") # Upgrade version number, options include: c("patch", "minor", "major", "dev")
 # usethis::use_gpl_license() # Update license info - if applicable
 devtools::spell_check() # Check spelling
-attachment::att_amend_desc(pkg_ignore = c("infomapecology"), extra.suggests = c("infomapecology"), update.config = TRUE) # Amend dependencies in description
+# attachment::att_amend_desc(pkg_ignore = c("infomapecology"), extra.suggests = c("infomapecology"), update.config = TRUE) # Amend dependencies in description
 # Code above adds DEV folder which is non-standard and needs to be manually deleted
 
 checkhelper::find_missing_tags() # check for missing return value for exported functions and missing @export tags
@@ -26,7 +26,7 @@ urlchecker::url_check() # this will throw errors until github is public
 #===========================================================================================
 ### Package standard formatting checks
 #===========================================================================================
-goodpractice::gp() # Goodpractice check -- skipping for now, some good ideas but not essential
+# goodpractice::gp() # Goodpractice check -- skipping for now, some good ideas but not essential
 inteRgrate::check_pkg() # "installs package dependencies, builds & installs the package, before running package check"
 inteRgrate::check_lintr() # check if code "adheres to standards" -- skipping this, some good ideas but not essential
 inteRgrate::check_tidy_description() # Check description is tidy -- OK
