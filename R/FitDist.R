@@ -67,8 +67,8 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE
     PL <- NULL
     if (full==FALSE){
       if (is.null(set_dmin)){
-        con_pl <- conpl$new(x)
-        PL <- estimate_xmin(con_pl)
+        con_pl <- poweRlaw::conpl$new(x)
+        PL <- poweRlaw::estimate_xmin(con_pl)
         PL_dmin <- PL$xmin
         PL_alpha <- PL$pars
         n <- PL$ntail
@@ -82,9 +82,9 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE
     }
 
     if (is.null(PL)){ ## if parameters haven't been calculated already, calc alpha and ntail
-      con_pl <- conpl$new(x) ## create continuous pl object
+      con_pl <- poweRlaw::conpl$new(x) ## create continuous pl object
       con_pl$setXmin(PL_dmin) ## set dmin as defined above
-      PL <- estimate_pars(con_pl) ## estimate alpha
+      PL <- poweRlaw::estimate_pars(con_pl) ## estimate alpha
       PL_alpha <- PL$pars
       selection <- min(which(x >= (PL_dmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
       n <- rev.index[selection] # number of values of x >= dmin
@@ -100,8 +100,8 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE
     EX <- NULL
     if (full==FALSE){
       if (is.null(set_dmin)){
-        con_exp <- conexp$new(x)
-        EX <- estimate_xmin(con_exp)
+        con_exp <- poweRlaw::conexp$new(x)
+        EX <- poweRlaw::estimate_xmin(con_exp)
         Exp_dmin <- EX$xmin
         Exp_lambda <- EX$pars
         n <- EX$ntail
@@ -115,9 +115,9 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE
     }
 
     if (is.null(EX)){ ## if parameters haven't been calculated already, calc alpha and ntail
-      con_exp <- conexp$new(x) ## create continuous pl object
+      con_exp <- poweRlaw::conexp$new(x) ## create continuous pl object
       con_exp$setXmin(Exp_dmin) ## set dmin as defined above
-      EX <- estimate_pars(con_exp) ## estimate alpha
+      EX <- poweRlaw::estimate_pars(con_exp) ## estimate alpha
       Exp_lambda <- EX$pars
       selection <- min(which(x >= (Exp_dmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
       n <- rev.index[selection] # number of values of x >= dmin
@@ -133,8 +133,8 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE
     LN <- NULL
     if (full==FALSE){
       if (is.null(set_dmin)){
-        con_ln <- conlnorm$new(x)
-        LN <- estimate_xmin(con_ln)
+        con_ln <- poweRlaw::conlnorm$new(x)
+        LN <- poweRlaw::estimate_xmin(con_ln)
         LN_dmin <- LN$xmin
         lnorm_pars <- LN$pars
         n <- LN$ntail
@@ -148,9 +148,9 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE
       }
 
       if (is.null(LN)){ ## if parameters haven't been calculated already, calc alpha and ntail
-        con_ln <- conlnorm$new(x) ## create continuous pl object
+        con_ln <- poweRlaw::conlnorm$new(x) ## create continuous pl object
         con_ln$setXmin(LN_dmin) ## set dmin as defined above
-        LN <- estimate_pars(con_ln) ## estimate alpha
+        LN <- poweRlaw::estimate_pars(con_ln) ## estimate alpha
         lnorm_pars <- LN$pars
         selection <- min(which(x >= (LN_dmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
         n <- rev.index[selection] # number of values of x >= dmin
