@@ -10,7 +10,7 @@
 devtools::document() # Update manual
 # usethis::use_news_md(open = rlang::is_interactive()) # Create NEWS - Bump version manually and add list of changes
 usethis::use_cran_comments(open = rlang::is_interactive()) # Update comments for CRAN
-usethis::use_version("patch") # Upgrade version number, options include: c("patch", "minor", "major", "dev")
+# usethis::use_version("patch") # Upgrade version number, options include: c("patch", "minor", "major", "dev")
 # usethis::use_gpl_license() # Update license info - if applicable
 devtools::spell_check() # Check spelling
 attachment::att_amend_desc(pkg_ignore = c("infomapecology"), extra.suggests = c("infomapecology"), update.config = TRUE) # Amend dependencies in description
