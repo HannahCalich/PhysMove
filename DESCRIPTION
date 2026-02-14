@@ -27,6 +27,7 @@ Imports:
     grDevices (>= 4.2.2),
     grid (>= 4.2.2),
     methods (>= 4.2.2),
+    poweRlaw (>= 1.0.0),
     RColorBrewer (>= 1.1-3),
     rlang (>= 1.1.1),
     rootSolve (>= 1.8.2.3),
