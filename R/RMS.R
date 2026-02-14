@@ -23,49 +23,141 @@
 #' }
 #' @export
 
-rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE){
+rms_new <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE, strict=TRUE){
+  # TRUE: stop() on invalid pairs; FALSE: warn and continue, max of 25 examples
 
-  MydistHaversine <- function(lon1, lat1, lon2, lat2) {
-    radlat1 <- rad * lat1
-    radlat2 <- rad * lat2
-    dlat <- radlat2 - radlat1
-    dlon <- rad * (lon2 - lon1)
-    a <- (sin(dlat/2)^2) + cos(radlat1)*cos(radlat2)*(sin(dlon/2)^2)
-    a <- 2*asin(sqrt(a))
-    return(a*Radius)
-  }
-
-  species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x}) #Convert to Ana terms
   Radius <- 6371 # Earth Radius in km (disp are in km)
   rad <- 3.141592653589793/180 # Python has more digits of pi than R, so value pasted here instead of "pi" for consistency with python versions of code
   bins <- seq(1,400,1)
+  nbins <- length(bins) # avoid multiple calls to length(bins)
   tmin <- 1/(60*60*24) # 1 second in days
-  sumDist2 <- sumDist <- Timefreq <- rep(0, length(bins))
+  max_examples <- 25
+
+  # Identify end points for each track
+  ids_chr <- as.character(species_df[[1]])
+  runs <- rle(ids_chr) # length of each track
+  end_idx <- cumsum(runs$lengths) # last loc per track
+  nvec <- rep(end_idx, times = runs$lengths) # index of where each individual's last row ends
+
+  # Compute numeric cols
+  lon <- as.numeric(species_df[[2]])
+  lat <- as.numeric(species_df[[3]])
+  time <- species_df[[4]]
+  radlat <- rad * lat
+  cos_radlat <- cos(radlat)
+
+  # Vars that accumulate in loop below
+  sumDist2 <- sumDist <- Timefreq <- rep(0, nbins)
+
+  # Status messages
   statusMessages <- c("25% complete", "50% complete", "75% complete")
   percent <- c(round(dim(species_df)[1]*0.25),round(dim(species_df)[1]*0.5),round(dim(species_df)[1]*0.75))
-  p <- 1 # for status messages
+  p <- j <- 1
 
-  for(j in 1:dim(species_df)[1]){
-    if (j %in% percent){
+  # Create list to store errors
+  invalid_list <- vector("list", length = 0L)
+
+  # Calc disp and time bins
+  for (j in seq_len(nrow(species_df))) {
+    if (p <= length(percent) && j == percent[p]) { # if we've reached the 25%, 50%, or 75% position, and we haven't sent all 3 messages yet, send msg
       message(statusMessages[p])
-      p <- p+1
+      p <- p + 1
     }
-    n <- species_index[[paste(species_df[j,1])]][length(species_index[[paste(species_df[j,1])]])] # row where each individual ends
-    for(k in (j+1):n){ # for each animal, calculate the distance between all locations (k)
-      if (j+1 <= n){
-        myTime <- as.numeric(difftime(species_df[k,4],species_df[j,4],units=timeUnit))
-        b <- floor(log(myTime/tmin)/log(wBins) + 0.5) # log scale time bin
-        Timefreq[b] <- Timefreq[b] + 1 # Cumulative count of displacements between each location within each log time bin
-        Dist <- MydistHaversine(species_df[k,2], species_df[k,3], species_df[j,2], species_df[j,3]) # Calculates distance from point 1 to all successive points
-        sumDist[b] <- sumDist[b] + Dist
-        sumDist2[b] <- sumDist2[b] + Dist^2
+
+    n <- nvec[j]  # last row for the individual
+    if (j + 1 <= n) { # for all rows that are not the last row
+      idx <- (j + 1):n # index the rows excluding row j and prior rows
+      myTime <- as.numeric(difftime(time[idx], time[j], units = timeUnit)) # Vector of all time differences relative to j
+      bvec <- floor(log(myTime / tmin) / log(wBins) + 0.5) # log scale time bin in vector
+
+      # Review data to skip invalid data
+      reason_nonpos_time  <- !is.na(myTime) & (myTime <= 0)
+      reason_nonfinite_bin <- !is.finite(bvec)
+      reason_oob_bin       <- is.finite(bvec) & (bvec < 1 | bvec > nbins)
+
+      any_invalid <- any(reason_nonpos_time | reason_nonfinite_bin | reason_oob_bin)
+      if (any_invalid) {
+        bad <- which(reason_nonpos_time | reason_nonfinite_bin | reason_oob_bin)
+        inv <- data.frame(
+          ref = ids_chr[j],
+          loc_a = j,
+          loc_b = idx[bad],
+          time = myTime[bad],
+          reason = ifelse(reason_nonpos_time[bad], "non_positive_time",
+                          ifelse(reason_nonfinite_bin[bad], "non_finite_bin",
+                                 ifelse(reason_oob_bin[bad], "bin_out_of_range", "unknown")))
+        )
+        invalid_list[[length(invalid_list) + 1L]] <- inv
+      }
+
+      # Proceed with valid data
+      valid <- !(reason_nonpos_time | reason_nonfinite_bin | reason_oob_bin)
+      if (any(valid)) {
+        idxv <- idx[valid]
+        bvec_ok <- bvec[valid]
+
+        # Vectorized Haversine from j to all idxv --
+        dlat <- radlat[idxv] - radlat[j]
+        dlon <- rad * (lon[idxv] - lon[j])
+        a <- (sin(dlat / 2)^2) + cos_radlat[j] * cos_radlat[idxv] * (sin(dlon / 2)^2)
+        # clip for numerical safety (avoids tiny >1 due to floating point):
+        a <- pmax(0, a)
+        sqrt_a <- sqrt(a)
+        # asin input must be <= 1; guard against minimal overshoot
+        angle <- 2 * asin(pmin(1, sqrt_a))
+        dist <- angle * Radius
+        ## NEED TO CHECK ABOVE compared to:
+        # Dist <- MydistHaversine(species_df[k,2], species_df[k,3], species_df[j,2], species_df[j,3]) # Calculates distance from point 1 to all successive points
+
+        Timefreq <- Timefreq + tabulate(bvec_ok, nbins) # Cumulative count of displacements between each location within each log time bin
+        s  <- tapply(dist,   bvec_ok, sum)
+        s2 <- tapply(dist^2, bvec_ok, sum)
+        buniq <- as.integer(names(s))
+        if (length(buniq)) {
+          sumDist[buniq]  <- sumDist[buniq]  + as.numeric(s)
+          sumDist2[buniq] <- sumDist2[buniq] + as.numeric(s2)
+        }
       }
     }
   }
+
+  if (length(invalid_list)) { ## If invalid vals are found
+    invalids <- do.call(rbind, invalid_list)
+    invalids <- invalids[order(invalids$ref, invalids$loc_a, invalids$loc_b), ]
+    n_invalid <- nrow(invalids)
+
+    summary_counts <- aggregate(loc_b ~ reason, invalids, length)
+    summary_text <- paste0(
+      "Invalid pair(s) detected: ", n_invalid, " total\n",
+      paste(sprintf(" - %s: %d", summary_counts$reason, summary_counts$k), collapse = "\n")
+    )
+
+    head_examples <- utils::head(invalids, max_examples)
+    example_text <- paste(
+      capture.output(print(head_examples, row.names = FALSE)),
+      collapse = "\n"
+    )
+    tail_note <- if (n_invalid > max_examples)
+      sprintf("\n… plus %d more invalid pair(s) not shown.", n_invalid - max_examples) else ""
+
+    msg <- paste0(
+      summary_text, "\n\nExamples (ref, location a, location b, time difference, reason):\n",
+      example_text, tail_note, "\n\n",
+      "Tip: Review the locations identified above to ensure there are no duplicated rows and all
+      values are valid"
+    )
+
+    if (strict) {
+      stop(msg, call. = FALSE)
+    } else {
+      warning(msg, call. = FALSE)
+    }
+  }
+
   message ("Calculations complete")
 
-  mybins <- rep(0, length(bins)) # for the x axis of the plot
-  for(b in 1: length(bins)){
+  mybins <- rep(0, nbins) # for the x axis of the plot
+  for(b in 1: nbins){
     mybins[b] <- tmin*wBins^(b)
   }
   RMS_Result <- as.data.frame(cbind("timeBin_log"=mybins, "Count"=Timefreq, "sumDist"=sumDist, "sumDist2"=sumDist2))
