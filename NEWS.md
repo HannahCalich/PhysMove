@@ -1,4 +1,11 @@
+# PhysMove 1.2
+
 ## PhysMove News & Updates
+
+#### <ins>PhysMove 1.2</ins>
+##### Key update
+* Optimized rms function to run faster
+* Updated fitDist to incorporate poweRlaw package. Results nearly identical to previous code
 
 #### <ins>PhysMove 1.1</ins>
 ##### Key update
