@@ -127,7 +127,7 @@ rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE, str
     invalids <- invalids[order(invalids$ref, invalids$loc_a, invalids$loc_b), ]
     n_invalid <- nrow(invalids)
 
-    summary_counts <- aggregate(loc_b ~ reason, invalids, length)
+    summary_counts <- stats::aggregate(loc_b ~ reason, invalids, length)
     summary_text <- paste0(
       "Invalid pair(s) detected: ", n_invalid, " total\n",
       paste(sprintf(" - %s: %d", summary_counts$reason, summary_counts$k), collapse = "\n")
@@ -135,11 +135,11 @@ rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE, str
 
     head_examples <- utils::head(invalids, max_examples)
     example_text <- paste(
-      capture.output(print(head_examples, row.names = FALSE)),
+      utils::capture.output(print(head_examples, row.names = FALSE)),
       collapse = "\n"
     )
     tail_note <- if (n_invalid > max_examples)
-      sprintf("\n… plus %d more invalid pair(s) not shown.", n_invalid - max_examples) else ""
+      sprintf("\n... plus %d more invalid pair(s) not shown.", n_invalid - max_examples) else ""
 
     msg <- paste0(
       summary_text, "\n\nExamples (ref, location a, location b, time difference, reason):\n",
