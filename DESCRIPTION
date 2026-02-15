@@ -2,7 +2,7 @@ Type: Package
 Package: PhysMove
 Title: Quantify Animal Movement Patterns Using Statistical Physics Methods
 Version: 1.2
-Date: 2025-02-11
+Date: 2025-02-15
 Authors@R: c(
     person("Hannah J.", "Calich", , "hannah.calich@anu.edu.au", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0001-7541-9584")),
