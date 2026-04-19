@@ -20,6 +20,15 @@ checkTracks <- function(species_df){
     error_count <- error_count+1
   }
 
+  # Prevent non-data frame subclasses
+  if (!identical(class(species_df), "data.frame")) {
+      warning("Input data must be a base data.frame. Tibbles or
+              data.frame subclasses are not supported.
+              Use as.data.frame() before proceeding.")
+      error_count <- error_count + 1
+  }
+
+
   if (any(colnames(species_df)!=c("ref","lon","lat","day"))) {
     warning("Collumn names are either incorrect or in the wrong order. Column names must be: ",
             "ref, ", "lon, ", "lat, " ,"day", " (in that order)")
