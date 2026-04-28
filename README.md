@@ -72,5 +72,5 @@ library(PhysMove)
 browseVignettes("PhysMove")
 ```
 
-Current Version: 1.0.1
-Last updated: October, 2024
+Current Version: 1.2
+Last updated: April, 2026
