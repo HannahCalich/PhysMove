@@ -19,3 +19,4 @@ vignettes/*.pdf
 *.knit.md
 .Renviron
 .DS_Store
+.positai
