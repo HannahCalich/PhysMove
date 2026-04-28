@@ -36,7 +36,6 @@ Imports:
     stats (>= 4.2.2),
     utils (>= 4.2.2)
 Suggests:
-    aniMotum (>= 1.2-15),
     emln (>= 1.0),    
     infomapecology (>= 2.0.0),
     kableExtra (>= 1.3.4),
