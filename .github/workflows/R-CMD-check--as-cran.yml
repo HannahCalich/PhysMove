@@ -5,11 +5,8 @@
 # As a result, infomapecology is currently being ignored during setup-deps@v1 following suggestions:
 # https://github.com/r-hub/rhub2/issues/11
 
-
 on:
-  workflow_dispatch
-
-on:
+  workflow_dispatch:
   push:
     branches: [main, master]
   pull_request:
