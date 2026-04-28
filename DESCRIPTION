@@ -51,7 +51,7 @@ Additional_repositories: https://HannahCalich.github.io/drat
 Config/Needs/check: rcmdcheck
 Config/testthat/edition: 3
 Encoding: UTF-8
-Language: en-CA
+Language: en-US
 LazyData: true
 LazyDataCompression: xz
 RoxygenNote: 7.3.3
