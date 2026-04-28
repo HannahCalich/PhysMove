@@ -1,3 +1,7 @@
+α
+λ
+μ
+σ
 00008B
 4682B4
 AICc
@@ -12,12 +16,15 @@ ccdfs
 CellsInOriginalTracks
 cellsVisited
 cdfs
+centre
+centres
 CMD
 colGrad
 color
 colour
 colours
 cran
+createTracks
 Dark2
 darkgreen
 darkred
@@ -35,6 +42,7 @@ endCol
 et
 exe
 Farage
+favour
 fitDist
 fitLines
 github
@@ -43,6 +51,7 @@ ggplot
 ggplot2
 gold2
 gradientn
+grey
 grey70
 grDevices
 gridCell
@@ -61,6 +70,7 @@ Intraspecific
 intraspecific
 io
 kilometers
+kilometres
 lm
 lnorm
 lon
@@ -99,6 +109,7 @@ rms
 rmsDisplacements
 RColorBrewer
 setDist
+species'
 Springer
 src
 ss
@@ -110,6 +121,7 @@ timePlot
 timeWindow
 timeWindows
 tpm
+travelled
 trunc
 turningAngles
 TransitionProbabilityMatrix
