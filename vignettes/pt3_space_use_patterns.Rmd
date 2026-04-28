@@ -55,7 +55,7 @@ library(PhysMove)
 
 ## Community-wide movements 
 
-Interactions between species’ movements and their space-use can be described using a network analysis algorithm called Infomap, which identifies communities where animals follow similar movement patterns and remain for extended periods. To identify Infomap communities, *PhysMove* requires the `infomapecology` [R package](https://github.com/Ecological-Complexity-Lab/infomap_ecology_package), the `emln` [R package](https://github.com/Ecological-Complexity-Lab/emln), and a stand-alone [Infomap file](https://ecological-complexity-lab.github.io/infomap_ecology_package/installation). 
+Interactions between species’ movements and their space-use can be described using a network analysis algorithm called Infomap, which identifies communities where animals follow similar movement patterns and remain for extended periods. To identify Infomap communities, *PhysMove* requires the `infomapecology` [R package](https://github.com/Ecological-Complexity-Lab/infomap_ecology_package), the `emln` [R package](https://github.com/Ecological-Complexity-Lab/emln), and a stand-alone [Infomap file](https://infomapecology.ecomplab.com/installation). 
 
 **Installation instructions for both packages and the Infomap file are available here:** <https://ecological-complexity-lab.github.io/infomap_ecology_package/installation>. Further details can be found in Farage *et* *al*. (2021). The following instructions assume both the `infomapecology` and `emln` R packages and the stand-alone Infomap file have been installed.
 
