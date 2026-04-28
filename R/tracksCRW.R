@@ -2,7 +2,7 @@
 #'
 #' A data frame containing location data from 25 sample trajectories
 #' that were developed to follow a correlated random walk model using
-#' the aniModal package.
+#' the aniMotum package.
 #'
 #' Reference: https://ianjonsen.r-universe.dev/aniMotum
 #'

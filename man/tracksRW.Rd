@@ -20,7 +20,7 @@ tracksRW
 \description{
 A data frame containing location data from 25 sample trajectories
 that were developed to follow a random walk model using
-the aniModal package.
+the aniMotum package.
 }
 \details{
 Reference: https://ianjonsen.r-universe.dev/aniMotum
