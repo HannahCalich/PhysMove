@@ -8,11 +8,11 @@
 on:
   workflow_dispatch:
 
-#on:
-#  push:
-#    branches: [main, master]
-#  pull_request:
-#    branches: [main, master]
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
 
 name: R-CMD-check-standard
 
