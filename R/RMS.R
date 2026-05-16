@@ -1,10 +1,10 @@
 #' Root-Mean-Square of Displacements
 #'
-#' This function allows you to calculate root-mean-square displacements and plot them scaled with time
+#' This function allows you to calculate root-mean-square displacements and plot them as a function of time
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
-#' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+#' "day" is the datetime stamp for each location estimate in POSIXct format following '%Y-%m-%d %H:%M:%S'.
 #' See attached sample data \code{\link{tracks}}.
 #' @param timeUnit Unit used to calculate time between locations (e.g., "secs", "mins", "hours", "days", "weeks"). Default is "days".
 #' @param wBins Bin width refers to the size of the time bins used to calculate how frequently displacements occurred. Default is 1.1
@@ -130,8 +130,9 @@ rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE, str
     summary_counts <- stats::aggregate(loc_b ~ reason, invalids, length)
     summary_text <- paste0(
       "Invalid pair(s) detected: ", n_invalid, " total\n",
-      paste(sprintf(" - %s: %d", summary_counts$reason, summary_counts$k), collapse = "\n")
+      paste(sprintf(" - %s: %d", summary_counts$reason, summary_counts$loc_b), collapse = "\n")
     )
+
 
     head_examples <- utils::head(invalids, max_examples)
     example_text <- paste(
@@ -155,7 +156,7 @@ rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE, str
     }
   }
 
-  message ("Calculations complete")
+  message("Calculations complete")
 
   mybins <- rep(0, nbins) # for the x axis of the plot
   for(b in 1: nbins){

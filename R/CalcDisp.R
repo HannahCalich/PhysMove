@@ -14,7 +14,7 @@
 #' code can identify location estimates that are close to, but not exactly separated by the interval_hr input value.
 #' If multiple location estimates fall within this time window the location estimate closest to the interval_hr input value
 #' will be used for calculations. For example, if interval_hr = 24 and range = 6, the algorithm will search for
-#' locations spaced 18 to 32 hours apart. Default is 6.
+#' locations spaced 18 to 30 hours apart. Default is 6.
 #' @return A list containing the displacements in km recorded for each time window. Each list element corresponds with the time
 #' windows set (i.e., the first list element is the first time window).
 #' @examples

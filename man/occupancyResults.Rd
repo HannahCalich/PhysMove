@@ -5,7 +5,7 @@
 \alias{occupancyResults}
 \title{Example output from occupancy()}
 \format{
-dataframe
+data.frame
 }
 \usage{
 occupancyResults

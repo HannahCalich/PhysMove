@@ -6,7 +6,7 @@
 #' @param desc Description of input data. This parameter is used to determine how the data are plotted and to assign appropriate x and y plot labels.
 #' Valid input options include: "occupancy" (e.g., from the \code{\link{occupancy}} function), "gyrationRad"  (e.g., from the \code{\link{gyrationRad}} function),
 #' "entropy" (e.g., from the \code{\link{entropy}} function), "predictability" (from the \code{\link{predictability}} function), and NULL. Occupancy pdfs are created on
-#' a log-log scale due to the nature of the data while the other desc types are create on a standard xy plot (to plot occupancy on a standard
+#' a log-log scale due to the nature of the data while the other desc types are created on a standard xy plot (to plot occupancy on a standard
 #' xy scale leave desc as default). Default is NULL.
 #' @param nBins Number of bins used to calculate the pdf plot (e.g., nBins=25). By default, if desc="occupancy" the code will use 20 log-sized bins (due to the
 #' nature of the data) else the number of bins is determined by the range of the data. If the input values range from 0 to 1 (e.g., entropy or

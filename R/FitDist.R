@@ -2,15 +2,14 @@
 #'
 #' This function allows you to fit power law, exponential, or lognormal distributions to a list of values (e.g., displacement data).
 #'
-#' @param input List of values that will be fit to each distribution
-#' @param dist Continuous distributions that will be fit to the data. Possible values are power law ("pl"), exponential ("exp"), or log-normal ("lnorm")
-#' continuous distributions. Default is dist=c("pl","exp","lnorm").
+#' @param input List of values used to fit the specified distributions; values are combined (and optionally normalised) prior to fitting.
+#' @param dist Continuous distributions that will be fit to the data. Possible values are power law ("pl"), exponential ("exp"), or lognormal ("lnorm"). Default is dist=c("pl","exp","lnorm").
 #' @param set_dmin To limit the fitted distribution to values above a specified value. If your data are going to be normalised
 #' this value will have to be a normalised value as well. Default is NULL.
 #' @param full To fit the distributions to the full range of data. Default is FALSE.
-#' @param normalise Normalises the input values by dividing each input value by the average value for that time window;
-#' normalise=TRUE is required if working with data calculated over multiple time windows.
-#' @return A list including a dataframe of summary statistics for each distribution fit (first list element). Results dataframe includes the
+#' @param normalise Normalises the input values by dividing each input value by the mean of its corresponding time window;
+#' normalise = TRUE is required if working with data calculated over multiple time windows.
+#' @return A list including a data frame of summary statistics for each distribution fit (first list element). Results data frame includes the
 #' distribution name, dmin (minimum value used to fit each distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
 #' distributions respectively, and nTail (the number of data points greater than or equal to dmin). A logical argument indicating if
 #' data were normalised is exported as the second list element because this information is needed for the \code{\link{compDist}} and \code{\link{plotDist}}

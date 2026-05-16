@@ -8,7 +8,7 @@
 #' @param colours Colour(s) for plot points. Valid input options include: base R (grDevices) colour pallets (e.g., colours=rainbow), RColorBrewer
 #' palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that grDevices colour
 #' pallets do not use quotations. If the palette does not have enough distinct colours to match the communities being plotted the function will automatically
-#' create a continuous pallet with the colours provided. Default is "Dark2".
+#' create a continuous pallet with the colours provided. Default is rainbow.
 #' @param legend Add legend with legend=TRUE. Default is TRUE.
 #' @return Probability density function (pdf) plots of displacements.
 #' @importFrom rlang .data

@@ -3,5 +3,5 @@
 #' Example output from the \code{\link{occupancy}} function. Results calculated using the \code{\link{tracks}} dataset
 #' and occupancy() default parameters.
 #'
-#' @format dataframe
+#' @format data.frame
 "occupancyResults"

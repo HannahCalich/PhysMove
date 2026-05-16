@@ -2,7 +2,7 @@
 #'
 #' This function allows you to plot a complementary cumulative distribution function (ccdf) of values with fit lines
 #' based on distribution fits calculated with the \code{\link{fitDist}} function.
-#' @param input List of values that will be fit to each distribution
+#' @param input List of values used to generate the ccdf plot (corresponding to values used in fitDist).
 #' @param distResults List output from the \code{\link{fitDist}} function containing a dataframe of fit results (list element 1) and a normalisation record (list element 2)
 #' @param fitLines Add fit lines based on the parameters calculated with the \code{\link{fitDist}} function. Default is TRUE.
 #' @param setDist Plot a subset of lines for each distribution fit calculated with the \code{\link{fitDist}} function (e.g., setDist=c("pl","exp"))
@@ -34,7 +34,7 @@ plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c(
   }
 
   if (exists("distResults")==FALSE){
-    stop("Please fit distributions using the FitDist function prior to executing plotDist")
+    stop("Please fit distributions using the fitDist function prior to executing plotDist")
   }
 
   normalise <- distResults[[2]]
@@ -203,7 +203,7 @@ plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c(
       a <- a +
         ggplot2::geom_line(data=plLine, ggplot2::aes(x=xval,y=yval, colour=plotCol[1]),lwd=1)
     }
-    a <- a + ggplot2:: scale_color_identity(breaks=stats::na.omit(plotCol), labels=setDist, guide="legend")
+    a <- a + ggplot2::scale_color_identity(breaks=stats::na.omit(plotCol), labels=setDist, guide="legend")
     if(legend==FALSE){
       a <- a + ggplot2::theme(legend.position = "none")
     }

@@ -5,13 +5,13 @@
 \alias{entropyResults}
 \title{Example output from entropy()}
 \format{
-dataframe
+data.frame
 }
 \usage{
 entropyResults
 }
 \description{
-Example output from the \code{\link{entropy}} function. Results calculated using the \code{\link{tracks}} dataset
-and entropy() default parameters.
+Example output from the \code{\link{entropy}} function. Results calculated using the
+\code{\link{tracks}} dataset with entropy() default parameters
 }
 \keyword{datasets}

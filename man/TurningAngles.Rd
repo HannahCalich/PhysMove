@@ -16,8 +16,8 @@ turningAngles(
 \arguments{
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
-"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
-"day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
+"day" is the datetime stamp for each location estimate in POSIXct format following '%Y-%m-%d %H:%M:%S'.
 See attached sample data \code{\link{tracks}}.}
 
 \item{min_hr}{Minimum number of hours to consider for calculations. Default is 24 hours (i.e., 1 day).}
@@ -26,10 +26,10 @@ See attached sample data \code{\link{tracks}}.}
 
 \item{interval_hr}{Time interval (in hours) used to set intervals between min_hr and max_hr. Default is 24 hours (i.e., 1 day).}
 
-\item{range_hr}{Range (in hours) converts interval_hr into a time window (interval_hr +/-  range_hr) so the
+\item{range_hr}{Range (in hours) converts interval_hr into a time window (interval_hr +/- range_hr) so the
 code can identify location estimates that are close to, but not exactly separated by the interval_hr input value.
 If multiple location estimates fall within this time window the location estimate closest to the interval_hr input value
-will be used for calculations. For example, if interval_hr = 24 and range = 6, the algorithm will search for
+will be used for calculations. For example, if interval_hr = 24 and range_hr = 6, the algorithm will search for
 locations spaced 18 to 32 hours apart. Default for range_hr is 6.}
 
 \item{histPlot}{Plot a histogram showing the frequency of turning angles from all time windows combined (default) or

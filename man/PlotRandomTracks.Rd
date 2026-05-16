@@ -19,8 +19,8 @@ plotRandomTracks(
 \arguments{
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
-"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
-"day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
+"day" is the datetime stamp for each location estimate in POSIXct format following '%Y-%m-%d %H:%M:%S'.
 See attached sample data \code{\link{tracks}}.}
 
 \item{ref}{Reference number of track from species_df to plot.}
@@ -41,7 +41,7 @@ of the original track. Default is startCol="red".}
 \item{endCol}{Colour for destination location. endCol=NULL will cause the symbology of the destination location to match the symbology of the rest
 of the original track. Default is endCol="blue".}
 
-\item{legend}{legend Add legend with legend=TRUE (default).}
+\item{legend}{Add legend with legend=TRUE (default).}
 }
 \value{
 Plot showing the original and randomised track locations and the randomised tracks data used to create the map (original tracks are
@@ -51,5 +51,5 @@ from species_df).
 Plot locations from original and reshuffled tracks using RandomisedLat and RandomisedLong outputs from the \code{\link{randomise}} function
 }
 \examples{
-plotRandomTracks(tracks, ref=1, randomResults, numPlot=1, startCol="red", endCol="blue")
+plotRandomTracks(tracks, ref=1, randomResults=randomResults, numPlot=1, startCol="red", endCol="blue")
 }

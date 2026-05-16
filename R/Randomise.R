@@ -6,7 +6,7 @@
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
-#' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+#' "day" is the datetime stamp for each location estimate in POSIXct format following '%Y-%m-%d %H:%M:%S'.
 #' See attached sample data \code{\link{tracks}}.
 #' @param randTrack Number of randomised tracks per individual. Default is 100.
 #' @param gridCell Grid cell size in degrees. Default is 0.25.
@@ -90,7 +90,7 @@ randomise <- function(species_df, randTrack=100, gridCell=0.25, plot=TRUE, lm=TR
       for (j in 1:length(species_index[[i]])){ # For each point in a track
         coordlong <- floor(grid * (ShuffledLong[species_index[[i]][j], r] - longmin))
         coordlat <- floor(grid * (ShuffledLat[species_index[[i]][j], r] - latmin))
-        cellnum <- coordlong + grid * (longmax - longmin) * coordlat
+        cellnum <- coordlong + grid * (longmax - longmin) * coordlat +1
         ShuffledPresence[cellnum] <- 1 # Record the number of unique cells visited (aka presence, not occupancy)
         }
     SumShuffledOccurrences[i, r] <- sum(ShuffledPresence)
@@ -102,12 +102,12 @@ randomise <- function(species_df, randTrack=100, gridCell=0.25, plot=TRUE, lm=TR
 
   i <- 1
   for (i in 1:length(species_index)){ # For original tracks
-    j < -1 # Do not comment this. This is needed to restart j for each animal to find position in index.
+    j <- 1 # Do not comment this. This is needed to restart j for each animal to find position in index.
     Presence <- rep(0, totalcells)
     for (j in 1:length(species_index[[i]])){
       coordlong <- floor(grid * (as.numeric(species_df[species_index[[i]][j],2]) - longmin))
       coordlat <- floor(grid * (as.numeric(species_df[species_index[[i]][j],3]) - latmin))
-      cellnum <- coordlong + grid * (longmax - longmin) * coordlat
+      cellnum <- coordlong + grid * (longmax - longmin) * coordlat +1
       Presence[cellnum] <- 1 # Record the number of unique cells visited (aka presence, not occupancy)
     }
     SumOriginalOccurrences[i] <- sum(Presence)

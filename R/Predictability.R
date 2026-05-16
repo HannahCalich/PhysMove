@@ -5,8 +5,8 @@
 #' A pdf plot of the predictability values can be created with the \code{\link{plotPDF}} function.
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
-#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
-#' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
+#' "day" is the datetime stamp for each location estimate in POSIXct format following '%Y-%m-%d %H:%M:%S'.
 #' See attached sample data \code{\link{tracks}}.
 #' @param entropyResults Data frame of results output from the \code{\link{entropy}} function.
 #' @param startVal Starting value used to find a root value for the limit of predictability equation. Function will loop through values
@@ -35,7 +35,7 @@ predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRU
     model <- function(x) c(F1 = x*log(x) + (1-x)*log(1-x) - (1-x)*log(entropyResults$cellsVisited[i]-1) + entropyResults$indivEntropy[i])
 
     if (startVal==0.99){
-      ss <- suppressWarnings(rootSolve::multiroot(f = model, start = 0.99))#(1.01-entropyResults$normalisedEntropy[i]))) # +0.01 added to deal with cases where NormEnt = 1
+      ss <- suppressWarnings(rootSolve::multiroot(f = model, start = 0.99))
       if (ss$root > 0 & ss$root < 1){
         Pred[i] <- ss$root
     } else {
@@ -46,7 +46,7 @@ predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRU
             break
           }
           else {
-            startVal<-startVal-0.01
+            start_value_default <- start_value_default - 0.01
           }
         }
         Pred[i] <- ss$root

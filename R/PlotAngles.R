@@ -6,7 +6,7 @@
 #' @param timePlot Plot angles from all time windows or only plot angles from one specific time window. For example,
 #' timePlot=1 will only plot angles from the first time window while timePlot="all" will plot angles from all time windows.
 #' Default is timePlot="all".
-#' @param colours Colour(s) for lines in circle plot Valid input options include: base R (grDevices) colour pallets (e.g., colours=rainbow),
+#' @param colours Colour(s) for lines in circle plot. Valid input options include: base R (grDevices) colour pallets (e.g., colours=rainbow),
 #' RColorBrewer palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that
 #' grDevices colour pallets are functions and do not use quotations. If the palette does not have enough distinct colours to match the lines being plotted the function will
 #' automatically create a continuous pallet with the colours provided. Default is rainbow.
@@ -21,7 +21,7 @@ plotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=TRUE){
   # bins <- 0.25
   timeWindows <- as.numeric(names(angleList))
   for (d in 1:length(angleList)){
-    h <- graphics::hist(unlist(angleList[[d]]), plot = FALSE, breaks = seq(-180, 180, bins)) # angleList is all angels for a time period from all individuals
+    h <- graphics::hist(unlist(angleList[[d]]), plot = FALSE, breaks = seq(-180, 180, bins)) # angleList is all angles for a time period from all individuals
     probability <- h$counts/length(unlist(angleList[[d]]))
     probability <- c(probability[1:23],probability[23],probability[24:45]) # Duplicated angle at 0 since 360=0 and 360 is needed for plot
     # probability <- c(probability[1:181],probability[181],probability[182:360]) # Duplicated angle at 0 since 360=0 and 360 is needed for plot
@@ -60,7 +60,7 @@ plotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=TRUE){
     legendPos <- "right"
   } else {
     title <- ""
-    legendPos <- "ggplot2::element_blank()"
+    legendPos <- "none"
   }
 
   circle.plot_plot <- ggplot2::ggplot(circle.plot, ggplot2::aes(x = .data$angles, y = .data$probability, group=as.factor(timeWindows),colour=as.factor(timeWindows)))+

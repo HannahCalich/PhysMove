@@ -2,7 +2,7 @@
 #'
 #' This function allows you to create a map of the level 1 Infomap communities calculated using the \code{\link{infomapCommunities}} function.
 #' To map only a selection of the communities use the subset_communities parameter.
-#' @param infomap_output Infomap monolayer object output from the \code{\link{infomapCommunities}} function.
+#' @param infomap_output Output list from the \code{\link{infomapCommunities}} function, from which the Infomap monolayer object is extracted internally
 #' @param subset_communities Concatenated vector of level 1 communities to be mapped. For example, subset_communities=c(1,2,3) will plot level 1 communities
 #' 1, 2, and 3. This parameter is particularly useful if Infomap has identified many communities and they are difficult to distinguish in the map
 #' All communities are included by default.
@@ -18,7 +18,7 @@
 communityMap <- function(infomap_output, subset_communities, colours="Dark2"){
 
   if (!("infomap_monolayer" %in% is(infomap_output[["infomap_object"]]))){
-    stop("This function requires the Infomap monolayer object that is output from the InfomapCommunities function. \n  Please run the InfomapCommunities function prior to executing CommunityMap.")
+    stop("This function requires the Infomap monolayer object that is output from the infomapCommunities function. \n  Please run the infomapCommunities function prior to executing communityMap.")
   }
 
   infomap_output <- infomap_output[["infomap_object"]]

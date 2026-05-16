@@ -10,18 +10,19 @@ gyrationRad(species_df, map = TRUE, mapCol = c("Black", "Red"))
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
-"day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+"day" is the datetime stamp for each location estimate in POSIXct format following '%Y-%m-%d %H:%M:%S'.
 See attached sample data \code{\link{tracks}}.}
 
 \item{map}{Create a map illustrating the gyration radius of each trajectory. Default is TRUE.}
 
-\item{mapCol}{Colours for points and gyration radii on map, respectively. Default is c("Black","Red).}
+\item{mapCol}{Colours for points and gyration radii on map, respectively. Default is c("Black","Red").}
 }
 \value{
-Gyration radius values for each trajectory. If map=TRUE a map of the gyration radius results is created.
+A data frame containing the unique trajectory identifier (ref), the mean location (longitude and latitude), and
+the gyration radius (rG, in km) for each trajectory. If map = TRUE, a map of the gyration radius results is also produced
 }
 \description{
-This function allows you to calculate the gyration radius of individual trajectories.
+This function calculates the gyration radius of individual trajectories.
 A pdf plot of the gyration radius values can be created with the \code{\link{plotPDF}} function.
 }
 \examples{

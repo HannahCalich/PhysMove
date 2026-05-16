@@ -15,7 +15,7 @@ plotDist(
 )
 }
 \arguments{
-\item{input}{List of values that will be fit to each distribution}
+\item{input}{List of values used to generate the ccdf plot (corresponding to values used in fitDist).}
 
 \item{distResults}{List output from the \code{\link{fitDist}} function containing a dataframe of fit results (list element 1) and a normalisation record (list element 2)}
 

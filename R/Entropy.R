@@ -1,16 +1,17 @@
 #' Entropy of trajectories
 #'
-#' This function allows you to calculate the normalised entropy of individual trajectories (individual entropy scores are
-#' normalised by the log number of cells each trajectory visited), which provides insight to how ordered or disordered the trajectories were.
-#' Values close to 1 indicate high entropy (disordered trajectories) while values closer to 0 indicate low entropy (ordered trajectories).
+#' This function calculates the normalised entropy of individual trajectories based on the probability distribution of location observations across grid cells.
+#' Normalised entropy scores are calculated by dividing individual entropy scores by the log number of cells each trajectory visited,
+#' providing insight to how ordered or disordered the trajectories were.
+#' Values close to 1 indicate high entropy (disordered trajectories), while values closer to 0 indicate low entropy (ordered trajectories).
 #' A pdf plot of the normalized entropy values can be created with the \code{\link{plotPDF}} function.
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
-#' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+#' "day" is the datetime stamp for each location estimate in POSIXct format following '%Y-%m-%d %H:%M:%S'.
 #' See attached sample data \code{\link{tracks}}.
 #' @param gridCell Grid cell size in degrees. Default is 0.25.
-#' @param histPlot Plot a histogram of the normalised  entropy values. Default is TRUE.
+#' @param histPlot Plot a histogram of the normalised entropy values. Default is TRUE.
 #' @return Data frame of the normalised entropy values for each trajectory as well as the individual entropy
 #' values (not normalised) and the number of cells each trajectory visited. If histPlot=TRUE a histogram of the normalised entropy scores is created.
 #' @importFrom rlang .data

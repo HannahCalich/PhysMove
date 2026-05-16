@@ -1,15 +1,16 @@
 #' Gyration Radius
 #'
-#' This function allows you to calculate the gyration radius of individual trajectories.
+#' This function calculates the gyration radius of individual trajectories.
 #' A pdf plot of the gyration radius values can be created with the \code{\link{plotPDF}} function.
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
-#' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+#' "day" is the datetime stamp for each location estimate in POSIXct format following '%Y-%m-%d %H:%M:%S'.
 #' See attached sample data \code{\link{tracks}}.
 #' @param map Create a map illustrating the gyration radius of each trajectory. Default is TRUE.
-#' @param mapCol Colours for points and gyration radii on map, respectively. Default is c("Black","Red).
-#' @return Gyration radius values for each trajectory. If map=TRUE a map of the gyration radius results is created.
+#' @param mapCol Colours for points and gyration radii on map, respectively. Default is c("Black","Red").
+#' @return A data frame containing the unique trajectory identifier (ref), the mean location (longitude and latitude), and
+#' the gyration radius (rG, in km) for each trajectory. If map = TRUE, a map of the gyration radius results is also produced
 #' @importFrom rlang .data
 #' @examples
 #' \dontrun{
@@ -31,7 +32,7 @@ gyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red")){
   }
 
   if(length(mapCol)==1){
-    message("Only one colour has been included in 'mapCol' so only the average locaton of each track will be displayed.
+    message("Only one colour has been included in 'mapCol' so only the average location of each track will be displayed.
     To also display each track's gyration radius please include a second colour following the format, mapCol=c('black','red')")
   }
 
@@ -102,6 +103,6 @@ gyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red")){
 
     print(z)
   }
-  names(MyrG) <- c("ref","avg long", "avg lat", "rG (km)")
+  names(MyrG) <- c("ref","avg_long", "avg_lat", "rG_(km)")
   return(MyrG)
 }

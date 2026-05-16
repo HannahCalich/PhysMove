@@ -42,20 +42,20 @@ ms <- FALSE
 
 ## Introduction 
 
-*PhysMove* contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. These vignettes demonstrate how to calculate each of the *PhysMove* methods and review all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called '`tracks`', which is automatically loaded with *PhysMove* (see [explore 'tracks' dataset](pt1_introduction.html#explore-tracks-dataset) for further details). For further details on our methods and interpreting results please see our corresponding manuscript. 
+*PhysMove* contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. These vignettes demonstrate how to calculate each of the *PhysMove* functions and review all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called '`tracks`', which is automatically loaded with *PhysMove* (see [Explore 'tracks' dataset](pt1_introduction.html#explore-tracks-dataset) section for further details). For further details on our methods and interpreting results please see the corresponding manuscript. 
 
 The most up-to-date version of *PhysMove* and the accompanying vignettes can be installed by following the instructions below.
 
 ## Installation 
 
-We recommend users install the development version of *PhysMove* from GitHub using the devtools R package. 
+The development version of *PhysMove* can be installed from its GitHub repository. 
 
 ```{r installation, eval=FALSE}
 # Install the devtools package from CRAN (if required)
 install.packages("devtools")
 
 # Download the development version from GitHub:
-devtools::install_github("HannahCalich/PhysMove", auth_token = "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", build_vignettes = TRUE)
+devtools::install_github("HannahCalich/PhysMove", build_vignettes = TRUE)
 ```
 
 ```{r load physmove}
@@ -74,7 +74,7 @@ Columns must be formatted as follows:
   * *lon* and *lat*: the longitude (-180 to + 180) and latitude (-90 to +90) in decimal degrees of
     each position estimate, respectively, in numeric format, and
   * *day*: the datetime stamp for each location estimate in POSIXct
-    format following yyyy-mm-dd hh:mm:ss.
+    format following '%Y-%m-%d %H:%M:%S'.
 
 The ```checkTracks``` function can be used to confirm your input data are formatted as described above. This function checks that column names are in order and that each column is in the correct format as described above. Note that this function does not evaluate data quality or quantity.  
 
@@ -87,7 +87,7 @@ You can also compare your data frame to our sample dataset '`tracks`' to ensure 
 
 ## Explore '`tracks`' dataset
 
-'`tracks`' is a simulated telemetry dataset of 25 unique tracks with a defined set of movement parameters that was designed to demonstrate each of the *PhysMove* functions. In detail, '`tracks`' was created using a biased, uncorrelated random walk model with variable step lengths drawn from an exponential distribution with λ = 0.125. We defined the turning angles such that 30% indicated directed forward movement (movements with angles <30° or >330°), and 30% indicated directed return movement (angles between 150-210°), allowing the remainder (40%) to be randomly between 0-360°. These metrics were chosen because they are broadly consistent with literature interpretations of animals moving through a resource-rich habitat. See corresponded manuscript for further details. The code used to make the '`tracks`' dataset is available in the *PhysMove* `doc` folder on GitHub as “createTracks.R”.
+'`tracks`' is a simulated telemetry dataset of 25 unique tracks with a defined set of movement parameters that was designed to demonstrate each of the *PhysMove* functions. In detail, '`tracks`' was created using a biased, uncorrelated random walk model with variable step lengths drawn from an exponential distribution with λ = 0.125. We defined the turning angles such that 30% indicated directed forward movement (movements with angles <30° or >330°), and 30% indicated directed return movement (angles between 150-210°), allowing the remainder (40%) to be randomly between 0-360°. These metrics were chosen because they are broadly consistent with literature describing animal movement in resource-rich habitats. See the corresponding manuscript for further details. The code used to make the '`tracks`' dataset is available in the *PhysMove* `doc` folder on GitHub as “createTracks.R”.
 
 ```{r head tracks, eval=FALSE}
 # Preview the first 6 rows of the 'tracks' dataset

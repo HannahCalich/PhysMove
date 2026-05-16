@@ -17,7 +17,7 @@ rms(
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
-"day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+"day" is the datetime stamp for each location estimate in POSIXct format following '%Y-%m-%d %H:%M:%S'.
 See attached sample data \code{\link{tracks}}.}
 
 \item{timeUnit}{Unit used to calculate time between locations (e.g., "secs", "mins", "hours", "days", "weeks"). Default is "days".}
@@ -39,7 +39,7 @@ The results dataframe includes the 'timeWindows' in log-sized bins along with th
 against their corresponding time period is created, and if lm = TRUE, a fit line and reference line are added to the plot.
 }
 \description{
-This function allows you to calculate root-mean-square displacements and plot them scaled with time
+This function allows you to calculate root-mean-square displacements and plot them as a function of time
 }
 \examples{
 \dontrun{

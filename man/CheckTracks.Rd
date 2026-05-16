@@ -2,21 +2,28 @@
 % Please edit documentation in R/checkTracks.R
 \name{checkTracks}
 \alias{checkTracks}
-\title{Check data format}
+\title{Check data format
+This function checks the format of telemetry data prior to running PhysMove metrics.}
 \usage{
 checkTracks(species_df)
 }
 \arguments{
-\item{species_df}{A data frame containing location data in rows. Columns must have the following headers: "ref", "lon", "lat", "day".
-"ref" is the unique id number for each individual in numeric format (e.g., each track's unique satellite tag ID number),
-"lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
-"day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.}
+\item{species_df}{A data frame containing telemetry data with columns named
+ref, lon, lat, and day.}
 }
 \value{
-If data are formatted correctly the function will output "Your data are formatted correctly", else you will receive an error message describing the problem
+Messages indicating whether the data are correctly formatted; warnings describe any issues.
 }
 \description{
-This function is used to check the format of your telemetry data prior to running PhysMove metrics
+Check data format
+This function checks the format of telemetry data prior to running PhysMove metrics.
+}
+\details{
+The columns must be formatted as follows:
+ref: numeric ID for each individual.
+lon and lat: numeric longitude and latitude in decimal degrees.
+day: POSIXct datetime values.
+Datetime format: %Y-%m-%d %H:%M:%S
 }
 \examples{
 checkTracks(tracks)

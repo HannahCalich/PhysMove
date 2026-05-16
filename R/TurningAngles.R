@@ -3,16 +3,16 @@
 #' This function allows you to calculate turning angles between sets of three consecutive location estimates separated by set time window(s).
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
-#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
-#' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
+#' "day" is the datetime stamp for each location estimate in POSIXct format following '%Y-%m-%d %H:%M:%S'.
 #' See attached sample data \code{\link{tracks}}.
 #' @param min_hr Minimum number of hours to consider for calculations. Default is 24 hours (i.e., 1 day).
 #' @param max_hr Maximum number of hours to consider for calculations. Default is 240 hours (i.e., 10 days).
 #' @param interval_hr Time interval (in hours) used to set intervals between min_hr and max_hr. Default is 24 hours (i.e., 1 day).
-#' @param range_hr Range (in hours) converts interval_hr into a time window (interval_hr +/-  range_hr) so the
+#' @param range_hr Range (in hours) converts interval_hr into a time window (interval_hr +/- range_hr) so the
 #' code can identify location estimates that are close to, but not exactly separated by the interval_hr input value.
 #' If multiple location estimates fall within this time window the location estimate closest to the interval_hr input value
-#' will be used for calculations. For example, if interval_hr = 24 and range = 6, the algorithm will search for
+#' will be used for calculations. For example, if interval_hr = 24 and range_hr = 6, the algorithm will search for
 #' locations spaced 18 to 32 hours apart. Default for range_hr is 6.
 #' @param histPlot Plot a histogram showing the frequency of turning angles from all time windows combined (default) or
 #' one specific time period. For example, histPlot=c(TRUE,1) to plot only the first time period.
@@ -121,11 +121,11 @@ turningAngles<-function(species_df, min_hr=24, max_hr=240, interval_hr=24, range
     if (histPlot[2]=="all"){
       angles.df <- as.data.frame(unlist(angleList))
       names(angles.df) <- "Angles"
-      h <- graphics::hist(angles.df$Angles, plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angels for all time periods from all individuals
+      h <- graphics::hist(angles.df$Angles, plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angles for all time periods from all individuals
     } else {
       angles.df <- as.data.frame(unlist(angleList[[histPlot[2]]]))
       names(angles.df) <- "Angles"
-      h <-graphics:: hist(angles.df$Angles, plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angels for selected time periods from all individuals
+      h <-graphics:: hist(angles.df$Angles, plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angles for selected time periods from all individuals
     }
     xlabels <- c("-180", "", "-120",  "",  "-60",  "",  "0", "",  "60", "", "120",  "",  "180")
     hist_plot <- ggplot2::ggplot(angles.df, ggplot2::aes(.data$Angles))+

@@ -1,23 +1,23 @@
 #' Occupancy
 #'
-#' This function allows you to calculate the occupancy patterns of location estimates and create a map.
+#' This function allows you to calculate the spatial occupancy patterns of location estimates and create a map.
 #' A pdf plot of the occupancy values can be created with the \code{\link{plotPDF}} function.
 #' @param species_df A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
-#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format),
-#' "day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+#' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
+#' "day" is the datetime stamp for each location estimate in POSIXct format following '%Y-%m-%d %H:%M:%S'.
 #' See attached sample data \code{\link{tracks}}.
 #' @param gridCell Grid cell size in degrees. Default is 0.25.
 #' @param map Create a map illustrating where occupancy occurs. Default is TRUE.
 #' @param colGrad  Colour gradient for occupancy map that illustrates low, moderate, and high occupancy, respectively
-#' (applied to ggplot2::scale_fill_gradientn). Default is colGrad=c("blue", "light blue","red").
-#' @return A dataframe including occupancy values and corresponding
-#' locations (provided as centres value of each grid cell). If map=TRUE a map is created.
+#' (applied to ggplot2::scale_fill_gradientn). Default is colGrad=c("blue", "lightblue","red").
+#' @return A data frame including occupancy values and corresponding locations (provided as the centre values of each grid cell).
+#' If map = TRUE, a map is created.
 #' @importFrom rlang .data
-#' @examples occupancy(tracks, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red"))
+#' @examples occupancy(tracks, gridCell=0.25, map=TRUE, colGrad=c("blue", "lightblue", "red"))
 #' @export
 
-occupancy <- function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "light blue", "red")){
+occupancy <- function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "lightblue", "red")){
 
   grid <- 1/gridCell
   Radius <- 6371 #Earth Radius in km (disp are in km)

@@ -16,7 +16,7 @@ infomapCommunities(
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
-"day" is the datetime stamp for each location estimate in POSIXct format following yyyy-mm-dd hh:mm:ss.
+"day" is the datetime stamp for each location estimate in POSIXct format following '%Y-%m-%d %H:%M:%S'.
 See attached sample data \code{\link{tracks}}.}
 
 \item{gridCell}{Grid cell size in degrees. Default is 0.25.}
@@ -27,16 +27,15 @@ See attached sample data \code{\link{tracks}}.}
 code can identify location estimates that are close to, but not exactly separated by a set number of hours.
 If multiple location estimates fall within this time window the location estimate closest to the set hours input value
 will be used for calculations. For example, if hours = 24 and range = 6, the algorithm will search for
-locations spaced 18 to 32 hours apart. Default is 6.}
+locations spaced 18 to 30 hours apart. Default is 6.}
 
 \item{tpm}{Export the transition probability matrix in link list format. If tpm=TRUE, a 'TransitionProbabilityMatrix' data frame will be automatically
-assigned to the global environment. Default is FALSE.}
+returned as the second element of the output list. Default is FALSE.}
 }
 \value{
-A list that can include two list elements, the Infomap results and the transition probability matrix (tpm), if tpm=TRUE. List element 1 is
-the 'infomap_object' result that summarizes the hierarchical structure of the Infomap communities (regions where individuals are likely to
-stay for longer periods of time). If tpm=TRUE the transition probability matrix used to create the 'infomap_object' is assigned
-as list element 2.
+A list where element 1 ('infomap_object') contains the Infomap results summarising the hierarchical structure of communities.
+If tpm = TRUE, element 2 ('tpm') contains the transition probability matrix used to construct the network.
+The transition probability matrix is returned in link list format (origin node, destination node, and transition probability).
 }
 \description{
 This function uses the network community detection Infomap to identify Infomap communities based on a transition probability matrix (tpm), which summarizes

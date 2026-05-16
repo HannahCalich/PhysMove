@@ -20,9 +20,8 @@ checkhelper::find_missing_tags() # check for missing return value for exported f
 #all_files_remaining <- checkhelper::check_clean_userspace() # listed as "experimental" in cran docs so skipping this because it's giving unclear messages about temp files
 #all_files_remaining
 # checkhelper::check_as_cran()# listed as "experimental" in cran docs so skipping this because it's not checking the correct packages
-urlchecker::url_check() # this will throw errors until github is public
-# urlchecker::url_update() # this will throw errors until github is public
-
+urlchecker::url_check()
+tools::checkVignettes()
 #===========================================================================================
 ### Package standard formatting checks
 #===========================================================================================
