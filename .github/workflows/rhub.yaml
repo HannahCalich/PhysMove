@@ -27,6 +27,12 @@ on:
         description: 'Unique ID (optional)'
         type: string
 
+  push:
+    branches: [main, master]
+
+  pull_request:
+    branches: [main, master]
+
 jobs:
 
   setup:
