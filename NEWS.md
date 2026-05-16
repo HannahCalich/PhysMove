@@ -1,20 +1,19 @@
+# PhysMove 1.2.1
+- [FIX] Removed URL redirection by updating Infomap installation link to final destination
+- [DOC] Improved consistency across vignettes, README, and manuscript
+- [DOC] Clarified wording and definitions of movement metrics and functions
+- [DOC] Corrected formatting issues in dataset documentation and vignettes
+- [MAINT] Minor documentation and formatting improvements
+- [DOC] Re-ran all devHistory checks in preparation for CRAN submission (doc/devHistory)
+
 # PhysMove 1.2
+- [PERF] Optimized `rms()` function for improved performance
+- [UPDATE] Updated `fitDist()` to incorporate the poweRlaw package; results remain consistent with previous implementation
 
-## PhysMove News & Updates
+# PhysMove 1.1
+- [UPDATE] Updated PhysMove for compatibility with R version 4.4.0
+- [DOC] Removed references to Infomap.exe to avoid confusion for macOS users
+- [FIX] Added `sf` to imports (required via ggplot) to resolve CRAN check note
 
-#### <ins>PhysMove 1.2</ins>
-##### Key update
-* Optimized rms function to run faster
-* Updated fitDist to incorporate poweRlaw package. Results nearly identical to previous code
-
-#### <ins>PhysMove 1.1</ins>
-##### Key update
-* Updated PhysMove for compatibility with R version 4.4.0
-
-##### Minor updates
-* Removed references to Infomap.exe to avoid confusion with Mac users
-* Included `sf()` in dependencies because it is being called on through ggplot but was being missed by dev checks. Hard coded into `gyrationrad()` so that cran will see it is called on to remove note about dependencies not being used. 
-
-#### <ins>PhysMove 1.0.1</ins>
-##### Key update
-* Initial CRAN submission.
+# PhysMove 1.0.1
+- [DOC] Initial package created
