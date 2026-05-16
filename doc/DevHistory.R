@@ -55,7 +55,18 @@ devtools::run_examples() # Check examples -- OK
 #===========================================================================================
 devtools::check() # Local R CMD check -- this is giving a nonsense error about doc file size being too large
 devtools::check(remote = TRUE, manual = TRUE) # Remote CRAN check with manual -- some expected notes, see below
-rcmdcheck::rcmdcheck() # This is struggling to find the drat repos but they are working fine and devtools can find them, might be a bug.
+# rcmdcheck::rcmdcheck()
+rcmdcheck::rcmdcheck(args = c("--no-manual"), build_args = c("--no-manual")) # Removed manual as I don't have LaTeX installed locally
+
+
+
+#===========================================================================================
+### Version checks (>=4.4)
+#===========================================================================================
+
+rhub::rhub_check(platform = "linux", r_version = "4.4")
+rhub::rhub_check(platform = c("linux", "windows", "macos"))
+rhub::rhub_check(platform = "linux", r_version = "devel")
 
 #===========================================================================================
 ### Test drat repos work
