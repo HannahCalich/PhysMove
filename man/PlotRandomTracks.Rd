@@ -51,5 +51,5 @@ from species_df).
 Plot locations from original and reshuffled tracks using RandomisedLat and RandomisedLong outputs from the \code{\link{randomise}} function
 }
 \examples{
-plotRandomTracks(tracks, ref=1, randomResults=randomResults, numPlot=1, startCol="red", endCol="blue")
+plotRandomTracks(tracks, ref=1, randomResults=randomResults, numPlot=1)
 }
