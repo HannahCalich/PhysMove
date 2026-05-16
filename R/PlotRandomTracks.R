@@ -21,7 +21,7 @@
 #' @return Plot showing the original and randomised track locations and the randomised tracks data used to create the map (original tracks are
 #' from species_df).
 #' @importFrom rlang .data
-#' @examples plotRandomTracks(tracks, ref=1, randomResults=randomResults, numPlot=1, startCol="red", endCol="blue")
+#' @examples plotRandomTracks(tracks, ref=1, randomResults=randomResults, numPlot=1)
 #' @export
 
 plotRandomTracks<-function(species_df, ref=NULL, randomResults, numPlot=1:5, colours=c("black","grey70"),
