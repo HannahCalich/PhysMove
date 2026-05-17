@@ -4,7 +4,7 @@
 \alias{predictability}
 \title{Predictability of trajectories}
 \usage{
-predictability(species_df, entropyResults, startVal = 0.99, histPlot = TRUE)
+predictability(species_df, entropyResults, startVal = NULL, histPlot = TRUE)
 }
 \arguments{
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
@@ -15,8 +15,9 @@ See attached sample data \code{\link{tracks}}.}
 
 \item{entropyResults}{Data frame of results output from the \code{\link{entropy}} function.}
 
-\item{startVal}{Starting value used to find a root value for the limit of predictability equation. Function will loop through values
-starting at startVal and decrease by 0.01 at each iteration until an acceptable root value is identified. Default is 0.99}
+\item{startVal}{Optional starting value used to find a root value for the limit of predictability equation.
+If NULL (default), the starting value is automatically determined from the normalised entropy for each individual.
+The function will iteratively decrease the starting value by 0.01 until an acceptable root within (0,1) is found.}
 
 \item{histPlot}{Plot a histogram of the limit of predictability scores. Default is TRUE.}
 }
@@ -29,5 +30,5 @@ This function allows you to calculate the limit of predictability for each traje
 A pdf plot of the predictability values can be created with the \code{\link{plotPDF}} function.
 }
 \examples{
-predictability(tracks, entropyResults, startVal=0.99, histPlot=TRUE)
+predictability(tracks, entropyResults, startVal = NULL, histPlot=TRUE)
 }

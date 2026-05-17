@@ -21,7 +21,8 @@ predictability results) the code will use 40 bins by default. If the input resul
 code will use 15 bins by default.}
 }
 \value{
-A pdf plot of the results and the data used to create the plot.
+Produces a probability density function (pdf) plot of the input data. Invisibly returns a data frame containing the values used to generate the plot.
+Assign the output to an object to access these data.
 }
 \description{
 This function allows you to plot a probability density function (pdf).

@@ -21,7 +21,8 @@ automatically create a continuous pallet with the colours provided. Default is r
 \item{legend}{Add a legend to the circle plot. Default is TRUE.}
 }
 \value{
-Circle plot of the angles calculated with the \code{\link{turningAngles}} function and a dataframe of the data used to create the circle plot.
+Produces a circle plot of the angles calculated with the \code{\link{turningAngles}} function. Invisibly returns a data frame containing
+ the values used to generate the plot, including time windows, frequencies, and angles. Assign the output to an object to access these data.
 }
 \description{
 This function allows you to create a circle plot illustrating the frequency of turning angles from

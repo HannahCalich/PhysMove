@@ -19,7 +19,8 @@ create a continuous pallet with the colours provided. Default is rainbow.}
 \item{legend}{Add legend with legend=TRUE. Default is TRUE.}
 }
 \value{
-Probability density function (pdf) plots of displacements.
+Produces probability density function (pdf) plots of displacements. Invisibly returns a data frame containing the calculated pdf values,
+corresponding displacements, and time window identifiers used to generate the plot. Assign the output to an object to access these data.
 }
 \description{
 This function allows you to plot probability density functions (pdfs) of displacements. Displacements must be in

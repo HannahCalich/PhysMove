@@ -32,7 +32,8 @@ By default all lines are plotted. Default is NULL.}
 \item{label}{X axis label. Note that "Normalised" will automatically be added if distributions were fit to normalised data. Default is NULL and will result in x-axis label of "input data".}
 }
 \value{
-Complementary cumulative distribution function (ccdf) plot of input with fit lines (if fitLines=TRUE).
+Produces a complementary cumulative distribution function (ccdf) plot of the input data with optional fit lines. Invisibly returns a data frame containing the sorted input values
+and corresponding ccdf values used to generate the plot. Assign the output to an object to access these data.
 }
 \description{
 This function allows you to plot a complementary cumulative distribution function (ccdf) of values with fit lines

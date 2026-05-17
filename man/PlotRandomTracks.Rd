@@ -44,8 +44,8 @@ of the original track. Default is endCol="blue".}
 \item{legend}{Add legend with legend=TRUE (default).}
 }
 \value{
-Plot showing the original and randomised track locations and the randomised tracks data used to create the map (original tracks are
-from species_df).
+Produces a plot showing the original and randomised track locations. Invisibly returns a data frame containing the randomised track
+data used to create the plot. Assign the output to an object to access these data.
 }
 \description{
 Plot locations from original and reshuffled tracks using RandomisedLat and RandomisedLong outputs from the \code{\link{randomise}} function
