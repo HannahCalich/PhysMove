@@ -14,15 +14,15 @@ Authors@R: c(
            comment = c(ORCID = "0000-0001-6906-799X"))
   )
 Description: Provides tools to analyse animal movement and space-use patterns from
-telemetry data using methods derived from statistical physics. Methods
-span displacement-based approaches, distribution fitting, space-use
-metrics (including the influence of correlations on space-use), network-based
-community detection, and measures of entropy and predictability.
-The package enables characterisation of these patterns across spatial
-and temporal scales, including variation within and among individuals
-(inter- and intraspecific analyses). Outputs include interpretable
-metrics and visualisations to support ecological analysis and the
-investigation of fundamental movement processes.
+  telemetry data using methods derived from statistical physics. Methods
+  span displacement-based approaches, distribution fitting, space-use
+  metrics (including the influence of correlations on space-use), network-based
+  community detection, and measures of entropy and predictability.
+  The package enables characterisation of these patterns across spatial
+  and temporal scales, including variation within and among individuals
+  (inter- and intraspecific analyses). Outputs include interpretable
+  metrics and visualisations to support ecological analysis and the
+  investigation of fundamental movement processes.
 License: GPL (>= 3)
 URL: https://github.com/HannahCalich/PhysMove
 BugReports: https://github.com/HannahCalich/PhysMove/issues
