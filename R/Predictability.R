@@ -9,15 +9,16 @@
 #' "day" is the datetime stamp for each location estimate in POSIXct format following '%Y-%m-%d %H:%M:%S'.
 #' See attached sample data \code{\link{tracks}}.
 #' @param entropyResults Data frame of results output from the \code{\link{entropy}} function.
-#' @param startVal Starting value used to find a root value for the limit of predictability equation. Function will loop through values
-#' starting at startVal and decrease by 0.01 at each iteration until an acceptable root value is identified. Default is 0.99
+#' @param startVal Optional starting value used to find a root value for the limit of predictability equation.
+#' If NULL (default), the starting value is automatically determined from the normalised entropy for each individual.
+#' The function will iteratively decrease the starting value by 0.01 until an acceptable root within (0,1) is found.
 #' @param histPlot Plot a histogram of the limit of predictability scores. Default is TRUE.
 #' @return Limit of predictability values for each trajectory. If histPlot=TRUE a histogram of the limit of predictability scores is created.
 #' @importFrom rlang .data
-#' @examples predictability(tracks, entropyResults, startVal=0.99, histPlot=TRUE)
+#' @examples predictability(tracks, entropyResults, startVal = NULL, histPlot=TRUE)
 #' @export
 
-predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRUE){
+predictability<-function(species_df, entropyResults, startVal = NULL, histPlot=TRUE){
 
   if (nrow(entropyResults)!=length(unique(species_df$ref))){
     stop("The number of individuals in the species_df does not match the number of normalised entropy values, check to ensure the right data has \n  been entered.")
@@ -34,43 +35,47 @@ predictability<-function(species_df, entropyResults, startVal=0.99, histPlot=TRU
     }
     model <- function(x) c(F1 = x*log(x) + (1-x)*log(1-x) - (1-x)*log(entropyResults$cellsVisited[i]-1) + entropyResults$indivEntropy[i])
 
-    if (startVal==0.99){
-      ss <- suppressWarnings(rootSolve::multiroot(f = model, start = 0.99))
-      if (ss$root > 0 & ss$root < 1){
-        Pred[i] <- ss$root
+    if (is.null(startVal)) {
+      start_value_default <- max(0.01, min(0.99, 1 - entropyResults$normalisedEntropy[i]))
     } else {
-        start_value_default <- 0.99
-        repeat{
-          ss <- suppressWarnings(rootSolve::multiroot(f = model, start = start_value_default))
-          if (ss$root > 0 & ss$root < 1){
-            break
-          }
-          else {
-            start_value_default <- start_value_default - 0.01
-          }
+      start_value_default <- startVal
+    }
+
+    ss <- suppressWarnings(rootSolve::multiroot(f = model, start = start_value_default))
+
+    if (ss$root > 0 & ss$root < 1){
+      Pred[i] <- ss$root
+    } else {
+      start_try <- start_value_default
+      repeat{
+        start_try <- start_try - 0.01
+
+        if (start_try <= 0.01){
+          ss <- list(root = NA)
+          break
         }
-        Pred[i] <- ss$root
+
+        ss <- suppressWarnings(rootSolve::multiroot(f = model, start = start_try))
+        if (ss$root > 0 & ss$root < 1){
+          break
+        }
       }
-    } else if (startVal!=0.99) {
-      ss <- rootSolve::multiroot(f = model, start = startVal)
       Pred[i] <- ss$root
     }
   }
 
-  predictabilityResults <- as.data.frame(cbind("ref"=unique(species_df$ref),"Predictability"=Pred))
+  predictabilityResults <- as.data.frame(cbind("ref"=unique(species_df$ref),"predictability"=Pred))
 
   if (histPlot==TRUE){
-    predictabilityPlot <- as.data.frame(predictabilityResults[!is.na(predictabilityResults$Predictability),])
-    h <- graphics::hist(predictabilityPlot$Predictability, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
+    predictabilityPlot <- as.data.frame(predictabilityResults[!is.na(predictabilityResults$predictability),])
+    h <- graphics::hist(predictabilityPlot$predictability, breaks=seq(0, 1, length.out = 21), plot=FALSE) # Determine hist values so you can automate plot better
     xlab <- c(0,"",0.2,"",0.4,"",0.6,"",0.8,"",1)
-    hist_plot <- ggplot2::ggplot(predictabilityPlot, ggplot2::aes(.data$Predictability))+
+    hist_plot <- ggplot2::ggplot(predictabilityPlot, ggplot2::aes(.data$predictability))+
       ggplot2::geom_histogram(breaks=h$breaks, color="black", fill="darkgrey")+
       ggplot2::scale_y_continuous(breaks=function(x) seq(ceiling(x[1]), floor(x[2]), by = 2))+
       ggplot2::scale_x_continuous("Limit of Predictability", breaks=seq(0,1,0.1), labels=c("0.0", "", "0.2", "", "0.4", "", "0.6", "", "0.8", "", "1.0"))+
       ggplot2::labs(y = "Frequency")+
       ggplot2::theme_classic(base_size = 12)#+
-    # ggplot2::geom_vline(ggplot2::aes(xintercept=0.5, color="0.5"), linetype="dashed", size=1) +
-    # ggplot2::scale_color_manual(name = "", values = c("0.5" = "red"))
     plot(hist_plot)
   }
   return(predictabilityResults)
