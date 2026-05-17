@@ -8,10 +8,9 @@ There were no ERRORs or WARNINGs.
 
 There were two NOTES:
 
-- The installed package size is ~9.6 MB. The size of the 'doc' directory
-  is due to multiple vignettes with figures intended to demonstrate
-  methodology and usage. The included data are modest in size and required
-  for examples and documentation.
+- The installed package size is ~9.6 MB. The size of the 'doc' directory 
+  is primarily due to vignette figures included to demonstrate methodology 
+  and usagee.
 
 - The packages emln and infomapecology are listed in Suggests and are
   available via the Additional_repositories field. These packages are
