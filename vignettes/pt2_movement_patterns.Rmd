@@ -128,7 +128,7 @@ The `calcDisp()` function calculates displacements travelled in kilometres over 
   between the minimum and maximum times over the set time interval (`interval_hr=24`, by default), and
   * `range_hr`: set the range in hours. This parameter allows the code to identify location estimates that are close to, but not exactly separated by the `interval_hr` input value (`range_hr=6`, by default).
 
-For example, by default, `calcDisp()` calculates displacements between location estimates separated by 10 time windows: 24 ± 6 hours, 48 ± 6 hours, 72 ± 6 hours, etc., until 240 ± 6 hours.
+For example, by default, `calcDisp()` calculates displacements between location estimates separated by 10 time windows: 24 ± 6 hours, 48 ± 6 hours, 72 ± 6 hours, etc., until 240 ± 6 hours. Note that displacements smaller than 0.001 km (1 m) are excluded to avoid zero or near-zero values arising from duplicated or stationary locations.
 
 `calcDisp()` outputs a list where each list element contains the displacements calculated over a time window, such that the first list element contains data from the first time window and so on. For example, by default, the first list element includes displacements calculated over 24 ± 6 hours, and the tenth list element includes displacements calculated over 240 ± 6 hours.
 
@@ -241,7 +241,7 @@ Uses the results from `fitDist()` to plot ccdfs of the displacements with fit li
 Compares distribution fits from `fitDist()` and identifies the best-fit distribution for the displacements. Note that
 `compDist()` can only be used when all distributions are fit to the same range of data (e.g., when `full=TRUE` or if `set_dmin≠NULL`). See Figure V5 for a methods overview. The `compDist()` function requires a list of displacements calculated using `calcDisp()`, the results from `fitDist()`, and includes one optional parameter:
 
-  * `force_AICc`: force `compDist()` to calculate an AICc (`force_AICc=FALSE`, by default). By default, `compDist()` compares distribution fits using weighted AICc scores (AIC scores corrected for small sample sizes) when the sample size of the displacements used to fit the model (i.e., *nTail*) divided by the number of parameters in the model is less than or equal to 40; else, weighed AIC scores are calculated, following Burnham and Anderson (2004). `force_AICc` is used to calculate an AICc instead of an AIC score (if `force_AICc` = TRUE). The highest wAIC or wAICc score from each comparison indicates the best-fit distribution.
+  * `force_AICc`: force `compDist()` to calculate an AICc (`force_AICc=FALSE`, by default). By default, `compDist()` compares distribution fits using weighted AICc scores (AIC scores corrected for small sample sizes) when the ratio of sample size (*nTail*) to the number of parameters (K) is ≤ 40, based on the model with the largest K; else, weighted AIC scores are calculated, following Burnham and Anderson (2004). `force_AICc` is used to calculate an AICc instead of an AIC score (if `force_AICc` = TRUE). The highest wAIC or wAICc score from each comparison indicates the best-fit distribution.
 
 `compDist()` outputs a data frame that contains the summary statistics for each distribution fit (as described for `fitDist()`) with the corresponding *AICc*/*AIC* scores and weighted AICc/AIC scores (*wAICc*/*wAIC*). The distribution with the highest *wAIC* or *wAICc* score from each comparison is the best-fit distribution.
 
