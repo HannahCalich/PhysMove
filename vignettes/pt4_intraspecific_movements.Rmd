@@ -108,7 +108,7 @@ $~$
 
 ## Track entropy
 
-The `entropy()` function calculates track randomness based on the fraction of data points from each track within each grid cell (Figure V18). The resulting entropy scores are then normalised so results can be compared between individuals. 
+The `entropy()` function calculates track randomness based on the fraction of data points from each track within each grid cell (Figure V18). The resulting entropy scores are then normalised so results can be compared between individuals. Note that if a track only visits a single grid cell, normalised entropy cannot be calculated and will return NaN; these values are excluded from visualisations. 
 
 `entropy()` requires a data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)) and includes two optional parameters:
 
@@ -163,7 +163,7 @@ The `predictability()` function calculates the limit of predictability for each 
 
 `predictability()` requires a data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)) and a data frame of results output from `entropy()`, and includes two optional parameters:
 
-* `startVal`: starting value used to find a root value for the limit of predictability equation (`startVal=0.99`, by default), and
+* `startVal`: Optional starting value used to find a root value for the limit of predictability equation. If NULL (default), the starting value is automatically determined from the normalised entropy for each individual. The function will iteratively decrease the starting value by 0.01 until an acceptable root within (0,1) is found.
 * `histPlot`: output a histogram (`histPlot=TRUE`, by default).
 
 `predictability()` outputs a data frame of results with two columns, including: 
