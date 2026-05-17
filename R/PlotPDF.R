@@ -12,7 +12,8 @@
 #' nature of the data) else the number of bins is determined by the range of the data. If the input values range from 0 to 1 (e.g., entropy or
 #' predictability results) the code will use 40 bins by default. If the input results fall outside the 0 to 1 range (e.g., gyration radius results) the
 #' code will use 15 bins by default.
-#' @return A pdf plot of the results and the data used to create the plot.
+#' @return Produces a probability density function (pdf) plot of the input data. Invisibly returns a data frame containing the values used to generate the plot.
+#' Assign the output to an object to access these data.
 #' @importFrom rlang .data
 #' @examples plotPDF(occupancyResults$Occupancy, desc="occupancy")
 #' @export
@@ -155,7 +156,7 @@ plotPDF <- function(result, desc=NULL, nBins){
         ggplot2::coord_cartesian(clip="off")+
         ggplot2::xlab(xlabel)+
         ggplot2::ylab("pdf")
-      plot(a)
+      print(a)
     } else {
       b <- ggplot2::ggplot(data=plot.df, ggplot2::aes(plot.df[,1], plot.df[,2])) +
         ggplot2::geom_line()+
@@ -167,10 +168,11 @@ plotPDF <- function(result, desc=NULL, nBins){
                                             axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour="black"))+
         ggplot2::xlab(xlabel)+
         ggplot2::ylab("pdf")
-      plot(b)
+      print(b)
     }
   } else {
     warning("Cannot create pdf plot with only 1 data point")
+    return(invisible(NULL))
   }
-  return(plot.df)
+  invisible(plot.df)
 }

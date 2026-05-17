@@ -11,7 +11,8 @@
 #' grDevices colour pallets are functions and do not use quotations. If the palette does not have enough distinct colours to match the lines being plotted the function will
 #' automatically create a continuous pallet with the colours provided. Default is rainbow.
 #' @param legend Add a legend to the circle plot. Default is TRUE.
-#' @return Circle plot of the angles calculated with the \code{\link{turningAngles}} function and a dataframe of the data used to create the circle plot.
+#' @return Produces a circle plot of the angles calculated with the \code{\link{turningAngles}} function. Invisibly returns a data frame containing
+#'  the values used to generate the plot, including time windows, frequencies, and angles. Assign the output to an object to access these data.
 #' @importFrom rlang .data
 #' @examples plotAngles(angleList, timePlot="all", colours=rainbow, legend=TRUE)
 #' @export
@@ -89,8 +90,7 @@ plotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=TRUE){
   if (length(angleList)>5){
     circle.plot_plot <- circle.plot_plot + ggplot2::guides(colour=ggplot2::guide_legend(ncol=2))
   }
-
-  plot(circle.plot_plot)
-  colnames(circle.plot)[2] <- c("frequency")
-  return(circle.plot)
+  print(circle.plot_plot)
+  colnames(circle.plot)[2] <- "frequency"
+  invisible(circle.plot)
 }

@@ -18,8 +18,8 @@
 #' @param endCol Colour for destination location. endCol=NULL will cause the symbology of the destination location to match the symbology of the rest
 #' of the original track. Default is endCol="blue".
 #' @param legend Add legend with legend=TRUE (default).
-#' @return Plot showing the original and randomised track locations and the randomised tracks data used to create the map (original tracks are
-#' from species_df).
+#' @return Produces a plot showing the original and randomised track locations. Invisibly returns a data frame containing the randomised track
+#' data used to create the plot. Assign the output to an object to access these data.
 #' @importFrom rlang .data
 #' @examples plotRandomTracks(tracks, ref=1, randomResults=randomResults, numPlot=1)
 #' @export
@@ -114,8 +114,8 @@ plotRandomTracks<-function(species_df, ref=NULL, randomResults, numPlot=1:5, col
   if (legend==FALSE){
     a <- a + ggplot2::theme(legend.position = "none")
   }
-  plot(a)
+  print(a)
   plotpoints <- plotpoints[,2:4]
-  colnames(plotpoints)[1] <- c("randTrack")
-  return(plotpoints)
+  colnames(plotpoints)[1] <- "randTrack"
+  invisible(plotpoints)
 }

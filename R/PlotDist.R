@@ -11,7 +11,8 @@
 #' @param colours Colours for each fit line. Valid input options include colour names or hex numbers. Default is colours=c("red","gold2","blue").
 #' @param legend Add legend with legend=TRUE. Default is TRUE.
 #' @param label X axis label. Note that "Normalised" will automatically be added if distributions were fit to normalised data. Default is NULL and will result in x-axis label of "input data".
-#' @return Complementary cumulative distribution function (ccdf) plot of input with fit lines (if fitLines=TRUE).
+#' @return Produces a complementary cumulative distribution function (ccdf) plot of the input data with optional fit lines. Invisibly returns a data frame containing the sorted input values
+#' and corresponding ccdf values used to generate the plot. Assign the output to an object to access these data.
 #' @importFrom stats plnorm pexp
 #' @examples plotDist(disp, distResultsExp)
 #' @export
@@ -208,7 +209,7 @@ plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c(
       a <- a + ggplot2::theme(legend.position = "none")
     }
   }
-  plot(a)
-  return(df)
+  print(a)
+  invisible(df)
 }
 

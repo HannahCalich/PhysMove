@@ -10,7 +10,8 @@
 #' pallets do not use quotations. If the palette does not have enough distinct colours to match the communities being plotted the function will automatically
 #' create a continuous pallet with the colours provided. Default is rainbow.
 #' @param legend Add legend with legend=TRUE. Default is TRUE.
-#' @return Probability density function (pdf) plots of displacements.
+#' @return Produces probability density function (pdf) plots of displacements. Invisibly returns a data frame containing the calculated pdf values,
+#' corresponding displacements, and time window identifiers used to generate the plot. Assign the output to an object to access these data.
 #' @importFrom rlang .data
 #' @examples plotDispPDF(disp)
 #' @export
@@ -108,9 +109,9 @@ plotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
     if(legend==FALSE){
       a <- a + ggplot2::theme(legend.position = "none")
     }
-    plot(a)
+    print(a)
     colnames(pdfPlotAll) <- c("pdf", "disp", "timeWindow")
-    return(pdfPlotAll)
+    invisible(pdfPlotAll)
   }
   #####################################################################################
   ## log-log plot of displacements normalised by mean displacement per time interval ##
@@ -182,8 +183,8 @@ plotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
     if(legend==FALSE){
       a <- a + ggplot2::theme(legend.position = "none")
     }
-    plot(a)
+    print(a)
     colnames(pdfPlotAll) <- c("pdf", "disp", "timeWindow")
-    return(pdfPlotAll)
+    invisible(pdfPlotAll)
   }
 }
