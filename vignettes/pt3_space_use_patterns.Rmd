@@ -72,6 +72,7 @@ The `infomapCommunities()` function requires a data frame with telemetry data (s
 
 `infomapCommunities()` outputs a list with up to two list objects. The first list object is an *infomap monolayer object* that summarizes the hierarchical structure of the Infomap communities (regions where individuals follow similar movement patterns and are likely to stay for longer periods of time). The second list object is the transition probability matrix, which is only output if `tpm=TRUE`.
 
+
 **Important**: Before running `infomapCommunities()` you must:
 1) set your working directory to the folder that contains the stand-alone Infomap file using `setwd()` and 
 2) load the infomapecology R package using `library(infomapecology)`
@@ -90,7 +91,7 @@ str(infomapResult[["infomap_object"]])
 
 `communityMap()` visualises results from `infomapCommunities()` by converting the *Infomap monolayer object* into a map (Figure V13).
 
-The `communityMap()` function requires the *Infomap monolayer object* output from `infomapCommunities()` and includes two optional parameters:
+The `communityMap()` function requires the full output list from `infomapCommunities()`, from which *Infomap monolayer object* is extracted internally, and includes two optional parameters: 
 
 * `subset_communities`: used to only map specific level 1 communities. For example, `subset_communities = c(1,2,3)` would plot the first three level 1 communities (all communities are included by default), and
 * `colours`: change colours of the communities (`colours= "Dark2"`, by default).
@@ -111,7 +112,7 @@ $~$
 
 ## Occupancy patterns
 
-The `occupancy()` function helps describe species’ space-use patterns by calculating the number of location estimates within each grid cell and dividing this by the grid cell’s area, calculated using spherical coordinates (Figure V14). 
+The `occupancy()` function helps describe species’ space-use patterns by calculating the total number of location estimates within each grid cell divided by the grid cell’s area, calculated using spherical coordinates (Figure V14). 
 
 `occupancy()` requires a data frame with telemetry data (see [data formatting](pt1_introduction.html#data-formatting)) and includes three optional parameters:
 
