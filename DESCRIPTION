@@ -1,10 +1,10 @@
 Type: Package
 Package: PhysMove
-Title: Quantifying Animal Movement Patterns Using Statistical Physics Methods
+Title: Quantifying Animal Movement and Space-Use with Statistical Physics
 Version: 1.2.1
-Date: 2026-05-16
+Date: 2026-05-17
 Authors@R: c(
-    person("Hannah J.", "Calich", , "hannah.calich@anu.edu.au", role = c("aut", "cre", "cph"),
+    person("Hannah J.", "Calich", , "hannah.calich@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0001-7541-9584")),
     person("Jorge", "Rodríguez", role = "aut",
            comment = c(ORCID = "0000-0001-6593-5032")),
@@ -13,8 +13,16 @@ Authors@R: c(
     person("Ana M. M.", "Sequeira", role = "aut",
            comment = c(ORCID = "0000-0001-6906-799X"))
   )
-Description: Quantify movement patterns of satellite-tagged animals using
-    methods derived from statistical physics.
+Description: Provides tools to analyse animal movement and space-use patterns from
+telemetry data using methods derived from statistical physics. Methods
+span displacement-based approaches, distribution fitting, space-use
+metrics (including the influence of correlations on space-use), network-based
+community detection, and measures of entropy and predictability.
+The package enables characterisation of these patterns across spatial
+and temporal scales, including variation within and among individuals
+(inter- and intraspecific analyses). Outputs include interpretable
+metrics and visualisations to support ecological analysis and the
+investigation of fundamental movement processes.
 License: GPL (>= 3)
 URL: https://github.com/HannahCalich/PhysMove
 BugReports: https://github.com/HannahCalich/PhysMove/issues
