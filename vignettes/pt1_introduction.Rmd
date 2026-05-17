@@ -80,14 +80,22 @@ The ```checkTracks``` function can be used to confirm your input data are format
 
 ``` {r check_tracks, eval=FALSE}
 # Check your data are formatted correctly
+
 checkTracks(tracks) # replace 'tracks' with your data frame
 ```
 
-You can also compare your data frame to our sample dataset '`tracks`' to ensure your data are formatted correctly.
+## Sample datasets
+
+*PhysMove* includes two example telemetry datasets that are automatically loaded with the package and can be used to demonstrate functionality and analytical workflows across the vignettes.
+
+1. The primary dataset, '`tracks`', is a simulated telemetry dataset of 25 unique tracks with a defined set of movement parameters that was designed to demonstrate each of the *PhysMove* functions. This dataset is used throughout the *PhysMove* vignettes to provide a consistent and reproducible example for demonstrating analytical workflows. In detail, '`tracks`' was created using a biased, uncorrelated random walk model with variable step lengths drawn from an exponential distribution with λ = 0.125. We defined the turning angles such that 30% indicated directed forward movement (movements with angles <30° or >330°), and 30% indicated directed return movement (angles between 150–210°), allowing the remainder (40%) to be randomly between 0–360°. These metrics were chosen because they are broadly consistent with literature describing animal movement in resource-rich habitats. The code used to make the '`tracks`' dataset is available in the *PhysMove* `doc` folder as “createTracks.R”.
+
+2. The second dataset, '`tracksCRW`', represents movement generated from a correlated random walk (CRW) model using the *aniMotum* R package simulation framework (Jonsen et al. 2023). '`tracksCRW`' consists of 25 simulated telemetry tracks, with each track containing between approximately 200 and 1000 locations to mirror the structure of the '`tracks`' dataset. Tracks were generated using the `sim()` function with a CRW model, where a correlation parameter (D = 0.5) introduces temporal autocorrelation in successive displacements, resulting in directional persistence in movement trajectories. In contrast to the uncorrelated random walk used to generate '`tracks`', this structure produces movement behaviour where step direction is partially dependent on previous steps. 
+Simulations were iteratively repeated until 25 tracks that did not intersect land were obtained, ensuring all trajectories remain within the intended spatial domain. This dataset is included to demonstrate how *PhysMove* performs when applied to movement trajectories exhibiting temporal autocorrelation and short-term directional persistence, enabling comparison between correlated and uncorrelated movement regimes. The code used to make the '`tracksCRW`' dataset is available in the *PhysMove* `doc` folder as “createTracksCRW.R”.
+
+Together, these datasets provide reproducible examples that illustrate how methods in *PhysMove* can be applied across different movement regimes. Users can also compare their own data frames to the '`tracks`' or '`tracksCRW`' dataset to ensure appropriate formatting prior to analysis.
 
 ## Explore '`tracks`' dataset
-
-'`tracks`' is a simulated telemetry dataset of 25 unique tracks with a defined set of movement parameters that was designed to demonstrate each of the *PhysMove* functions. In detail, '`tracks`' was created using a biased, uncorrelated random walk model with variable step lengths drawn from an exponential distribution with λ = 0.125. We defined the turning angles such that 30% indicated directed forward movement (movements with angles <30° or >330°), and 30% indicated directed return movement (angles between 150-210°), allowing the remainder (40%) to be randomly between 0-360°. These metrics were chosen because they are broadly consistent with literature describing animal movement in resource-rich habitats. See the corresponding manuscript for further details. The code used to make the '`tracks`' dataset is available in the *PhysMove* `doc` folder on GitHub as “createTracks.R”.
 
 ```{r head tracks, eval=FALSE}
 # Preview the first 6 rows of the 'tracks' dataset
@@ -145,6 +153,8 @@ Calich, H.J. *et al*. (2021) Comprehensive analytical approaches reveal
 
 Farage, C. *et al*. (2021) Identifying flow modules in ecological
   networks using Infomap. *Methods in Ecology and Evolution*, 12, 778–786.
+
+Jonsen, I. *et al*. (2023) aniMotum, an R package for animal movement data: Rapid quality control, behavioural estimation and simulation. *Methods in Ecology and Evolution* <doi:10.1111/2041-210X.14060>
 
 Méndez, V., *et al*. (2013). Stochastic Foundations in Movement Ecology:
   Anomalous Diffusion, Front Propagation and Random Searches. Berlin,
