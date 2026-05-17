@@ -80,7 +80,8 @@ plotPDF <- function(result, desc=NULL, nBins){
         freq <- xs <- rep(0, nBins+1)
         len <- length(result)
         for(i in 1:len){
-          b <- floor(result[i]/bw+0.5)
+          b <- floor(result[i]/bw+0.5) # b <- floor(result[i]/bw)
+          if (b >= nBins) b <- nBins - 1
           freq[b+1] <- freq[b+1] +1 # the b+1 is necessary due to scenarios where b=0 above
         }
         for (i in 1:nBins){
