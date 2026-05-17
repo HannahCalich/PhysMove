@@ -155,7 +155,7 @@ Farage, C. *et al*. (2021) Identifying flow modules in ecological
   networks using Infomap. *Methods in Ecology and Evolution*, 12, 778–786.
 
 Jonsen, I. *et al*. (2023) aniMotum, an R package for animal movement data: 
-  Rapid qualitycontrol, behavioural estimation and simulation. 
+  Rapid quality control, behavioural estimation and simulation. 
   *Methods in Ecology and Evolution*, 14(3), 806-816. 
 
 Méndez, V., *et al*. (2013). Stochastic Foundations in Movement Ecology:
