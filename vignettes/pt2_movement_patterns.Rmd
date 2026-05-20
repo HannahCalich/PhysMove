@@ -252,7 +252,7 @@ Compares distribution fits from `fitDist()` and identifies the best-fit distribu
 
 ### Search patterns example
 
-In the example below we calculate displacements over 24 ± 6 hours (to reduce processing times), plot a pdf of the displacement, identify the best-fit distribution for the full range of displacements, and we identify the best-fit distribution when displacement datasets are truncated by a best-fit dmin. In general, we recommend fitting distributions to both full and truncated datasets to gain a comprehensive understanding of displacement patterns.
+In the example below we calculate displacements over 24 ± 6 hours, plot a pdf of the displacements, and identify the best-fit distributions for both full and truncated datasets. Using a single time window helps keep run times manageable, while still capturing the overall displacement patterns. In general, we recommend fitting distributions to both full and truncated datasets to gain a comprehensive understanding of displacement patterns.
 
 We begin by calculating displacements over 24 ± 6 hours with `calcDisp()` and plotting a pdf of the displacements with `plotDispPDF()` (Figure V6). 
 
