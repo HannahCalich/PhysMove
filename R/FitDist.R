@@ -12,7 +12,7 @@
 #' @return A list including a data frame of summary statistics for each distribution fit (first list element). Results data frame includes the
 #' distribution name, dmin (minimum value used to fit each distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
 #' distributions respectively, and nTail (the number of data points greater than or equal to dmin). A logical argument indicating if
-#' data were normalised is exported as the second list element because this information is needed for the \code{\link{compDist}} and \code{\link{plotDist}}
+#' data were normalised is exported as the seconda list element because this information is needed for the \code{\link{compDist}} and \code{\link{plotDist}}
 #' functions.
 #' @importFrom stats dlnorm plnorm optim sd
 #' @examples fitDist(disp, dist=c("pl","exp","lnorm"), full=TRUE)
@@ -44,22 +44,23 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE
   }
 
   if (normalise){
-    x <- list()
-    for (d in seq_along(input)){
-      vals <- unlist(input[d])
-      x[[d]] <- vals/mean(vals)
-    }
+    x <- unlist(lapply(input, function(vals) vals / mean(vals)))
   } else {
     x <- unlist(input)
   }
 
-  x <- unlist(x)
-  dmins <- sort(unique(x)) #possible dmin values
-  dat <- numeric(length(dmins)) #blank vectors for D values
   x <- sort(x)
-  N <- length(x)
+
+  if (length(input) > 1) {
+    warning(
+      "Fitting distributions across multiple time windows can be computationally intensive because all values are combined into a single dataset. Consider fitting distributions to a single time window to reduce run time.",
+      call. = FALSE
+    )
+  }
+
   distResults <- data.frame("distribution"=dist, "dmin"= c(NA), "parameter1"=c(NA), "parameter2"=c(NA), "nTail"= c(NA)) #make sure dist= is loaded
   rev.index <- rev(seq_along(x))
+  eps <- .Machine$double.eps^0.5
 
   if ("pl" %in% dist){
     message("Fitting a power law distribution")
@@ -85,13 +86,13 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE
       con_pl$setXmin(PL_dmin) ## set dmin as defined above
       PL <- poweRlaw::estimate_pars(con_pl) ## estimate alpha
       PL_alpha <- PL$pars
-      selection <- min(which(x >= (PL_dmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+      selection <- which(x >= (PL_dmin - eps))[1]
       n <- rev.index[selection] # number of values of x >= dmin
     }
 
-    distResults[which(distResults$distribution =="pl"),which(names(distResults)=="dmin")] <- PL_dmin
-    distResults[which(distResults$distribution =="pl"),which(names(distResults)=="parameter1")] <- PL_alpha
-    distResults[which(distResults$distribution =="pl"),which(names(distResults)=="nTail")] <- n
+    distResults$dmin[distResults$distribution == "pl"] <- PL_dmin
+    distResults$parameter1[distResults$distribution == "pl"] <- PL_alpha
+    distResults$nTail[distResults$distribution == "pl"] <- n
   }
 
   if ("exp" %in% dist){
@@ -118,13 +119,12 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE
       con_exp$setXmin(Exp_dmin) ## set dmin as defined above
       EX <- poweRlaw::estimate_pars(con_exp) ## estimate alpha
       Exp_lambda <- EX$pars
-      selection <- min(which(x >= (Exp_dmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+      selection <- which(x >= (Exp_dmin - eps))[1]
       n <- rev.index[selection] # number of values of x >= dmin
     }
-
-    distResults[which(distResults$distribution =="exp"),which(names(distResults)=="dmin")] <- Exp_dmin
-    distResults[which(distResults$distribution =="exp"),which(names(distResults)=="parameter1")] <- Exp_lambda
-    distResults[which(distResults$distribution =="exp"),which(names(distResults)=="nTail")] <- n
+    distResults$dmin[distResults$distribution == "exp"] <- Exp_dmin
+    distResults$parameter1[distResults$distribution == "exp"] <- Exp_lambda
+    distResults$nTail[distResults$distribution == "exp"] <- n
   }
 
   if ("lnorm" %in% dist){
@@ -151,14 +151,13 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE
         con_ln$setXmin(LN_dmin) ## set dmin as defined above
         LN <- poweRlaw::estimate_pars(con_ln) ## estimate alpha
         lnorm_pars <- LN$pars
-        selection <- min(which(x >= (LN_dmin - .Machine$double.eps ^ 0.5))) # to account for decimal place issue with selection
+        selection <- which(x >= (LN_dmin - eps))[1]
         n <- rev.index[selection] # number of values of x >= dmin
       }
-
-    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="dmin")] <- LN_dmin
-    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="parameter1")] <- lnorm_pars[1]
-    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="parameter2")] <- lnorm_pars[2]
-    distResults[which(distResults$distribution =="lnorm"),which(names(distResults)=="nTail")] <- n
+    distResults$dmin[distResults$distribution == "lnorm"] <- LN_dmin
+    distResults$parameter1[distResults$distribution == "lnorm"] <- lnorm_pars[1]
+    distResults$parameter2[distResults$distribution == "lnorm"] <- lnorm_pars[2]
+    distResults$nTail[distResults$distribution == "lnorm"] <- n
   }
 
   distResults <- list(distResults, normalise)
