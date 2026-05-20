@@ -29,7 +29,7 @@ normalise = TRUE is required if working with data calculated over multiple time 
 A list including a data frame of summary statistics for each distribution fit (first list element). Results data frame includes the
 distribution name, dmin (minimum value used to fit each distribution), parameter 1 (alpha, lambda, mu) and parameter 2 (NA, NA, sigma) for pl, exp, and lnorm
 distributions respectively, and nTail (the number of data points greater than or equal to dmin). A logical argument indicating if
-data were normalised is exported as the second list element because this information is needed for the \code{\link{compDist}} and \code{\link{plotDist}}
+data were normalised is exported as the seconda list element because this information is needed for the \code{\link{compDist}} and \code{\link{plotDist}}
 functions.
 }
 \description{
