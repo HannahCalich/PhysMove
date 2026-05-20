@@ -66,10 +66,10 @@ plotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=TRUE){
 
   circle.plot_plot <- ggplot2::ggplot(circle.plot, ggplot2::aes(x = .data$angles, y = .data$probability, group=as.factor(timeWindows),colour=as.factor(timeWindows)))+
     ggplot2::coord_polar(clip="off")+
-    ggplot2::geom_hline(yintercept = c(0, max(circle.plot$probability)+0.01), colour = "black", size = 0.25) +
-    ggplot2::geom_vline(xintercept = seq(0, 360, by = 90), colour = "black", size = 0.25) +
+    ggplot2::geom_hline(yintercept = c(0, max(circle.plot$probability)+0.01), colour = "black", linewidth = 0.25) +
+    ggplot2::geom_vline(xintercept = seq(0, 360, by = 90), colour = "black", linewidth = 0.25) +
     ggplot2::geom_point(size = 0.4) +
-    ggplot2::geom_line(size = 1) +
+    ggplot2::geom_line(linewidth = 1) +
     ggplot2::scale_colour_manual(title, values = myColoursPal)+
     ggplot2::scale_x_continuous(limits=c(0, 360), breaks=c(0,90,180,270), labels=c("0"," 90","180","270  "))+
     ggplot2::xlab("") +
