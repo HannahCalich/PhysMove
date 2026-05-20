@@ -60,9 +60,9 @@ rcmdcheck::rcmdcheck(args = c("--no-manual"), build_args = c("--no-manual")) # R
 #===========================================================================================
 ### Version checks (>=4.4)
 #===========================================================================================
-rhub::rhub_check(platform = "linux", r_version = "4.4")
+rhub::rhub_check(platform = c("linux", "windows", "macos"), r_version = "4.4")
 rhub::rhub_check(platform = c("linux", "windows", "macos"))
-rhub::rhub_check(platform = "linux", r_version = "devel")
+rhub::rhub_check(platform = c("linux", "windows", "macos"), r_version = "devel")
 
 ### RESULTS:
 ### 3x PASS
@@ -110,8 +110,9 @@ install.packages("emln", repos="https://HannahCalich.github.io/drat")
 ## Update News.md
 ## Update README.md
 ## usethis::use_version("patch")
-## devtools::check() # Run one last check
-
+devtools::check(cran = TRUE) # Run one last check
+devtools::build()
+install.packages("path/to/PhysMove_1.2.1.tar.gz", repos = NULL, type = "source")
 # PUSH CHANGES TO GITHUB
 
 ## devtools::release() # Verify you're ready for release, and release -- used to SUBMIT package to CRAN
