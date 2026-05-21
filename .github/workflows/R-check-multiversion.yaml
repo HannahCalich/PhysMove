@@ -44,6 +44,7 @@ jobs:
 
       - name: Install infomapecology from drat
         run: |
+          options(repos = c(CRAN = "https://cloud.r-project.org"))
           install.packages("drat")
           drat::addRepo("HannahCalich")
           install.packages("infomapecology")
