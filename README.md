@@ -1,8 +1,9 @@
 # PhysMove <img src="vignettes/PhysMoveHexNew.png" align="right" width="130" />
-
+<!-- badges: start -->
 [![R CMD check (as-cran)](https://github.com/HannahCalich/PhysMove/actions/workflows/R-CMD-check--as-cran.yaml/badge.svg)](https://github.com/HannahCalich/PhysMove/actions/workflows/R-CMD-check--as-cran.yaml)
-[![R CMD check (multi-version)](https://github.com/HannahCalich/PhysMove/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/HannahCalich/PhysMove/actions/workflows/R-CMD-check.yaml)
 
+[![R CMD check (multi-version)](https://github.com/HannahCalich/PhysMove/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/HannahCalich/PhysMove/actions/workflows/R-CMD-check.yaml)
+<!-- badges: e
 Authors: Hannah Calich, Jorge P. Rodríguez, Víctor M. Eguíluz & Ana Sequeira
 
 Maintained by: Hannah Calich (hannah.calich@gmail.com)
