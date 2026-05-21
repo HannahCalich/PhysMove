@@ -42,7 +42,6 @@ jobs:
         with:
           r-version: ${{ matrix.config.r }}
 
-      # Install infomapecology from drat BEFORE resolving dependencies
       - name: Install infomapecology from drat
         run: |
           install.packages("drat")
@@ -59,4 +58,3 @@ jobs:
         with:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
-``
