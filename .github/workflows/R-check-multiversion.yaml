@@ -46,7 +46,8 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew update
-          brew install udunits
+          brew install udunits gettext
+          brew link --force gettext
 
       - name: Install infomapecology from drat
         run: |
