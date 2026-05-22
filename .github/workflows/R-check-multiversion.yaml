@@ -48,6 +48,8 @@ jobs:
           brew update
           brew install udunits gettext
           brew link --force gettext
+          echo "LDFLAGS=-L/opt/homebrew/opt/gettext/lib" >> $GITHUB_ENV
+          echo "CPPFLAGS=-I/opt/homebrew/opt/gettext/include" >> $GITHUB_ENV
 
       - name: Install infomapecology from drat
         run: |
