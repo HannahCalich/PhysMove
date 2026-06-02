@@ -52,11 +52,18 @@ jobs:
           brew link gettext --force
 
           echo "PKG_CONFIG_PATH=/opt/homebrew/opt/gettext/lib/pkgconfig:/opt/homebrew/lib/pkgconfig" >> $GITHUB_ENV
+<<<<<<< HEAD
 
           echo "LDFLAGS=-L/opt/homebrew/opt/gettext/lib -L/opt/homebrew/opt/libpng/lib" >> $GITHUB_ENV
           echo "CPPFLAGS=-I/opt/homebrew/opt/gettext/include -I/opt/homebrew/opt/libpng/include" >> $GITHUB_ENV
 
           echo "LIBRARY_PATH=/opt/homebrew/opt/gettext/lib:/opt/homebrew/opt/libpng/lib" >> $GITHUB_ENV
+=======
+          echo "LDFLAGS=-L/opt/homebrew/opt/gettext/lib" >> $GITHUB_ENV
+          echo "CPPFLAGS=-I/opt/homebrew/opt/gettext/include" >> $GITHUB_ENV
+          echo "LIBRARY_PATH=/opt/homebrew/opt/gettext/lib" >> $GITHUB_ENV
+          echo "DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/opt/gettext/lib" >> $GITHUB
+>>>>>>> a28dc6276bae429f9a46e86ba3ae9646c6fd01aa
 
       - name: Install infomapecology from drat
         run: |
