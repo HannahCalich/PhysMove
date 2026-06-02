@@ -1,7 +1,7 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 
-# NOTE: infomapecology is currently hosted on drat repo on GitHub and there is a known issue with rhub being unable to locate GitHub repos. 
+# NOTE: infomapecology is currently hosted on drat repo on GitHub and there is a known issue with rhub being unable to locate GitHub repos.
 # As a result, infomapecology is currently being ignored during setup-deps@v1 following suggestions:
 # https://github.com/r-hub/rhub2/issues/11
 
@@ -12,7 +12,7 @@ on:
  # pull_request:
    # branches: [main, master]
 
-name: R-CMD-check--as-cran
+name: R CMD check (as CRAN)
 
 jobs:
   R-CMD-check:
@@ -44,18 +44,18 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
-          extra-repositories: https://hannahcalich.github.io/drat/ 
-      
+          extra-repositories: https://hannahcalich.github.io/drat/
+
       #- name: Install further dependencies
       #  run: |
       #    install.packages(pkgs = "infomapecology", contriburl = "https://hannahcalich.github.io/drat/docs/src/contrib", type = "source")
       #  shell: Rscript {0}
-      
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck, infomapecology=?ignore-before-r=99.0.0, emln=?ignore-before-r=99.0.0
           needs: check
-     
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
