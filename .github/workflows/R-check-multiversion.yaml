@@ -46,16 +46,15 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew update
-          brew install gettext udunits pkg-config
+          brew install gettext udunits pkg-config cairo freetype libpng fontconfig
 
-          # Force link gettext (libintl)
           brew unlink gettext || true
           brew link gettext --force
 
-          # Explicit paths
           echo "PKG_CONFIG_PATH=/opt/homebrew/opt/gettext/lib/pkgconfig:/opt/homebrew/lib/pkgconfig" >> $GITHUB_ENV
           echo "LDFLAGS=-L/opt/homebrew/opt/gettext/lib" >> $GITHUB_ENV
           echo "CPPFLAGS=-I/opt/homebrew/opt/gettext/include" >> $GITHUB_ENV
+          echo "LIBRARY_PATH=/opt/homebrew/opt/gettext/lib" >> $GITHUB_ENV
 
       - name: Install infomapecology from drat
         run: |
