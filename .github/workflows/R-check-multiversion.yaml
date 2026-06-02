@@ -46,7 +46,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew update
-          brew install gettext udunits pkg-config cairo freetype libpng fontconfig
+          brew install gettext udunits pkg-config cairo freetype libpng fontconfig gdal geos proj
 
           # Ensure gettext (libintl) is properly linked
           brew unlink gettext || true
