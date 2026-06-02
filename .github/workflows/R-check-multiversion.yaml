@@ -48,14 +48,24 @@ jobs:
           brew update
           brew install gettext udunits pkg-config cairo freetype libpng fontconfig
 
+          # Ensure gettext (libintl) is properly linked
           brew unlink gettext || true
           brew link gettext --force
 
+          # Environment variables for compilation
           echo "PKG_CONFIG_PATH=/opt/homebrew/opt/gettext/lib/pkgconfig:/opt/homebrew/lib/pkgconfig" >> $GITHUB_ENV
-
           echo "LDFLAGS=-L/opt/homebrew/opt/gettext/lib -L/opt/homebrew/opt/libpng/lib" >> $GITHUB_ENV
-          echo "CPPFLAGS=-I/opt/homebrew/opt/gettext/include -I/opt/homebrew/opt/libpng/include" >> $GITHUB_ENV
+          echo "CPPFLAGS=-I/opt/homebrew/opt/gettext/include -I/opt/homebrew/opt/libpng/include -I/opt/homebrew/opt/libpng/include/libpng16" >> $GITHUB_ENV
           echo "LIBRARY_PATH=/opt/homebrew/opt/gettext/lib:/opt/homebrew/opt/libpng/lib" >> $GITHUB_ENV
+
+      - name: Configure R compilation flags (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          mkdir -p ~/.R
+          cat <<EOF >> ~/.R/Makevars
+          CPPFLAGS += -I/opt/homebrew/opt/gettext/include -I/opt/homebrew/opt/libpng/include -I/opt/homebrew/opt/libpng/include/libpng16
+          LDFLAGS += -L/opt/homebrew/opt/gettext/lib -L/opt/homebrew/opt/libpng/lib
+          EOF
 
       - name: Install infomapecology from drat
         run: |
