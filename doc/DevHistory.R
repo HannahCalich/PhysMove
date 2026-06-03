@@ -115,4 +115,6 @@ devtools::build()
 install.packages("../PhysMove_1.2.2.tar.gz", repos = NULL, type = "source")
 # PUSH CHANGES TO GITHUB
 
-## devtools::release() # Verify you're ready for release, and release -- used to SUBMIT package to CRAN
+devtools::check_win_devel()
+
+devtools::release() # Verify you're ready for release, and release -- used to SUBMIT package to CRAN
