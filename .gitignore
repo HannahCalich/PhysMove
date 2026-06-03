@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 .Rapp.history
+*.Rproj
 
 /*.tar.gz
 /*.Rcheck/
