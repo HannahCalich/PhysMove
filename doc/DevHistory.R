@@ -49,7 +49,7 @@ devtools::run_examples() # Check examples -- OK
 devtools::check() # Local R CMD check
 devtools::check(remote = TRUE, manual = TRUE) # Remote CRAN check with manual -- some expected notes, see below
 rcmdcheck::rcmdcheck()
-rcmdcheck::rcmdcheck(args = c("--no-manual"), build_args = c("--no-manual")) # Removed manual as I don't have LaTeX installed locally
+# rcmdcheck::rcmdcheck(args = c("--no-manual"), build_args = c("--no-manual")) # Removed manual as I don't have LaTeX installed locally
 
 ### RESULTS:
 ### 3 Notes --
