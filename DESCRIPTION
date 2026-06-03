@@ -1,8 +1,8 @@
 Type: Package
 Package: PhysMove
-Title: Quantifying Animal Movement and Space-Use with Statistical Physics
-Version: 1.2.1
-Date: 2026-05-17
+Title: Quantifying Animal Movement and Space-Use Patterns with Statistical Physics
+Version: 1.2.2
+Date: 2026-06-03
 Authors@R: c(
     person("Hannah J.", "Calich", , "hannah.calich@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0001-7541-9584")),
