@@ -226,7 +226,7 @@ Compares distribution fits from `fitDist()` and identifies the best-fit distribu
 
 `compDist()` outputs a data frame that contains the summary statistics for each distribution fit (as described for `fitDist()`) with the corresponding *AICc*/*AIC* scores and weighted AICc/AIC scores (*wAICc*/*wAIC*). The distribution with the highest *wAIC* or *wAICc* score from each comparison is the best-fit distribution.
 
-<img src="../vignettes/word_formatted/FitDistFlowChart_updated.png" align="center" width="500" />
+<img src="../vignettes/FitDistFlowChart_updated.png" align="center" width="500" />
 
 **Figure V5** Diagram outlining the procedure for identifying the best-fit distribution of displacements.
 
