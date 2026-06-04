@@ -7,13 +7,21 @@ library(PhysMove)
 angleList <- turningAngles(tracks, max_hr = 24)
 save(angleList, file ="angleList.RData")
 
+angleListAll <- turningAngles(tracks)
+save(angleListAll, file ="angleListAll.RData")
+
 disp <- calcDisp(tracks, max_hr=24)
 save(disp, file="disp.RData")
+
+dispAll <- calcDisp(tracks)
+save(dispAll, file="dispAll.RData")
 
 distResultsAll <- fitDist(disp, full=TRUE)
 save(distResultsAll, file="distResultsAll.RData")
 
 distResultsTrunc <- fitDist(disp, full=FALSE) # find best-fit dmin for all
+save(distResultsTrunc, file="distResultsTrunc.RData")
+
 distResultsExp <- fitDist(disp, set_dmin = distResultsTrunc[[1]][2,2], normalise = distResultsTrunc[2][[1]]) # fit all dist to best fit dmin for exp
 save(distResultsExp, file="distResultsExp.RData")
 
