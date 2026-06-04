@@ -19,18 +19,13 @@ vignette: >
 </style>
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(dpi = 600, 
+knitr::opts_chunk$set(dpi = 120, 
                       fig.align = 'center', 
                       echo = TRUE,
                       collapse = TRUE,
                       comment = "#>") 
 ```
 
-```{r ms, include=FALSE}
-ms <- FALSE
-```
-
-`r if (ms) paste0("![](", "images/PhysMoveHexNew.png", "){width='",130, "'}")`
 <img src="../vignettes/PhysMoveHexNew.png" align="right" width="130" />
 
 ## Index 
@@ -97,21 +92,15 @@ Together, these datasets provide reproducible examples that illustrate how metho
 
 ## Explore '`tracks`' dataset
 
-```{r head tracks, eval=FALSE}
+```{r head tracks}
 # Preview the first 6 rows of the 'tracks' dataset
 head(tracks)
 ```
 
-`r if (ms) paste0("![](", "tables/tracks_head.png", "){width=800}")`
-<img src="../vignettes/word_formatted/tables/tracks_head.png" width="100%" />
-
-```{r structure tracks, eval=FALSE}
+```{r structure tracks}
 # Determine the structure of the 'tracks' dataset
 str(tracks)
 ```
-
-`r if (ms) paste0("![](", "tables/tracks_str.png", "){width=800}")`
-<img src="../vignettes/word_formatted/tables/tracks_str.png" width="100%" />
 
 ## Create a map of the 'tracks' dataset
 
@@ -123,12 +112,9 @@ A basic map of your telemetry data can be created using our `plotTracks()` funct
   * `tracks`: connect points with lines (`tracks=TRUE`, by default), and
   * `colours`: edit the colours used in the map (`colours=rainbow`, by default).  
 
-```{r plot_tracks, eval=FALSE, message=FALSE}
+```{r plot_tracks, message=FALSE, dev='svg', fig.width=5, fig.height=4}
 plotTracks(tracks)
 ```
-`r if (ms) paste0("![](", "images/plot_tracks-1.png", ")")`
-<img src="../vignettes/word_formatted/images/plot_tracks-1.png" width="70%" />
-
 **Figure V1** Map of the simulated '`tracks`' dataset created with `plotTracks()` default settings.
 
 $~$
