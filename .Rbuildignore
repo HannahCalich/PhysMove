@@ -14,3 +14,5 @@
 ^\.positai$
 ^\.claude$
 ^CRAN-SUBMISSION$
+^vignettes/.*\.html$
+^vignettes/.*_files$
