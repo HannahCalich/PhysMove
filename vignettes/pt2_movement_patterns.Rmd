@@ -121,24 +121,27 @@ For example, by default, `calcDisp()` calculates displacements between location 
 # Calculate displacements with default parameters
 disp.all <- calcDisp(tracks)
 
-# "15598 displacements in 24 +/- 6 hour(s)"
-# "15573 displacements in 48 +/- 6 hour(s)"
-# "15548 displacements in 72 +/- 6 hour(s)"
-# "15523 displacements in 96 +/- 6 hour(s)"
-# "15498 displacements in 120 +/- 6 hour(s)"
-# "15473 displacements in 144 +/- 6 hour(s)"
-# "15448 displacements in 168 +/- 6 hour(s)"
-# "15423 displacements in 192 +/- 6 hour(s)"
-# "15398 displacements in 216 +/- 6 hour(s)"
-# "15373 displacements in 240 +/- 6 hour(s)"
+# [1] "15598 displacements in 24 +/- 6 hour(s)"
+# [1] "15573 displacements in 48 +/- 6 hour(s)"
+# [1] "15548 displacements in 72 +/- 6 hour(s)"
+# [1] "15523 displacements in 96 +/- 6 hour(s)"
+# [1] "15498 displacements in 120 +/- 6 hour(s)"
+# [1] "15473 displacements in 144 +/- 6 hour(s)"
+# [1] "15448 displacements in 168 +/- 6 hour(s)"
+# [1] "15423 displacements in 192 +/- 6 hour(s)"
+# [1] "15398 displacements in 216 +/- 6 hour(s)"
+# [1] "15373 displacements in 240 +/- 6 hour(s)"
 ```
 
-```{r sum disp from 1st time window, eval=FALSE}
+```{r load example disp data, include=FALSE}
+# Load example dataset included in the package
+data("disp.all", package = "PhysMove")
+```
+
+```{r sum disp all}
 # Summarise displacements calculated over the first time window (24 ± 6 hrs)
 summary(unlist(disp.all[[1]]))
 ```
-<img src="../vignettes/word_formatted/tables/summary_disp_all_24.png" width="100%" />
-
 
 ### Probability density function (pdf) of displacements
 
@@ -156,22 +159,18 @@ The `plotDispPDF()` function requires a list of displacements calculated using `
   * *disp*: binned displacement values (note that if `normalised=TRUE` the displacements are normalised values), and
   * *timeWindow*: corresponding time windows
 
-```{r plot all norm disp, eval=FALSE}
+```{r plot all norm disp}
 # Create a probability density function (pdf) plot of normalised 
 # displacements
 plot.data <- plotDispPDF(disp.all)
 ```
-<img src="../vignettes/word_formatted/images/plot_all_norm_disp-1.png" width="60%" />
-
 **Figure V3** Probability density function (pdf) plot of normalised displacements from the `'tracks'` dataset calculated over 10 time windows, 24 to 240 hours at 24 ± 6-hour time intervals with `calcDisp()`. Plot created with `plotDispPDF()` default parameters (i.e., where `normalised=TRUE`). 
 
-```{r plot all disp (not norm), eval=FALSE}
+```{r plot all disp (not norm)}
 # Create a probability density function (pdf) plot of raw (i.e., not 
 # normalised) displacements
 plot.data.norm <- plotDispPDF(disp.all, normalised=FALSE)
 ```
-<img src="../vignettes/word_formatted/images/plot_all_disp_not_norm-1.png" width="60%" />
-
 **Figure V4** Probability density function (pdf) plot of displacements from the `'tracks'` dataset calculated over 10 time windows, 24 to 240 hours at 24 ± 6-hour time intervals with `calcDisp()`. Plot created with `plotDispPDF()` where `normalised=FALSE`.
 
 $~$
@@ -266,50 +265,53 @@ plot.data.all.pdf <- plotDist(disp, distResults, label="Displacements (km)")
 
 Next, we use `compDist()` to compare distribution fits over the full range of displacement data.
 
-```{r comp dist fits, eval=FALSE}
+```{r comp dist fits}
 # Identify the best-fit distribution for the full range of displacement data
 compResults <- compDist(disp, distResults)
 compResults
 ```
-<img src="../vignettes/word_formatted/tables/dist_full_comp.png" width="100%" />
 
 #### Fitting truncated distributions
 
 We use `fitDist()` to identify the best-fit dmin for each distribution and fit truncated power-law, exponential, and lognormal distributions to displacements calculated over 24 ± 6 hours. We visualise results with `plotDist()` (Figure V8).
 
+```{r load example dispTrunc data, include=FALSE}
+data("distResults.trunc", package = "PhysMove")
+```
+
 ```{r find best-fit dmin for each dist, eval=FALSE}
 # Fit all distributions and identify the best-fit dmin for each distribution
 distResults.trunc <- fitDist(disp, full=FALSE, normalise=FALSE)
+```
+
+``` {r print dist results trunc}
 print(distResults.trunc[["distResults"]])
 ```
-<img src="../vignettes/word_formatted/tables/dist_trunc.png" width="100%" />
 
-```{r plot trunc dist, eval=FALSE}
+```{r plot trunc dist}
 # Create a ccdf plot of displacements with fit lines illustrating 
 # distributions fit to the best-fit dmin for each distribution
 plot.data.all.trunc <- plotDist(disp, distResults.trunc, label="Displacements (km)")
 ```
-<img src="../vignettes/word_formatted/images/plot_trunc_dist-1.png" width="60%" />
-
 **Figure V8** Complementary cumulative distribution function (ccdf) of displacements calculated using `calcDisp()` with `max_hr=24` including fit lines for truncated power-law (pl), exponential (exp), and lognormal (lnorm) distributions based on the best-fit dmin results from `fitDist()`. Plot created using `plotDist()` default parameters.
 
 Since each distribution was fit to a different range of data (i.e., *nTail* values are different for each distribution), we cannot run `compDist()` directly. Instead, we must make pairwise comparisons where `fitDist()` is re-run three times (once for each of the three distributions) where the `set_dmin` parameter is set to each of the best-fit dmin values in turn. 
 
-```{r fit dist with pl, eval=FALSE}
+```{r fit dist with pl}
 # Fit all distributions using the dmin value for the 
 # power-law distribution
 dmin <- distResults.trunc[["distResults"]][1,2]
 distResultsPl <- fitDist(disp, set_dmin=dmin, normalise=FALSE)
 ```
 
-```{r fit dist with exp, eval=FALSE}
+```{r fit dist with exp}
 # Fit all distributions using the dmin value for the 
 # exponential distribution
 dmin <- distResults.trunc[["distResults"]][2,2]
 distResultsExp <- fitDist(disp, set_dmin=dmin, normalise=FALSE)
 ```
 
-```{r fit dist with lnorm, eval=FALSE}
+```{r fit dist with lnorm}
 # Fit all distributions using the dmin value for the 
 # lognormal distribution
 dmin <- distResults.trunc[["distResults"]][3,2]
@@ -317,26 +319,23 @@ distResultsLnorm <- fitDist(disp, set_dmin=dmin, normalise=FALSE)
 ```
 Once all distributions are fit using each of the best-fit dmin values, the distribution fits can be compared using `compDist()`. An important consideration for interpreting the `compDist()` results from pairwise comparisons is that if a dmin was set to favour a specific distribution, but the *wAIC*/*wAICc* scores do not identify that distribution as the best fit, the distribution corresponding to the dmin value is not the best-fit distribution for the displacements. For example, in the first pairwise comparison the dmin was set to the best-fit dmin for a power-law (20.87); however, as you'll see below, the *wAIC* scores identified an exponential distribution as the best fit. Therefore, we conclude that a power-law is not the best-fit distribution for the data. 
 
-```{r comp pl, eval=FALSE}
+```{r comp pl}
 # Compare distribution fits based on the best-fit dmin value for the power-law distribution
 compResultsPl <- compDist(disp, distResultsPl)
 compResultsPl
 ```
-<img src="../vignettes/word_formatted/tables/dist_pl_comp.png" width="100%" />
 
-```{r comp exp, eval=FALSE}
+```{r comp exp}
 # Compare distribution fits based on the best-fit dmin value for the exponential distribution
 compResultsExp <- compDist(disp, distResultsExp)
 compResultsExp
 ```
-<img src="../vignettes/word_formatted/tables/dist_exp_comp.png" width="100%" />
 
-```{r comp lnorm, eval=FALSE}
+```{r comp lnorm}
 # Compare distribution fits based on the best-fit dmin value for the lognormal distribution
 compResultsLnorm <- compDist(disp, distResultsLnorm)
 compResultsLnorm
 ```
-<img src="../vignettes/word_formatted/tables/dist_lnorm_comp.png" width="100%" />
 
 Overall conclusion: The data were best-fit to both full and truncated exponential distributions, when compared with power-law and lognormal distributions. Because the full distribution includes all of the data we will refer to the full distribution when presenting and discussing our final results.
 
@@ -438,30 +437,31 @@ default), and
 
 Results are output in a list where each list element contains the angles calculated over a time window, such that the first list element contains data from the first time window and so on.
 
+```{r load example angle data, include=FALSE}
+data("angleList.all", package = "PhysMove")
+```
+
 ```{r calc turn angles, eval=FALSE}
 # Calculate turning angles in the `'tracks'` dataset using default parameters
-angle.results <- turningAngles(tracks)
+angleList.all <- turningAngles(tracks)
 
-# "15573 angles in 24 +/- 6 hour(s)"
-# "15523 angles in 48 +/- 6 hour(s)"
-# "15473 angles in 72 +/- 6 hour(s)"
-# "15423 angles in 96 +/- 6 hour(s)"
-# "15373 angles in 120 +/- 6 hour(s)"
-# "15323 angles in 144 +/- 6 hour(s)"
-# "15273 angles in 168 +/- 6 hour(s)"
-# "15223 angles in 192 +/- 6 hour(s)"
-# "15173 angles in 216 +/- 6 hour(s)"
-# "15123 angles in 240 +/- 6 hour(s)"
+# [1] "15573 angles in 24 +/- 6 hour(s)"
+# [1] "15523 angles in 48 +/- 6 hour(s)"
+# [1] "15473 angles in 72 +/- 6 hour(s)"
+# [1] "15423 angles in 96 +/- 6 hour(s)"
+# [1] "15373 angles in 120 +/- 6 hour(s)"
+# [1] "15323 angles in 144 +/- 6 hour(s)"
+# [1] "15273 angles in 168 +/- 6 hour(s)"
+# [1] "15223 angles in 192 +/- 6 hour(s)"
+# [1] "15173 angles in 216 +/- 6 hour(s)"
+# [1] "15123 angles in 240 +/- 6 hour(s)"
 ```
-<img src="../vignettes/word_formatted/images/turn_angles.png" width="60%" />
-
 **Figure V11** Histogram of turning angles from the `'tracks'` dataset over ten time windows (24 to 240 hours at 24 ± 6 hour intervals). Plot created with `turningAngles()` default parameters.
 
-```{r summarise turning angles, eval=FALSE}
+```{r summarise turning angles}
 # Summarise turning angles calculated over the first time window 
-summary(angle.results[[1]])
+summary(angleList.all[[1]])
 ```
-<img src="../vignettes/word_formatted/tables/summary_angles.png" width="100%" />
 
 ### Create a circle plot
 
@@ -483,12 +483,10 @@ plot) showing the frequency of turning angles over each time window
 * *frequency*: turning angle frequency, and
 * *angle*: turning angles in degrees
 
-```{r plot angles with a circle plot, eval=FALSE}
+```{r plot angles with a circle plot}
 # Plot angles with a circle plot
-plot.data.angles <- plotAngles(angle.results)
+plot.data.angles <- plotAngles(angleList.all)
 ```
-<img src="../vignettes/word_formatted/images/plot_angles_circle_plot.png" width="60%" />
-
 **Figure V12** Circle plot of turning angles recorded from the `'tracks'` dataset during ten time windows (24 to 240 hours at 24 ± 6 hour intervals). Plot created with `plotAngles()` default parameters.
 
 $~$
