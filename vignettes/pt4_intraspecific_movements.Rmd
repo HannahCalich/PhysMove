@@ -90,9 +90,6 @@ pdf.gr <- plotPDF((GR$`rG_(km)`), desc="gyrationRad")
 ```
 **Figure V17** Probability density function (pdf) plot of gyration radius values for the `'tracks'` dataset determined with `gyrationRad()` default parameters. Plot created using `plotPDF()` with `desc="gyrationRad"`.
 
-$~$
-$~$
-
 [Back to top](pt4_intraspecific_movements.html)
 
 ## Track entropy
@@ -132,9 +129,6 @@ pdf.ent <- plotPDF(Ent$normalisedEntropy, desc="entropy")
 ```
 **Figure V19** Probability density function (pdf) plot of normalised entropy scores for `'tracks'` dataset determined with `entropy()` default parameters. Plot created using `plotPDF()` with `desc="entropy"`.
 
-$~$
-$~$
-
 [Back to top](pt4_intraspecific_movements.html)
 
 ## Track predictability 
@@ -171,9 +165,6 @@ A pdf of the results from `predictability()` can be plotted with the `plotPDF()`
 pdf.pred <- plotPDF(Pred$predictability, desc="predictability")
 ```
 **Figure V21** Probability density function (pdf) plot of predictability scores for `'tracks'` dataset determined with `predictability()` default parameters and results from `entropy()`. Plot created using `plotPDF()` with `desc="predictability"`.
-
-$~$
-$~$
 
 [Back to top](pt4_intraspecific_movements.html)
 

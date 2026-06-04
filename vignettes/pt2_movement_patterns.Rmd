@@ -96,8 +96,6 @@ print(RMSlinearModel)
 # Determine the scaling exponent 
 RMSlinearModel$estimate[2]
 ```
-$~$
-$~$
 
 [Back to top](pt2_movement_patterns.html)
 
@@ -119,7 +117,7 @@ For example, by default, `calcDisp()` calculates displacements between location 
 
 ```{r calc disp, eval=FALSE}
 # Calculate displacements with default parameters
-disp.all <- calcDisp(tracks)
+dispAll <- calcDisp(tracks)
 
 # [1] "15598 displacements in 24 +/- 6 hour(s)"
 # [1] "15573 displacements in 48 +/- 6 hour(s)"
@@ -135,12 +133,12 @@ disp.all <- calcDisp(tracks)
 
 ```{r load example disp data, include=FALSE}
 # Load example dataset included in the package
-data("disp.all", package = "PhysMove")
+data("dispAll", package = "PhysMove")
 ```
 
 ```{r sum disp all}
 # Summarise displacements calculated over the first time window (24 ± 6 hrs)
-summary(unlist(disp.all[[1]]))
+summary(unlist(dispAll[[1]]))
 ```
 
 ### Probability density function (pdf) of displacements
@@ -162,19 +160,16 @@ The `plotDispPDF()` function requires a list of displacements calculated using `
 ```{r plot all norm disp}
 # Create a probability density function (pdf) plot of normalised 
 # displacements
-plot.data <- plotDispPDF(disp.all)
+plot.data <- plotDispPDF(dispAll)
 ```
 **Figure V3** Probability density function (pdf) plot of normalised displacements from the `'tracks'` dataset calculated over 10 time windows, 24 to 240 hours at 24 ± 6-hour time intervals with `calcDisp()`. Plot created with `plotDispPDF()` default parameters (i.e., where `normalised=TRUE`). 
 
 ```{r plot all disp (not norm)}
 # Create a probability density function (pdf) plot of raw (i.e., not 
 # normalised) displacements
-plot.data.norm <- plotDispPDF(disp.all, normalised=FALSE)
+plot.data.norm <- plotDispPDF(dispAll, normalised=FALSE)
 ```
 **Figure V4** Probability density function (pdf) plot of displacements from the `'tracks'` dataset calculated over 10 time windows, 24 to 240 hours at 24 ± 6-hour time intervals with `calcDisp()`. Plot created with `plotDispPDF()` where `normalised=FALSE`.
-
-$~$
-$~$
 
 [Back to top](pt2_movement_patterns.html)
 
@@ -255,8 +250,11 @@ We use `fitDist()` to fit the full range of distributions calculated over 24 ± 
 ```{r fit full dist}
 # Fit all distributions to the full range of displacement data 
 distResults <- fitDist(disp, full=TRUE, normalise=FALSE) 
-distResults[["distResults"]]
 
+distResults[["distResults"]]
+```
+
+```{r plot full dist}
 # Create a ccdf plot of displacements with fit lines illustrating 
 # distributions fit to the full range of displacements
 plot.data.all.pdf <- plotDist(disp, distResults, label="Displacements (km)")
@@ -276,22 +274,22 @@ compResults
 We use `fitDist()` to identify the best-fit dmin for each distribution and fit truncated power-law, exponential, and lognormal distributions to displacements calculated over 24 ± 6 hours. We visualise results with `plotDist()` (Figure V8).
 
 ```{r load example dispTrunc data, include=FALSE}
-data("distResults.trunc", package = "PhysMove")
+data("distResultsTrunc", package = "PhysMove")
 ```
 
 ```{r find best-fit dmin for each dist, eval=FALSE}
 # Fit all distributions and identify the best-fit dmin for each distribution
-distResults.trunc <- fitDist(disp, full=FALSE, normalise=FALSE)
+distResultsTrunc <- fitDist(disp, full=FALSE, normalise=FALSE)
 ```
 
 ``` {r print dist results trunc}
-print(distResults.trunc[["distResults"]])
+print(distResultsTrunc[["distResults"]])
 ```
 
 ```{r plot trunc dist}
 # Create a ccdf plot of displacements with fit lines illustrating 
 # distributions fit to the best-fit dmin for each distribution
-plot.data.all.trunc <- plotDist(disp, distResults.trunc, label="Displacements (km)")
+plot.data.all.trunc <- plotDist(disp, distResultsTrunc, label="Displacements (km)")
 ```
 **Figure V8** Complementary cumulative distribution function (ccdf) of displacements calculated using `calcDisp()` with `max_hr=24` including fit lines for truncated power-law (pl), exponential (exp), and lognormal (lnorm) distributions based on the best-fit dmin results from `fitDist()`. Plot created using `plotDist()` default parameters.
 
@@ -300,21 +298,21 @@ Since each distribution was fit to a different range of data (i.e., *nTail* valu
 ```{r fit dist with pl}
 # Fit all distributions using the dmin value for the 
 # power-law distribution
-dmin <- distResults.trunc[["distResults"]][1,2]
+dmin <- distResultsTrunc[["distResults"]][1,2]
 distResultsPl <- fitDist(disp, set_dmin=dmin, normalise=FALSE)
 ```
 
 ```{r fit dist with exp}
 # Fit all distributions using the dmin value for the 
 # exponential distribution
-dmin <- distResults.trunc[["distResults"]][2,2]
+dmin <- distResultsTrunc[["distResults"]][2,2]
 distResultsExp <- fitDist(disp, set_dmin=dmin, normalise=FALSE)
 ```
 
 ```{r fit dist with lnorm}
 # Fit all distributions using the dmin value for the 
 # lognormal distribution
-dmin <- distResults.trunc[["distResults"]][3,2]
+dmin <- distResultsTrunc[["distResults"]][3,2]
 distResultsLnorm <- fitDist(disp, set_dmin=dmin, normalise=FALSE)
 ```
 Once all distributions are fit using each of the best-fit dmin values, the distribution fits can be compared using `compDist()`. An important consideration for interpreting the `compDist()` results from pairwise comparisons is that if a dmin was set to favour a specific distribution, but the *wAIC*/*wAICc* scores do not identify that distribution as the best fit, the distribution corresponding to the dmin value is not the best-fit distribution for the displacements. For example, in the first pairwise comparison the dmin was set to the best-fit dmin for a power-law (20.87); however, as you'll see below, the *wAIC* scores identified an exponential distribution as the best fit. Therefore, we conclude that a power-law is not the best-fit distribution for the data. 
@@ -338,9 +336,6 @@ compResultsLnorm
 ```
 
 Overall conclusion: The data were best-fit to both full and truncated exponential distributions, when compared with power-law and lognormal distributions. Because the full distribution includes all of the data we will refer to the full distribution when presenting and discussing our final results.
-
-$~$
-$~$
 
 [Back to top](pt2_movement_patterns.html)
 
@@ -415,9 +410,6 @@ plot.data.random.tracks <- plotRandomTracks(tracks, ref=1, randomise.result)
 ```
 **Figure V10** Map illustrating the original track for reference ID 1 from the `'tracks'` dataset (black points and line) and the first 5 randomised tracks for track reference ID 1 calculated using `randomise()` (grey points and lines). The starting and ending locations are in red and blue, respectively. Plot created with `plotRandomTracks()` default parameters and `ref=1`.
 
-$~$
-$~$
-
 [Back to top](pt2_movement_patterns.html)
 
 ## Turning angles
@@ -438,12 +430,12 @@ default), and
 Results are output in a list where each list element contains the angles calculated over a time window, such that the first list element contains data from the first time window and so on.
 
 ```{r load example angle data, include=FALSE}
-data("angleList.all", package = "PhysMove")
+data("angleListAll", package = "PhysMove")
 ```
 
 ```{r calc turn angles, eval=FALSE}
 # Calculate turning angles in the `'tracks'` dataset using default parameters
-angleList.all <- turningAngles(tracks)
+angleListAll <- turningAngles(tracks)
 
 # [1] "15573 angles in 24 +/- 6 hour(s)"
 # [1] "15523 angles in 48 +/- 6 hour(s)"
@@ -456,11 +448,26 @@ angleList.all <- turningAngles(tracks)
 # [1] "15173 angles in 216 +/- 6 hour(s)"
 # [1] "15123 angles in 240 +/- 6 hour(s)"
 ```
+
+```{r plot histogram from turningAngles, echo=FALSE}
+# Histogram of all angles combined - directly from turningAngles code
+  bins <- 360 / 45    
+  angles.df <- as.data.frame(unlist(angleListAll))
+  names(angles.df) <- "Angles"
+  h <- graphics::hist(angles.df$Angles, plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angles for all time periods from all individuals
+  xlabels <- c("-180", "", "-120",  "",  "-60",  "",  "0", "",  "60", "", "120",  "",  "180")
+  hist_plot <- ggplot2::ggplot(angles.df, ggplot2::aes(.data$Angles))+
+    ggplot2::geom_histogram(breaks=h$breaks, color="black", fill="darkgrey")+
+    ggplot2::scale_x_continuous("Turning Angles", breaks=seq(-180,180,30), labels=xlabels)+
+    ggplot2::labs(y="Frequency")+
+    ggplot2::theme_classic(base_size=12)
+  plot(hist_plot)
+```
 **Figure V11** Histogram of turning angles from the `'tracks'` dataset over ten time windows (24 to 240 hours at 24 ± 6 hour intervals). Plot created with `turningAngles()` default parameters.
 
 ```{r summarise turning angles}
 # Summarise turning angles calculated over the first time window 
-summary(angleList.all[[1]])
+summary(angleListAll[[1]])
 ```
 
 ### Create a circle plot
@@ -485,17 +492,13 @@ plot) showing the frequency of turning angles over each time window
 
 ```{r plot angles with a circle plot}
 # Plot angles with a circle plot
-plot.data.angles <- plotAngles(angleList.all)
+plot.data.angles <- plotAngles(angleListAll)
 ```
 **Figure V12** Circle plot of turning angles recorded from the `'tracks'` dataset during ten time windows (24 to 240 hours at 24 ± 6 hour intervals). Plot created with `plotAngles()` default parameters.
-
-$~$
-$~$
 
 [Proceed to Space-Use Patterns](pt3_space_use_patterns.html)
 
 [Back to top](pt2_movement_patterns.html)
-
 
 ## References & Recommended resources
 <div style="text-indent: -40px; padding-left: 40px;">

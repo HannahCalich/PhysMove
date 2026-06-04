@@ -107,9 +107,6 @@ communityMap(infomapResult)
 ```
 **Figure V13** Map illustrating level 1 Infomap communities from the `'tracks'` dataset determined using `infomapCommunities()` default parameters. Map created with `communityMap()` default parameters.
 
-$~$
-$~$
-
 [Back to top](pt3_space_use_patterns.html)
 
 ## Occupancy patterns
@@ -150,15 +147,9 @@ pdf.occ  <- plotPDF(occ$Occupancy, desc="occupancy")
 ```
 **Figure V15** Probability density function (pdf) plot of occupancy values for the tracks dataset calculated with `occupancy()` default parameters. Plot created using `plotPDF()` with `desc="occupancy"`.
 
-$~$
-$~$
-
 [Proceed to Intraspecific Movements](pt4_intraspecific_movements.html)
 
 [Back to top](pt3_space_use_patterns.html)
-
-$~$
-$~$
 
 ## References & Recommended resources
 

@@ -124,13 +124,9 @@ plotTracks(tracks)
 ```
 **Figure V1** Map of the simulated '`tracks`' dataset created with `plotTracks()` default settings.
 
-$~$
-$~$
-
 [Proceed to Movement Patterns](pt2_movement_patterns.html)
 
 [Back to top](pt1_introduction.html)
-
 
 ## References & Recommended resources
 
