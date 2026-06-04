@@ -19,20 +19,18 @@ vignette: >
 </style>
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(dpi = 600, 
-                      fig.align = 'center', 
-                      fig.width = 4, 
-                      fig.height = 4,
-                      echo = TRUE,
-                      collapse = TRUE,
-                      comment = "#>") 
+knitr::opts_chunk$set(dev = "png",
+                    dev.args = list(type = "cairo-png"),
+                    dpi = 120,                             
+                    fig.width = 5,                        
+                    fig.height = 4,
+                    out.width = "70%",                    
+                    fig.align = "center",
+                    echo = TRUE,
+                    collapse = TRUE,
+                    comment = "#>") 
 ```
 
-```{r ms, include=FALSE}
-ms <- FALSE
-```
-
-`r if (ms) paste0("![](", "images/PhysMoveHexNew.png", "){width='",130, "'}")`
 <img src="../vignettes/PhysMoveHexNew.png" align="right" width="130" />
 
 ## Index
@@ -71,34 +69,25 @@ and circles, which indicate how far each animal dispersed (`mapCol=c("Black", "R
 * *avg long* and *avg lat*: the average longitude and latitude coordinates in degrees for each track, and 
 * *rG* *(km)*: the gyration radius in kilometres for each track 
 
-```{r gyrad, eval=FALSE, echo=TRUE, message=FALSE}
+```{r gyrad, message=FALSE}
 # Calculate the dispersion of each track in the 'tracks' dataset
 GR <- gyrationRad(tracks)
 ```
-`r if (ms) paste0("![](", "images/gyrad-1.png", ")")`
-<img src="../vignettes/word_formatted/images/gyrad-1.png" width="60%" />
-
 **Figure V16** Map illustrating dispersion patterns for `'tracks'` dataset using `gyrationRad()` default parameters. Black points represent the mean location of each track and red circles represent how far each track dispersed (i.e., each track's gyration radius).
 
-```{r preview gyrad, echo=TRUE, eval=FALSE}
+```{r preview gyrad}
 # Summarize gyration radius results
 summary(GR)
 ```
-`r if (ms) paste0("![](", "tables/summary_gyrad.png", "){width=800}")`
-<img src="../vignettes/word_formatted/tables/summary_gyrad.png" width="100%" />
-
 
 ### Probability density function of gyration radius results
 
 A pdf of the results from `gyrationRad()` can be plotted with the `plotPDF()` function when the `desc` parameter is set to "gyrationRad" (Figure V17).
 
-```{r gyrad pdf, eval=FALSE, echo=TRUE}
+```{r gyrad pdf}
 # Create a pdf plot of gyration radius values
-pdf.gr <- plotPDF((GR$`rG (km)`), desc="gyrationRad")
+pdf.gr <- plotPDF((GR$`rG_(km)`), desc="gyrationRad")
 ```
-`r if (ms) paste0("![](", "images/gyrad_pdf-1.png", ")")`
-<img src="../vignettes/word_formatted/images/gyrad_pdf-1.png" width="60%" />
-
 **Figure V17** Probability density function (pdf) plot of gyration radius values for the `'tracks'` dataset determined with `gyrationRad()` default parameters. Plot created using `plotPDF()` with `desc="gyrationRad"`.
 
 $~$
@@ -122,34 +111,25 @@ The `entropy()` function calculates track randomness based on the fraction of da
 * *indivEntropy*: individual entropy scores (before normalisation), and 
 * *cellsVisited*: number of cells visited by each track. 
 
-```{r ent, echo=TRUE, eval=FALSE}
+```{r ent}
 # Calculate track entropy using default parameters
 Ent <- entropy(tracks)
 ```
-`r if (ms) paste0("![](", "images/ent-1.png", ")")`
-<img src="../vignettes/word_formatted/images/ent-1.png" width="60%" />
-
 **Figure V18** Histogram of normalised entropy scores for `'tracks'` dataset created using `entropy()` default parameters.
 
-```{r ent head, echo=TRUE, eval=FALSE}
+```{r ent head}
 # Summarise entropy results
 summary(Ent)
 ```
-`r if (ms) paste0("![](", "tables/summary_ent.png", "){width=800}")`
-<img src="../vignettes/word_formatted/tables/summary_ent.png" width="100%" />
-
 
 ### Probability density function of entropy results
 
 A pdf of the results from `entropy()` can be plotted with the `plotPDF()` function when the `desc` parameter is set to "entropy" (Figure V19).
 
-```{r ent pdf, echo=TRUE, eval=FALSE}
+```{r ent pdf}
 # Create a pdf plot of the entropy scores
-pdf.ent <- plotPDF(Ent$normalisedEntropy, "entropy")
+pdf.ent <- plotPDF(Ent$normalisedEntropy, desc="entropy")
 ```
-`r if (ms) paste0("![](", "images/ent_pdf-1.png", ")")`
-<img src="../vignettes/word_formatted/images/ent_pdf-1.png" width="60%" />
-
 **Figure V19** Probability density function (pdf) plot of normalised entropy scores for `'tracks'` dataset determined with `entropy()` default parameters. Plot created using `plotPDF()` with `desc="entropy"`.
 
 $~$
@@ -171,34 +151,25 @@ The `predictability()` function calculates the limit of predictability for each 
 * *ref*: reference ID for each track, and 
 * *predictability*:  predictability scores for each track. 
 
-```{r predict, echo=TRUE, eval=FALSE}
+```{r predict}
 # Track predictability using predictability() default parameters and the output from entropy()
 Pred <- predictability(tracks, Ent)
 ```
-`r if (ms) paste0("![](", "images/predict-1.png", ")")`
-<img src="../vignettes/word_formatted/images/predict-1.png" width="60%" />
-
 **Figure V20** Histogram of predictability scores for `'tracks'` dataset determined using `predictability()` default parameters and entropy scores from `entropy()`.
 
-```{r predict head, echo=TRUE, eval=FALSE}
+```{r predict head}
 # Summarize predictability scores
 summary(Pred)
 ```
-`r if (ms) paste0("![](", "tables/summary_predict.png", "){width=800}")`
-<img src="../vignettes/word_formatted/tables/summary_predict.png" width="100%" />
-
 
 ### Probability density function of predictability results
 
 A pdf of the results from `predictability()` can be plotted with the `plotPDF()` function when the `desc` parameter is set to "predictability" (Figure V21).
 
-```{r predict pdf, echo=TRUE, eval=FALSE}
+```{r predict pdf}
 # Create a pdf plot of the predictability scores
 pdf.pred <- plotPDF(Pred$predictability, desc="predictability")
 ```
-`r if (ms) paste0("![](", "images/predict_pdf-1.png", ")")`
-<img src="../vignettes/word_formatted/images/predict_pdf-1.png" width="60%" />
-
 **Figure V21** Probability density function (pdf) plot of predictability scores for `'tracks'` dataset determined with `predictability()` default parameters and results from `entropy()`. Plot created using `plotPDF()` with `desc="predictability"`.
 
 $~$

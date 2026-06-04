@@ -2,7 +2,8 @@
 title: "PhysMove: Introduction" 
 author: "Hannah J. Calich, Jorge Rodríguez, Víctor Eguíluz & Ana M. M. Sequeira"
 date: 'Last updated: `r Sys.Date()`'
-output: rmarkdown::html_vignette 
+output: 
+  rmarkdown::html_vignette 
 vignette: >
   %\VignetteIndexEntry{PhysMove: Introduction} 
   %\VignetteEngine{knitr::rmarkdown}
@@ -19,11 +20,17 @@ vignette: >
 </style>
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(dpi = 120, 
-                      fig.align = 'center', 
-                      echo = TRUE,
-                      collapse = TRUE,
-                      comment = "#>") 
+knitr::opts_chunk$set(dev = "png",
+                    dev.args = list(type = "cairo-png"),
+                    dpi = 120,                             
+                    fig.width = 5,                        
+                    fig.height = 4,
+                    out.width = "70%",                    
+                    fig.align = "center",
+                    echo = TRUE,
+                    collapse = TRUE,
+                    comment = "#>")
+ 
 ```
 
 <img src="../vignettes/PhysMoveHexNew.png" align="right" width="130" />
@@ -112,7 +119,7 @@ A basic map of your telemetry data can be created using our `plotTracks()` funct
   * `tracks`: connect points with lines (`tracks=TRUE`, by default), and
   * `colours`: edit the colours used in the map (`colours=rainbow`, by default).  
 
-```{r plot_tracks, message=FALSE, dev='svg', fig.width=5, fig.height=4}
+```{r plot_tracks, message=FALSE}
 plotTracks(tracks)
 ```
 **Figure V1** Map of the simulated '`tracks`' dataset created with `plotTracks()` default settings.

@@ -20,18 +20,18 @@ vignette: >
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(dpi = 600, 
-                      fig.align = 'center', 
-                      echo = TRUE,
-                      collapse = TRUE,
-                      comment = "#>") 
+knitr::opts_chunk$set(dev = "png",
+                    dev.args = list(type = "cairo-png"),
+                    dpi = 120,                             
+                    fig.width = 5,                        
+                    fig.height = 4,
+                    out.width = "70%",                    
+                    fig.align = "center",
+                    echo = TRUE,
+                    collapse = TRUE,
+                    comment = "#>")
 ```
 
-```{r ms, include=FALSE}
-ms <- FALSE
-```
-
-`r if (ms) paste0("![](", "images/PhysMoveHexNew.png", "){width='",130, "'}")`
 <img src="../vignettes/PhysMoveHexNew.png" align="right" width="130" />
 
 ## Index
@@ -84,7 +84,6 @@ infomapResult <- infomapCommunities(tracks)
 # View the Infomap monolayer object structure
 str(infomapResult[["infomap_object"]])
 ```
-`r if (ms) paste0("![](", "tables/infomap_str.png", ")")`
 <img src="../vignettes/word_formatted/tables/infomap_str.png" width="50%" />
 
 ### Plot Infomap communities
@@ -100,7 +99,6 @@ The `communityMap()` function requires the full output list from `infomapCommuni
 # Create a map of the Infomap communities
 communityMap(infomapResult)
 ```
-`r if (ms) paste0("![](", "images/infomap_map-1.png", ")")`
 <img src="../vignettes/word_formatted/images/infomap_map-1.png" width="60%" />
 
 **Figure V13** Map illustrating level 1 Infomap communities from the `'tracks'` dataset determined using `infomapCommunities()` default parameters. Map created with `communityMap()` default parameters.
@@ -127,34 +125,25 @@ The `occupancy()` function helps describe species’ space-use patterns by calcu
 * *Counts*: the number of location estimates recorded in the grid cell, and 
 * *Occupancy*: occupancy values per grid cell, defined as the number of counts/area.
 
-```{r calc occ, eval=FALSE, echo=TRUE, message=FALSE}
+```{r calc occ, message=FALSE}
 # Create an occupancy map based on the tracks dataset
 occ <- occupancy(tracks)
 ```
-`r if (ms) paste0("![](", "images/occ_map-1.png", ")")`
-<img src="../vignettes/word_formatted/images/occ_map-1.png" width="60%" />
-
 **Figure V14** Map of occupancy patterns from the `'tracks'` dataset. Map created with `occupancy()` default parameters.
 
-```{r summarise occ, echo=TRUE, eval=FALSE}
+```{r summarise occ}
 # Summarize occupancy results
 summary(occ) 
 ```
-`r if (ms) paste0("![](", "tables/summary_occ.png", ")")`
-<img src="../vignettes/word_formatted/tables/summary_occ.png" width="100%" />
-
 
 ### Probability density function of occupancy results
 
 A pdf of the results from `occupancy()` can be plotted with the `plotPDF()` function when the `desc` parameter is set to "occupancy" (Figure V15).
 
-```{r pdf occ, echo=TRUE, eval=FALSE}
+```{r pdf occ}
 # Create a pdf plot of occupancy values
 pdf.occ  <- plotPDF(occ$Occupancy, desc="occupancy")
 ```
-`r if (ms) paste0("![](", "images/occ_pdf-1.png", ")")`
-<img src="../vignettes/word_formatted/images/occ_pdf-1.png" width="60%" />
-
 **Figure V15** Probability density function (pdf) plot of occupancy values for the tracks dataset calculated with `occupancy()` default parameters. Plot created using `plotPDF()` with `desc="occupancy"`.
 
 $~$
