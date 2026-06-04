@@ -16,3 +16,4 @@
 ^CRAN-SUBMISSION$
 ^vignettes/.*\.html$
 ^vignettes/.*_files$
+^vignettes/.R
