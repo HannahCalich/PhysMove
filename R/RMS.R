@@ -221,7 +221,7 @@ rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE, str
       fit <- lm(log(RMS_Result$Sqrt_dRMS_per_tb) ~ log(RMS_Result$timeBin_log), data = RMS_Result)
       plot.df[[2]] <- as.data.frame(broom::tidy(fit))
       names(plot.df) <- c("rmsResults", "lm")
-      message("Hurst exponent = ", round(fit$coefficients[[2]],4))
+      message("Scaling exponent = ", round(fit$coefficients[[2]],4))
       rm(fit)
     } else {
       warning("Not enough data fit linear model")
