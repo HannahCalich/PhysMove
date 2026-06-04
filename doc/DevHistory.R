@@ -4,6 +4,12 @@
 ### https://www.mzes.uni-mannheim.de/socialsciencedatalab/article/r-package/
 ### https://github.com/ThinkR-open/prepare-for-cran
 
+devtools::install_github("HannahCalich/PhysMove", build_vignettes = TRUE, force = TRUE)
+
+#===========================================================================================
+## Make sure 'createExampleData.R' has been run to refresh all sample datasets used in examples and vignettes
+#===========================================================================================
+
 #===========================================================================================
 ### Package details
 #===========================================================================================
