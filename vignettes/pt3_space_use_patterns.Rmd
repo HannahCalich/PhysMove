@@ -73,8 +73,10 @@ The `infomapCommunities()` function requires a data frame with telemetry data (s
 
 
 **Important**: Before running `infomapCommunities()` you must:
-1) set your working directory to the folder that contains the stand-alone Infomap file using `setwd()` and 
-2) load the infomapecology R package using `library(infomapecology)`
+
+1. Set your working directory to the folder that contains the stand-alone Infomap file using `setwd()`
+
+2. Load the infomapecology R package using `library(infomapecology)`
 
 ```{r run infomap, eval=FALSE}
 # Identify community-wide movements 
