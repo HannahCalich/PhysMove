@@ -1,6 +1,7 @@
 ### Package development and CRAN checks
 
 ### Dev history based on recommendations from:
+### https://r-pkgs.org/
 ### https://www.mzes.uni-mannheim.de/socialsciencedatalab/article/r-package/
 ### https://github.com/ThinkR-open/prepare-for-cran
 
@@ -55,13 +56,21 @@ devtools::run_examples() # Check examples -- OK
 devtools::check() # Local R CMD check
 devtools::check(remote = TRUE, manual = TRUE) # Remote CRAN check with manual -- some expected notes, see below
 rcmdcheck::rcmdcheck()
-# rcmdcheck::rcmdcheck(args = c("--no-manual"), build_args = c("--no-manual")) # Removed manual as I don't have LaTeX installed locally
 
 ### RESULTS:
 ### 3 Notes --
 ### checking installed package size (note added to cran comments)
 ### checking for future file timestamps (likely d/t OneDrive)
 ### Suggests or Enhances not in mainstream repositories (note added to cran comments)
+
+#===========================================================================================
+### Confrim package size
+#===========================================================================================
+pkg <- devtools::build(clean = TRUE)
+file.info(pkg)$size / 1024^2
+
+### RESULT: 
+### < 10MB
 
 #===========================================================================================
 ### Version checks (>=4.4)
