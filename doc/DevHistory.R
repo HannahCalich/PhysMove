@@ -122,12 +122,16 @@ install.packages("emln", repos="https://HannahCalich.github.io/drat")
 ### Release package
 #===========================================================================================
 
-## Update News.md
-## Update README.md
+## Update News
+## Update README
+## Update cran-comments
+## Update description
+
 ## usethis::use_version("patch")
 devtools::check(cran = TRUE) # Run one last check
 devtools::build()
-install.packages("../PhysMove_1.2.2.tar.gz", repos = NULL, type = "source")
+install.packages("../PhysMove_1.2.3.tar.gz", repos = NULL, type = "source")
+
 # PUSH CHANGES TO GITHUB
 
 devtools::check_win_devel()
