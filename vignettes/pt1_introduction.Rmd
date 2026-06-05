@@ -81,7 +81,6 @@ The ```checkTracks``` function can be used to confirm your input data are format
 
 ``` {r check_tracks, eval=FALSE}
 # Check your data are formatted correctly
-
 checkTracks(tracks) # replace 'tracks' with your data frame
 ```
 
