@@ -16,10 +16,10 @@ save(disp, file="disp.RData")
 dispAll <- calcDisp(tracks)
 save(dispAll, file="dispAll.RData")
 
-distResultsAll <- fitDist(disp, full=TRUE)
+distResultsAll <- fitDist(disp, full=TRUE, normalise=FALSE) 
 save(distResultsAll, file="distResultsAll.RData")
 
-distResultsTrunc <- fitDist(disp, full=FALSE) # find best-fit dmin for all
+distResultsTrunc <- fitDist(disp, full=FALSE, normalise=FALSE) # find best-fit dmin for all
 save(distResultsTrunc, file="distResultsTrunc.RData")
 
 distResultsExp <- fitDist(disp, set_dmin = distResultsTrunc[[1]][2,2], normalise = distResultsTrunc[2][[1]]) # fit all dist to best fit dmin for exp
