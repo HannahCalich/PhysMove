@@ -1,3 +1,12 @@
+## Resubmission
+
+This is a resubmission.
+
+The package size has been reduced to comply with CRAN policies. In particular, vignette figures were optimised to reduce the size of the ‘doc’ directory.
+The installed package size is now ~7.6 MB. The size of the ‘doc’ directory is due to vignette outputs demonstrating methodology and usage. The ‘data’ directory contains pre-computed .rda files, which are used in place of embedded vignette images to reduce the overall package size and improve efficiency
+
+Thank you for your time and helpful feedback.
+
 ## Test environments
 - Local: Windows (R 4.6.0)
 - R-hub: Ubuntu (R 4.4.0, R-release, R-devel)

@@ -1,5 +1,5 @@
 ## PhysMove 1.2.3 (June 2026)
-- [FIX] Reduce package size by updating how results are shown in vignettes
+- [FIX] Reduced package size to comply with CRAN requirements
 
 ## PhysMove 1.2.2 (June 2026)
 - [Release] First submission to CRAN
