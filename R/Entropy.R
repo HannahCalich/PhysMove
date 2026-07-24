@@ -16,7 +16,7 @@
 #' values (not normalised) and the number of cells each trajectory visited. If histPlot=TRUE a histogram of the normalised entropy scores is created.
 #' @importFrom rlang .data
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'
 #' entropy(tracks, gridCell=0.25, histPlot=TRUE)
 #'
@@ -41,7 +41,9 @@ entropy<-function(species_df, gridCell=0.25, histPlot=TRUE){
     for (j in 1:length((species_index[[i]]))){
       coordlong <- as.numeric(floor(grid * (species_df[species_index[[i]][j],2] - longmin)))
       coordlat <- as.numeric(floor(grid * (species_df[species_index[[i]][j],3] - latmin)))
-      cellnum <- coordlong + grid * (longmax - longmin) * coordlat
+      coordlong <- pmin(coordlong, longcells - 1) # prevents lon/lat values at the exact upper boundary (e.g. 180 or 90) from overflowing into the next row's cell index
+      coordlat  <- pmin(coordlat, latcells - 1)
+      cellnum <- coordlong + longcells * coordlat + 1 # +1 is needed to ensure count starts at 1
       Presence[cellnum] <- Presence[cellnum] + 1 # Recording how many occurrences occurred in each cell
     }
     occurrences[[i]] <- Presence # Converts the occurrence count to a list for each individual
@@ -60,10 +62,13 @@ entropy<-function(species_df, gridCell=0.25, histPlot=TRUE){
     normalisedEntropy[i] <- indivEntropy[i] / log(CellsVisited[i])  # Normalised to allow for direct comparison of the entropies of trajectories with different numbers of visited areas
     # and informs about the complexity of the visitation pattern ranging between 0 (one visited cell) and 1 (uniform, every cell is visited with the same probability).
     if (CellsVisited[i]==1){
-      warning(paste("Ref",unique(species_df$ref)[i],"only visited 1 cell so normalised entropy scores cannot be calculated and NaN is produced. NaN values will be excluded from histPlot"), immediate. = TRUE)
+      warning(paste("Ref", names(species_index)[i], "only visited 1 cell so normalised entropy scores cannot be calculated and NaN is produced. NaN values will be excluded from histPlot"), immediate. = TRUE)
     }
   }
-  entropyResults <- as.data.frame(cbind("ref"=unique(species_df$ref),"normalisedEntropy"=normalisedEntropy,"indivEntropy"=indivEntropy,"cellsVisited"=CellsVisited))
+  entropyResults <- as.data.frame(cbind("ref"=as.numeric(names(species_index)),
+                                        "normalisedEntropy"=normalisedEntropy,
+                                        "indivEntropy"=indivEntropy,
+                                        "cellsVisited"=CellsVisited))
 
   if (histPlot==TRUE){
     entropyResults.plot <- entropyResults[!is.na(entropyResults$normalisedEntropy),]
