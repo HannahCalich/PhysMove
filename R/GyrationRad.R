@@ -9,18 +9,24 @@
 #' See attached sample data \code{\link{tracks}}.
 #' @param map Create a map illustrating the gyration radius of each trajectory. Default is TRUE.
 #' @param mapCol Colours for points and gyration radii on map, respectively. Default is c("Black","Red").
+#' @param verbose Logical. If TRUE, an informative message is displayed when map features cannot be added to the 
+#' plot. Default is TRUE.
 #' @return A data frame containing the unique trajectory identifier (ref), the mean location (longitude and latitude), and
 #' the gyration radius (rG, in km) for each trajectory. If map = TRUE, a map of the gyration radius results is also produced
 #' @importFrom rlang .data
-#' @examples
-#' \dontrun{
-#'
-#' gyrationRad(tracks, map=TRUE, mapCol=c("Black","Red"))
-#' }
+#' @details
+#' Data frame must also be sorted by ref and then day within each ref, see \code{\link{checkTracks}} for details
+#' @examples 
+#' gyrationRad(tracks, map = TRUE, mapCol = c("Black","Red"))
 #' @export
 
-gyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red")){
+gyrationRad <- function (species_df, map = TRUE, mapCol = c("Black","Red"), verbose = TRUE){
 
+  qc <- checkTracks(species_df, verbose = FALSE)
+  if (qc > 0) {
+    stop("species_df failed formatting checks. Run checkTracks(species_df) to see details.")
+  }
+  
   MydistHaversine <- function(lon1, lat1, lon2, lat2) {
     radlat1 <- rad * lat1
     radlat2 <- rad * lat2
@@ -31,9 +37,8 @@ gyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red")){
     return(a*Radius)
   }
 
-  if(length(mapCol)==1){
-    message("Only one colour has been included in 'mapCol' so only the average location of each track will be displayed.
-    To also display each track's gyration radius please include a second colour following the format, mapCol=c('black','red')")
+  if(length(mapCol) == 1){
+    warning("Only one colour was supplied in 'mapCol'. Only average point locations will be displayed. To also display gyration radii, use mapCol = c('black', 'red').")
   }
 
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
@@ -70,7 +75,7 @@ gyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red")){
 
   MyrG <- unique(species_df[,c(1,11,13,15)])
 
-  if (map==TRUE){
+  if (map == TRUE){
     angle <- seq(1,360,1)
     circles <- as.data.frame(matrix(0, ncol = 3, nrow = length(angle)*length(MyrG$ref)))
     names(circles)<-c("Ref","lat","long")
@@ -89,17 +94,24 @@ gyrationRad <- function (species_df, map=TRUE, mapCol=c("Black","Red")){
     k <- k+length(angle)
     }
     xyz <- MyrG[,c(3,2,4)]
-    z <- ggplot2::ggplot() +
+    
+    z <- ggplot2::ggplot() 
+    
+    tryCatch({ # This prevents the plot from crashing if the mapped area does not overlap with the world polygon (e.g., for pelagic species)
+      z <- z +
+        ggplot2::annotation_borders("world", colour="gray50", fill="gray50", xlim = c(min(circles$long), max(circles$long)), ylim = c(min(circles$lat), max(circles$lat)))
+    }, error = function(e){
+      if (verbose) {
+        message("World polygon does not overlap with gyration radius results.")
+      }
+    })
+    
+    z <- z +
       ggplot2::geom_point(data = xyz, ggplot2::aes(.data$lon.avg.deg, .data$lat.avg.deg), size=2, color = mapCol[1])+
       ggplot2::coord_sf(xlim = c(min(circles$long), max(circles$long)), ylim = c(min(circles$lat), max(circles$lat)), datum = sf::st_crs(4326))+
       ggplot2::theme_minimal(base_size = 12)+
       ggplot2::geom_polygon(data = circles, ggplot2::aes(.data$long, .data$lat, group = .data$Ref), color = mapCol[2], alpha=0)+
       ggplot2::labs(x="Longitude", y="Latitude")
-
-    tryCatch({ # This prevents the plot from crashing if the mapped area does not overlap with the world polygon (e.g., for pelagic species)
-      z <- z +
-        ggplot2::borders("world", colour="gray50", fill="gray50", xlim = c(min(circles$long), max(circles$long)), ylim = c(min(circles$lat), max(circles$lat)))
-    }, error = function(e){message('Please note: World polygon does not overlap with gyration radius results')})
 
     print(z)
   }
