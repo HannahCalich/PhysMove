@@ -19,6 +19,11 @@
 
 occupancy <- function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "lightblue", "red")){
 
+  qc <- checkTracks(species_df, verbose = FALSE)
+  if (qc > 0) {
+    stop("species_df failed formatting checks. Run checkTracks(species_df) to see details.")
+  }
+  
   grid <- 1/gridCell
   Radius <- 6371 #Earth Radius in km (disp are in km)
   rad <- 3.141592653589793/180 #to convert degrees to radians
@@ -35,6 +40,8 @@ occupancy <- function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "li
   for (i in 1:dim(species_df)[1]){
     coordlong <- floor(grid * (species_df[i,2] - longmin))
     coordlat <- floor(grid * (species_df[i,3] - latmin))
+    coordlong <- pmin(coordlong, longcells - 1)
+    coordlat  <- pmin(coordlat, latcells - 1)
     cellnum <- (coordlong + grid * (longmax - longmin) * coordlat) + 1 # Need to add 1 here otherwise we have cell number 0, which was valid in Python but not in R.
     Presence[cellnum] <- Presence[cellnum] + 1
   }
@@ -53,9 +60,8 @@ occupancy <- function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "li
   for(i in 1:nrow(OccExp)){
     coordlat <- floor(OccExp[i,1]/(grid*(longmax-longmin))) # Take origin cell number and divide by number of cells in longitude of grid.
     coordlong <- OccExp[i,1] - (grid*(longmax-longmin)) * coordlat
-
     if (coordlong==0) {
-      OccExp$Longitude[i] <- (longmin + (360 / grid)) - 0.5*gridCell # midpoint of cell
+      OccExp$Longitude[i] <- longmax - 0.5*gridCell
       OccExp$Latitude[i] <- (latmin + (coordlat / grid)) - 0.5*gridCell
     } else {
       OccExp$Longitude[i] <- (longmin + (coordlong/grid)) - 0.5*gridCell
@@ -84,8 +90,5 @@ occupancy <- function(species_df, gridCell=0.25, map=TRUE, colGrad=c("blue", "li
 
   OccExp <- OccExp[,c(6,5,4,2,3)]
   row.names(OccExp) <- 1:nrow(OccExp)
-  # out <- list(OccExp, totalcells)
-  # names(out) <- c("occResults", "totalcells")
-  # return(out)
   return(OccExp)
 }
