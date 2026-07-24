@@ -21,7 +21,7 @@ rms(
 "day" is the datetime stamp for each location estimate in POSIXct format following '%Y-%m-%d %H:%M:%S'.
  Data frame must also be sorted by ref and then day within each ref, see \code{\link{checkTracks}} for details.}
 
-\item{timeUnit}{Unit used to calculate time between locations (e.g., "secs", "mins", "hours", "days", "weeks"). Default is "days".}
+\item{timeUnit}{Unit used to calculate time between locations (e.g., "secs", "mins", "hours", "days"). Default is "days".}
 
 \item{wBins}{Bin width refers to the size of the time bins used to calculate how frequently displacements occurred. Default is 1.1}
 
