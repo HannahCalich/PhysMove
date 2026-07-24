@@ -25,7 +25,7 @@ Description: Provides tools to analyse animal movement and space-use patterns fr
   investigation of fundamental movement processes. For applications of
   these methods in ecological studies see Rodríguez et al. (2017) 
   <doi:10.1038/s41598-017-00165-0> and Sequeira et al. (2018) 
-  <doi:10.1073/pnas.1716137115>
+  <doi:10.1073/pnas.1716137115>.
 License: GPL (>= 3)
 URL: https://github.com/HannahCalich/PhysMove
 BugReports: https://github.com/HannahCalich/PhysMove/issues
