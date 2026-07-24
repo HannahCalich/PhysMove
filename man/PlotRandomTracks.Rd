@@ -25,11 +25,13 @@ See attached sample data \code{\link{tracks}}.}
 
 \item{ref}{Reference number of track from species_df to plot.}
 
-\item{randomResults}{Result from \code{\link{randomise}} function.}
+\item{randomResults}{Result from \code{\link{randomise}} function. Note that the attached example dataset \code{\link{randomResults}}
+was generated with randTrack=1 (to keep the example data small), so it only contains 1 randomised track; set numPlot=1 when using it.}
 
 \item{numPlot}{Number of randomised tracks to plot. The randomised tracks were consecutively numbered from 1 to however many you set in the
 \code{\link{randomise}} function. The input value can either be any of these individual numbers (e.g., 23), or a range of numbers (e.g., 1:10),
-which will plot all of the random tracks created within the range. Default is 1:5.}
+which will plot all of the random tracks created within the range. Default is 1:5. Must not exceed the number of randomised tracks
+available in randomResults (e.g., numPlot=1 if randomResults was generated with randTrack=1).}
 
 \item{colours}{Colours to plot points from original and randomised tracks, respectively. Default is colours=c("black","grey70").}
 
