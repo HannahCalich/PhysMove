@@ -32,7 +32,7 @@ save(entropyResults, file="entropyResults.RData")
 
 setwd("~/2025/PhysMove")
 library(infomapecology)
-infomapResult <- infomapCommunities(tracks, tpm=TRUE)
+infomapResult <- infomapCommunities(tracks)
 setwd("~/2025/PhysMove/PhysMove_Git/PhysMove/data")
 save(infomapResult, file="infomapResult.RData")
 
