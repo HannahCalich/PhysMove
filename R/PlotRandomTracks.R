@@ -34,9 +34,8 @@ plotRandomTracks<-function(species_df, ref=NULL, randomResults, numPlot=1:5, col
     stop("What track would you like to plot? Please update the 'ref' parameter to a valid reference number from your species_df")
   }
 
-  if (length(numPlot)>ncol(RandomisedLat)){
-    stop("You cannot plot more random tracks than you created with the Randomise function. Please adjust the numPlot value or
-         re-run Randomise to create more tracks")
+  if (any(numPlot < 1 | numPlot > ncol(RandomisedLat) | numPlot != round(numPlot))) {
+    stop("numPlot must contain whole numbers between 1 and ", ncol(RandomisedLat), " (the number of randomised tracks available).")
   }
 
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
