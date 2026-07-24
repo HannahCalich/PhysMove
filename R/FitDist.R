@@ -22,8 +22,8 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE
 
   if (!(inherits(input, "list"))){ #
     # if the data are in data frame format AND from the occupancy function they can automatically be converted to a list
-    if (inherits(input, "data.frame") &
-        all(colnames(input)==c("Latitude", "Longitude", "Area", "Counts", "Occupancy"))){
+    expected_cols <- c("Latitude", "Longitude", "Area", "Counts", "Occupancy")
+    if (inherits(input, "data.frame") & identical(colnames(input), expected_cols)){
         input <- list(input$Occupancy)
       message("Occupancy data automatically converted to list format")
     } else {
@@ -39,8 +39,8 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE
     stop("Data must be normalised for data from multiple time windows to be collated into 1 dataset")
   }
 
-  if (("pl" %in% dist|"exp" %in% dist|"lnorm" %in% dist)!=TRUE){
-    stop("Distributions can only be fit to 'pl','exp', or 'lnorm' distributions")
+  if (!all(dist %in% c("pl", "exp", "lnorm"))){
+    stop("dist must only contain 'pl','exp', and/or 'lnorm'")
   }
 
   if (normalise){
@@ -48,17 +48,21 @@ fitDist <- function(input, dist=c("pl","exp","lnorm"), set_dmin=NULL, full=FALSE
   } else {
     x <- unlist(input)
   }
-
+  
+  if (anyNA(x) || any(x <= 0)) stop("All values must be positive to fit these distributions")
+  
   x <- sort(x)
 
   if (length(input) > 1) {
     warning(
-      "Fitting distributions across multiple time windows can be computationally intensive because all values are combined into a single dataset. Consider fitting distributions to a single time window to reduce run time.",
+      "Fitting distributions across multiple time windows can be computationally
+      intensive because all values are combined into a single dataset. Consider 
+      fitting distributions to a single time window to reduce run time.",
       call. = FALSE
     )
   }
 
-  distResults <- data.frame("distribution"=dist, "dmin"= c(NA), "parameter1"=c(NA), "parameter2"=c(NA), "nTail"= c(NA)) #make sure dist= is loaded
+  distResults <- data.frame("distribution"=dist, "dmin"= c(NA), "parameter1"=c(NA), "parameter2"=c(NA), "nTail"= c(NA))
   rev.index <- rev(seq_along(x))
   eps <- .Machine$double.eps^0.5
 
