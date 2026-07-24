@@ -24,7 +24,7 @@ save(distResultsAll, file="distResultsAll.RData")
 distResultsTrunc <- fitDist(disp, full=FALSE, normalise=FALSE) # find best-fit dmin for all
 save(distResultsTrunc, file="distResultsTrunc.RData")
 
-distResultsExp <- fitDist(disp, set_dmin = distResultsTrunc[[1]][2,2], normalise = distResultsTrunc[2][[1]]) # fit all dist to best fit dmin for exp
+distResultsExp <- fitDist(disp, set_dmin = distResultsTrunc[[1]][2,2], normalise=FALSE) # fit all dist to best fit dmin for exp
 save(distResultsExp, file="distResultsExp.RData")
 
 entropyResults <- entropy(tracks)
@@ -39,6 +39,7 @@ save(infomapResult, file="infomapResult.RData")
 occupancyResults <- occupancy(tracks)
 save(occupancyResults, file="occupancyResults.RData")
 
-randomResults <- randomise(tracks, randTrack = 1)
+set.seed(1)
+randomResults <- randomise(tracks)
 save(randomResults, file="randomResults.RData")
 
