@@ -40,6 +40,6 @@ occupancyResults <- occupancy(tracks)
 save(occupancyResults, file="occupancyResults.RData", compress = "xz")
 
 set.seed(1)
-randomResults <- randomise(tracks)
+randomResults <- randomise(tracks, randTrack = 1)
 save(randomResults, file="randomResults.RData", compress = "xz")
-
+  
