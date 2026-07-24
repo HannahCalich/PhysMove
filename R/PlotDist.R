@@ -19,23 +19,17 @@
 
 plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c("red","gold2","blue"), legend=TRUE, label=NULL){
 
-  if (exists("input")==FALSE){
-    stop("Input data are missing")
-  }
+  if (missing(input)) stop("Input data are missing")
+  
+  if (missing(distResults)) stop("Please fit distributions using the fitDist function prior to executing plotDist")
 
   if (!(inherits(input, "list"))){
-    # if the data are in data frame format from the occupancy function they can automatically be converted to a list
-    if (inherits(input, "data.frame") &
-        all(colnames(input)==c("Latitude", "Longitude", "Area", "Counts", "Occupancy"))){
+    if (inherits(input, "data.frame") &&
+      identical(colnames(input), c("Latitude", "Longitude", "Area", "Counts", "Occupancy"))){
       input <- list(input$Occupancy)
-      message("Occupancy data automatically converted to list format")
     } else {
       stop("plotDist requires input data in list format")
     }
-  }
-
-  if (exists("distResults")==FALSE){
-    stop("Please fit distributions using the fitDist function prior to executing plotDist")
   }
 
   normalise <- distResults[[2]]
@@ -44,7 +38,7 @@ plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c(
   if (is.null(setDist)){
     setDist <- distResults$distribution # Use all distributions used in fitDist
   } else {
-    setDist <- as.vector(sort(factor(setDist, ordered=TRUE, levels=c("lnorm","exp","pl")))) # Order and sort the distribution names to make sure the legend is accurate
+    setDist <- as.vector(sort(factor(setDist, ordered=TRUE, levels=c("pl","exp","lnorm")))) # Order and sort the distribution names to make sure the legend is accurate
   }
 
   # to make plot colours match dist
@@ -138,7 +132,7 @@ plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c(
       x_dif <- x[lower] - x[upper]
       y_dif <- ccdf[lower] - ccdf[upper]
       scale <- ccdf[lower] + y_dif * (LN_dmin - x[lower])/x_dif
-      if (is.nan(scale)){
+      if (is.na(scale)){
         scale <- 1
       }
       yval <- yval * scale
@@ -166,7 +160,7 @@ plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c(
       x_dif <- x[lower] - x[upper]
       y_dif <- ccdf[lower] - ccdf[upper]
       scale <- ccdf[lower] + y_dif * (Exp_dmin - x[lower])/x_dif
-      if (is.nan(scale)){
+      if (is.na(scale)){
         scale <- 1
       }
       yval <- yval * scale
@@ -193,7 +187,7 @@ plotDist <- function(input, distResults, fitLines=TRUE, setDist=NULL, colours=c(
       x_dif <- x[lower] - x[upper]
       y_dif <- ccdf[lower] - ccdf[upper]
       scale <- ccdf[lower] + y_dif * (PL_dmin - x[lower])/x_dif
-      if (is.nan(scale)){
+      if (is.na(scale)){
         scale <- 1
       }
       yval <- yval * scale
