@@ -150,7 +150,7 @@ infomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, 
       if (tpm==TRUE){
         names(order.df) <- c("OriginNode", "OriginCell", "OriginLong", "OriginLat","DestinationNode", "DestinationCell", "DestinationLong", "DestinationLat","Probability")
         infomap_object <- append(infomap_object, list(order.df))
-        names(infomap_object[[2]]) <- "tpm"
+        names(infomap_object)[2] <- "tpm"
       }
       return(infomap_object)
     }
