@@ -5,7 +5,7 @@
 #' "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 #' "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
 #' "day" is the datetime stamp for each location estimate in POSIXct format following '%Y-%m-%d %H:%M:%S'.
-#' See attached sample data \code{\link{tracks}}.
+#'  Data frame must also be sorted by ref and then day within each ref, see \code{\link{checkTracks}} for details.
 #' @param timeUnit Unit used to calculate time between locations (e.g., "secs", "mins", "hours", "days", "weeks"). Default is "days".
 #' @param wBins Bin width refers to the size of the time bins used to calculate how frequently displacements occurred. Default is 1.1
 #' @param plot Plot the root-mean-square and mean displacements against their corresponding time periods. Default is TRUE.
@@ -13,30 +13,42 @@
 #' and time (predictor variable) and add fit line to the plot (if plot=TRUE). Default is TRUE.
 #' @param strict If TRUE, abort with a detailed error when invalid time/displacement pairs are found; if FALSE, warn and
 #' proceed using only valid pairs (up to 25 examples shown). Default is TRUE.
+#' @param verbose Logical. If TRUE, progress messages are displayed during calculations, including 
+#' completion updates and the estimated scaling exponent. Default is TRUE.
 #' @return List containing a dataframe of results (list element 1) and the results of the linear model (if lm = TRUE, list element 2).
 #' The results dataframe includes the 'timeWindows' in log-sized bins along with their corresponding 'meanDisplacements' and 'rmsDisplacements'
 #' (root-mean-square displacements). If plot = TRUE, a plot of the mean displacement values and the root-mean-square displacement values
-#' against their corresponding time period is created, and if lm = TRUE, a fit line and reference line are added to the plot.
+#' against their corresponding time period is created, and if lm=TRUE, a fit line and reference line are added to the plot.#' 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'
-#' rms(tracks, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE)
+#' rms(tracks, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE, verbose=TRUE)
 #'
 #' }
 #' @export
 
-rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE, strict=TRUE){
+rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE, strict=TRUE, verbose=TRUE){
 
+  qc <- checkTracks(species_df, verbose = FALSE)
+  if (qc > 0) {
+    stop("species_df failed formatting checks. Run checkTracks(species_df) to see details.")
+  }
+  
   Radius <- 6371 # Earth Radius in km (disp are in km)
   rad <- 3.141592653589793/180 # Python has more digits of pi than R, so value pasted here instead of "pi" for consistency with python versions of code
   bins <- seq(1,400,1)
   nbins <- length(bins) # avoid multiple calls to length(bins)
-  tmin <- 1/(60*60*24) # 1 second in days
+  
+  unit_secs <- c(secs = 1, mins = 60, hours = 3600, days = 86400)
+  if (!timeUnit %in% names(unit_secs)) {
+    stop("timeUnit must be one of: 'secs', 'mins', 'hours', 'days'")
+  }
+  tmin <- 1/unit_secs[[timeUnit]] # 1 second, expressed in the chosen timeUnit
   max_examples <- 25
 
   # Identify end points for each track
   ids_chr <- as.character(species_df[[1]])
-  runs <- rle(ids_chr) # length of each track
+  runs <- rle(ids_chr) # length of each track using run length encoding
   end_idx <- cumsum(runs$lengths) # last loc per track
   nvec <- rep(end_idx, times = runs$lengths) # index of where each individual's last row ends
 
@@ -51,16 +63,18 @@ rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE, str
   sumDist2 <- sumDist <- Timefreq <- rep(0, nbins)
 
   # Status messages
+  if (verbose) {
   statusMessages <- c("25% complete", "50% complete", "75% complete")
   percent <- c(round(dim(species_df)[1]*0.25),round(dim(species_df)[1]*0.5),round(dim(species_df)[1]*0.75))
-  p <- j <- 1
+  }
 
   # Create list to store errors
   invalid_list <- vector("list", length = 0L)
 
   # Calc disp and time bins
+  p <- j <- 1
   for (j in seq_len(nrow(species_df))) {
-    if (p <= length(percent) && j == percent[p]) { # if we've reached the 25%, 50%, or 75% position, and we haven't sent all 3 messages yet, send msg
+    if (verbose && p <= length(percent) && j == percent[p]) { # if we've reached the 25%, 50%, or 75% position, and we haven't sent all 3 messages yet, send msg
       message(statusMessages[p])
       p <- p + 1
     }
@@ -72,43 +86,37 @@ rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE, str
       bvec <- floor(log(myTime / tmin) / log(wBins) + 0.5) # log scale time bin in vector
 
       # Review data to skip invalid data
-      reason_nonpos_time  <- !is.na(myTime) & (myTime <= 0)
       reason_nonfinite_bin <- !is.finite(bvec)
-      reason_oob_bin       <- is.finite(bvec) & (bvec < 1 | bvec > nbins)
+      reason_oob_bin <- is.finite(bvec) & (bvec < 1 | bvec > nbins)
 
-      any_invalid <- any(reason_nonpos_time | reason_nonfinite_bin | reason_oob_bin)
+      any_invalid <- any(reason_nonfinite_bin | reason_oob_bin)
       if (any_invalid) {
-        bad <- which(reason_nonpos_time | reason_nonfinite_bin | reason_oob_bin)
+        bad <- which(reason_nonfinite_bin | reason_oob_bin)
         inv <- data.frame(
           ref = ids_chr[j],
           loc_a = j,
           loc_b = idx[bad],
           time = myTime[bad],
-          reason = ifelse(reason_nonpos_time[bad], "non_positive_time",
-                          ifelse(reason_nonfinite_bin[bad], "non_finite_bin",
-                                 ifelse(reason_oob_bin[bad], "bin_out_of_range", "unknown")))
-        )
+          reason = ifelse(reason_nonfinite_bin[bad], "non_finite_bin",
+                          ifelse(reason_oob_bin[bad], "bin_out_of_range", "unknown"))
+          )
         invalid_list[[length(invalid_list) + 1L]] <- inv
       }
 
       # Proceed with valid data
-      valid <- !(reason_nonpos_time | reason_nonfinite_bin | reason_oob_bin)
+      valid <- !(reason_nonfinite_bin | reason_oob_bin)
       if (any(valid)) {
         idxv <- idx[valid]
         bvec_ok <- bvec[valid]
 
-        # Vectorized Haversine from j to all idxv --
-        dlat <- radlat[idxv] - radlat[j]
+        # Vectorized Haversine from j to all idxv 
+        dlat <- radlat[idxv] - radlat[j] 
         dlon <- rad * (lon[idxv] - lon[j])
-        a <- (sin(dlat / 2)^2) + cos_radlat[j] * cos_radlat[idxv] * (sin(dlon / 2)^2)
-        # clip for numerical safety (avoids tiny >1 due to floating point):
-        a <- pmax(0, a)
+        a <- (sin(dlat / 2)^2) + cos_radlat[j] * cos_radlat[idxv] * (sin(dlon / 2)^2) # this should always land on a positive value, but guards are put in place in the coming rows to account for issues with floating points and rounding
+        a <- pmax(0, a) # pmax allows values >0, but anything below 0 is converted to 0. Needed to prevent floating point errors that could crash the sqrt code
         sqrt_a <- sqrt(a)
-        # asin input must be <= 1; guard against minimal overshoot
-        angle <- 2 * asin(pmin(1, sqrt_a))
+        angle <- 2 * asin(pmin(1, sqrt_a)) # pmin allows any values <1 (>0 was accounted for already), but forces any >1 to be 1
         dist <- angle * Radius
-        ## NEED TO CHECK ABOVE compared to:
-        # Dist <- MydistHaversine(species_df[k,2], species_df[k,3], species_df[j,2], species_df[j,3]) # Calculates distance from point 1 to all successive points
 
         Timefreq <- Timefreq + tabulate(bvec_ok, nbins) # Cumulative count of displacements between each location within each log time bin
         s  <- tapply(dist,   bvec_ok, sum)
@@ -133,7 +141,6 @@ rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE, str
       paste(sprintf(" - %s: %d", summary_counts$reason, summary_counts$loc_b), collapse = "\n")
     )
 
-
     head_examples <- utils::head(invalids, max_examples)
     example_text <- paste(
       utils::capture.output(print(head_examples, row.names = FALSE)),
@@ -145,8 +152,7 @@ rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE, str
     msg <- paste0(
       summary_text, "\n\nExamples (ref, location a, location b, time difference, reason):\n",
       example_text, tail_note, "\n\n",
-      "Tip: Review the locations identified above to ensure there are no duplicated rows and all
-      values are valid"
+      "Tip: Review the locations identified above to ensure there are no duplicated rows and all values are valid"
     )
 
     if (strict) {
@@ -156,14 +162,16 @@ rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE, str
     }
   }
 
+  if (verbose){
   message("Calculations complete")
-
+  }
+  
   mybins <- rep(0, nbins) # for the x axis of the plot
   for(b in 1: nbins){
     mybins[b] <- tmin*wBins^(b)
   }
   RMS_Result <- as.data.frame(cbind("timeBin_log"=mybins, "Count"=Timefreq, "sumDist"=sumDist, "sumDist2"=sumDist2))
-  RMS_Result <- RMS_Result[(RMS_Result[,1]!= 0) & (RMS_Result[,3]!= 0) & (RMS_Result[,4]!= 0),]
+  RMS_Result <- RMS_Result[(RMS_Result[,3]!= 0) & (RMS_Result[,4]!= 0),]
   RMS_Result$MeanDisp_per_tb <- RMS_Result[,3]/RMS_Result[,2]
   RMS_Result$Sqrt_dRMS_per_tb <- sqrt(RMS_Result[,4]/RMS_Result[,2])
   plot.df <- cbind(RMS_Result[,c(1,5,6)])
@@ -221,7 +229,9 @@ rms <- function (species_df, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE, str
       fit <- lm(log(RMS_Result$Sqrt_dRMS_per_tb) ~ log(RMS_Result$timeBin_log), data = RMS_Result)
       plot.df[[2]] <- as.data.frame(broom::tidy(fit))
       names(plot.df) <- c("rmsResults", "lm")
+      if (verbose){
       message("Scaling exponent = ", round(fit$coefficients[[2]],4))
+      }
       rm(fit)
     } else {
       warning("Not enough data fit linear model")
