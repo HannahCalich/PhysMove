@@ -22,7 +22,7 @@ This function allows you to determine if a power law, exponential, or log-normal
 of the input data using weighted Akaike Information Criterion (AIC). These fits use input data in conjunction with dmin and parameter values that were
 previously calculated with the \code{\link{fitDist}} function. By default, this function will calculate
 AICc scores (AIC scores corrected for small sample sizes) if n/K is <= 40 for the largest value of K, where n = sample size (nTail) and
-K = number of parameters in the model (see Burnham and Anderson (2004) for further details, DOI: 10.1177/0049124104268644). However,
+K = number of parameters in the model (see Burnham and Anderson (2004) for further details, <doi:10.1177/0049124104268644>). However,
 if force_AICc = TRUE AICc scores will be calculated regardless of n/K.
 }
 \examples{

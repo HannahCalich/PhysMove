@@ -10,7 +10,8 @@ turningAngles(
   max_hr = 240,
   interval_hr = 24,
   range_hr = 6,
-  histPlot = c(TRUE, "all")
+  histPlot = c(TRUE, "all"),
+  verbose = TRUE
 )
 }
 \arguments{
@@ -35,6 +36,8 @@ locations spaced 18 to 32 hours apart. Default for range_hr is 6.}
 \item{histPlot}{Plot a histogram showing the frequency of turning angles from all time windows combined (default) or
 one specific time period. For example, histPlot=c(TRUE,1) to plot only the first time period.
 Default is histPlot=c(TRUE, "all").}
+
+\item{verbose}{Logical. If TRUE, progress messages are displayed during calculations. Default is TRUE.}
 }
 \value{
 List of turning angles for each time window, the name of each list element corresponds with a time window in days. If histPlot = TRUE,
@@ -44,9 +47,7 @@ a histogram of results is created.
 This function allows you to calculate turning angles between sets of three consecutive location estimates separated by set time window(s).
 }
 \examples{
-\dontrun{
-
-turningAngles(tracks, min_hr=24, max_hr=240, interval_hr=24, range_hr=6, histPlot=c(FALSE, "all"))
-
+\donttest{
+turningAngles(tracks, min_hr=24, max_hr=240, interval_hr=24, range_hr=6, histPlot=c(FALSE, "all"), verbose=TRUE)
 }
 }

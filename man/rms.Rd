@@ -10,7 +10,8 @@ rms(
   wBins = 1.1,
   plot = TRUE,
   lm = TRUE,
-  strict = TRUE
+  strict = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -18,7 +19,7 @@ rms(
 "ref" is the unique id number for each animal (e.g., their satellite tag number formatted as an integer),
 "lon" and "lat" are the longitude and latitude of each position estimate in decimal degrees in numeric format,
 "day" is the datetime stamp for each location estimate in POSIXct format following '%Y-%m-%d %H:%M:%S'.
-See attached sample data \code{\link{tracks}}.}
+ Data frame must also be sorted by ref and then day within each ref, see \code{\link{checkTracks}} for details.}
 
 \item{timeUnit}{Unit used to calculate time between locations (e.g., "secs", "mins", "hours", "days", "weeks"). Default is "days".}
 
@@ -31,20 +32,23 @@ and time (predictor variable) and add fit line to the plot (if plot=TRUE). Defau
 
 \item{strict}{If TRUE, abort with a detailed error when invalid time/displacement pairs are found; if FALSE, warn and
 proceed using only valid pairs (up to 25 examples shown). Default is TRUE.}
+
+\item{verbose}{Logical. If TRUE, progress messages are displayed during calculations, including 
+completion updates and the estimated scaling exponent. Default is TRUE.}
 }
 \value{
 List containing a dataframe of results (list element 1) and the results of the linear model (if lm = TRUE, list element 2).
 The results dataframe includes the 'timeWindows' in log-sized bins along with their corresponding 'meanDisplacements' and 'rmsDisplacements'
 (root-mean-square displacements). If plot = TRUE, a plot of the mean displacement values and the root-mean-square displacement values
-against their corresponding time period is created, and if lm = TRUE, a fit line and reference line are added to the plot.
+against their corresponding time period is created, and if lm=TRUE, a fit line and reference line are added to the plot.#'
 }
 \description{
 This function allows you to calculate root-mean-square displacements and plot them as a function of time
 }
 \examples{
-\dontrun{
+\donttest{
 
-rms(tracks, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE)
+rms(tracks, timeUnit="days", wBins=1.1, plot=TRUE, lm=TRUE, verbose=TRUE)
 
 }
 }

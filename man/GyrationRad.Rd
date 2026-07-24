@@ -4,7 +4,7 @@
 \alias{gyrationRad}
 \title{Gyration Radius}
 \usage{
-gyrationRad(species_df, map = TRUE, mapCol = c("Black", "Red"))
+gyrationRad(species_df, map = TRUE, mapCol = c("Black", "Red"), verbose = TRUE)
 }
 \arguments{
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
@@ -16,6 +16,9 @@ See attached sample data \code{\link{tracks}}.}
 \item{map}{Create a map illustrating the gyration radius of each trajectory. Default is TRUE.}
 
 \item{mapCol}{Colours for points and gyration radii on map, respectively. Default is c("Black","Red").}
+
+\item{verbose}{Logical. If TRUE, an informative message is displayed when map features cannot be added to the 
+plot. Default is TRUE.}
 }
 \value{
 A data frame containing the unique trajectory identifier (ref), the mean location (longitude and latitude), and
@@ -25,9 +28,9 @@ the gyration radius (rG, in km) for each trajectory. If map = TRUE, a map of the
 This function calculates the gyration radius of individual trajectories.
 A pdf plot of the gyration radius values can be created with the \code{\link{plotPDF}} function.
 }
-\examples{
-\dontrun{
-
-gyrationRad(tracks, map=TRUE, mapCol=c("Black","Red"))
+\details{
+Data frame must also be sorted by ref and then day within each ref, see \code{\link{checkTracks}} for details
 }
+\examples{
+gyrationRad(tracks, map = TRUE, mapCol = c("Black","Red"))
 }

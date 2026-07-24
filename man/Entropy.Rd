@@ -29,7 +29,7 @@ Values close to 1 indicate high entropy (disordered trajectories), while values 
 A pdf plot of the normalized entropy values can be created with the \code{\link{plotPDF}} function.
 }
 \examples{
-\dontrun{
+\donttest{
 
 entropy(tracks, gridCell=0.25, histPlot=TRUE)
 

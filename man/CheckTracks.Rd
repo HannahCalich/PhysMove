@@ -3,20 +3,26 @@
 \name{checkTracks}
 \alias{checkTracks}
 \title{Check data format
-This function checks the format of telemetry data prior to running PhysMove metrics.}
+This function checks the format of telemetry data prior to running PhysMove 
+metrics.}
 \usage{
-checkTracks(species_df)
+checkTracks(species_df, verbose = TRUE)
 }
 \arguments{
-\item{species_df}{A data frame containing telemetry data with columns named
+\item{species_df}{A data frame containing telemetry data with columns named 
 ref, lon, lat, and day.}
+
+\item{verbose}{Logical. If TRUE feedback is provided on your dataset. Default 
+is TRUE.}
 }
 \value{
-Messages indicating whether the data are correctly formatted; warnings describe any issues.
+Invisibly returns an integer error count (0 if no issues found), in 
+addition to printing diagnostic messages/warnings.
 }
 \description{
 Check data format
-This function checks the format of telemetry data prior to running PhysMove metrics.
+This function checks the format of telemetry data prior to running PhysMove 
+metrics.
 }
 \details{
 The columns must be formatted as follows:

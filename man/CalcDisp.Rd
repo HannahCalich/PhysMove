@@ -4,7 +4,14 @@
 \alias{calcDisp}
 \title{Calculate displacements}
 \usage{
-calcDisp(species_df, min_hr = 24, max_hr = 240, interval_hr = 24, range_hr = 6)
+calcDisp(
+  species_df,
+  min_hr = 24,
+  max_hr = 240,
+  interval_hr = 24,
+  range_hr = 6,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{species_df}{A data frame containing location data in rows. Columns have the following headers: "ref", "lon", "lat", "day".
@@ -24,6 +31,9 @@ code can identify location estimates that are close to, but not exactly separate
 If multiple location estimates fall within this time window the location estimate closest to the interval_hr input value
 will be used for calculations. For example, if interval_hr = 24 and range = 6, the algorithm will search for
 locations spaced 18 to 30 hours apart. Default is 6.}
+
+\item{verbose}{Logical. If TRUE, informative messages describing the number of displacements identified for 
+each time window are displayed. Default is FALSE.}
 }
 \value{
 A list containing the displacements in km recorded for each time window. Each list element corresponds with the time
@@ -33,9 +43,9 @@ windows set (i.e., the first list element is the first time window).
 This function allows you to calculate the displacement distances travelled by individuals over set time windows.
 }
 \examples{
-\dontrun{
+\donttest{
 
-calcDisp(tracks, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
+calcDisp(tracks, min_hr=24, max_hr=240, interval_hr=24, range_hr=6, verbose=TRUE)
 
 }
 }
