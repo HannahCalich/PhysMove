@@ -40,14 +40,18 @@ plotAngles<-function(angleList, timePlot="all", colours=rainbow, legend=TRUE){
   }
 
   if (timePlot!="all"){
-    circle.plot <- circle.plot[which(circle.plot$timeWindows==timePlot),]
+    win <- suppressWarnings(as.numeric(timePlot))
+    if (is.na(win) || win < 1 || win > length(angleList) || win != round(win)) {
+      stop("timePlot must be 'all' or a whole number indicating which time window to plot (1 to ", length(angleList), ").")
+    }
+    circle.plot <- circle.plot[which(circle.plot$timeWindows == timeWindows[win]),]
   }
 
   circle.plot <- circle.plot[stats::complete.cases(circle.plot), ] #remove rows with no data
   circle.plot$timeWindows <- round(circle.plot$timeWindows,3)
   circle.plot <- circle.plot[,c(3,2,1)]
 
-  if ("function" %in% is(colours)){ # If a grDevices colour pallet is used
+  if ("function" %in% methods::is(colours)){ # If a grDevices colour pallet is used
     myColoursPal <- colours(length(unique(circle.plot$timeWindows)))
   } else if (colours[1] %in% rownames(RColorBrewer::brewer.pal.info)){ # If a RColourBrewer pallet is used
     myColoursPal <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[colours,1], colours))(length(unique(circle.plot$timeWindows))) # Use the submitted colour palette and extend if to the number of colours needed
