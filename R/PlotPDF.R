@@ -20,7 +20,7 @@
 
 plotPDF <- function(result, desc=NULL, nBins){
 
-  if ("data.frame" %in% is(result)){
+  if ("data.frame" %in% methods::is(result)){
     stop ("A data frame has been entered. Please re-run this function and identify the column of data you want to plot following a dataframe$column structure
   or input the data as a vector")
   }
@@ -29,6 +29,11 @@ plotPDF <- function(result, desc=NULL, nBins){
     desc <- "generic"
   }
 
+  valid_desc <- c("occupancy", "gyrationRad", "entropy", "predictability", "generic")
+  if (!(desc %in% valid_desc)) {
+    stop("desc must be one of: ", paste(valid_desc, collapse=", "), " (or NULL).")
+  }
+  
   if (length(result)>1){ # A pdf of 1 value is not meaningful
     if (desc=="occupancy"){ # occupancy is separate because it is done on a log scale with log-sized bins and there are warnings about cell size being too small
       if (missing(nBins)){
@@ -39,6 +44,10 @@ plotPDF <- function(result, desc=NULL, nBins){
       if (bw<1.2){
         break_start <- 20
         repeat {
+          if (break_start < 1) {
+            stop("Cell size too small to create pdf plot: could not find a suitable bin width. 
+                 Try providing a larger nBins value or check your data for near-duplicate values.")
+          }
           h <- graphics::hist(log(result), breaks=break_start, plot=FALSE)
           bw <- exp(h$breaks[2]-h$breaks[1])
           if (bw>=1.2){
@@ -81,7 +90,6 @@ plotPDF <- function(result, desc=NULL, nBins){
         len <- length(result)
         for(i in 1:len){
           b <- floor(result[i]/bw+0.5) # b <- floor(result[i]/bw)
-          if (b >= nBins) b <- nBins - 1
           freq[b+1] <- freq[b+1] +1 # the b+1 is necessary due to scenarios where b=0 above
         }
         for (i in 1:nBins){
@@ -172,7 +180,7 @@ plotPDF <- function(result, desc=NULL, nBins){
       print(b)
     }
   } else {
-    warning("Cannot create pdf plot with only 1 data point")
+    warning("Cannot create PDF plot from a single data point")
     return(invisible(NULL))
   }
   invisible(plot.df)
