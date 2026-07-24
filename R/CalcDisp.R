@@ -15,18 +15,28 @@
 #' If multiple location estimates fall within this time window the location estimate closest to the interval_hr input value
 #' will be used for calculations. For example, if interval_hr = 24 and range = 6, the algorithm will search for
 #' locations spaced 18 to 30 hours apart. Default is 6.
+#' @param verbose Logical. If TRUE, informative messages describing the number of displacements identified for 
+#' each time window are displayed. Default is FALSE.
 #' @return A list containing the displacements in km recorded for each time window. Each list element corresponds with the time
 #' windows set (i.e., the first list element is the first time window).
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'
-#' calcDisp(tracks, min_hr=24, max_hr=240, interval_hr=24, range_hr=6)
+#' calcDisp(tracks, min_hr=24, max_hr=240, interval_hr=24, range_hr=6, verbose=TRUE)
 #'
 #' }
 #' @export
 
-calcDisp<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6){
+calcDisp<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6, verbose=FALSE){
 
+  qc <- checkTracks(species_df, verbose=FALSE)
+  if (qc > 0) {
+    stop("species_df failed formatting checks. Run checkTracks(species_df) to see details.")
+  }
+  
+  if (range_hr > min_hr)
+    stop("range_hr must be <= min_hr")
+  
   min_hr <- min_hr*(60*60) # convert hours (input) to seconds
   max_hr <- max_hr*(60*60) # convert hours (input) to seconds
   interval_hr <- interval_hr*(60*60) # convert hours (input) to seconds
@@ -81,18 +91,21 @@ calcDisp<-function(species_df,min_hr=24,max_hr=240,interval_hr=24,range_hr=6){
         }
       }
     }
-    if (is.null(MyDistance)){
-      MyList[[d]] <- NULL
-      print(paste0("0 displacements in ", MyTime[d]/(60*60), " +/- ", range_hr/(60*60), " hour(s)"))
-    } else {
-      MyList[[d]] <- MyDistance
-      print(paste0(length(MyList[[d]])," displacements in ", MyTime[d]/(60*60), " +/- ", range_hr/(60*60), " hour(s)"))
+    if (length(MyDistance) == 0){
+      MyList[d] <- list(NULL)
+      if (verbose) {
+      message(paste0("0 displacements in ", MyTime[d]/(60*60), " +/- ", range_hr/(60*60), " hour(s)"))
       }
+    }else {
+      MyList[d] <- list(MyDistance)
+      if (verbose) {
+      message(paste0(length(MyList[[d]])," displacements in ", MyTime[d]/(60*60), " +/- ", range_hr/(60*60), " hour(s)"))
+      }
+    }
   }
 
-  if (length(MyList) ==0 | any(vapply(MyList, function(x) length(x)==0, logical(1)))==TRUE){
-    warning("At least 1 of the displacement list elements is empty, which means that no location estimates were separated by at least 1 of the time windows supplied.
-    To troubleshoot, review the list of displacements created with this function and update your time windows accordingly.")
+  if (length(MyList)==0 || any(vapply(MyList, function(x) length(x)==0, logical(1)))){
+    warning("No displacements were identified for at least one supplied time window. Review the displacement list and adjust the time windows accordingly.")
   }
 
   displacements <- MyList
