@@ -25,18 +25,26 @@ predictability<-function(species_df, entropyResults, startVal = NULL, histPlot=T
   }
 
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
+  refs <- as.numeric(names(species_index))
   Pred <- c()
-
-  for (i in 1:length(species_index) ){
-    if (entropyResults$cellsVisited[i]==1){
-      warning(paste("Ref",unique(species_df$ref)[i],"only visited 1 cell so Pred scores cannot be calculated and NA is produced. NA values will be excluded from histPlot"), immediate. = TRUE)
+  
+  for (i in seq_along(species_index)) {
+    ref_i <- refs[i]
+    er_row <- entropyResults[entropyResults$ref == ref_i, ]
+    
+    if (nrow(er_row) != 1) {
+      stop(paste("Expected exactly one entropyResults row for ref", ref_i, "but found", nrow(er_row)))
+    }
+    
+    if (er_row$cellsVisited == 1) {
+      warning(paste("Ref", ref_i, "only visited 1 cell so Pred scores cannot be calculated and NA is produced. NA values will be excluded from histPlot"), immediate. = TRUE)
       Pred[i] <- NA
       next
     }
-    model <- function(x) c(F1 = x*log(x) + (1-x)*log(1-x) - (1-x)*log(entropyResults$cellsVisited[i]-1) + entropyResults$indivEntropy[i])
+    model <- function(x) c(F1 = x*log(x) + (1-x)*log(1-x) - (1-x)*log(er_row$cellsVisited-1) + er_row$indivEntropy)
 
     if (is.null(startVal)) {
-      start_value_default <- max(0.01, min(0.99, 1 - entropyResults$normalisedEntropy[i]))
+      start_value_default <- max(0.01, min(0.99, 1 - er_row$normalisedEntropy))
     } else {
       start_value_default <- startVal
     }
@@ -64,7 +72,7 @@ predictability<-function(species_df, entropyResults, startVal = NULL, histPlot=T
     }
   }
 
-  predictabilityResults <- as.data.frame(cbind("ref"=unique(species_df$ref),"predictability"=Pred))
+  predictabilityResults <- as.data.frame(cbind("ref" = refs, "predictability" = Pred))
 
   if (histPlot==TRUE){
     predictabilityPlot <- as.data.frame(predictabilityResults[!is.na(predictabilityResults$predictability),])
