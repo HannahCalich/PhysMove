@@ -21,6 +21,11 @@
 
 plotTracks<-function(species_df, ref=NULL, tracks=TRUE, colours=rainbow){
 
+  qc <- checkTracks(species_df, verbose = FALSE)
+  if (qc > 0) {
+    stop("species_df failed formatting checks. Run checkTracks(species_df) to see details.")
+  }
+  
   if(!is.null(ref)){
     if (!all(ref %in% species_df$ref)){
       stop("What track would you like to plot? Update the 'ref' parameter to a valid reference number from your species_df")
@@ -33,7 +38,7 @@ plotTracks<-function(species_df, ref=NULL, tracks=TRUE, colours=rainbow){
     plot.df <- species_df
   }
 
-  if ("function" %in% is(colours)){ # If a grDevices colour pallet is used
+  if ("function" %in% methods::is(colours)){ # If a grDevices colour pallet is used
     myColoursPal <- colours(length(unique(plot.df$ref)))
   } else if (colours[1] %in% rownames(RColorBrewer::brewer.pal.info)){ # If a RColourBrewer pallet is used
     myColoursPal <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[colours,1], colours))(length(unique(plot.df$ref))) # Use the submitted colour palette and extend if to the number of colours needed
@@ -51,7 +56,7 @@ plotTracks<-function(species_df, ref=NULL, tracks=TRUE, colours=rainbow){
                                         axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 10), colour="black"),
                                         axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 10), colour="black"),
                                         legend.position = "none")+
-    ggplot2::scale_fill_manual(values=c(unique(myColoursPal)))+
+    ggplot2::scale_fill_manual(values=c(myColoursPal))+
     ggplot2::xlab("Longitude")+
     ggplot2::ylab("Latitude")+
     ggplot2::coord_cartesian(xlim = c(min(plot.df$lon), max(plot.df$lon)), ylim = c(min(plot.df$lat), max(plot.df$lat)))
