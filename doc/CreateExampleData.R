@@ -1,6 +1,8 @@
 ## create example data
 
-setwd("~2025/PhysMove/data")
+setwd("~/2025/PhysMove/data")
+
+devtools::install_github("HannahCalich/PhysMove", build_vignettes = TRUE, force = TRUE)
 
 library(PhysMove)
 
