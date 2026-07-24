@@ -451,7 +451,7 @@ angleListAll <- turningAngles(tracks)
 ```{r plot histogram from turningAngles, echo=FALSE}
 # Histogram of all angles combined - directly from turningAngles code
   bins <- 360 / 45    
-  angleList_plot <- angleList[lengths(angleList)>0]
+  angleListAll <- angleListAll[lengths(angleList)>0]
   angles.df <- as.data.frame(unlist(angleListAll))
   names(angles.df) <- "Angles"
   h <- graphics::hist(angles.df$Angles, plot = FALSE, breaks = seq(-180, 180, bins)) # Plot all angles for all time periods from all individuals
