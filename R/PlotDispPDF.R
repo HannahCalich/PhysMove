@@ -18,7 +18,7 @@
 
 plotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=TRUE){
 
-  if ("function" %in% is(colours)){ # If a grDevices colour pallet is used
+  if ("function" %in% methods::is(colours)){ # If a grDevices colour pallet is used
     myColoursPal <- colours(length(displacements))
   } else if (colours[1] %in% rownames(RColorBrewer::brewer.pal.info)){ # If a RColourBrewer pallet is used
     myColoursPal <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[colours,1], colours))(length(displacements)) # Use the submitted colour palette and extend if to the number of colours needed
@@ -43,7 +43,7 @@ plotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
       freq <- rep(0, length(bins)) # to count the number of displacements in each bin
       disp <- displacements[[d]]
 
-      for(i in 1:length(disp)){ # for each displacement in the time period. To determine what bin that displacement belongs in,
+      for(i in seq_along(disp)){ # for each displacement in the time period. To determine what bin that displacement belongs in,
         # calculate frequency of the displacements and tally the frequency in "freq", adding 0.5 shifts the bins so the values are on the midpoints of the bars
         if(disp[i] != 0){
           b <- floor(log(disp[i]/disp0)/log(logbase) + 0.5 ) # to convert the displacements in km to log & zero them
@@ -119,11 +119,15 @@ plotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
   if (normalised ==TRUE){
     MeanDisp <- c()
     for(d in 1:length(displacements)){  #for each time period
-      freq <- rep(0, length(bins)) # to count the number of displacements in each bin
       disp <- displacements[[d]]
+      if (length(disp) == 0) {
+        message("Time window ", d, " has no displacements; skipping.")
+        next
+      }
+      freq <- rep(0, length(bins)) # to count the number of displacements in each bin
       MeanDisp <- mean(displacements[[d]])
 
-      for(i in 1:length(disp)){ # for each displacement in the time period. To determine what bin that displacement belongs in,
+      for(i in seq_along(disp)){ # for each displacement in the time period. To determine what bin that displacement belongs in,
         # calculate frequency of the displacements and tally the frequency in "freq", adding 0.5 shifts the bins so the values are on the midpoints of the bars
         if(disp[i] != 0){
           b <- floor(log(disp[i]/disp0)/log(logbase) + 0.5 ) # to convert the displacements in km to log & zero them
