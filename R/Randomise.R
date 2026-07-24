@@ -22,7 +22,7 @@
 #' Randomised tracks for each ref. Lastly, if plot = TRUE, a plot illustrating the number of cells visited by the original and randomised tracks is created,
 #' and if lm = TRUE, a fit line and reference line are added to the plot.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'
 #' randomise(tracks, randTrack=100, gridCell=0.25, plot=TRUE, lm=TRUE)
 #'
@@ -31,27 +31,57 @@
 
 randomise <- function(species_df, randTrack=100, gridCell=0.25, plot=TRUE, lm=TRUE) {
 
+  qc <- checkTracks(species_df, verbose = FALSE)
+  if (qc > 0) {
+    stop("species_df failed formatting checks. Run checkTracks(species_df) to see details.")
+  }
+  
   species_index <- tapply(1:nrow(species_df), species_df[,1], function(x){x})
   MyDiffLat <- MyDiffLong <- MyDiffTime <- rep(0, dim(species_df)[1]) # Create vector to store the differences in lat and long
+  wrap180 <- function(x) ((x + 180) %% 360) - 180
+  
+  # reflect_lat: keeps a latitude value on the valid [-90,90] scale by reflecting it back
+  # off the poles, rather than allowing it to exceed 90 or -90.
+  reflect_lat <- function(x) {
+    y <- (x + 90) %% 360
+    ifelse(y <= 180, y - 90, 270 - y)
+  }
+  
+  # lon_flip_parity: an odd number of pole crossings means longitude must shift by 180
+  # degrees, since crossing a pole puts you on the opposite side of the globe.
+  lon_flip_parity <- function(x) floor((x + 90) / 180) %% 2
+  
   for (i in 2:dim(species_df)[1]){
     # For all rows starting at 2, subtract the difference between row i and the row before it.
     # Includes differences between individuals but those are called on in next section of code
     MyDiffLong[i] <- species_df[i,2] - species_df[i-1,2]
+    MyDiffLong[i] <- wrap180(MyDiffLong[i]) 
     MyDiffLat[i] <- species_df[i,3] - species_df[i-1,3]
   }
   # Shuffle the differences per individual using sample without replacement
   ShuffledLong <- ShuffledLat <- ShuffledTime <- matrix(0, nrow = dim(species_df)[1], ncol = randTrack) # Create vector to store the shuffled differences per individual
-
+  
+  # Raw (unwrapped, unreflected) running totals, tracked separately from the public
+  # ShuffledLong/ShuffledLat values, needed to correctly compute the wrap/reflect
+  # corrections at every step.
+  RawLongAcc <- RawLatAcc <- matrix(0, nrow = dim(species_df)[1], ncol = randTrack)
+  
   message("Randomizing tracks, step 1/3")
 
   for (i in 1:length(species_index)){
+    
     for(r in 1:randTrack){ # Number of Randomised tracks per individual
     # Randomise the order of the positions for each individual (e.g., instead of 1,2,3, the order might be 13,43,5)
       NewPositions <- sample(seq(1:(utils::tail(species_index[[i]],1) - species_index[[i]][1])), utils::tail(species_index[[i]],1) - species_index[[i]][1], replace = FALSE)
       # For each reshuffling (r), reserve the original first location per individual (i).
       ShuffledLong[species_index[[i]][1], r] <- species_df[species_index[[i]][1], 2] # first position for each individual is the origin
       ShuffledLat[species_index[[i]][1], r] <- species_df[species_index[[i]][1], 3]
+      RawLongAcc[species_index[[i]][1], r] <- species_df[species_index[[i]][1], 2]
+      RawLatAcc[species_index[[i]][1], r] <- species_df[species_index[[i]][1], 3]
+      
       for(j in 1:length(NewPositions)){
+        RawLatAcc[species_index[[i]][j+1], r] <- RawLatAcc[species_index[[i]][j], r] + MyDiffLat[species_index[[i]][NewPositions[j]+1]]
+        RawLongAcc[species_index[[i]][j+1], r] <- RawLongAcc[species_index[[i]][j], r] + MyDiffLong[species_index[[i]][NewPositions[j]+1]]
         # Looping through new positions, length is 1 fewer than the number of locations per animal because first position is fixed
         # Create random locations based on the sum of previous location and the distance travelled between a random location and the next point in the track (MyDiff)
         # If the first new position is 26, we want to add the difference between the previous location (the origin), and the MyDiff[27],
@@ -60,8 +90,12 @@ randomise <- function(species_df, randTrack=100, gridCell=0.25, plot=TRUE, lm=TR
         # (eg if an individual has 65 points, there are 64 new ones, but the code below will make sure the distance between the 65th and 64th point is included)
         # Since this loop is limited by length(NewPositions), we won't include the diffs calculated between individuals
         # Following this approach the math results in the same final destination point for each track
-        ShuffledLong[species_index[[i]][j+1], r] <- ShuffledLong[species_index[[i]][j], r] + MyDiffLong[species_index[[i]][NewPositions[j]+1]]
-        ShuffledLat[species_index[[i]][j+1], r] <- ShuffledLat[species_index[[i]][j], r] + MyDiffLat[species_index[[i]][NewPositions[j]+1]]
+        
+        # Final (valid) coordinates: latitude reflected within [-90,90]; 
+        # longitude wrapped within (-180,180], shifted by 180 degrees whenever an odd number of pole crossings
+        # have occurred so far.
+        ShuffledLat[species_index[[i]][j+1], r]  <- reflect_lat(RawLatAcc[species_index[[i]][j+1], r])
+        ShuffledLong[species_index[[i]][j+1], r] <- wrap180(RawLongAcc[species_index[[i]][j+1], r] + 180 * lon_flip_parity(RawLatAcc[species_index[[i]][j+1], r]))
       }
     }
   }
@@ -90,6 +124,8 @@ randomise <- function(species_df, randTrack=100, gridCell=0.25, plot=TRUE, lm=TR
       for (j in 1:length(species_index[[i]])){ # For each point in a track
         coordlong <- floor(grid * (ShuffledLong[species_index[[i]][j], r] - longmin))
         coordlat <- floor(grid * (ShuffledLat[species_index[[i]][j], r] - latmin))
+        coordlong <- pmin(coordlong, longcells - 1)
+        coordlat  <- pmin(coordlat, latcells - 1)
         cellnum <- coordlong + grid * (longmax - longmin) * coordlat +1
         ShuffledPresence[cellnum] <- 1 # Record the number of unique cells visited (aka presence, not occupancy)
         }
@@ -107,6 +143,8 @@ randomise <- function(species_df, randTrack=100, gridCell=0.25, plot=TRUE, lm=TR
     for (j in 1:length(species_index[[i]])){
       coordlong <- floor(grid * (as.numeric(species_df[species_index[[i]][j],2]) - longmin))
       coordlat <- floor(grid * (as.numeric(species_df[species_index[[i]][j],3]) - latmin))
+      coordlong <- pmin(coordlong, longcells - 1)
+      coordlat  <- pmin(coordlat, latcells - 1)
       cellnum <- coordlong + grid * (longmax - longmin) * coordlat +1
       Presence[cellnum] <- 1 # Record the number of unique cells visited (aka presence, not occupancy)
     }
