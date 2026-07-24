@@ -17,7 +17,7 @@
 
 communityMap <- function(infomap_output, subset_communities, colours="Dark2"){
 
-  if (!("infomap_monolayer" %in% is(infomap_output[["infomap_object"]]))){
+  if (!("infomap_monolayer" %in% methods::is(infomap_output[["infomap_object"]]))){
     stop("This function requires the Infomap monolayer object that is output from the infomapCommunities function. \n  Please run the infomapCommunities function prior to executing communityMap.")
   }
 
@@ -29,7 +29,7 @@ communityMap <- function(infomap_output, subset_communities, colours="Dark2"){
     infomap_modules<-infomap_modules[which(infomap_modules$module_level1 %in% subset_communities),]
   }
 
-  if ("function" %in% is(colours)){ # If a grDevices colour pallet is used
+  if ("function" %in% methods::is(colours)){ # If a grDevices colour pallet is used
     myColoursPal <- colours(length(unique(infomap_modules$module_level1)))
   } else if (colours[1] %in% rownames(RColorBrewer::brewer.pal.info)){ # If a RColourBrewer pallet is used
     myColoursPal <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[colours,1], colours))(length(unique(infomap_modules$module_level1))) # Use the submitted colour palette and extend if to the number of colours needed
