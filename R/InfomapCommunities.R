@@ -30,11 +30,17 @@
 #' @return A list where element 1 ('infomap_object') contains the Infomap results summarising the hierarchical structure of communities.
 #' If tpm = TRUE, element 2 ('tpm') contains the transition probability matrix used to construct the network.
 #' The transition probability matrix is returned in link list format (origin node, destination node, and transition probability).
-
 #' @export
 
 infomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, tpm=FALSE){
 
+  if (range_hr > hours) stop("range_hr must be <= hours")
+  
+  qc <- checkTracks(species_df, verbose = FALSE)
+  if (qc > 0) {
+    stop("species_df failed formatting checks. Run checkTracks(species_df) to see details.")
+  }
+  
   if (rlang::is_installed(c("infomapecology", "emln"))){
     if("infomapecology" %in% (.packages())){
 
@@ -48,12 +54,16 @@ infomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, 
       longmax <- 180
       latmax <- 90
       grid <- 1/gridCell
+      longcells <- grid * (longmax - longmin)
+      latcells  <- grid * (latmax - latmin)
       coordlong <- floor(grid * (as.numeric(species_df[,2]) - longmin))
       coordlat <- floor(grid * (as.numeric(species_df[,3]) - latmin))
-      species_df$cellnum <- coordlong + grid * (longmax - longmin) * coordlat
+      coordlong <- pmin(coordlong, longcells - 1)
+      coordlat  <- pmin(coordlat, latcells - 1)
+      species_df$cellnum <- coordlong + grid * (longmax - longmin) * coordlat + 1
       MyTime <- hours*60*60
       range_hr <- range_hr*60*60
-      totalcells <- (grid * (longmax - longmin)) * (grid * (latmax - latmin))
+      totalcells <- longcells * latcells
       DestinationCells <- list()
       DestinationCells[[totalcells + 1 ]] <- 0
       message("Creating transition probability matrix, this may take some time depending on the size of the dataset")
@@ -90,8 +100,6 @@ infomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, 
                                 "DestinationCell"=c(as.numeric(names(table(DestinationCells[[i]])))), "Probability"=c(MyP))
         Probability.Total <- rbind(Probability.Total, Probability)
       }
-      Probability.Total$OriginCell <- Probability.Total$OriginCell+1
-      Probability.Total$DestinationCell <- Probability.Total$DestinationCell+1
       empty.vector <- c(rep(0,times=totalcells)) # make vector for each cell in world (n=1036800 cells for 0.25 deg resolution)
       Visited.Cells <- unique(as.vector(t(cbind(Probability.Total$OriginCell,Probability.Total$DestinationCell)))) # convert transition probability matrix to consecutive vector of origin then destination cells, maintaining movement order
       CellCoords <- data.frame("Cell"=Visited.Cells)
@@ -100,7 +108,7 @@ infomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, 
         coordlat <- floor(CellCoords$Cell[i]/(grid*(longmax-longmin)))
         coordlong <- CellCoords$Cell[i] - (grid*(longmax-longmin)) * coordlat
         if (coordlong==0) {
-          CellCoords$long[i]  <- (longmin + (360 / grid)) - 0.5*gridCell
+          CellCoords$long[i]  <- longmax - 0.5*gridCell
           CellCoords$lat[i] <- (latmin + (coordlat / grid)) - 0.5*gridCell
         } else {
           CellCoords$long[i]  <- (longmin + (coordlong/grid)) - 0.5*gridCell
