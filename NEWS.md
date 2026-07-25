@@ -1,3 +1,9 @@
+## PhysMove 1.2.4 (July 2026)
+- [MAINT] Added references and DOIs to description
+- [FIX] Replaced dontrun with donttest for slow examples
+- [FIX] Replaced print and cat calls with message/warning/stop where necessary
+- [FIX] Updated how functions handle edge cases appearing at 180/90
+
 ## PhysMove 1.2.3 (June 2026)
 - [FIX] Reduced package size to comply with CRAN requirements
 
