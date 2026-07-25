@@ -1,9 +1,15 @@
 ## Resubmission
 
-This is a resubmission.
+- DESCRIPTION references: Added references describing the package's
+  methods to the Description field, formatted as `authors (year) <doi:...>`.
 
-The package size has been reduced to comply with CRAN policies. In particular, vignette figures were optimised to reduce the size of the ‘doc’ directory.
-The installed package size is now ~7.6 MB. The size of the ‘doc’ directory is due to vignette outputs demonstrating methodology and usage. The ‘data’ directory contains pre-computed .rda files, which are used in place of embedded vignette images to reduce the overall package size and improve efficiency
+- \dontrun{} usage: Replaced `\dontrun{}` with `\donttest{}` for
+  examples that take longer than 5 seconds to run; all other examples
+  have been unwrapped.
+
+- Console messages: Replaced `print()`/`cat()` calls with
+  `message()`/`warning()`/`stop()` across the flagged files, so console
+  output can be suppressed by the user.
 
 Thank you for your time and helpful feedback.
 
@@ -22,9 +28,8 @@ The package installs and loads cleanly on all tested platforms without errors or
 
 There were three NOTES:
 
-- The installed package size is ~9.6 MB. The size of the 'doc' directory 
-  is primarily due to vignette figures included to demonstrate methodology 
-  and usage.
+- The installed package size is ~7.6 MB. Sub-directories of 1Mb or more include data (2.8Mb) and doc (4.5Mb). 
+  These files are needed to support examples and vignettes.
 
 - The packages emln and infomapecology are listed in Suggests and are
   available via the Additional_repositories field. These packages are
@@ -32,7 +37,8 @@ There were three NOTES:
   loading, examples, and tests do not require them.
   All examples run successfully without requiring these suggested packages.
 
-- Future file timestamps are due to OneDrive syncing and do not affect package functionality.
+- Future file timestamps unable to verify current time. 
+  This is due to OneDrive syncing and does not affect package functionality.
 
 Continuous integration via GitHub Actions confirms checks on multiple platforms and R versions.
 
