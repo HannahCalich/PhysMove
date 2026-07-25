@@ -48,6 +48,7 @@ This function allows you to calculate turning angles between sets of three conse
 }
 \examples{
 \donttest{
-turningAngles(tracks, min_hr=24, max_hr=240, interval_hr=24, range_hr=6, histPlot=c(FALSE, "all"), verbose=TRUE)
+turningAngles(tracks, min_hr=24, max_hr=240, interval_hr=24, 
+              range_hr=6, histPlot=c(FALSE, "all"), verbose=TRUE)
 }
 }
