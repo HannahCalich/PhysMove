@@ -146,14 +146,14 @@ Probability density functions (pdfs) of displacements describe the probability d
 
 The `plotDispPDF()` function requires a list of displacements calculated using `calcDisp()` and includes 3 optional parameters:
 
-  * `normalised`: normalise the data before plotting, which divides all displacements in a time window by the mean displacement for that time window (`normalised=TRUE`, by default).
+  * `normalise`: normalise the data before plotting, which divides all displacements in a time window by the mean displacement for that time window (`normalise=TRUE`, by default).
   * `colours`: change the point colours (`colours=rainbow`, by default) and
   * `legend`: add or remove a legend (`legend=TRUE`, by default).
   
 `plotDispPDF()` outputs a data frame of all data used to create the plot, including:
 
   * *pdf*: pdf values,
-  * *disp*: binned displacement values (note that if `normalised=TRUE` the displacements are normalised values), and
+  * *disp*: binned displacement values (note that if `normalise=TRUE` the displacements are normalised values), and
   * *timeWindow*: corresponding time windows
 
 ```{r plot all norm disp}
@@ -161,7 +161,7 @@ The `plotDispPDF()` function requires a list of displacements calculated using `
 # displacements
 plot.data <- plotDispPDF(dispAll)
 ```
-**Figure V3** Probability density function (pdf) plot of normalised displacements from the `'tracks'` dataset calculated over 10 time windows, 24 to 240 hours at 24 ± 6-hour time intervals with `calcDisp()`. Plot created with `plotDispPDF()` default parameters (i.e., where `normalised=TRUE`). 
+**Figure V3** Probability density function (pdf) plot of normalised displacements from the `'tracks'` dataset calculated over 10 time windows, 24 to 240 hours at 24 ± 6-hour time intervals with `calcDisp()`. Plot created with `plotDispPDF()` default parameters (i.e., where `normalise=TRUE`). 
 
 ```{r plot all disp (not norm)}
 # Create a probability density function (pdf) plot of raw (i.e., not 

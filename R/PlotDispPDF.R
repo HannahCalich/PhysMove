@@ -4,7 +4,7 @@
 #' list format where each list element corresponds to displacements calculated over a specific time window, which is the default output
 #' format from the \code{\link{calcDisp}} function.
 #' @param displacements Displacements in list format (e.g., the output from \code{\link{calcDisp}}).
-#' @param normalised Normalise the displacements by the mean displacement for each time window. Default is TRUE.
+#' @param normalise Normalise the displacements by the mean displacement for each time window. Default is TRUE.
 #' @param colours Colour(s) for plot points. Valid input options include: base R (grDevices) colour pallets (e.g., colours=rainbow), RColorBrewer
 #' palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that grDevices colour
 #' pallets do not use quotations. If the palette does not have enough distinct colours to match the communities being plotted the function will automatically
@@ -16,7 +16,7 @@
 #' @examples plotDispPDF(disp)
 #' @export
 
-plotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=TRUE){
+plotDispPDF<-function (displacements, normalise=TRUE, colours=rainbow, legend=TRUE){
 
   if ("function" %in% methods::is(colours)){ # If a grDevices colour pallet is used
     myColoursPal <- colours(length(displacements))
@@ -37,7 +37,7 @@ plotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
   #################################################################
   ## Log-log plot of displacements, not normalised by mean disp. ##
   #################################################################
-  if (normalised!=TRUE){
+  if (normalise!=TRUE){
 
     for(d in 1:length(displacements)){  # for each time period
       freq <- rep(0, length(bins)) # to count the number of displacements in each bin
@@ -116,7 +116,7 @@ plotDispPDF<-function (displacements, normalised=TRUE, colours=rainbow, legend=T
   #####################################################################################
   ## log-log plot of displacements normalised by mean displacement per time interval ##
   #####################################################################################
-  if (normalised ==TRUE){
+  if (normalise ==TRUE){
     MeanDisp <- c()
     for(d in 1:length(displacements)){  #for each time period
       disp <- displacements[[d]]
