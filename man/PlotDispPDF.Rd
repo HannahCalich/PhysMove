@@ -4,12 +4,12 @@
 \alias{plotDispPDF}
 \title{Create probability density function (PDF) plots of displacements}
 \usage{
-plotDispPDF(displacements, normalised = TRUE, colours = rainbow, legend = TRUE)
+plotDispPDF(displacements, normalise = TRUE, colours = rainbow, legend = TRUE)
 }
 \arguments{
 \item{displacements}{Displacements in list format (e.g., the output from \code{\link{calcDisp}}).}
 
-\item{normalised}{Normalise the displacements by the mean displacement for each time window. Default is TRUE.}
+\item{normalise}{Normalise the displacements by the mean displacement for each time window. Default is TRUE.}
 
 \item{colours}{Colour(s) for plot points. Valid input options include: base R (grDevices) colour pallets (e.g., colours=rainbow), RColorBrewer
 palettes (e.g., colours="Dark2"), and colour names or hex numbers (e.g.,colours=c("darkred", "#4682B4", "#00008B", "darkgreen")). Note that grDevices colour
