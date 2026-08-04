@@ -143,7 +143,7 @@ infomapCommunities <- function(species_df, gridCell=0.25, hours=24, range_hr=6, 
 
       monolayer_object <- emln::create_monolayer_network(LinkList, directed = TRUE, bipartite = FALSE, node_metadata = nodenames)
       infomap_object <- suppressWarnings(infomapecology::run_infomap_monolayer(monolayer_object, infomap_executable='infomap', flow_model='directed',
-                                                                                 silent=TRUE, verbose=FALSE, two_level=FALSE))#, ...="-k"))
+                                                                                 silent=TRUE, verbose=FALSE, two_level=FALSE))
       infomap_object <- list(infomap_object)
       names(infomap_object) <- "infomap_object"
 
