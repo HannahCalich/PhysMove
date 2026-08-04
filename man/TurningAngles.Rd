@@ -31,7 +31,7 @@ See attached sample data \code{\link{tracks}}.}
 code can identify location estimates that are close to, but not exactly separated by the interval_hr input value.
 If multiple location estimates fall within this time window the location estimate closest to the interval_hr input value
 will be used for calculations. For example, if interval_hr = 24 and range_hr = 6, the algorithm will search for
-locations spaced 18 to 32 hours apart. Default for range_hr is 6.}
+locations spaced 18 to 30 hours apart. Default for range_hr is 6.}
 
 \item{histPlot}{Plot a histogram showing the frequency of turning angles from all time windows combined (default) or
 one specific time period. For example, histPlot=c(TRUE,1) to plot only the first time period.
