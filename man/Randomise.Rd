@@ -20,10 +20,10 @@ See attached sample data \code{\link{tracks}}.}
 \item{plot}{Plot the number of cells visited in the original track versus the average number of cells visited in the
 reshuffled tracks. Default is TRUE.}
 
-\item{lm}{Calculate a linear regression to examine the relationship between the number of cells visited in the original tracks
-(target variable) and the average number of cells visited by the Randomised tracks (predictor variable). If plot = TRUE this parameter
+\item{lm}{Calculate a linear regression to examine the relationship between the average number of cells visited by the Randomised 
+tracks (target variable) and the number of cells visited in the original tracks (predictor variable). If plot = TRUE this parameter
 adds a solid black fit line to the data points and a black dashed line, which represents a 1:1 relationship. The slope of the fit line can
-be determined by typing 'RandomiselinearModel$coefficients[2]'. Default is TRUE.}
+be determined by typing 'randomResults$lm$estimate[2]'. Default is TRUE.}
 }
 \value{
 List containing a dataframe of results (list element 1), the randomised longitude and latitude values (list elements 2 and 3, respectively),

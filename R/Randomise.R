@@ -12,10 +12,10 @@
 #' @param gridCell Grid cell size in degrees. Default is 0.25.
 #' @param plot Plot the number of cells visited in the original track versus the average number of cells visited in the
 #' reshuffled tracks. Default is TRUE.
-#' @param lm Calculate a linear regression to examine the relationship between the number of cells visited in the original tracks
-#' (target variable) and the average number of cells visited by the Randomised tracks (predictor variable). If plot = TRUE this parameter
+#' @param lm Calculate a linear regression to examine the relationship between the average number of cells visited by the Randomised 
+#' tracks (target variable) and the number of cells visited in the original tracks (predictor variable). If plot = TRUE this parameter
 #' adds a solid black fit line to the data points and a black dashed line, which represents a 1:1 relationship. The slope of the fit line can
-#' be determined by typing 'RandomiselinearModel$coefficients[2]'. Default is TRUE.
+#' be determined by typing 'randomResults$lm$estimate[2]'. Default is TRUE.
 #' @return List containing a dataframe of results (list element 1), the randomised longitude and latitude values (list elements 2 and 3, respectively),
 #' which are needed for the \code{\link{plotRandomTracks}} function, and if lm = TRUE, the results of the linear model are output (list element 4).
 #' The dataframe of results includes columns for the number of cells visited by each original track and the average number of cells visited by the
@@ -165,7 +165,7 @@ randomise <- function(species_df, randTrack=100, gridCell=0.25, plot=TRUE, lm=TR
       ggplot2::ylab(expression(atop("Average sum of cells", paste("in randomised tracks")))) #("Average sum of cells \n in Randomised tracks")
     if (lm==TRUE){
       a <- a +
-        ggplot2::geom_abline(slope=1, intercept=1, col="black", lwd=0.5, lty=2)+
+        ggplot2::geom_abline(slope=1, intercept=0, col="black", lwd=0.5, lty=2)+
         ggplot2::stat_smooth(formula=y~x, method="lm", col="black", lwd=0.5)+
         ggplot2::geom_point(size=2) # Add points back in again to they are on top layer
     }
