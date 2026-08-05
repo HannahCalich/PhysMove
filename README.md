@@ -1,5 +1,6 @@
 # PhysMove <img src="vignettes/PhysMoveHexNew.png" align="right" width="130" />
 
+[![CRAN status](https://www.r-pkg.org/badges/version/PhysMove)](https://CRAN.R-project.org/package=PhysMove)
 [![R-CMD-check--as-cran](https://github.com/HannahCalich/PhysMove/actions/workflows/R-CMD-check--as-cran.yml/badge.svg)](https://github.com/HannahCalich/PhysMove/actions)
 [![R-CMD-check--Windows, Ubuntu, macOS](https://github.com/HannahCalich/PhysMove/actions/workflows/R-check-multiversion.yaml/badge.svg)](https://github.com/HannahCalich/PhysMove/actions)
 
@@ -33,13 +34,12 @@ PhysMove focuses on three major categories of movement data analyses, and each c
 
 ## Installation 
 
-PhysMove passes all local CRAN checks and has been submitted to CRAN for review. In the meantime, we recommend users install the development version of PhysMove from GitHub using the devtools R package. 
-
 ```r
-# Install the devtools package from CRAN (if required)
-install.packages("devtools")
+# The official version from CRAN:
+install.packages("PhysMove")
 
 # Download the development version from GitHub:
+install.packages("devtools")
 devtools::install_github("HannahCalich/PhysMove", build_vignettes = TRUE, force = TRUE)
 ```
 
@@ -68,6 +68,3 @@ library(PhysMove)
 
 browseVignettes("PhysMove")
 ```
-
-Current Version: 1.2.4
-Last updated: July 2026
