@@ -176,7 +176,7 @@ Rodríguez, J.P. *et al*. (2017) Big data analyses reveal patterns and
   *Reports*, 7, 1-10.
 
 Viswanathan, G. M., *et al*. (2011). The Physics of Foraging: An
-  Introduction to Biological Encounters and Random Searches. Cambridge,
+  Introduction to Random Searches and Biological Encounters. Cambridge,
   Cambridge University Press.
 
 Wickham, H. (2016) ggplot2: Elegant Graphics for Data Analysis.
