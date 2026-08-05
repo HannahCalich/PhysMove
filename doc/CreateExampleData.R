@@ -1,9 +1,8 @@
 ## create example data
 
-setwd("~/2025/PhysMove/data")
+## set WD to PhysMove/data
 
 devtools::install_github("HannahCalich/PhysMove", build_vignettes = TRUE, force = TRUE)
-
 library(PhysMove)
 
 angleList <- turningAngles(tracks, max_hr = 24)
@@ -30,10 +29,10 @@ save(distResultsExp, file="distResultsExp.RData", compress = "xz")
 entropyResults <- entropy(tracks)
 save(entropyResults, file="entropyResults.RData", compress = "xz")
 
-setwd("~/2025/PhysMove")
+## set WD to folder with infomap
 library(infomapecology)
 infomapResult <- infomapCommunities(tracks)
-setwd("~/2025/PhysMove/PhysMove_Git/PhysMove/data")
+## reset WD to PhysMove data folder
 save(infomapResult, file="infomapResult.RData", compress = "xz")
 
 occupancyResults <- occupancy(tracks)
