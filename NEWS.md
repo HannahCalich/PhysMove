@@ -1,5 +1,12 @@
+## PhysMove 1.2.5 (August 2026)
+- [FIX] Renamed `normalised` argument to `normalise` in `plotDispPDF()` for spelling consistency
+- [FIX] Corrected intercept (was 1, now 0) for the 1:1 reference line plotted by `randomise()`
+- [DOC] Corrected `randomise()` documentation describing the `lm` parameter's target/predictor roles and coefficient-extraction example
+- [DOC] Corrected `turningAngles()` documentation search-window example (18–30 hours, not 18–32)
+
 ## PhysMove 1.2.4 (July 2026)
-- [MAINT] Added references and DOIs to description
+- [RELEASE] Published on CRAN
+- [DOC] Added references and DOIs to description
 - [FIX] Replaced dontrun with donttest for slow examples
 - [FIX] Replaced print and cat calls with message/warning/stop where necessary
 - [FIX] Updated how functions handle edge cases appearing at 180/90
@@ -8,7 +15,7 @@
 - [FIX] Reduced package size to comply with CRAN requirements
 
 ## PhysMove 1.2.2 (June 2026)
-- [Release] First submission to CRAN
+- [RELEASE] First submission to CRAN
 - [DOC] Minor updates to package documentation and GitHub actions
 
 ## PhysMove 1.2.1 (May 2026)
