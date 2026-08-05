@@ -185,3 +185,5 @@ doi
 pnas
 numPlot
 randomResults
+dontrun
+donttest
