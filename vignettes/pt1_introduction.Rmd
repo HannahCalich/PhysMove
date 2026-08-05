@@ -45,17 +45,18 @@ knitr::opts_chunk$set(dev = "png",
 
 *PhysMove* contains a comprehensive collection of methods for documenting species' movement and space-use patterns from satellite telemetry data. These vignettes demonstrate how to calculate each of the *PhysMove* functions and review all relevant functions and parameters. We demonstrate each function with a simulated telemetry dataset, called '`tracks`', which is automatically loaded with *PhysMove* (see [Explore 'tracks' dataset](pt1_introduction.html#explore-tracks-dataset) section for further details). For further details on our methods and interpreting results please see the corresponding manuscript. 
 
-The most up-to-date version of *PhysMove* and the accompanying vignettes can be installed by following the instructions below.
+To install the latest version of *PhysMove* and its vignettes, please follow the instructions below.
 
 ## Installation 
 
-The development version of *PhysMove* can be installed from its GitHub repository. 
+The stable release of *PhysMove*, including all associated example data, is available on the Comprehensive R Archive Network (CRAN; cran.r-project.org/package=PhysMove). The development version, including full source code, is available on GitHub (github.com/HannahCalich/PhysMove).
 
 ```{r installation, eval=FALSE}
-# Install the devtools package from CRAN (if required)
-install.packages("devtools")
+# Option 1: Download the stable version from CRAN
+install.packages("PhysMove")
 
-# Download the development version from GitHub:
+# Option 2: Download the development version from GitHub
+install.packages("devtools")
 devtools::install_github("HannahCalich/PhysMove", build_vignettes = TRUE)
 ```
 
