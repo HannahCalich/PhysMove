@@ -131,9 +131,7 @@ install.packages("emln", repos="https://HannahCalich.github.io/drat")
 devtools::check(cran = TRUE) # Run one last check
 devtools::build()
 install.packages("../PhysMove_1.2.5.tar.gz", repos = NULL, type = "source")
-
-# PUSH CHANGES TO GITHUB
-
 devtools::check_win_devel()
 
+# PUSH CHANGES TO GITHUB
 devtools::release() # Verify you're ready for release, and release -- used to SUBMIT package to CRAN
