@@ -51,7 +51,7 @@ predictability<-function(species_df, entropyResults, startVal = NULL, histPlot=T
 
     ss <- suppressWarnings(rootSolve::multiroot(f = model, start = start_value_default))
 
-    if (ss$root > 0 & ss$root < 1){
+    if (!is.na(ss$root) && ss$root > 0 & ss$root < 1){
       Pred[i] <- ss$root
     } else {
       start_try <- start_value_default
@@ -64,7 +64,7 @@ predictability<-function(species_df, entropyResults, startVal = NULL, histPlot=T
         }
 
         ss <- suppressWarnings(rootSolve::multiroot(f = model, start = start_try))
-        if (ss$root > 0 & ss$root < 1){
+        if (!is.na(ss$root) && ss$root > 0 & ss$root < 1){
           break
         }
       }
