@@ -1,0 +1,43 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+repository-code: "https://github.com/HannahCalich/PhysMove"
+
+authors:
+  - family-names: Calich
+    given-names: Hannah J.
+    email: hannah.calich@gmail.com
+    orcid: "https://orcid.org/0000-0001-7541-9584"
+
+  - family-names: Rodríguez
+    given-names: Jorge
+    orcid: "https://orcid.org/0000-0001-6593-5032"
+
+  - family-names: Eguíluz
+    given-names: Víctor
+    orcid: "https://orcid.org/0000-0003-1133-1289"
+
+  - family-names: Pattiaratchi
+    given-names: Charitha
+    orcid: "https://orcid.org/0000-0003-2229-6183"
+
+  - family-names: Sequeira
+    given-names: Ana M. M.
+    orcid: "https://orcid.org/0000-0001-6906-799X"
+
+preferred-citation:
+  type: article
+  authors:
+    - family-names: Calich
+      given-names: Hannah J.
+    - family-names: Rodríguez
+      given-names: Jorge
+    - family-names: Eguíluz
+      given-names: Víctor
+    - family-names: Pattiaratchi
+      given-names: Charitha
+    - family-names: Sequeira
+      given-names: Ana M. M.
+  title: "Investigating animal movement and behaviour with statistical physics methods: a primer for biologists"
+  journal: "Movement Ecology"
+  year: 2026
+  doi: "10.1186/s40462-026-00688-0"
